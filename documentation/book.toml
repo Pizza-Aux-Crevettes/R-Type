@@ -1,0 +1,6 @@
+[book]
+authors = ["Anastasia Bouby, Elyne Masse, Benjamin Gayaud, Eddy Gardes, Alexandre Chouteau"]
+language = "en"
+multilingual = false
+src = "src"
+title = "RType_book"
