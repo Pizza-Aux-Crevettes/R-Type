@@ -18,6 +18,7 @@ Chaque message de commit doit suivre ce format :
 
 | Type       | Description                                                               |
 |------------|---------------------------------------------------------------------------|
+| **ADD**   | Ajout d'un nouveau fichier            
 | **FEAT**   | Ajout d'une nouvelle fonctionnalité                                       |
 | **FIX**    | Correction d'un bug                                                      |
 | **DOCS**   | Modification ou ajout de documentation                                   |
