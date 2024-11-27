@@ -31,5 +31,6 @@
 *.out
 *.app
 
+.clang-format
 .idea
 book/
