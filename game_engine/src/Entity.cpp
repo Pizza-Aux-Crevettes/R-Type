@@ -9,7 +9,7 @@
 ** - Store an entity's unique ID
 */
 
-#include "../../include/game_engine/Entity.hpp"
+#include "../include/Entity.hpp"
 
 Entity::Entity()
 {

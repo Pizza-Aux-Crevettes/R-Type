@@ -11,7 +11,7 @@
 
 */
 
-#include "../../../include/game_engine/system/PhysicsSystem.hpp"
+#include "../../include/system/PhysicsSystem.hpp"
 
 PhysicsSystem::PhysicsSystem(std::vector<std::shared_ptr<Entity>>& entities) : ASystem(entities)
 {

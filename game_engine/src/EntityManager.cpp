@@ -10,7 +10,7 @@
 ** - Track active entities and facilitate their removal.
 */
 
-#include "../../include/game_engine/EntityManager.hpp"
+#include "../include/EntityManager.hpp"
 
 EntityManager::EntityManager()
 {
