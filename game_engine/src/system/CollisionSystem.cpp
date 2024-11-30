@@ -11,7 +11,7 @@
 
 */
 
-#include "../../include/system/CollisionSystem.hpp"
+#include "/system/CollisionSystem.hpp"
 
 CollisionSystem::CollisionSystem(std::vector<std::shared_ptr<Entity>>& entities) : ASystem(entities)
 {

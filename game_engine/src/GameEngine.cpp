@@ -10,7 +10,7 @@
 ** - Manage the game loop, including updates and rendering.
 */
 
-#include "../include/GameEngine.hpp"
+#include "GameEngine.hpp"
 
 GameEngine::GameEngine()
 {

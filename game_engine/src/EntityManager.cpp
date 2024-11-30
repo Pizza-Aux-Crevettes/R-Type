@@ -10,7 +10,7 @@
 ** - Track active entities and facilitate their removal.
 */
 
-#include "../include/EntityManager.hpp"
+#include "EntityManager.hpp"
 
 EntityManager::EntityManager()
 {
