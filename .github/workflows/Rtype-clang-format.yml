@@ -22,11 +22,17 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y clang-format
 
-    - name: Check clang-format
+    - name: Vérifier clang-format
       run: |
         files=$(find . -name '*.cpp' -o -name '*.h' -o -name '*.c' -o -name '*.hpp')
         if [ -n "$files" ]; then
-          echo "$files" | xargs clang-format --dry-run --Werror
+          clang-format --dry-run --Werror $files | while read -r line; do
+            if [[ "$line" == *"error"* ]]; then
+              file=$(echo "$line" | cut -d ':' -f 1)
+              line_num=$(echo "$line" | cut -d ':' -f 2)
+              echo "::error file=$files,line=$line_num"
+            fi
+          done
         else
-          echo "No files to check."
+          echo "::notice ::No files to check."
         fi
