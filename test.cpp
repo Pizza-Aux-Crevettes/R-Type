@@ -13,12 +13,11 @@
 #include <stdio.h>
 
 // Fonction pour ajouter deux nombres
-int add(int a, int b) {
-    return a + b;
-}
+int add(int a, int b) { return a + b; }
 
 // Fonction principale
-int main() {
+int main()
+{
     int num1 = 10;
     int num2 = 20;
 
@@ -28,7 +27,8 @@ int main() {
     printf("La somme de %d et %d est %d\n", num1, num2, result);
 
     // Boucle pour afficher des nombres
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         printf("Nombre : %d\n", i);
     }
 
