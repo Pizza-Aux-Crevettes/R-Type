@@ -30,7 +30,7 @@ jobs:
             if [[ "$line" == *"error"* ]]; then
               file=$(echo "$line" | cut -d ':' -f 1)
               line_num=$(echo "$line" | cut -d ':' -f 2)
-              echo "::error file=$files,line=$line_num"
+              echo "::error file=$files,line=$line_num::clang-format error in $file at line $line_num"
             fi
           done
         else
