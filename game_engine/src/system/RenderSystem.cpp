@@ -10,7 +10,7 @@
 ** - Manage integration with SMFL
 */
 
-#include "../../../include/game_engine/system/RenderSystem.hpp"
+#include "/system/RenderSystem.hpp"
 
 
 

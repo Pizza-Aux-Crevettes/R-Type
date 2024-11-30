@@ -10,7 +10,7 @@
 ** - Communicate player actions to other systems or entities.
 */
 
-#include "../../../include/game_engine/system/InputSystem.hpp"
+#include "/system/InputSystem.hpp"
 
 InputSystem::InputSystem(std::vector<std::shared_ptr<Entity>>& entities) : ASystem(entities)
 {
