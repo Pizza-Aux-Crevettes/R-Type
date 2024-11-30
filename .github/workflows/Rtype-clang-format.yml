@@ -26,13 +26,18 @@ jobs:
       run: |
         files=$(find . -name '*.cpp' -o -name '*.h' -o -name '*.c' -o -name '*.hpp')
         if [ -n "$files" ]; then
+          errors_found=0
           clang-format --dry-run --Werror $files | while read -r line; do
             if [[ "$line" == *"error"* ]]; then
               file=$(echo "$line" | cut -d ':' -f 1)
               line_num=$(echo "$line" | cut -d ':' -f 2)
-              echo "::error file=$files,line=$line_num::clang-format error in $file at line $line_num"
+              echo "::error file=$file,line=$line_num::clang-format error in $file at line $line_num"
+              errors_found=1
             fi
           done
+          if [ $errors_found -eq 1 ]; then
+            exit 1
+          fi
         else
           echo "::notice ::No files to check."
         fi
