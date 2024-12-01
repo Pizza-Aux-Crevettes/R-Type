@@ -35,3 +35,9 @@
 book/
 
 build/
+
+#CMAKE
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile

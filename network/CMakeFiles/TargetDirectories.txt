@@ -1,3 +1,0 @@
-/Users/anastasiabouby/Developer/Epitech/R-Type/network/CMakeFiles/Network.dir
-/Users/anastasiabouby/Developer/Epitech/R-Type/network/CMakeFiles/edit_cache.dir
-/Users/anastasiabouby/Developer/Epitech/R-Type/network/CMakeFiles/rebuild_cache.dir
