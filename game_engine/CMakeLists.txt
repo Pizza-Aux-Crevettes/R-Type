@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 file(GLOB_RECURSE SOURCES src/*.cpp)
 file(GLOB_RECURSE HEADERS include/*.hpp)
 
-add_executable(GameEngine src/main.cpp)
+add_executable(GameEngine ${SOURCES})
 
 target_include_directories(GameEngine PUBLIC include)
 
