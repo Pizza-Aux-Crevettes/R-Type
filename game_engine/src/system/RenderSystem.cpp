@@ -10,8 +10,10 @@
 ** - Manage integration with SMFL
 */
 
-#include "/system/RenderSystem.hpp"
+#include "system/RenderSystem.hpp"
 
 RenderSystem::RenderSystem(std::vector<std::shared_ptr<Entity>> &entities) : ASystem(entities) {}
 
 RenderSystem::~RenderSystem() {}
+
+void RenderSystem::update() {}

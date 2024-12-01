@@ -15,7 +15,7 @@ class RenderSystem : public ASystem
   public:
     RenderSystem(std::vector<std::shared_ptr<Entity>> &entities);
     ~RenderSystem();
-    void update() override;
+    void update();
     void displaySprite();
     void displayText();
     void handleAnimations();
