@@ -757,7 +757,7 @@ char const *info_cray = "INFO"
 #define HEX(n)                                                                                     \
     ('0' + ((n) >> 28 & 0xF)), ('0' + ((n) >> 24 & 0xF)), ('0' + ((n) >> 20 & 0xF)),               \
         ('0' + ((n) >> 16 & 0xF)), ('0' + ((n) >> 12 & 0xF)), ('0' + ((n) >> 8 & 0xF)),            \
-        ('0' + ((n) >> 4 & 0xF)), ('0' + ((n) & 0xF))
+        ('0' + ((n) >> 4 & 0xF)), ('0' + ((n)&0xF))
 
 /* Construct a string literal encoding the version number. */
 #ifdef COMPILER_VERSION
@@ -919,8 +919,7 @@ const char *info_language_extensions_default = "INFO"
 void main() {}
 #else
 #if defined(__CLASSIC_C__)
-int main(argc, argv)
-int argc;
+int main(argc, argv) int argc;
 char *argv[];
 #else
 int main(int argc, char *argv[])
