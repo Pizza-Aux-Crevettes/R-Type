@@ -16,6 +16,10 @@ jobs:
               uses: actions/Checkout@v4
               with:
                 submodules: true
+            - name: Install dependencies
+              run: |
+                sudo apt update
+                sudo apt install -y libgl1-mesa-dev
             
             - name: run cmake
               run: cmake -B build .
