@@ -13,12 +13,6 @@
 
 #include "/system/PhysicsSystem.hpp"
 
-PhysicsSystem::PhysicsSystem(std::vector<std::shared_ptr<Entity>>& entities) : ASystem(entities)
-{
+PhysicsSystem::PhysicsSystem(std::vector<std::shared_ptr<Entity>> &entities) : ASystem(entities) {}
 
-}
-
-PhysicsSystem::~PhysicsSystem()
-{
-
-}
+PhysicsSystem::~PhysicsSystem() {}

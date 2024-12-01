@@ -8,20 +8,21 @@
 #pragma once
 
 #include "Entity.hpp"
-#include <vector>
 #include <memory>
+#include <vector>
 
 class EntityManager
 {
-    private:
-        std::vector<std::shared_ptr<Entity>>entities;
-    public:
-        EntityManager();
-        ~EntityManager();
-        void createEntity();
-        void destroyEntity();
-        // void addComponent(Entity entity, T component);
-        // void destroyComponent(Entity entity, T component);
-        void getComponent(Entity entity);
-        void getEntities();
+  private:
+    std::vector<std::shared_ptr<Entity>> entities;
+
+  public:
+    EntityManager();
+    ~EntityManager();
+    void createEntity();
+    void destroyEntity();
+    // void addComponent(Entity entity, T component);
+    // void destroyComponent(Entity entity, T component);
+    void getComponent(Entity entity);
+    void getEntities();
 };

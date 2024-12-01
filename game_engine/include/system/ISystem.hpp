@@ -11,7 +11,7 @@
 
 class ISystem
 {
-    public:
-        virtual ~ISystem() = default;
-        virtual void update() = 0;
+  public:
+    virtual ~ISystem() = default;
+    virtual void update() = 0;
 };

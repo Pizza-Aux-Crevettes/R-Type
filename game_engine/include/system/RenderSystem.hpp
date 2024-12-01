@@ -11,14 +11,14 @@
 
 class RenderSystem : public ASystem
 {
-    private:
-    public:
-        RenderSystem(std::vector<std::shared_ptr<Entity>>& entities);
-        ~RenderSystem();
-        void update() override;
-        void displaySprite();
-        void displayText();
-        void handleAnimations();
-        void handleSound();
-        void displayButton();
+  private:
+  public:
+    RenderSystem(std::vector<std::shared_ptr<Entity>> &entities);
+    ~RenderSystem();
+    void update() override;
+    void displaySprite();
+    void displayText();
+    void handleAnimations();
+    void handleSound();
+    void displayButton();
 };

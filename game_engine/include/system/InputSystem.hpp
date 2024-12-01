@@ -11,11 +11,12 @@
 
 class InputSystem : public ASystem
 {
-    public:
-        InputSystem(std::vector<std::shared_ptr<Entity>>& entities);
-        ~InputSystem();
-        void update() override;
-        void handleKeyBoard();
-        void handleMouse();
-    private:
+  public:
+    InputSystem(std::vector<std::shared_ptr<Entity>> &entities);
+    ~InputSystem();
+    void update() override;
+    void handleKeyBoard();
+    void handleMouse();
+
+  private:
 };

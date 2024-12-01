@@ -10,13 +10,14 @@
 #include <SFML/Graphics.hpp>
 class GameEngine
 {
-    private:
-        sf::RenderWindow _window;
-    public:
-        GameEngine();
-        ~GameEngine();
-        void manageEntity();
-        void createWindow();
-        void destroyWindow();
-        void manageSystem();
+  private:
+    sf::RenderWindow _window;
+
+  public:
+    GameEngine();
+    ~GameEngine();
+    void manageEntity();
+    void createWindow();
+    void destroyWindow();
+    void manageSystem();
 };
