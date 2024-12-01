@@ -20,3 +20,4 @@ jobs:
       - uses: wagoid/commitlint-github-action@v6
         with:
           config_file: commitlint.config.mjs
+          fail_on_error: true
