@@ -10,7 +10,7 @@
 ** - Manage integration with SMFL
 */
 
-#include "/system/RenderSystem.hpp"
+#include "system/RenderSystem.hpp"
 
 
 
@@ -23,3 +23,5 @@ RenderSystem::~RenderSystem()
 {
 
 }
+
+void RenderSystem::update() {}

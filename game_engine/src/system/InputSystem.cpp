@@ -10,7 +10,7 @@
 ** - Communicate player actions to other systems or entities.
 */
 
-#include "/system/InputSystem.hpp"
+#include "system/InputSystem.hpp"
 
 InputSystem::InputSystem(std::vector<std::shared_ptr<Entity>>& entities) : ASystem(entities)
 {
@@ -21,3 +21,4 @@ InputSystem::~InputSystem()
 {
 
 }
+void InputSystem::update() {}
