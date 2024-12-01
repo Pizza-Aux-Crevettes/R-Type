@@ -19,5 +19,5 @@ jobs:
       - uses: actions/checkout@v3
       - uses: wagoid/commitlint-github-action@v6
         with:
-          config_file: commitlint.config.mjs
-          fail_on_error: true
+          configFile: commitlint.config.mjs
+          failOnErrors: true
