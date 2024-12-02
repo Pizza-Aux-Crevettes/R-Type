@@ -12,7 +12,7 @@
 class PhysicsSystem : public ASystem
 {
     public:
-        PhysicsSystem(std::vector<std::shared_ptr<Entity>>& entities);
+        PhysicsSystem(std::vector<std::shared_ptr<Entity>> &entities);
         ~PhysicsSystem();
         void update();
         void handleMovement();
