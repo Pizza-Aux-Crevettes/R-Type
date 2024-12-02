@@ -11,7 +11,7 @@ Point Bullet::getSize() const {
     return size;
 }
 
-void Bullet::setSize(const Point &newSize) {
+void Bullet::setSize(const Point& newSize) {
     size = newSize;
 }
 
@@ -19,7 +19,7 @@ Point Bullet::getPosition() const {
     return position;
 }
 
-void Bullet::setPosition(const Point &pos) {
+void Bullet::setPosition(const Point& pos) {
     position = pos;
 }
 
@@ -27,7 +27,7 @@ std::vector<double> Bullet::getMoveVector() const {
     return moveVector;
 }
 
-void Bullet::setMoveVector(const std::vector<double> &vector) {
+void Bullet::setMoveVector(const std::vector<double>& vector) {
     moveVector = vector;
 }
 

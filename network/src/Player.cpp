@@ -11,7 +11,7 @@ std::string Player::getName() const {
     return name;
 }
 
-void Player::setName(const std::string &newName) {
+void Player::setName(const std::string& newName) {
     name = newName;
 }
 
@@ -19,7 +19,7 @@ Point Player::getPosition() const {
     return position;
 }
 
-void Player::setPosition(const Point &pos) {
+void Player::setPosition(const Point& pos) {
     position = pos;
 }
 
@@ -27,7 +27,7 @@ Point Player::getSize() const {
     return size;
 }
 
-void Player::setSize(const Point &newSize) {
+void Player::setSize(const Point& newSize) {
     size = newSize;
 }
 
@@ -43,7 +43,7 @@ Health Player::getHealth() const {
     return health;
 }
 
-void Player::setHealth(const Health &newHealth) {
+void Player::setHealth(const Health& newHealth) {
     health = newHealth;
 }
 
@@ -51,6 +51,6 @@ Inventory Player::getInventory() const {
     return inventory;
 }
 
-void Player::setInventory(const Inventory &newInventory) {
+void Player::setInventory(const Inventory& newInventory) {
     inventory = newInventory;
 }

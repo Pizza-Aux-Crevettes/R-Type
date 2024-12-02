@@ -9,11 +9,11 @@
 #define HEALTH_HPP
 
 class Health {
-private:
+  private:
     double health;
     double lives;
 
-public:
+  public:
     double getHealth() const;
     void setHealth(double health);
 

@@ -11,10 +11,10 @@
 #include "Point.hpp"
 
 class Checkpoint {
-private:
+  private:
     Point position;
 
-public:
+  public:
     Point getPosition() const;
     void setPosition(const Point pos);
 };

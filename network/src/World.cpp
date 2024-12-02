@@ -11,38 +11,38 @@ Point World::getSize() const {
     return size;
 }
 
-void World::setSize(const Point &newSize) {
+void World::setSize(const Point& newSize) {
     size = newSize;
 }
 
-std::vector <Obstacle> &World::getObstacles() const {
+std::vector<Obstacle>& World::getObstacles() const {
     return obstacleList;
 }
 
-void World::addObstacle(const Obstacle &obstacle) {
+void World::addObstacle(const Obstacle& obstacle) {
     obstacleList.push_back(obstacle);
 }
 
-std::vector <Checkpoint> &World::getCheckpoints() const {
+std::vector<Checkpoint>& World::getCheckpoints() const {
     return checkpointList;
 }
 
-void World::addCheckpoint(const Checkpoint &checkpoint) {
+void World::addCheckpoint(const Checkpoint& checkpoint) {
     checkpointList.push_back(checkpoint);
 }
 
-std::vector <Player> &World::getPlayers() const {
+std::vector<Player>& World::getPlayers() const {
     return playerList;
 }
 
-void World::addPlayer(const Player &player) {
+void World::addPlayer(const Player& player) {
     playerList.push_back(player);
 }
 
-std::vector <Enemy> &World::getEnemies() const {
+std::vector<Enemy>& World::getEnemies() const {
     return enemyList;
 }
 
-void World::addEnemy(const Enemy &enemy) {
+void World::addEnemy(const Enemy& enemy) {
     enemyList.push_back(enemy);
 }

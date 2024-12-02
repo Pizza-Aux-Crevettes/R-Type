@@ -8,19 +8,19 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
 
-#include "Point.hpp"
 #include "Health.hpp"
+#include "Point.hpp"
 #include <vector>
 
 class Enemy {
-private:
+  private:
     int id;
     Point position;
     Point size;
     std::vector<double> moveVector;
     Health health;
 
-public:
+  public:
     int getId() const;
     void setId(int id);
 
@@ -28,13 +28,13 @@ public:
     void setPosition(const Point pos);
 
     Point getSize() const;
-    void setSize(const Point &size);
+    void setSize(const Point& size);
 
     std::vector<double> getMoveVector() const;
     void setMoveVector(const std::vector<double> vector);
 
     Health getHealth() const;
-    void setHealth(const Health &health);
+    void setHealth(const Health& health);
 };
 
 #endif // ENEMY_HPP

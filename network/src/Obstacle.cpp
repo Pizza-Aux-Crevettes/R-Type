@@ -11,7 +11,7 @@ Point Obstacle::getPosition() const {
     return position;
 }
 
-void Obstacle::setPosition(const Point &pos) {
+void Obstacle::setPosition(const Point& pos) {
     position = pos;
 }
 
@@ -27,6 +27,6 @@ Point Obstacle::getSize() const {
     return size;
 }
 
-void Obstacle::setSize(const Point &newSize) {
+void Obstacle::setSize(const Point& newSize) {
     size = newSize;
 }

@@ -11,6 +11,6 @@ Point Checkpoint::getPosition() const {
     return position;
 }
 
-void Checkpoint::setPosition(const Point &pos) {
+void Checkpoint::setPosition(const Point& pos) {
     position = pos;
 }
