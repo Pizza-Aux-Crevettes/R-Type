@@ -12,7 +12,7 @@
 
 #include "system/InputSystem.hpp"
 
-InputSystem::InputSystem(std::vector<std::shared_ptr<Entity>> &entities) : ASystem(entities)
+InputSystem::InputSystem(std::vector<std::shared_ptr<Entity>>& entities) : ASystem(entities)
 {
 
 }

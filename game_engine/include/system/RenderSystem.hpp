@@ -13,7 +13,7 @@ class RenderSystem : public ASystem
 {
     private:
     public:
-        RenderSystem(std::vector<std::shared_ptr<Entity>> &entities);
+        RenderSystem(std::vector<std::shared_ptr<Entity>>& entities);
         ~RenderSystem();
         void update();
         void displaySprite();
