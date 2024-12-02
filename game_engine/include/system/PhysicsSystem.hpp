@@ -9,14 +9,14 @@
 
 #include "ASystem.hpp"
 
-class PhysicsSystem : public ASystem
-{
-    public:
-        PhysicsSystem(std::vector<std::shared_ptr<Entity>>& entities);
-        ~PhysicsSystem();
-        void update();
-        void handleMovement();
-        void handleGravity();
-        void handleCheckbounds();
-    private:
+class PhysicsSystem : public ASystem {
+  public:
+    PhysicsSystem(std::vector<std::shared_ptr<Entity>>& entities);
+    ~PhysicsSystem();
+    void update();
+    void handleMovement();
+    void handleGravity();
+    void handleCheckbounds();
+
+  private:
 };

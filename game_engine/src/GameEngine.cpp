@@ -12,12 +12,6 @@
 
 #include "GameEngine.hpp"
 
-GameEngine::GameEngine()
-{
+GameEngine::GameEngine() {}
 
-}
-
-GameEngine::~GameEngine()
-{
-
-}
+GameEngine::~GameEngine() {}

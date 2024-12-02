@@ -9,9 +9,8 @@
 
 #include "../Entity.hpp"
 
-class ISystem
-{
-    public:
-        virtual ~ISystem() = default;
-        virtual void update() = 0;
+class ISystem {
+  public:
+    virtual ~ISystem() = default;
+    virtual void update() = 0;
 };

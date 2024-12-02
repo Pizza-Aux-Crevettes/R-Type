@@ -9,16 +9,15 @@
 
 #include "ASystem.hpp"
 
-class RenderSystem : public ASystem
-{
-    private:
-    public:
-        RenderSystem(std::vector<std::shared_ptr<Entity>>& entities);
-        ~RenderSystem();
-        void update();
-        void displaySprite();
-        void displayText();
-        void handleAnimations();
-        void handleSound();
-        void displayButton();
+class RenderSystem : public ASystem {
+  private:
+  public:
+    RenderSystem(std::vector<std::shared_ptr<Entity>>& entities);
+    ~RenderSystem();
+    void update();
+    void displaySprite();
+    void displayText();
+    void handleAnimations();
+    void handleSound();
+    void displayButton();
 };

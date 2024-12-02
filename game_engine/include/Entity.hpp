@@ -9,13 +9,12 @@
 
 #include <cstdint>
 
-class Entity
-{
-    private:
-        std::int32_t _id;
-        // std::vector<T component>;
-    public:
-        Entity();
-        ~Entity();
-        std::int32_t getEntityId();
+class Entity {
+  private:
+    std::int32_t _id;
+    // std::vector<T component>;
+  public:
+    Entity();
+    ~Entity();
+    std::int32_t getEntityId();
 };

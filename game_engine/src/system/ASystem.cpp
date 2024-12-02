@@ -7,6 +7,6 @@
 
 #include "system/ASystem.hpp"
 
-ASystem::~ASystem(){}
+ASystem::~ASystem() {}
 
-void ASystem::update(){}
+void ASystem::update() {}

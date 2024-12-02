@@ -12,16 +12,9 @@
 
 #include "system/RenderSystem.hpp"
 
+RenderSystem::RenderSystem(std::vector<std::shared_ptr<Entity>>& entities)
+    : ASystem(entities) {}
 
-
-RenderSystem::RenderSystem(std::vector<std::shared_ptr<Entity>>& entities) : ASystem(entities)
-{
-
-}
-
-RenderSystem::~RenderSystem()
-{
-
-}
+RenderSystem::~RenderSystem() {}
 
 void RenderSystem::update() {}

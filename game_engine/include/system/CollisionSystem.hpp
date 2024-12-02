@@ -9,13 +9,13 @@
 
 #include "ASystem.hpp"
 
-class CollisionSystem : public ASystem
-{
-    public:
-        CollisionSystem(std::vector<std::shared_ptr<Entity>>& entities);
-        ~CollisionSystem();
-        void update();
-        void isColliding();
-        void damage();
-    private:
+class CollisionSystem : public ASystem {
+  public:
+    CollisionSystem(std::vector<std::shared_ptr<Entity>>& entities);
+    ~CollisionSystem();
+    void update();
+    void isColliding();
+    void damage();
+
+  private:
 };

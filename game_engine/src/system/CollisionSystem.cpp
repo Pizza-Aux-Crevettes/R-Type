@@ -13,15 +13,9 @@
 
 #include "system/CollisionSystem.hpp"
 
-CollisionSystem::CollisionSystem(std::vector<std::shared_ptr<Entity>>& entities) : ASystem(entities)
-{
+CollisionSystem::CollisionSystem(std::vector<std::shared_ptr<Entity>>& entities)
+    : ASystem(entities) {}
 
-}
-
-CollisionSystem::~CollisionSystem()
-{
-
-}
+CollisionSystem::~CollisionSystem() {}
 
 void CollisionSystem::update() {}
-
