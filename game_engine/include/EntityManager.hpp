@@ -11,8 +11,7 @@
 #include <memory>
 #include <vector>
 
-class EntityManager
-{
+class EntityManager {
   private:
     std::vector<std::shared_ptr<Entity>> entities;
 

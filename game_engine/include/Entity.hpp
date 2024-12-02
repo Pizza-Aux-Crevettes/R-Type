@@ -9,8 +9,7 @@
 
 #include <cstdint>
 
-class Entity
-{
+class Entity {
   private:
     std::int32_t _id;
     // std::vector<T component>;
