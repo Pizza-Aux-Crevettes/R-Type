@@ -11,30 +11,23 @@
 
 #include "components/Sound.hpp"
 
-Sound::Sound(std::string soundFile, int volume) : _soundFile(soundFile), _volume(volume)
-{
-}
+Sound::Sound(std::string soundFile, int volume)
+    : _soundFile(soundFile), _volume(volume) {}
 
-Sound::~Sound()
-{
-}
+Sound::~Sound() {}
 
-std::string Sound::getSoundFile() const
-{
+std::string Sound::getSoundFile() const {
     return this->_soundFile;
 }
 
-void Sound::setSoundFile(std::string soundFile)
-{
+void Sound::setSoundFile(std::string soundFile) {
     this->_soundFile = soundFile;
 }
 
-int Sound::getVolume() const
-{
+int Sound::getVolume() const {
     return this->_volume;
 }
 
-void Sound::setVolume(int volume)
-{
+void Sound::setVolume(int volume) {
     this->_volume = volume;
 }

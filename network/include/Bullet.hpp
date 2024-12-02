@@ -8,20 +8,20 @@
 #ifndef BULLET_HPP
 #define BULLET_HPP
 
-#include "Point.hpp"
 #include "BulletType.hpp"
+#include "Point.hpp"
 #include <vector>
 
 class Bullet {
-private:
+  private:
     Point size;
     Point position;
     std::vector<double> moveVector;
     BulletType type;
 
-public:
+  public:
     Point getSize() const;
-    void setSize(const Point &size);
+    void setSize(const Point& size);
 
     Point getPosition() const;
     void setPosition(const Point pos);

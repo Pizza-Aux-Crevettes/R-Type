@@ -8,16 +8,16 @@
 #ifndef OBSTACLE_HPP
 #define OBSTACLE_HPP
 
-#include "Point.hpp"
 #include "ObstacleType.hpp"
+#include "Point.hpp"
 
 class Obstacle {
-private:
+  private:
     Point position;
     ObstacleType type;
     Point size;
 
-public:
+  public:
     Point getPosition() const;
     void setPosition(const Point pos);
 
@@ -25,7 +25,7 @@ public:
     void setType(ObstacleType);
 
     Point getSize() const;
-    void setSize(const Point &size);
+    void setSize(const Point& size);
 };
 
 #endif // OBSTACLE_HPP

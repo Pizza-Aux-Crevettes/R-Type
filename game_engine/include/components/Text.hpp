@@ -11,15 +11,14 @@
 #include <string>
 
 class Text {
-    public:
-        Text(std::string text = "");
-        ~Text();
-        std::string getText() const;
-        void setText(std::string text);
+  public:
+    Text(std::string text = "");
+    ~Text();
+    std::string getText() const;
+    void setText(std::string text);
 
-    private:
-        std::string _text;
+  private:
+    std::string _text;
 };
 
 #endif /* TEXT_HPP_ */
-

@@ -1,15 +1,15 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "Point.hpp"
+#include "Bullet.hpp"
 #include "Health.hpp"
 #include "Inventory.hpp"
-#include "Bullet.hpp"
-#include <vector>
+#include "Point.hpp"
 #include <string>
+#include <vector>
 
 class Player {
-private:
+  private:
     std::string name;
     Point position;
     Point size;
@@ -18,24 +18,24 @@ private:
     Inventory inventory;
     std::vector<Bullet> bulletList;
 
-public:
+  public:
     std::string getName() const;
-    void setName(const std::string &name);
+    void setName(const std::string& name);
 
     Point getPosition() const;
     void setPosition(const Point pos);
 
     Point getSize() const;
-    void setSize(const Point &size);
+    void setSize(const Point& size);
 
     double getSpeed() const;
     void setSpeed(double speed);
 
     Health getHealth() const;
-    void setHealth(const Health &health);
+    void setHealth(const Health& health);
 
     Inventory getInventory() const;
-    void setInventory(const Inventory &inventory);
+    void setInventory(const Inventory& inventory);
 };
 
 #endif // PLAYER_HPP

@@ -5,46 +5,40 @@
 ** Animation.cpp
 **
 ** The Animation class represents an animation for an entity in the game.
-** It tracks the current frame, frame duration, and elapsed time for animation playback.
-** The constructor allows initializing the animation with the specified values for each parameter.
+** It tracks the current frame, frame duration, and elapsed time for animation
+*playback.
+** The constructor allows initializing the animation with the specified values
+*for each parameter.
 */
 
 #include "components/Animation.hpp"
 
-Animation::Animation(int currentFrame, float frameDuration, float elapsedTime) : _currentFrame(currentFrame), _frameDuration(frameDuration), _elapsedTime(elapsedTime)
-{
-}
+Animation::Animation(int currentFrame, float frameDuration, float elapsedTime)
+    : _currentFrame(currentFrame), _frameDuration(frameDuration),
+      _elapsedTime(elapsedTime) {}
 
-Animation::~Animation()
-{
-}
+Animation::~Animation() {}
 
-int Animation::getCurrentFrame() const
-{
+int Animation::getCurrentFrame() const {
     return this->_currentFrame;
 }
 
-void Animation::setCurrentFrame(int currentFrame)
-{
+void Animation::setCurrentFrame(int currentFrame) {
     this->_currentFrame = currentFrame;
 }
 
-float Animation::getFrameDuration() const
-{
+float Animation::getFrameDuration() const {
     return this->_frameDuration;
 }
 
-void Animation::setFrameDuration(float frameDuration)
-{
+void Animation::setFrameDuration(float frameDuration) {
     this->_frameDuration = frameDuration;
 }
 
-float Animation::getElapsedTime() const
-{
+float Animation::getElapsedTime() const {
     return this->_elapsedTime;
 }
 
-void Animation::setElapsedTime(float elapsedTime)
-{
+void Animation::setElapsedTime(float elapsedTime) {
     this->_elapsedTime = elapsedTime;
 }

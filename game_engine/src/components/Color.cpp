@@ -6,25 +6,20 @@
 **
 ** The Color class represents a color for an entity in the game.
 ** It holds the color as a vector of doubles representing RGB values.
-** The constructor allows initializing the color with a given vector of values (e.g., RGB).
+** The constructor allows initializing the color with a given vector of values
+*(e.g., RGB).
 */
 
 #include "components/Color.hpp"
 
-Color::Color(std::vector<double> color) : _color(color)
-{
-}
+Color::Color(std::vector<double> color) : _color(color) {}
 
-Color::~Color()
-{
-}
+Color::~Color() {}
 
-std::vector<double> Color::getColor() const
-{
+std::vector<double> Color::getColor() const {
     return this->_color;
 }
 
-void Color::setColor(std::vector<double> color)
-{
+void Color::setColor(std::vector<double> color) {
     this->_color = color;
 }

@@ -11,15 +11,15 @@
 #include "../Entity.hpp"
 
 class Bullet {
-    public:
-        Bullet(int damage = 0);
-        ~Bullet();
-        int getDamage() const;
-        void setDamage(int damage);
+  public:
+    Bullet(int damage = 0);
+    ~Bullet();
+    int getDamage() const;
+    void setDamage(int damage);
 
-    private:
-        int _damage;
-        Entity _sourceEntity;
+  private:
+    int _damage;
+    Entity _sourceEntity;
 };
 
 #endif /* BULLET_HPP_ */

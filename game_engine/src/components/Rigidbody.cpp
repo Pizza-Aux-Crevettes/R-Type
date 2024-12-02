@@ -11,61 +11,49 @@
 
 #include "components/Rigidbody.hpp"
 
-Rigidbody::Rigidbody(float mass, float drag, float gravityScale, float forceX, float forceY) : _mass(mass), _drag(drag), _gravityScale(gravityScale), _forceX(forceX), _forceY(forceY)
-{
-    
-}
+Rigidbody::Rigidbody(float mass, float drag, float gravityScale, float forceX,
+                     float forceY)
+    : _mass(mass), _drag(drag), _gravityScale(gravityScale), _forceX(forceX),
+      _forceY(forceY) {}
 
-Rigidbody::~Rigidbody()
-{
-}
+Rigidbody::~Rigidbody() {}
 
-float Rigidbody::getMass() const
-{
+float Rigidbody::getMass() const {
     return this->_mass;
 }
 
-void Rigidbody::setMass(float mass)
-{
+void Rigidbody::setMass(float mass) {
     this->_mass = mass;
 }
 
-float Rigidbody::getDrag() const
-{
+float Rigidbody::getDrag() const {
     return this->_drag;
 }
 
-void Rigidbody::setDrag(float drag)
-{
+void Rigidbody::setDrag(float drag) {
     this->_drag = drag;
 }
 
-float Rigidbody::getGravityScale() const
-{
+float Rigidbody::getGravityScale() const {
     return this->_gravityScale;
 }
 
-void Rigidbody::setGravityScale(float gravityScale)
-{
+void Rigidbody::setGravityScale(float gravityScale) {
     this->_gravityScale = gravityScale;
 }
 
-float Rigidbody::getForceX() const
-{
+float Rigidbody::getForceX() const {
     return this->_forceX;
 }
 
-void Rigidbody::setForceX(float forceX)
-{
+void Rigidbody::setForceX(float forceX) {
     this->_forceX = forceX;
 }
 
-float Rigidbody::getForceY() const
-{
+float Rigidbody::getForceY() const {
     return this->_forceY;
 }
 
-void Rigidbody::setForceY(float forceY)
-{
+void Rigidbody::setForceY(float forceY) {
     this->_forceY = forceY;
 }
