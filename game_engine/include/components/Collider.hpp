@@ -12,13 +12,13 @@
 
 class Collider {
   public:
-    Collider(std::vector<double> size = {0.0, 0.0});
+    Collider(std::pair<double, double> size = {0.0, 0.0});
     ~Collider();
-    std::vector<double> getCollider() const;
-    void setCollider(std::vector<double> size);
+    std::pair<double, double> getCollider() const;
+    void setCollider(std::pair<double, double> size);
 
   private:
-    std::vector<double> _size;
+    std::pair<double, double> _size;
 };
 
 #endif /* COLLIDER_HPP_ */
