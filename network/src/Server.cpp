@@ -20,14 +20,16 @@ Server::Server(Config port) : port(port), tcpSocket(port), udpSocket(port) {
     Logger::success("UDP socket initialized successfully.");
 
     Logger::warning("Checking SmartBuffer...");
-    smartBuffer << std::string ("SmartBuffer test") << int8_t(8) << int16_t(16) <<  int32_t(32);
+    smartBuffer << std::string("SmartBuffer test") << int8_t(8) << int16_t(16)
+                << int32_t(32);
     std::string a;
     int8_t b;
     int16_t c;
     int32_t d;
     smartBuffer >> a >> b >> c >> d;
     std::stringstream ss;
-    ss << "Deserialized values: " << a << " " << static_cast<int>(b) << " "  << c << " " << d;
+    ss << "Deserialized values: " << a << " " << static_cast<int>(b) << " " << c
+       << " " << d;
     Logger::success(ss.str());
 
     Logger::success("Server initialization complete.");
