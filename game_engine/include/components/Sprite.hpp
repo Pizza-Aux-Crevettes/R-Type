@@ -13,7 +13,8 @@
 
 class Sprite {
   public:
-    Sprite(std::string texturePath = "", std::pair<double, double> size = {0.0, 0.0});
+    Sprite(std::string texturePath = "",
+           std::pair<double, double> size = {0.0, 0.0});
     ~Sprite();
     std::string getTexturePath() const;
     void setTexturePath(std::string texturePath);

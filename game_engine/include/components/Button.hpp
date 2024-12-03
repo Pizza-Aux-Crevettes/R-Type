@@ -23,10 +23,7 @@ class Button {
   private:
     std::string _text;
     std::pair<double, double> _size;
-    enum Shape {
-        Circle,
-        Rectangle
-    };
+    enum Shape { Circle, Rectangle };
 };
 
 #endif /* BUTTON_HPP_ */

@@ -11,15 +11,15 @@
 #include <string>
 
 class Texture {
-    public:
-        Texture(std::string texturePath = "");
-        ~Texture();
-        std::string getTexturePath() const;
-        void setTexturePath(std::string texturePath);
+  public:
+    Texture(std::string texturePath = "");
+    ~Texture();
+    std::string getTexturePath() const;
+    void setTexturePath(std::string texturePath);
 
-    protected:
-    private:
-        std::string _texturePath;
+  protected:
+  private:
+    std::string _texturePath;
 };
 
 #endif /* !TEXTURE_HPP_ */

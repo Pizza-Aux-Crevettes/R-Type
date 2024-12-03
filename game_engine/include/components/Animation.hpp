@@ -10,7 +10,8 @@
 
 class Animation {
   public:
-    Animation(int currentFrame = 0, float frameDuration = 0.0f, float elapsedTime = 0.0f);
+    Animation(int currentFrame = 0, float frameDuration = 0.0f,
+              float elapsedTime = 0.0f);
     ~Animation();
     int getCurrentFrame() const;
     void setCurrentFrame(int currentFrame);

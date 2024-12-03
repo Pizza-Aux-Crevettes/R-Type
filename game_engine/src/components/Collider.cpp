@@ -17,12 +17,10 @@ Collider::Collider(std::pair<double, double> size) : _size(size) {}
 
 Collider::~Collider() {}
 
-std::pair<double, double> Collider::getCollider() const
-{
+std::pair<double, double> Collider::getCollider() const {
     return this->_size;
 }
 
-void Collider::setCollider(std::pair<double, double> size)
-{
+void Collider::setCollider(std::pair<double, double> size) {
     this->_size = size;
 }
