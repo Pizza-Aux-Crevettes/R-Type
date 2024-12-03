@@ -4,3 +4,6 @@
 [submodule "smart-buffer-cpp"]
 	path = external/smart-buffer-cpp
 	url = git@github.com:fohz67/smart-buffer-cpp.git
+[submodule "external/smart-buffer-cpp"]
+	path = external/smart-buffer-cpp
+	url = git@github.com:fohz67/smart-buffer-cpp.git
