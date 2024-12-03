@@ -5,15 +5,14 @@
 ** UdpSocket.hpp
 */
 
-#ifndef UDPSOCKET_HPP
-#define UDPSOCKET_HPP
+#pragma once
 
-#include <vector>
-#include <netinet/in.h>
 #include "Config.hpp"
+#include <netinet/in.h>
+#include <vector>
 
 class UdpSocket {
-public:
+  public:
     explicit UdpSocket(Config port = PORT);
     ~UdpSocket();
 
@@ -21,10 +20,8 @@ public:
     void listen();
     void close();
 
-private:
+  private:
     Config port;
     int udpSocket;
     sockaddr_in udpAddr;
 };
-
-#endif // UDPSOCKET_HPP

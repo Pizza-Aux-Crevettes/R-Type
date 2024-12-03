@@ -5,11 +5,11 @@
 ** TcpSocket.cpp
 */
 
-#include <unistd.h>
-#include <cstring>
-#include <arpa/inet.h>
 #include "TcpSocket.hpp"
 #include "Logger.hpp"
+#include <arpa/inet.h>
+#include <cstring>
+#include <unistd.h>
 
 TcpSocket::TcpSocket(Config port) : port(port), tcpSocket(FAILURE) {}
 
@@ -27,14 +27,16 @@ void TcpSocket::init() {
     tcpAddr.sin_addr.s_addr = INADDR_ANY;
     tcpAddr.sin_port = htons(port);
 
-    if (bind(tcpSocket, (struct sockaddr*)&tcpAddr, sizeof(tcpAddr)) < SUCCESS) {
+    if (bind(tcpSocket, (struct sockaddr*)&tcpAddr, sizeof(tcpAddr)) <
+        SUCCESS) {
         throw std::runtime_error("Bind failed for TCP socket");
     }
     if (::listen(tcpSocket, 3) < SUCCESS) {
         throw std::runtime_error("Listen failed for TCP socket");
     }
 
-    Logger::info("TCP socket bound and listening on port " + std::to_string(port));
+    Logger::info("TCP socket bound and listening on port " +
+                 std::to_string(port));
 }
 
 void TcpSocket::listen() {
@@ -49,9 +51,8 @@ void TcpSocket::listen() {
 
         Logger::info("New TCP client connected");
 
-        clientThreads.emplace_back([this, clientSocket]() {
-            handleClient(clientSocket);
-        });
+        clientThreads.emplace_back(
+            [this, clientSocket]() { handleClient(clientSocket); });
     }
 }
 

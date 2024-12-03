@@ -5,16 +5,15 @@
 ** TcpSocket.hpp
 */
 
-#ifndef TCPSOCKET_HPP
-#define TCPSOCKET_HPP
+#pragma once
 
-#include <vector>
-#include <thread>
-#include <netinet/in.h>
 #include "Config.hpp"
+#include <netinet/in.h>
+#include <thread>
+#include <vector>
 
 class TcpSocket {
-public:
+  public:
     explicit TcpSocket(Config port = PORT);
     ~TcpSocket();
 
@@ -22,7 +21,7 @@ public:
     void listen();
     void close();
 
-private:
+  private:
     Config port;
     int tcpSocket;
     sockaddr_in tcpAddr;
@@ -30,5 +29,3 @@ private:
 
     void handleClient(int clientSocket);
 };
-
-#endif // TCPSOCKET_HPP

@@ -5,10 +5,10 @@
 ** Server.cpp
 */
 
-#include <stdexcept>
-#include <iostream>
 #include "Server.hpp"
 #include "Logger.hpp"
+#include <iostream>
+#include <stdexcept>
 
 Server::Server(Config port) : port(port), tcpSocket(port), udpSocket(port) {
     Logger::info("Starting server initialization...");
@@ -21,7 +21,8 @@ Server::Server(Config port) : port(port), tcpSocket(port), udpSocket(port) {
 
     Logger::warning("Checking SmartBuffer...");
     smartBuffer.writeString("SmartBuffer test passed");
-    Logger::success("Buffer initialized with message: " + smartBuffer.readString());
+    Logger::success("Buffer initialized with message: " +
+                    smartBuffer.readString());
 
     Logger::success("Server initialization complete.");
     Logger::info("Server started. Listening for connections...");
@@ -44,7 +45,7 @@ int Server::start() {
         std::thread udpThread(&UdpSocket::listen, &udpSocket);
         udpThread.detach();
         tcpSocket.listen();
-    } catch (const std::exception &exception) {
+    } catch (const std::exception& exception) {
         Logger::error("Runtime error: " + std::string(exception.what()));
         return ERROR;
     }
@@ -53,7 +54,7 @@ int Server::start() {
 }
 
 void Server::closeThreads() {
-    for (auto &thread : clientThreads) {
+    for (auto& thread : clientThreads) {
         if (thread.joinable()) {
             thread.join();
             Logger::info("Client thread joined.");

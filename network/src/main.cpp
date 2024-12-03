@@ -5,15 +5,15 @@
 ** main.cpp
 */
 
-#include <iostream>
-#include "Server.hpp"
 #include "Logger.hpp"
+#include "Server.hpp"
+#include <iostream>
 
 int main() {
     try {
         Server server(PORT);
         server.start();
-    } catch (const std::exception &e) {
+    } catch (const std::exception& e) {
         Logger::error(std::string("Server error: ") + e.what());
         return ERROR;
     }

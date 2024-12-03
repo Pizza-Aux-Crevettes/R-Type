@@ -5,11 +5,11 @@
 ** UdpSocket.cpp
 */
 
-#include <unistd.h>
-#include <cstring>
-#include <arpa/inet.h>
 #include "UdpSocket.hpp"
 #include "Logger.hpp"
+#include <arpa/inet.h>
+#include <cstring>
+#include <unistd.h>
 
 UdpSocket::UdpSocket(Config port) : port(port), udpSocket(FAILURE) {}
 
@@ -27,7 +27,8 @@ void UdpSocket::init() {
     udpAddr.sin_addr.s_addr = INADDR_ANY;
     udpAddr.sin_port = htons(port);
 
-    if (bind(udpSocket, (struct sockaddr*)&udpAddr, sizeof(udpAddr)) < SUCCESS) {
+    if (bind(udpSocket, (struct sockaddr*)&udpAddr, sizeof(udpAddr)) <
+        SUCCESS) {
         throw std::runtime_error("Bind failed for UDP socket");
     }
 
@@ -42,7 +43,8 @@ void UdpSocket::listen() {
     Logger::info("Listening for UDP messages...");
 
     while (true) {
-        int bytesRead = recvfrom(udpSocket, buffer, sizeof(buffer) - 1, 0, (struct sockaddr*)&clientAddr, &addrLen);
+        int bytesRead = recvfrom(udpSocket, buffer, sizeof(buffer) - 1, 0,
+                                 (struct sockaddr*)&clientAddr, &addrLen);
         if (bytesRead > 0) {
             buffer[bytesRead] = END_STR;
             Logger::info("UDP Received: " + std::string(buffer));

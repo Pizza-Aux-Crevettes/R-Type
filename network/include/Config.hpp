@@ -5,8 +5,7 @@
 ** Config.hpp
 */
 
-#ifndef CONFIG_HPP
-#define CONFIG_HPP
+#pragma once
 
 enum Config {
     DEFAULT_BYTES = 1024,
@@ -17,5 +16,3 @@ enum Config {
     BAD = 1,
     END_STR = '\0',
 };
-
-#endif //CONFIG_HPP

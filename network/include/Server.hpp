@@ -5,24 +5,23 @@
 ** Server.hpp
 */
 
-#ifndef SERVER_HPP
-#define SERVER_HPP
+#pragma once
 
-#include <vector>
-#include <thread>
-#include <SmartBuffer.hpp>
+#include "Config.hpp"
 #include "TcpSocket.hpp"
 #include "UdpSocket.hpp"
-#include "Config.hpp"
+#include <SmartBuffer.hpp>
+#include <thread>
+#include <vector>
 
 class Server {
-public:
+  public:
     explicit Server(Config port = PORT);
     ~Server();
 
     int start();
 
-private:
+  private:
     Config port;
     TcpSocket tcpSocket;
     UdpSocket udpSocket;
@@ -31,5 +30,3 @@ private:
 
     void closeThreads();
 };
-
-#endif // SERVER_HPP
