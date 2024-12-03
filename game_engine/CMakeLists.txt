@@ -11,4 +11,4 @@ add_executable(GameEngine ${SOURCES})
 
 target_include_directories(GameEngine PUBLIC include)
 
-target_link_libraries(GameEngine sfml-graphics sfml-window sfml-system)
+target_link_libraries(GameEngine sfml-graphics sfml-window sfml-system smart_buffer)
