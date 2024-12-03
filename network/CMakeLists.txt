@@ -9,6 +9,4 @@ file(GLOB_RECURSE HEADERS include/*.hpp)
 
 add_executable(Network ${SOURCES})
 
-target_include_directories(Network PUBLIC include ../external/smart-buffer-cpp/include)
-
-target_link_libraries(Network smart_buffer)
+target_include_directories(Network PUBLIC include)
