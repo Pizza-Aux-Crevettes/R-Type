@@ -10,9 +10,9 @@
 
 #include <vector>
 #include <thread>
+#include <SmartBuffer.hpp>
 #include "TcpSocket.hpp"
 #include "UdpSocket.hpp"
-#include "SmartBuffer.hpp"
 #include "Config.hpp"
 
 class Server {
