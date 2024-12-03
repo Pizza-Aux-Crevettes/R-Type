@@ -14,3 +14,7 @@
 Entity::Entity() {}
 
 Entity::~Entity() {}
+
+std::int32_t Entity::getEntityId() {
+    return (_id);
+}
