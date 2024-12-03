@@ -19,7 +19,12 @@ Server::Server(Config port) : port(port), tcpSocket(port), udpSocket(port) {
     udpSocket.init();
     Logger::success("UDP socket initialized successfully.");
 
+    Logger::warning("Checking SmartBuffer...");
+    smartBuffer.writeString("SmartBuffer test passed");
+    Logger::success("Buffer initialized with message: " + smartBuffer.readString());
+
     Logger::success("Server initialization complete.");
+    Logger::info("Server started. Listening for connections...");
 }
 
 Server::~Server() {

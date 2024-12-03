@@ -12,6 +12,7 @@
 #include <thread>
 #include "TcpSocket.hpp"
 #include "UdpSocket.hpp"
+#include "SmartBuffer.hpp"
 #include "Config.hpp"
 
 class Server {
@@ -25,6 +26,7 @@ private:
     Config port;
     TcpSocket tcpSocket;
     UdpSocket udpSocket;
+    SmartBuffer smartBuffer;
     std::vector<std::thread> clientThreads;
 
     void closeThreads();

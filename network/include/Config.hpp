@@ -10,6 +10,7 @@
 
 enum Config {
     DEFAULT_BYTES = 1024,
+    DEFAULT_SMART_BUFFER_ALLOC = 8,
     PORT = 8080,
     SUCCESS = 0,
     ERROR = 84,
