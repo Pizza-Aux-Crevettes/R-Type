@@ -3,7 +3,8 @@
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
 ** Implements the logic for processing user inputs on the client side.
-** Handles inputs from devices such as the keyboard or mouse, converting them into game actions.
+** Handles inputs from devices such as the keyboard or mouse, converting them
+*into game actions.
 ** Responsibility:
 ** - Capture and interpret user inputs.
 ** - Relay interpreted inputs to the appropriate systems in the game.
@@ -18,49 +19,37 @@ InputClient::InputClient() {}
 InputClient::~InputClient() {}
 
 sf::Keyboard::Key InputClient::getUp() {
-    return(_up);
+    return (_up);
 }
 
-void InputClient::setUp() {
-    
-}
+void InputClient::setUp() {}
 
 sf::Keyboard::Key InputClient::getRight() {
-    return(_right);
+    return (_right);
 }
 
-void InputClient::setRight() {
-    
-}
+void InputClient::setRight() {}
 
 sf::Keyboard::Key InputClient::getLeft() {
-    return(_left);
+    return (_left);
 }
 
-void InputClient::setLeft() {
-    
-}
+void InputClient::setLeft() {}
 
 sf::Keyboard::Key InputClient::getDown() {
-    return(_down);
+    return (_down);
 }
 
-void InputClient::setDown() {
-    
-}
+void InputClient::setDown() {}
 
 sf::Keyboard::Key InputClient::getAttack() {
-    return(_attack);
+    return (_attack);
 }
 
-void InputClient::setAttack() {
-    
-}
+void InputClient::setAttack() {}
 
 sf::Keyboard::Key InputClient::getAutoFire() {
-    return(_autoFire);
+    return (_autoFire);
 }
 
-void InputClient::setAutoFire() {
-    
-}
+void InputClient::setAutoFire() {}

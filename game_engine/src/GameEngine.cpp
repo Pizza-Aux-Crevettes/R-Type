@@ -16,15 +16,7 @@ GameEngine::GameEngine() {}
 
 GameEngine::~GameEngine() {}
 
-void GameEngine::manageEntity() {
-    
-}
-void GameEngine::createWindow() {
-    
-}
-void GameEngine::destroyWindow() {
-    
-}
-void GameEngine::manageSystem() {
-    
-}
+void GameEngine::manageEntity() {}
+void GameEngine::createWindow() {}
+void GameEngine::destroyWindow() {}
+void GameEngine::manageSystem() {}
