@@ -5,6 +5,17 @@
 ** main.cpp
 */
 
-int main(int ac, char* av[]) {
-    return 0;
+#include <iostream>
+#include "Server.hpp"
+#include "Logger.hpp"
+
+int main() {
+    try {
+        Server server(PORT);
+        server.start();
+    } catch (const std::exception &e) {
+        Logger::error(std::string("Server error: ") + e.what());
+        return ERROR;
+    }
+    return SUCCESS;
 }
