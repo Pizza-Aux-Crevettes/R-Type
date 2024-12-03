@@ -8,6 +8,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+
 class GameEngine {
   private:
     sf::RenderWindow _window;
