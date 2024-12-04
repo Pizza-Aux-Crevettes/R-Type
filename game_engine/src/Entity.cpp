@@ -10,11 +10,22 @@
 */
 
 #include "Entity.hpp"
+#include <iostream>
 
-Entity::Entity() {}
+GameEngine::Entity::Entity() : _id(0) {}
 
-Entity::~Entity() {}
+GameEngine::Entity::~Entity() {}
 
-std::int32_t Entity::getEntityId() {
+std::int32_t GameEngine::Entity::getEntityId() const {
     return (_id);
+}
+
+std::vector<std::unique_ptr<Component>>& GameEngine::Entity::getComponents() {
+    return components;
+}
+
+void GameEngine::Entity::displayComponents() const {
+    for (const auto& component : components) {
+        component->display();
+    }
 }
