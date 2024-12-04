@@ -10,6 +10,7 @@
 */
 
 #include "Client.hpp"
+#include "InputClient.hpp"
 #include <thread>
 
 Client::Client() {}
@@ -18,8 +19,8 @@ Client::~Client() {}
 
 void Client::listenServer(sf::RenderWindow* win) {
     while (win->isOpen()) {
-        std::cout << "écoute le serveur et stocke les données qu'il envoie"
-                  << std::endl;
+        // std::cout << "écoute le serveur et stocke les données qu'il envoie"
+        //           << std::endl;
     }
 }
 
@@ -27,12 +28,15 @@ void Client::manageClient() {
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "Client Game");
     std::thread serverThread(std::bind(&Client::listenServer, this, &window));
+    InputClient input_test;
 
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+            if (event.type == sf::Event::KeyPressed)
+                input_test.checkKey(event);
         }
 
         window.clear();

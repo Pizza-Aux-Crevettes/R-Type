@@ -6,6 +6,7 @@
 */
 
 #include "Client.hpp"
+#include "InputClient.hpp"
 
 int main(int ac, char* av[]) {
     Client client_test;
