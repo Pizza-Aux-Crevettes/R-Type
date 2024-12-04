@@ -13,6 +13,7 @@
 #include <iostream>
 #include <vector>
 #include <typeinfo>
+#include <memory>
 
 namespace GameEngine {
 
