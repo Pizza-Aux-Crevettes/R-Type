@@ -11,9 +11,9 @@
 #include "components/Components.hpp"
 
 #include <iostream>
-#include <vector>
-#include <typeinfo>
 #include <memory>
+#include <typeinfo>
+#include <vector>
 
 namespace GameEngine {
 
@@ -25,8 +25,7 @@ class Entity {
     template <typename ComponentType>
     void addComponent(ComponentType&& component);
 
-    template <typename ComponentType>
-    void removeComponent();
+    template <typename ComponentType> void removeComponent();
 
     std::vector<std::unique_ptr<Component>>& getComponents();
     void displayComponents() const;
@@ -42,8 +41,7 @@ void Entity::addComponent(ComponentType&& component) {
     for (auto& tmpComponent : components) {
         auto& componentRef = *tmpComponent;
         if (typeid(componentRef) == typeid(ComponentType)) {
-            std::cout << "Component already adding to the Entity"
-                      << std::endl;
+            std::cout << "Component already adding to the Entity" << std::endl;
             return;
         }
     }
@@ -51,8 +49,7 @@ void Entity::addComponent(ComponentType&& component) {
         std::forward<ComponentType>(component)));
 }
 
-template <typename ComponentType>
-void Entity::removeComponent() {
+template <typename ComponentType> void Entity::removeComponent() {
     int index = 0;
     for (auto& tmpComponent : components) {
         auto& componentRef = *tmpComponent;
