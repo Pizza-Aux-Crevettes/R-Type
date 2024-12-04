@@ -5,10 +5,9 @@
 ** Client.cpp
 */
 
-#include "../include/Client.hpp"
+#include "Client.hpp"
 
-int main (int ac, char *av[])
-{
+int main(int ac, char* av[]) {
     Client client_test;
 
     client_test.manageClient();
