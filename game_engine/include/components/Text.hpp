@@ -5,8 +5,7 @@
 ** Text.hpp
 */
 
-#ifndef TEXT_HPP_
-#define TEXT_HPP_
+#pragma once
 
 #include <string>
 
@@ -20,5 +19,3 @@ class Text {
   private:
     std::string _text;
 };
-
-#endif /* TEXT_HPP_ */

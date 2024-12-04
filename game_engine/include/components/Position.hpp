@@ -5,8 +5,7 @@
 ** Position.hpp
 */
 
-#ifndef POSITION_HPP_
-#define POSITION_HPP_
+#pragma once
 
 class Position {
   public:
@@ -21,5 +20,3 @@ class Position {
     float _x;
     float _y;
 };
-
-#endif /* POSITION_HPP_ */

@@ -5,8 +5,7 @@
 ** Animation.hpp
 */
 
-#ifndef ANIMATION_HPP_
-#define ANIMATION_HPP_
+#pragma once
 
 class Animation {
   public:
@@ -25,5 +24,3 @@ class Animation {
     float _frameDuration;
     float _elapsedTime;
 };
-
-#endif /* ANIMATION_HPP_ */

@@ -5,8 +5,7 @@
 ** Texture.hpp
 */
 
-#ifndef TEXTURE_HPP_
-#define TEXTURE_HPP_
+#pragma once
 
 #include <string>
 
@@ -21,5 +20,3 @@ class Texture {
   private:
     std::string _texturePath;
 };
-
-#endif /* !TEXTURE_HPP_ */
