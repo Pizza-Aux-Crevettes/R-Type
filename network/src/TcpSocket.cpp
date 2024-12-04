@@ -72,7 +72,8 @@ void TcpSocket::handleClient(int clientSocket) {
             break;
         }
 
-        smartBuffer.inject(reinterpret_cast<const uint8_t*>(rawBuffer), bytesRead);
+        smartBuffer.inject(reinterpret_cast<const uint8_t*>(rawBuffer),
+                           bytesRead);
         smartBuffer.resetRead();
 
         Server::getProtocol().handleMessage(clientSocket, smartBuffer);

@@ -51,7 +51,8 @@ void UdpSocket::listen() {
                                  (struct sockaddr*)&clientAddr, &addrLen);
         if (bytesRead > 0) {
 
-            smartBuffer.inject(reinterpret_cast<const uint8_t*>(rawBuffer), bytesRead);
+            smartBuffer.inject(reinterpret_cast<const uint8_t*>(rawBuffer),
+                               bytesRead);
             smartBuffer.resetRead();
 
             Server::getProtocol().handleMessage(udpSocket, smartBuffer);
