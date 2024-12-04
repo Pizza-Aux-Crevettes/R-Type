@@ -14,9 +14,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <any>
-#include <iostream>
 #include <functional>
-
+#include <iostream>
 
 class Client {
   private:
