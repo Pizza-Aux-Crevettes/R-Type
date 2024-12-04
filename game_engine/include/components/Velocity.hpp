@@ -5,8 +5,7 @@
 ** Velocity.hpp
 */
 
-#ifndef VELOCITY_HPP_
-#define VELOCITY_HPP_
+#pragma once
 
 class Velocity {
   public:
@@ -21,5 +20,3 @@ class Velocity {
     float _x;
     float _y;
 };
-
-#endif /* VELOCITY_HPP_ */

@@ -5,8 +5,7 @@
 ** Collider.hpp
 */
 
-#ifndef COLLIDER_HPP_
-#define COLLIDER_HPP_
+#pragma once
 
 #include <vector>
 
@@ -20,5 +19,3 @@ class Collider {
   private:
     std::pair<double, double> _size;
 };
-
-#endif /* COLLIDER_HPP_ */

@@ -5,8 +5,7 @@
 ** Input.hpp
 */
 
-#ifndef INPUT_HPP_
-#define INPUT_HPP_
+#pragma once
 
 class Input {
   public:
@@ -34,5 +33,3 @@ class Input {
     bool _attack;
     bool _autoFire;
 };
-
-#endif /* INPUT_HPP_ */

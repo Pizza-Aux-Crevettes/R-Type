@@ -5,8 +5,7 @@
 ** Health.hpp
 */
 
-#ifndef HEALTH_HPP_
-#define HEALTH_HPP_
+#pragma once
 
 class Health {
   public:
@@ -22,5 +21,3 @@ class Health {
     int _currentHp;
     int _maxHp;
 };
-
-#endif /* !HEALTH_HPP_ */
