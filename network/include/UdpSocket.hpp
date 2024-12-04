@@ -22,6 +22,7 @@ class UdpSocket {
 
   private:
     Config port;
+
     int udpSocket;
     sockaddr_in udpAddr;
 };

@@ -23,9 +23,10 @@ class TcpSocket {
 
   private:
     Config port;
+
     int tcpSocket;
     sockaddr_in tcpAddr;
-    std::vector<std::thread> clientThreads;
 
+    std::vector<std::thread> clientThreads;
     void handleClient(int clientSocket);
 };

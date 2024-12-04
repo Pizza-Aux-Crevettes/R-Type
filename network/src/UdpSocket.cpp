@@ -7,6 +7,8 @@
 
 #include "UdpSocket.hpp"
 #include "Logger.hpp"
+#include "Server.hpp"
+#include <SmartBuffer.hpp>
 #include <arpa/inet.h>
 #include <cstring>
 #include <unistd.h>
@@ -36,18 +38,23 @@ void UdpSocket::init() {
 }
 
 void UdpSocket::listen() {
-    char buffer[1024] = {0};
+    SmartBuffer smartBuffer;
     sockaddr_in clientAddr;
     socklen_t addrLen = sizeof(clientAddr);
 
     Logger::info("Listening for UDP messages...");
 
     while (true) {
-        int bytesRead = recvfrom(udpSocket, buffer, sizeof(buffer) - 1, 0,
+        char rawBuffer[1024] = {0};
+
+        int bytesRead = recvfrom(udpSocket, rawBuffer, sizeof(rawBuffer), 0,
                                  (struct sockaddr*)&clientAddr, &addrLen);
         if (bytesRead > 0) {
-            buffer[bytesRead] = END_STR;
-            Logger::info("UDP Received: " + std::string(buffer));
+
+            smartBuffer.inject(reinterpret_cast<const uint8_t*>(rawBuffer), bytesRead);
+            smartBuffer.resetRead();
+
+            Server::getProtocol().handleMessage(udpSocket, smartBuffer);
         }
     }
 }

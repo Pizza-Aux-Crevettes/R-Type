@@ -7,6 +7,8 @@
 
 #include "TcpSocket.hpp"
 #include "Logger.hpp"
+#include "Server.hpp"
+#include <SmartBuffer.hpp>
 #include <arpa/inet.h>
 #include <cstring>
 #include <unistd.h>
@@ -31,6 +33,7 @@ void TcpSocket::init() {
         SUCCESS) {
         throw std::runtime_error("Bind failed for TCP socket");
     }
+
     if (::listen(tcpSocket, 3) < SUCCESS) {
         throw std::runtime_error("Listen failed for TCP socket");
     }
@@ -57,18 +60,22 @@ void TcpSocket::listen() {
 }
 
 void TcpSocket::handleClient(int clientSocket) {
-    char buffer[1024] = {0};
+    SmartBuffer smartBuffer;
 
     while (true) {
-        int bytesRead = read(clientSocket, buffer, sizeof(buffer) - 1);
+        char rawBuffer[1024] = {0};
+
+        int bytesRead = read(clientSocket, rawBuffer, sizeof(rawBuffer));
         if (bytesRead <= SUCCESS) {
             Logger::info("TCP client disconnected");
             ::close(clientSocket);
             break;
         }
 
-        buffer[bytesRead] = END_STR;
-        Logger::info("TCP Received: " + std::string(buffer));
+        smartBuffer.inject(reinterpret_cast<const uint8_t*>(rawBuffer), bytesRead);
+        smartBuffer.resetRead();
+
+        Server::getProtocol().handleMessage(clientSocket, smartBuffer);
     }
 }
 

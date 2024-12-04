@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Config.hpp"
+#include "Protocol.hpp"
 #include "TcpSocket.hpp"
 #include "UdpSocket.hpp"
 #include <SmartBuffer.hpp>
@@ -21,12 +22,17 @@ class Server {
 
     int start();
 
+    static Protocol& getProtocol();
+
   private:
     Config port;
+
     TcpSocket tcpSocket;
     UdpSocket udpSocket;
+
     SmartBuffer smartBuffer;
-    std::vector<std::thread> clientThreads;
+    static Protocol protocol;
 
     void closeThreads();
+    std::vector<std::thread> clientThreads;
 };

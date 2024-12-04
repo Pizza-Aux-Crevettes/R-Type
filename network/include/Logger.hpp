@@ -20,5 +20,6 @@ class Logger {
   private:
     static void log(const std::string& message, const std::string& color,
                     const std::string& level);
+
     static std::string getTimestamp();
 };
