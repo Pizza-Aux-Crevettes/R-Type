@@ -8,9 +8,9 @@
 #ifndef BUTTON_HPP_
 #define BUTTON_HPP_
 
+#include "Components.hpp"
 #include <SFML/Graphics.hpp>
 #include <string>
-#include "Components.hpp"
 
 class Button : public Component {
   public:
