@@ -10,6 +10,7 @@
 */
 
 #include "components/Bullet.hpp"
+#include <iostream>
 
 Bullet::Bullet(int damage) : _damage(damage) {}
 
@@ -21,4 +22,8 @@ int Bullet::getDamage() const {
 
 void Bullet::setDamage(int damage) {
     this->_damage = damage;
+}
+
+void Bullet::display() const {
+    std::cout << "Bullet component displayed!" << std::endl;
 }

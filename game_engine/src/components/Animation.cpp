@@ -12,6 +12,7 @@
 */
 
 #include "components/Animation.hpp"
+#include "iostream"
 
 Animation::Animation(int currentFrame, float frameDuration, float elapsedTime)
     : _currentFrame(currentFrame), _frameDuration(frameDuration),
@@ -41,4 +42,8 @@ float Animation::getElapsedTime() const {
 
 void Animation::setElapsedTime(float elapsedTime) {
     this->_elapsedTime = elapsedTime;
+}
+
+void Animation::display() const {
+    std::cout << "Animation component displayed!" << std::endl;
 }

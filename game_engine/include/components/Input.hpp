@@ -7,8 +7,9 @@
 
 #ifndef INPUT_HPP_
 #define INPUT_HPP_
+#include "Components.hpp"
 
-class Input {
+class Input : public Component {
   public:
     Input(bool up = false, bool right = false, bool left = false,
           bool down = false, bool attack = false, bool autoFire = false);
@@ -25,6 +26,7 @@ class Input {
     void setAttack(bool attack);
     bool getAutoFire() const;
     void setAutoFire(bool autoFire);
+    void display() const override;
 
   private:
     bool _up;

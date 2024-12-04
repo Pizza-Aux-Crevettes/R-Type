@@ -10,6 +10,7 @@
 */
 
 #include "components/Sound.hpp"
+#include <iostream>
 
 Sound::Sound(std::string soundFile, int volume)
     : _soundFile(soundFile), _volume(volume) {}
@@ -30,4 +31,8 @@ int Sound::getVolume() const {
 
 void Sound::setVolume(int volume) {
     this->_volume = volume;
+}
+
+void Sound::display() const {
+    std::cout << "Sound component displayed!" << std::endl;
 }

@@ -12,6 +12,7 @@
 */
 
 #include "components/Button.hpp"
+#include <iostream>
 
 Button::Button(std::string text, std::pair<double, double> size)
     : _text(text), _size(size) {}
@@ -32,4 +33,8 @@ std::pair<double, double> Button::getSize() const {
 
 void Button::setSize(std::pair<double, double> size) {
     this->_size = size;
+}
+
+void Button::display() const {
+    std::cout << "Button component displayed!" << std::endl;
 }

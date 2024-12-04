@@ -11,6 +11,7 @@
 */
 
 #include "components/Sprite.hpp"
+#include <iostream>
 
 Sprite::Sprite(std::string texturePath, std::pair<double, double> size)
     : _texturePath(texturePath), _size(size) {}
@@ -31,4 +32,8 @@ std::pair<double, double> Sprite::getSize() const {
 
 void Sprite::setSize(std::pair<double, double> size) {
     this->_size = size;
+}
+
+void Sprite::display() const {
+    std::cout << "Sprite component displayed!" << std::endl;
 }

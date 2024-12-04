@@ -11,6 +11,7 @@
 */
 
 #include "components/Health.hpp"
+#include <iostream>
 
 Health::Health(int initialHp) : _currentHp(initialHp), _maxHp(100) {}
 
@@ -30,4 +31,8 @@ int Health::getMaxHp() const {
 
 void Health::setMaxHp(int maxHp) {
     this->_maxHp = maxHp;
+}
+
+void Health::display() const {
+    std::cout << "Health component displayed!" << std::endl;
 }

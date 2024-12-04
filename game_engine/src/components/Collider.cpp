@@ -12,6 +12,7 @@
 */
 
 #include "components/Collider.hpp"
+#include <iostream>
 
 Collider::Collider(std::pair<double, double> size) : _size(size) {}
 
@@ -23,4 +24,8 @@ std::pair<double, double> Collider::getCollider() const {
 
 void Collider::setCollider(std::pair<double, double> size) {
     this->_size = size;
+}
+
+void Collider::display() const {
+    std::cout << "Collider component displayed!" << std::endl;
 }

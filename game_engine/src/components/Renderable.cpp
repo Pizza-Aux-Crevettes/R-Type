@@ -11,6 +11,7 @@
 */
 
 #include "components/Renderable.hpp"
+#include <iostream>
 
 Renderable::Renderable(bool isVisible) : _isVisible(isVisible) {}
 
@@ -22,4 +23,8 @@ bool Renderable::getIsVisible() const {
 
 void Renderable::setIsVisible(bool isVisible) {
     this->_isVisible = isVisible;
+}
+
+void Renderable::display() const {
+    std::cout << "Renderable component displayed!" << std::endl;
 }

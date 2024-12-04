@@ -11,6 +11,7 @@
 */
 
 #include "components/Color.hpp"
+#include <iostream>
 
 Color::Color(std::vector<double> color) : _color(color) {}
 
@@ -22,4 +23,8 @@ std::vector<double> Color::getColor() const {
 
 void Color::setColor(std::vector<double> color) {
     this->_color = color;
+}
+
+void Color::display() const {
+    std::cout << "Color component displayed!" << std::endl;
 }

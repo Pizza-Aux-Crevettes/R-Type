@@ -10,6 +10,7 @@
 */
 
 #include "components/Rigidbody.hpp"
+#include <iostream>
 
 Rigidbody::Rigidbody(float mass, float drag, float gravityScale, float forceX,
                      float forceY)
@@ -56,4 +57,8 @@ float Rigidbody::getForceY() const {
 
 void Rigidbody::setForceY(float forceY) {
     this->_forceY = forceY;
+}
+
+void Rigidbody::display() const {
+    std::cout << "Rigibody component displayed!" << std::endl;
 }

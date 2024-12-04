@@ -9,6 +9,7 @@
 */
 
 #include "components/Texture.hpp"
+#include <iostream>
 
 Texture::Texture(std::string texturePath) : _texturePath(texturePath) {}
 
@@ -18,6 +19,10 @@ std::string Texture::getTexturePath() const {
 
 void Texture::setTexturePath(std::string texturePath) {
     this->_texturePath = texturePath;
+}
+
+void Texture::display() const {
+    std::cout << "Texture component displayed!" << std::endl;
 }
 
 Texture::~Texture() {}

@@ -11,6 +11,7 @@
 */
 
 #include "components/Position.hpp"
+#include <iostream>
 
 Position::Position(float x, float y) : _x(x), _y(y) {}
 
@@ -30,4 +31,8 @@ void Position::setPositionX(float x) {
 
 void Position::setPositionY(float y) {
     this->_y = y;
+}
+
+void Position::display() const {
+    std::cout << "Position component displayed!" << std::endl;
 }

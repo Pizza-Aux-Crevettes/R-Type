@@ -5,10 +5,17 @@
 ** main.cpp
 */
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <iostream>
+#include "Entity.hpp"
+
+#include <components/Bullet.hpp>
+#include <components/Button.hpp>
 
 int main(int ac, char* av[]) {
+    GameEngine::Entity player;
+    player.addComponent(Button("Player", {0.0 + 1.0, 0.0}));
+    player.addComponent(Bullet(10));
+    player.displayComponents();
+    player.removeComponent<Button>();
+    player.displayComponents();
     return 0;
 }

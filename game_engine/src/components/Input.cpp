@@ -12,6 +12,7 @@
 */
 
 #include "components/Input.hpp"
+#include <iostream>
 
 Input::Input(bool up, bool right, bool left, bool down, bool attack,
              bool autoFire)
@@ -66,4 +67,8 @@ bool Input::getAutoFire() const {
 
 void Input::setAutoFire(bool autoFire) {
     this->_autoFire = autoFire;
+}
+
+void Input::display() const {
+    std::cout << "Input component displayed!" << std::endl;
 }

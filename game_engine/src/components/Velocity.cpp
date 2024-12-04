@@ -11,6 +11,7 @@
 */
 
 #include "components/Velocity.hpp"
+#include <iostream>
 
 Velocity::Velocity(float x, float y) : _x(x), _y(y) {}
 
@@ -30,4 +31,8 @@ float Velocity::getVelocityY() const {
 
 void Velocity::setVelocityY(float y) {
     this->_y = y;
+}
+
+void Velocity::display() const {
+    std::cout << "Velocity component displayed!" << std::endl;
 }

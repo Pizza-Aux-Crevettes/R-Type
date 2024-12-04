@@ -8,10 +8,12 @@
 #ifndef SPRITE_HPP_
 #define SPRITE_HPP_
 
+#include "Components.hpp"
+
 #include <string>
 #include <vector>
 
-class Sprite {
+class Sprite : public Component {
   public:
     Sprite(std::string texturePath = "",
            std::pair<double, double> size = {0.0, 0.0});
@@ -20,6 +22,7 @@ class Sprite {
     void setTexturePath(std::string texturePath);
     std::pair<double, double> getSize() const;
     void setSize(std::pair<double, double> size);
+    void display() const override;
 
   private:
     std::string _texturePath;

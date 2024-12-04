@@ -11,6 +11,7 @@
 */
 
 #include "components/Text.hpp"
+#include <iostream>
 
 Text::Text(const std::string text) : _text(text) {}
 
@@ -22,4 +23,8 @@ std::string Text::getText() const {
 
 void Text::setText(std::string text) {
     this->_text = text;
+}
+
+void Text::display() const {
+    std::cout << "Text component displayed!" << std::endl;
 }
