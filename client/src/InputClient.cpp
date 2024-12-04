@@ -14,42 +14,65 @@
 
 #include "InputClient.hpp"
 
-InputClient::InputClient() {}
+InputClient::InputClient() {
+    _keys = {
+        {"up", sf::Keyboard::Up},        {"down", sf::Keyboard::Down},
+        {"left", sf::Keyboard::Left},    {"right", sf::Keyboard::Right},
+        {"attack", sf::Keyboard::Space}, {"auto fire", sf::Keyboard::Enter}};
+}
 
 InputClient::~InputClient() {}
 
 sf::Keyboard::Key InputClient::getUp() {
-    return (_up);
+    return (_keys["up"]);
 }
 
-void InputClient::setUp() {}
-
-sf::Keyboard::Key InputClient::getRight() {
-    return (_right);
+void InputClient::setUp(sf::Keyboard::Key new_key) {
+    _keys["up"] = new_key;
 }
-
-void InputClient::setRight() {}
-
-sf::Keyboard::Key InputClient::getLeft() {
-    return (_left);
-}
-
-void InputClient::setLeft() {}
 
 sf::Keyboard::Key InputClient::getDown() {
-    return (_down);
+    return (_keys["down"]);
 }
 
-void InputClient::setDown() {}
+void InputClient::setDown(sf::Keyboard::Key new_key) {
+    _keys["down"] = new_key;
+}
+
+sf::Keyboard::Key InputClient::getLeft() {
+    return (_keys["left"]);
+}
+
+void InputClient::setLeft(sf::Keyboard::Key new_key) {
+    _keys["left"] = new_key;
+}
+
+sf::Keyboard::Key InputClient::getRight() {
+    return (_keys["right"]);
+}
+
+void InputClient::setRight(sf::Keyboard::Key new_key) {
+    _keys["right"] = new_key;
+}
 
 sf::Keyboard::Key InputClient::getAttack() {
-    return (_attack);
+    return (_keys["attack"]);
 }
 
-void InputClient::setAttack() {}
+void InputClient::setAttack(sf::Keyboard::Key new_key) {
+    _keys["attack"] = new_key;
+}
 
 sf::Keyboard::Key InputClient::getAutoFire() {
-    return (_autoFire);
+    return (_keys["auto fire"]);
 }
 
-void InputClient::setAutoFire() {}
+void InputClient::setAutoFire(sf::Keyboard::Key new_key) {
+    _keys["auto fire"] = new_key;
+}
+
+void InputClient::checkKey(sf::Event event) {
+    for (const auto& [key, value] : _keys)
+        if (value == event.key.code)
+            std::cout << "J'ai trouvé " << key << "!" << std::endl;
+}
