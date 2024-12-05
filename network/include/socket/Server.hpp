@@ -17,7 +17,7 @@
 
 class Server {
   public:
-    explicit Server(Config port = PORT);
+    Server(Config port = PORT);
     ~Server();
 
     int start();

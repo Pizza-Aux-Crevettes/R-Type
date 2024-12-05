@@ -13,7 +13,7 @@
 
 class UdpSocket {
   public:
-    explicit UdpSocket(Config port = PORT);
+    UdpSocket(Config port = PORT);
     ~UdpSocket();
 
     void init();

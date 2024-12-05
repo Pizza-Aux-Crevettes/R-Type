@@ -8,8 +8,6 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
-#include <memory>
-#include <unordered_map>
 
 class Protocol {
   public:
@@ -24,6 +22,7 @@ class Protocol {
     };
 
     Protocol();
+    ~Protocol();
 
     void handleMessage(int clientSocket, SmartBuffer& smartBuffer);
 

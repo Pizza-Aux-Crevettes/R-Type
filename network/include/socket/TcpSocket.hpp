@@ -14,7 +14,7 @@
 
 class TcpSocket {
   public:
-    explicit TcpSocket(Config port = PORT);
+    TcpSocket(Config port = PORT);
     ~TcpSocket();
 
     void init();

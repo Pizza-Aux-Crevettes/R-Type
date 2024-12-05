@@ -16,6 +16,11 @@ class Logger {
     static void success(const std::string& message);
     static void warning(const std::string& message);
     static void error(const std::string& message);
+    static void socket(const std::string& message);
+    static void packet(const std::string& message);
+    static void thread(const std::string& message);
+    static void debug(const std::string& message);
+    static void trace(const std::string& message);
 
   private:
     static void log(const std::string& message, const std::string& color,

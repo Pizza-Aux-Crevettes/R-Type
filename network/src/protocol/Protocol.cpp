@@ -1,37 +1,53 @@
+/*
+** EPITECH PROJECT, 2024
+** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
+** File description:
+** Protocol.cpp
+*/
+
 #include "protocol/Protocol.hpp"
 #include "util/Logger.hpp"
 
-Protocol::Protocol() {}
+Protocol::Protocol() {
+    Logger::info("[Protocol] Instance successfully created.");
+}
+
+Protocol::~Protocol() {
+    Logger::info("[Protocol] Instance successfully destroyed.");
+}
 
 void Protocol::handleMessage(int clientSocket, SmartBuffer& smartBuffer) {
     uint8_t opCode;
     smartBuffer >> opCode;
 
+    Logger::info("[Protocol] Handling OpCode: " + std::to_string(opCode));
+
     switch (opCode) {
-    case CREATE_ROOM:
-        //
-        break;
-    case JOIN_ROOM:
-        //
-        break;
-    case DELETE_ROOM:
-        //
-        break;
-    default:
-        Logger::error("Received unknown OpCode: " + std::to_string(opCode));
+        case CREATE_ROOM:
+            createRoom(clientSocket, smartBuffer);
+            break;
+        case JOIN_ROOM:
+            joinRoom(clientSocket, smartBuffer);
+            break;
+        case DELETE_ROOM:
+            deleteRoom(clientSocket, smartBuffer);
+            break;
+        default:
+            Logger::error("[Protocol] Received unknown OpCode: " + std::to_string(opCode));
+            break;
     }
 }
 
-void createRoom(int clientSocket, SmartBuffer& smartBuffer) {
+void Protocol::createRoom(int clientSocket, SmartBuffer& smartBuffer) {
     /*
      * Protocol CREATE_ROOM
      * int8_t opCode
      * Data sent in response: CREATE_ROOM_CALLBACK
      */
-    Logger::info("CREATE_ROOM ==> No data");
+    Logger::trace("[Protocol] Processing CREATE_ROOM command (no data required).");
 }
 
-void joinRoom(int clientSocket, SmartBuffer& smartBuffer) {
+void Protocol::joinRoom(int clientSocket, SmartBuffer& smartBuffer) {
     /*
      * Protocol JOIN_ROOM:
      * int8_t opCode
@@ -40,10 +56,11 @@ void joinRoom(int clientSocket, SmartBuffer& smartBuffer) {
      */
     int32_t roomCode;
     smartBuffer >> roomCode;
-    Logger::info("JOIN_ROOM ==> roomCode = " + std::to_string(roomCode));
+
+    Logger::trace("[Protocol] Processing JOIN_ROOM command. roomCode = " + std::to_string(roomCode));
 }
 
-void deleteRoom(int clientSocket, SmartBuffer& smartBuffer) {
+void Protocol::deleteRoom(int clientSocket, SmartBuffer& smartBuffer) {
     /*
      * Protocol DELETE_ROOM:
      * int8_t opCode
@@ -52,5 +69,6 @@ void deleteRoom(int clientSocket, SmartBuffer& smartBuffer) {
      */
     int32_t roomCode;
     smartBuffer >> roomCode;
-    Logger::info("DELETE_ROOM ==> roomCode = " + std::to_string(roomCode));
+
+    Logger::trace("[Protocol] Processing DELETE_ROOM command. roomCode = " + std::to_string(roomCode));
 }
