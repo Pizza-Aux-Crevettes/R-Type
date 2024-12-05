@@ -5,8 +5,8 @@
 ** main.cpp
 */
 
-#include "Logger.hpp"
-#include "Server.hpp"
+#include "socket/Server.hpp"
+#include "util/Logger.hpp"
 #include <iostream>
 
 int main() {

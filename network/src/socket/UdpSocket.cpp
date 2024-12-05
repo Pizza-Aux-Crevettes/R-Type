@@ -5,9 +5,8 @@
 ** UdpSocket.cpp
 */
 
-#include "UdpSocket.hpp"
-#include "Logger.hpp"
-#include "Server.hpp"
+#include "socket/Server.hpp"
+#include "util/Logger.hpp"
 #include <SmartBuffer.hpp>
 #include <arpa/inet.h>
 #include <cstring>
@@ -50,7 +49,6 @@ void UdpSocket::listen() {
         int bytesRead = recvfrom(udpSocket, rawBuffer, sizeof(rawBuffer), 0,
                                  (struct sockaddr*)&clientAddr, &addrLen);
         if (bytesRead > 0) {
-
             smartBuffer.inject(reinterpret_cast<const uint8_t*>(rawBuffer),
                                bytesRead);
             smartBuffer.resetRead();
@@ -64,5 +62,7 @@ void UdpSocket::close() {
     if (udpSocket != FAILURE) {
         ::close(udpSocket);
         Logger::info("UDP socket closed.");
+    } else {
+        Logger::info("UDP socket can't be closed.");
     }
 }

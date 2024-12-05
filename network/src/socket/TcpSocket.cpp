@@ -5,9 +5,8 @@
 ** TcpSocket.cpp
 */
 
-#include "TcpSocket.hpp"
-#include "Logger.hpp"
-#include "Server.hpp"
+#include "socket/Server.hpp"
+#include "util/Logger.hpp"
 #include <SmartBuffer.hpp>
 #include <arpa/inet.h>
 #include <cstring>

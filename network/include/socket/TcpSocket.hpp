@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Config.hpp"
+#include "util/Config.hpp"
 #include <netinet/in.h>
 #include <thread>
 #include <vector>

@@ -5,8 +5,8 @@
 ** Server.cpp
 */
 
-#include "Server.hpp"
-#include "Logger.hpp"
+#include "socket/Server.hpp"
+#include "util/Logger.hpp"
 #include <iostream>
 #include <stdexcept>
 
@@ -22,7 +22,6 @@ Server::Server(Config port) : port(port), tcpSocket(port), udpSocket(port) {
     Logger::success("UDP socket initialized successfully.");
 
     Logger::success("Server initialization complete.");
-    Logger::info("Server started. Listening for connections...");
 }
 
 Protocol& Server::getProtocol() {
@@ -33,6 +32,7 @@ Server::~Server() {
     Logger::info("Shutting down server...");
 
     closeThreads();
+
     tcpSocket.close();
     udpSocket.close();
 
@@ -45,6 +45,7 @@ int Server::start() {
     try {
         std::thread udpThread(&UdpSocket::listen, &udpSocket);
         udpThread.detach();
+
         tcpSocket.listen();
     } catch (const std::exception& exception) {
         Logger::error("Runtime error: " + std::string(exception.what()));
@@ -59,6 +60,8 @@ void Server::closeThreads() {
         if (thread.joinable()) {
             thread.join();
             Logger::info("Client thread joined.");
+        } else {
+            Logger::error("Client thread can't be closed.");
         }
     }
 }

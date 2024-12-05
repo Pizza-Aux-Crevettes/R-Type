@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include "Config.hpp"
-#include "Protocol.hpp"
-#include "TcpSocket.hpp"
-#include "UdpSocket.hpp"
+#include "protocol/Protocol.hpp"
+#include "socket/TcpSocket.hpp"
+#include "socket/UdpSocket.hpp"
+#include "util/Config.hpp"
 #include <SmartBuffer.hpp>
 #include <thread>
 #include <vector>
@@ -33,6 +33,6 @@ class Server {
     SmartBuffer smartBuffer;
     static Protocol protocol;
 
-    void closeThreads();
     std::vector<std::thread> clientThreads;
+    void closeThreads();
 };
