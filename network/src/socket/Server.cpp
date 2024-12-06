@@ -10,23 +10,23 @@
 #include <iostream>
 #include <stdexcept>
 
-Protocol Server::protocol;
+Protocol Server::_protocol;
 
 Protocol& Server::getProtocol() {
-    return protocol;
+    return _protocol;
 }
 
-Server::Server(Config port) : port(port), tcpSocket(port), udpSocket(port) {
+Server::Server() : _tcpSocket(), _udpSocket() {
     Logger::info("[Server] Starting initialization...");
 
     try {
-        tcpSocket.init();
+        _tcpSocket.init();
         Logger::socket("[Server] TCP socket initialized successfully on port " +
-                       std::to_string(port) + ".");
+                       std::to_string(PORT) + ".");
 
-        udpSocket.init();
+        _udpSocket.init();
         Logger::socket("[Server] UDP socket initialized successfully on port " +
-                       std::to_string(port) + ".");
+                       std::to_string(PORT) + ".");
 
         Logger::success("[Server] Initialization complete.");
     } catch (const std::exception& e) {
@@ -41,8 +41,8 @@ Server::~Server() {
 
     closeThreads();
 
-    tcpSocket.close();
-    udpSocket.close();
+    _tcpSocket.close();
+    _udpSocket.close();
 
     Logger::success("[Server] Shutdown complete.");
 }
@@ -51,11 +51,11 @@ int Server::start() {
     Logger::info("[Server] Starting main loop. Listening for connections...");
 
     try {
-        std::thread udpThread(&UdpSocket::listen, &udpSocket);
+        std::thread udpThread(&UdpSocket::listen, &_udpSocket);
         udpThread.detach();
         Logger::thread("[Server] UDP listener thread started.");
 
-        tcpSocket.listen();
+        _tcpSocket.listen();
     } catch (const std::exception& exception) {
         Logger::error("[Server] Runtime error: " +
                       std::string(exception.what()));
@@ -68,7 +68,7 @@ int Server::start() {
 void Server::closeThreads() {
     Logger::info("[Server] Closing client threads...");
 
-    for (auto& thread : clientThreads) {
+    for (auto& thread : _clientThreads) {
         if (thread.joinable()) {
             thread.join();
             Logger::thread("[Server] Client thread joined successfully.");

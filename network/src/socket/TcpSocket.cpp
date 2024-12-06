@@ -5,57 +5,57 @@
 #include <cstring>
 #include <unistd.h>
 
-TcpSocket::TcpSocket(Config port) : port(port), tcpSocket(FAILURE) {
+TcpSocket::TcpSocket() : _tcpSocket(FAILURE) {
     Logger::socket("[TCP Socket] Instance created for port: " +
-                   std::to_string(port));
+                   std::to_string(PORT));
 }
 
 TcpSocket::~TcpSocket() {
-    Logger::socket("[TCP Socket] Instance for port " + std::to_string(port) +
+    Logger::socket("[TCP Socket] Instance for port " + std::to_string(PORT) +
                    " is being destroyed.");
     close();
 }
 
 void TcpSocket::init() {
     Logger::socket("[TCP Socket] Initializing socket on port: " +
-                   std::to_string(port));
+                   std::to_string(PORT));
 
-    tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
+    _tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
 
-    if (tcpSocket == FAILURE) {
+    if (_tcpSocket == FAILURE) {
         Logger::error("[TCP Socket] Failed to create socket.");
         throw std::runtime_error("Failed to create TCP socket.");
     }
 
-    tcpAddr.sin_family = AF_INET;
-    tcpAddr.sin_addr.s_addr = INADDR_ANY;
-    tcpAddr.sin_port = htons(port);
+    _tcpAddr.sin_family = AF_INET;
+    _tcpAddr.sin_addr.s_addr = INADDR_ANY;
+    _tcpAddr.sin_port = htons(PORT);
 
-    if (bind(tcpSocket, (struct sockaddr*)&tcpAddr, sizeof(tcpAddr)) <
+    if (bind(_tcpSocket, (struct sockaddr*)&_tcpAddr, sizeof(_tcpAddr)) <
         SUCCESS) {
         Logger::error("[TCP Socket] Failed to bind socket to port: " +
-                      std::to_string(port));
+                      std::to_string(PORT));
         throw std::runtime_error("Bind failed for TCP socket on port " +
-                                 std::to_string(port));
+                                 std::to_string(PORT));
     }
 
-    if (::listen(tcpSocket, 3) < SUCCESS) {
+    if (::listen(_tcpSocket, 3) < SUCCESS) {
         Logger::error("[TCP Socket] Failed to listen on port: " +
-                      std::to_string(port));
+                      std::to_string(PORT));
         throw std::runtime_error("Listen failed for TCP socket on port " +
-                                 std::to_string(port));
+                                 std::to_string(PORT));
     }
 
     Logger::socket("[TCP Socket] Successfully bound and listening on port: " +
-                   std::to_string(port));
+                   std::to_string(PORT));
 }
 
 void TcpSocket::listen() {
     Logger::socket("[TCP Socket] Waiting for incoming connections on port: " +
-                   std::to_string(port));
+                   std::to_string(PORT));
 
     while (true) {
-        int clientSocket = accept(tcpSocket, nullptr, nullptr);
+        int clientSocket = accept(_tcpSocket, nullptr, nullptr);
 
         if (clientSocket < SUCCESS) {
             Logger::warning("[TCP Socket] Failed to accept a connection.");
@@ -67,7 +67,7 @@ void TcpSocket::listen() {
         Logger::thread("[TCP Socket] Starting thread for client socket: " +
                        std::to_string(clientSocket));
 
-        clientThreads.emplace_back(
+        _clientThreads.emplace_back(
             [this, clientSocket]() { handleClient(clientSocket); });
     }
 }
@@ -102,9 +102,9 @@ void TcpSocket::handleClient(int clientSocket) {
 }
 
 void TcpSocket::close() {
-    if (tcpSocket != FAILURE) {
-        ::close(tcpSocket);
-        Logger::socket("[TCP Socket] Socket on port " + std::to_string(port) +
+    if (_tcpSocket != FAILURE) {
+        ::close(_tcpSocket);
+        Logger::socket("[TCP Socket] Socket on port " + std::to_string(PORT) +
                        " successfully closed.");
     } else {
         Logger::warning("[TCP Socket] Attempted to close an uninitialized or "

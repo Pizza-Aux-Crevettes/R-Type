@@ -11,13 +11,12 @@
 #include "socket/TcpSocket.hpp"
 #include "socket/UdpSocket.hpp"
 #include "util/Config.hpp"
-#include <SmartBuffer.hpp>
 #include <thread>
 #include <vector>
 
 class Server {
   public:
-    Server(Config port = PORT);
+    Server();
     ~Server();
 
     int start();
@@ -25,14 +24,11 @@ class Server {
     static Protocol& getProtocol();
 
   private:
-    Config port;
+    TcpSocket _tcpSocket;
+    UdpSocket _udpSocket;
 
-    TcpSocket tcpSocket;
-    UdpSocket udpSocket;
+    static Protocol _protocol;
 
-    SmartBuffer smartBuffer;
-    static Protocol protocol;
-
-    std::vector<std::thread> clientThreads;
+    std::vector<std::thread> _clientThreads;
     void closeThreads();
 };

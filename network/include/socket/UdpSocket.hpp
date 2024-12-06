@@ -13,7 +13,7 @@
 
 class UdpSocket {
   public:
-    UdpSocket(Config port = PORT);
+    UdpSocket();
     ~UdpSocket();
 
     void init();
@@ -21,8 +21,6 @@ class UdpSocket {
     void close();
 
   private:
-    Config port;
-
-    int udpSocket;
-    sockaddr_in udpAddr;
+    int _udpSocket;
+    sockaddr_in _udpAddr;
 };

@@ -13,7 +13,7 @@ int main() {
     Logger::info("[Main] Starting server...");
 
     try {
-        Server server(PORT);
+        Server server;
         Logger::success("[Main] Server successfully initialized on port " +
                         std::to_string(PORT) + ".");
 

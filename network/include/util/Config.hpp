@@ -8,11 +8,20 @@
 #pragma once
 
 enum Config {
+    // Network
     DEFAULT_BYTES = 1024,
     PORT = 8080,
+
+    // Return codes
     SUCCESS = 0,
     ERROR = 84,
     FAILURE = -1,
     BAD = 1,
+
+    // String
     END_STR = '\0',
+
+    // Game
+    DEFAULT_HEALTH = 100,
+    DEFAULT_LIVES = 3,
 };

@@ -12,42 +12,42 @@
 #include <cstring>
 #include <unistd.h>
 
-UdpSocket::UdpSocket(Config port) : port(port), udpSocket(FAILURE) {
+UdpSocket::UdpSocket() : _udpSocket(FAILURE) {
     Logger::socket("[UDP Socket] Instance created for port: " +
-                   std::to_string(port));
+                   std::to_string(PORT));
 }
 
 UdpSocket::~UdpSocket() {
-    Logger::socket("[UDP Socket] Instance for port " + std::to_string(port) +
+    Logger::socket("[UDP Socket] Instance for port " + std::to_string(PORT) +
                    " is being destroyed.");
     close();
 }
 
 void UdpSocket::init() {
     Logger::socket("[UDP Socket] Initializing socket on port: " +
-                   std::to_string(port));
+                   std::to_string(PORT));
 
-    udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
+    _udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
 
-    if (udpSocket == FAILURE) {
+    if (_udpSocket == FAILURE) {
         Logger::error("[UDP Socket] Failed to create socket.");
         throw std::runtime_error("Failed to create UDP socket.");
     }
 
-    udpAddr.sin_family = AF_INET;
-    udpAddr.sin_addr.s_addr = INADDR_ANY;
-    udpAddr.sin_port = htons(port);
+    _udpAddr.sin_family = AF_INET;
+    _udpAddr.sin_addr.s_addr = INADDR_ANY;
+    _udpAddr.sin_port = htons(PORT);
 
-    if (bind(udpSocket, (struct sockaddr*)&udpAddr, sizeof(udpAddr)) <
+    if (bind(_udpSocket, (struct sockaddr*)&_udpAddr, sizeof(_udpAddr)) <
         SUCCESS) {
         Logger::error("[UDP Socket] Failed to bind socket to port: " +
-                      std::to_string(port));
+                      std::to_string(PORT));
         throw std::runtime_error("Bind failed for UDP socket on port " +
-                                 std::to_string(port));
+                                 std::to_string(PORT));
     }
 
     Logger::socket("[UDP Socket] Successfully bound to port: " +
-                   std::to_string(port));
+                   std::to_string(PORT));
 }
 
 void UdpSocket::listen() {
@@ -56,11 +56,11 @@ void UdpSocket::listen() {
     socklen_t addrLen = sizeof(clientAddr);
 
     Logger::socket("[UDP Socket] Listening for incoming messages on port: " +
-                   std::to_string(port));
+                   std::to_string(PORT));
 
     while (true) {
         char rawBuffer[1024] = {0};
-        int bytesRead = recvfrom(udpSocket, rawBuffer, sizeof(rawBuffer), 0,
+        int bytesRead = recvfrom(_udpSocket, rawBuffer, sizeof(rawBuffer), 0,
                                  (struct sockaddr*)&clientAddr, &addrLen);
 
         if (bytesRead > 0) {
@@ -73,7 +73,7 @@ void UdpSocket::listen() {
                                bytesRead);
             smartBuffer.resetRead();
 
-            Server::getProtocol().handleMessage(udpSocket, smartBuffer);
+            Server::getProtocol().handleMessage(_udpSocket, smartBuffer);
         } else {
             Logger::warning("[UDP Socket] Failed to receive data from client.");
         }
@@ -81,9 +81,9 @@ void UdpSocket::listen() {
 }
 
 void UdpSocket::close() {
-    if (udpSocket != FAILURE) {
-        ::close(udpSocket);
-        Logger::socket("[UDP Socket] Socket on port " + std::to_string(port) +
+    if (_udpSocket != FAILURE) {
+        ::close(_udpSocket);
+        Logger::socket("[UDP Socket] Socket on port " + std::to_string(PORT) +
                        " successfully closed.");
     } else {
         Logger::warning("[UDP Socket] Attempted to close an uninitialized or "
