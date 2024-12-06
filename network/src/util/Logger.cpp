@@ -58,7 +58,6 @@ void Logger::trace(const std::string& message) {
     log(message, GRAY, "[TRACE]");
 }
 
-
 void Logger::log(const std::string& message, const std::string& color,
                  const std::string& level) {
     std::cout << color << getTimestamp() << " " << level << GRAY << " >>> "

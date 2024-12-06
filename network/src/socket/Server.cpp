@@ -21,14 +21,17 @@ Server::Server(Config port) : port(port), tcpSocket(port), udpSocket(port) {
 
     try {
         tcpSocket.init();
-        Logger::socket("[Server] TCP socket initialized successfully on port " + std::to_string(port) + ".");
+        Logger::socket("[Server] TCP socket initialized successfully on port " +
+                       std::to_string(port) + ".");
 
         udpSocket.init();
-        Logger::socket("[Server] UDP socket initialized successfully on port " + std::to_string(port) + ".");
+        Logger::socket("[Server] UDP socket initialized successfully on port " +
+                       std::to_string(port) + ".");
 
         Logger::success("[Server] Initialization complete.");
     } catch (const std::exception& e) {
-        Logger::error("[Server] Initialization failed: " + std::string(e.what()));
+        Logger::error("[Server] Initialization failed: " +
+                      std::string(e.what()));
         throw;
     }
 }
@@ -54,7 +57,8 @@ int Server::start() {
 
         tcpSocket.listen();
     } catch (const std::exception& exception) {
-        Logger::error("[Server] Runtime error: " + std::string(exception.what()));
+        Logger::error("[Server] Runtime error: " +
+                      std::string(exception.what()));
         return ERROR;
     }
 
@@ -69,7 +73,8 @@ void Server::closeThreads() {
             thread.join();
             Logger::thread("[Server] Client thread joined successfully.");
         } else {
-            Logger::warning("[Server] Attempted to join a non-joinable thread.");
+            Logger::warning(
+                "[Server] Attempted to join a non-joinable thread.");
         }
     }
 

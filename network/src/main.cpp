@@ -14,7 +14,8 @@ int main() {
 
     try {
         Server server(PORT);
-        Logger::success("[Main] Server successfully initialized on port " + std::to_string(PORT) + ".");
+        Logger::success("[Main] Server successfully initialized on port " +
+                        std::to_string(PORT) + ".");
 
         server.start();
     } catch (const std::exception& e) {

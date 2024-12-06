@@ -23,18 +23,19 @@ void Protocol::handleMessage(int clientSocket, SmartBuffer& smartBuffer) {
     Logger::info("[Protocol] Handling OpCode: " + std::to_string(opCode));
 
     switch (opCode) {
-        case CREATE_ROOM:
-            createRoom(clientSocket, smartBuffer);
-            break;
-        case JOIN_ROOM:
-            joinRoom(clientSocket, smartBuffer);
-            break;
-        case DELETE_ROOM:
-            deleteRoom(clientSocket, smartBuffer);
-            break;
-        default:
-            Logger::error("[Protocol] Received unknown OpCode: " + std::to_string(opCode));
-            break;
+    case CREATE_ROOM:
+        createRoom(clientSocket, smartBuffer);
+        break;
+    case JOIN_ROOM:
+        joinRoom(clientSocket, smartBuffer);
+        break;
+    case DELETE_ROOM:
+        deleteRoom(clientSocket, smartBuffer);
+        break;
+    default:
+        Logger::error("[Protocol] Received unknown OpCode: " +
+                      std::to_string(opCode));
+        break;
     }
 }
 
@@ -44,7 +45,8 @@ void Protocol::createRoom(int clientSocket, SmartBuffer& smartBuffer) {
      * int8_t opCode
      * Data sent in response: CREATE_ROOM_CALLBACK
      */
-    Logger::trace("[Protocol] Processing CREATE_ROOM command (no data required).");
+    Logger::trace(
+        "[Protocol] Processing CREATE_ROOM command (no data required).");
 }
 
 void Protocol::joinRoom(int clientSocket, SmartBuffer& smartBuffer) {
@@ -57,7 +59,8 @@ void Protocol::joinRoom(int clientSocket, SmartBuffer& smartBuffer) {
     int32_t roomCode;
     smartBuffer >> roomCode;
 
-    Logger::trace("[Protocol] Processing JOIN_ROOM command. roomCode = " + std::to_string(roomCode));
+    Logger::trace("[Protocol] Processing JOIN_ROOM command. roomCode = " +
+                  std::to_string(roomCode));
 }
 
 void Protocol::deleteRoom(int clientSocket, SmartBuffer& smartBuffer) {
@@ -70,5 +73,6 @@ void Protocol::deleteRoom(int clientSocket, SmartBuffer& smartBuffer) {
     int32_t roomCode;
     smartBuffer >> roomCode;
 
-    Logger::trace("[Protocol] Processing DELETE_ROOM command. roomCode = " + std::to_string(roomCode));
+    Logger::trace("[Protocol] Processing DELETE_ROOM command. roomCode = " +
+                  std::to_string(roomCode));
 }
