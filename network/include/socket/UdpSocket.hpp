@@ -7,13 +7,13 @@
 
 #pragma once
 
-#include "Config.hpp"
+#include "util/Config.hpp"
 #include <netinet/in.h>
 #include <vector>
 
 class UdpSocket {
   public:
-    explicit UdpSocket(Config port = PORT);
+    UdpSocket();
     ~UdpSocket();
 
     void init();
@@ -21,7 +21,6 @@ class UdpSocket {
     void close();
 
   private:
-    Config port;
-    int udpSocket;
-    sockaddr_in udpAddr;
+    int _udpSocket;
+    sockaddr_in _udpAddr;
 };
