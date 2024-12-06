@@ -7,14 +7,14 @@
 
 #pragma once
 
-#include "Config.hpp"
+#include "util/Config.hpp"
 #include <netinet/in.h>
 #include <thread>
 #include <vector>
 
 class TcpSocket {
   public:
-    explicit TcpSocket(Config port = PORT);
+    TcpSocket(Config port = PORT);
     ~TcpSocket();
 
     void init();
@@ -23,9 +23,10 @@ class TcpSocket {
 
   private:
     Config port;
+
     int tcpSocket;
     sockaddr_in tcpAddr;
-    std::vector<std::thread> clientThreads;
 
+    std::vector<std::thread> clientThreads;
     void handleClient(int clientSocket);
 };
