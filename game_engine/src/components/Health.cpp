@@ -10,7 +10,7 @@
 ** with a specified value, while the maximum health is fixed at 100.
 */
 
-#include "components/Health.hpp"
+#include "../../../network/include/component/attr/Health.hpp"
 
 Health::Health(int initialHp) : _currentHp(initialHp), _maxHp(100) {}
 
