@@ -13,13 +13,9 @@ Protocol& Protocol::getInstance() {
     return instance;
 }
 
-Protocol::Protocol() {
-    Logger::info("[Protocol] Instance successfully created.");
-}
+Protocol::Protocol() {}
 
-Protocol::~Protocol() {
-    Logger::info("[Protocol] Instance successfully destroyed.");
-}
+Protocol::~Protocol() {}
 
 void Protocol::handleMessage(int clientSocket, SmartBuffer& smartBuffer) {
     uint8_t opCode;

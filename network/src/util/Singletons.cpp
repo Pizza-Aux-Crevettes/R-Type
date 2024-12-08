@@ -9,13 +9,9 @@
 #include "util/Logger.hpp"
 
 RoomManager& Singletons::getRoomManager() {
-    Logger::debug("[Singletons] Accessed RoomManager instance.");
-
     return RoomManager::getInstance();
 }
 
 Protocol& Singletons::getProtocol() {
-    Logger::debug("[Singletons] Accessed Protocol instance.");
-
     return Protocol::getInstance();
 }

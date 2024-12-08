@@ -10,19 +10,12 @@
 
 RoomManager& RoomManager::getInstance() {
     static RoomManager instance;
-
-    Logger::info("[RoomManager] Instance accessed.");
-
     return instance;
 }
 
-RoomManager::RoomManager() : _nextRoomId(1) {
-    Logger::info("[RoomManager] Initialized RoomManager.");
-}
+RoomManager::RoomManager() : _nextRoomId(1) {}
 
-RoomManager::~RoomManager() {
-    Logger::info("[RoomManager] Destroyed RoomManager.");
-}
+RoomManager::~RoomManager() {}
 
 std::shared_ptr<Room> RoomManager::createRoom(const std::string& code,
                                               size_t capacity) {
@@ -61,15 +54,9 @@ bool RoomManager::deleteRoom(int roomId) {
 std::shared_ptr<Room> RoomManager::findRoomById(int roomId) {
     for (auto& room : _rooms) {
         if (room->getId() == roomId) {
-            Logger::info("[RoomManager] Found room with ID: " +
-                         std::to_string(roomId) + ".");
-
             return room;
         }
     }
-
-    Logger::warning("[RoomManager] Room with ID: " + std::to_string(roomId) +
-                    " not found.");
 
     return nullptr;
 }
@@ -77,19 +64,13 @@ std::shared_ptr<Room> RoomManager::findRoomById(int roomId) {
 std::shared_ptr<Room> RoomManager::findRoomByCode(const std::string& code) {
     for (auto& room : _rooms) {
         if (room->getCode() == code) {
-            Logger::info("[RoomManager] Found room with Code: " + code + ".");
-
             return room;
         }
     }
-
-    Logger::warning("[RoomManager] Room with Code: " + code + " not found.");
 
     return nullptr;
 }
 
 const std::vector<std::shared_ptr<Room>>& RoomManager::getRooms() const {
-    Logger::debug("[RoomManager] Accessed list of all rooms.");
-
     return _rooms;
 }

@@ -15,27 +15,18 @@ Room::Room(int id, const std::string& code, size_t capacity)
 }
 
 int Room::getId() const {
-    Logger::debug("[Room] Accessed ID: " + std::to_string(_id));
-
     return _id;
 }
 
 const std::string& Room::getCode() const {
-    Logger::debug("[Room] Accessed Code: " + _code);
-
     return _code;
 }
 
 size_t Room::getCapacity() const {
-    Logger::debug("[Room] Accessed Capacity: " + std::to_string(_capacity));
-
     return _capacity;
 }
 
 const std::vector<std::shared_ptr<Player>>& Room::getPlayers() const {
-    Logger::debug("[Room] Accessed list of players in Room ID: " +
-                  std::to_string(_id));
-
     return _players;
 }
 

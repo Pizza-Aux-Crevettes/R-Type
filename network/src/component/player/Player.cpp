@@ -18,37 +18,22 @@ Player::Player(const std::string& name, const Point& position,
 }
 
 const std::string& Player::getName() const {
-    Logger::debug("[Player] Accessed name: " + _name);
-
     return _name;
 }
 
 const Point& Player::getPosition() const {
-    Logger::debug("[Player] Accessed position for player: " + _name + " - (" +
-                  std::to_string(_position.getX()) + ", " +
-                  std::to_string(_position.getY()) + ")");
-
     return _position;
 }
 
 const Point& Player::getSize() const {
-    Logger::debug("[Player] Accessed size for player: " + _name + " - (" +
-                  std::to_string(_size.getX()) + ", " +
-                  std::to_string(_size.getY()) + ")");
-
     return _size;
 }
 
 double Player::getSpeed() const {
-    Logger::debug("[Player] Accessed speed for player: " + _name + " - " +
-                  std::to_string(_speed));
-
     return _speed;
 }
 
 const Health& Player::getHealth() const {
-    Logger::debug("[Player] Accessed health for player: " + _name);
-
     return _health;
 }
 
