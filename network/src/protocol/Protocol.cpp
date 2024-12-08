@@ -19,7 +19,7 @@ Protocol::Protocol() {}
 Protocol::~Protocol() {}
 
 void Protocol::handleMessage(int clientSocket, SmartBuffer& smartBuffer) {
-    int8_t opCode;
+    int16_t opCode;
     smartBuffer >> opCode;
 
     Logger::info("[Protocol] Handling OpCode: " + std::to_string(opCode));

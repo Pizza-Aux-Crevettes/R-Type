@@ -14,20 +14,20 @@
 void RoomProtocol::createRoom(int clientSocket, SmartBuffer& smartBuffer) {
     // Protocol structure
     int32_t playerId;
-    int8_t capacity;
-    int8_t isPublic;
+    int16_t capacity;
+    int16_t isPublic;
 
     // Get the data from SmartBuffer after injection
     smartBuffer >> playerId >> capacity >> isPublic;
 
     // Reset and init for response
     smartBuffer.reset();
-    smartBuffer << int8_t(Protocol::OpCode::CREATE_ROOM_CALLBACK);
+    smartBuffer << int16_t(Protocol::OpCode::CREATE_ROOM_CALLBACK);
 
     Logger::trace("[RoomProtocol] Processing CREATE_ROOM. playerId = " +
                   std::to_string(playerId) +
                   ", capacity = " + std::to_string(capacity) +
-                  ", isPublic = " + (isPublic ? "true" : "false"));
+                  ", isPublic = " + std::to_string(isPublic));
 
     // Check relevant data
     auto player = Singletons::getPlayerManager().findPlayerById(playerId);
@@ -37,7 +37,7 @@ void RoomProtocol::createRoom(int clientSocket, SmartBuffer& smartBuffer) {
      * 0 = Room created
      * 1 = Player not found
      */
-    int8_t status = !player;
+    int16_t status = !player;
     smartBuffer << status;
 
     // Inject room's code if the status authorize it
@@ -69,7 +69,7 @@ void RoomProtocol::joinRoom(int clientSocket, SmartBuffer& smartBuffer) {
 
     // Reset and init for response
     smartBuffer.reset();
-    smartBuffer << Protocol::OpCode::JOIN_ROOM_CALLBACK;
+    smartBuffer << int16_t(Protocol::OpCode::JOIN_ROOM_CALLBACK);
 
     Logger::trace("[RoomProtocol] Processing JOIN_ROOM. roomCode = " +
                   roomCode + ", playerId = " + std::to_string(playerId));
@@ -85,7 +85,7 @@ void RoomProtocol::joinRoom(int clientSocket, SmartBuffer& smartBuffer) {
      * 2 = Room not found
      * 3 = Can't add player to the room
      */
-    int8_t status = (!player + !room + (!room->addPlayer(player)));
+    int16_t status = (!player + !room + (!room->addPlayer(player)));
     smartBuffer << status;
 
     // Send back the data to client
@@ -108,7 +108,7 @@ void RoomProtocol::deleteRoom(int clientSocket, SmartBuffer& smartBuffer) {
 
     // Reset and init for response
     smartBuffer.reset();
-    smartBuffer << Protocol::OpCode::DELETE_ROOM_CALLBACK;
+    smartBuffer << int16_t(Protocol::OpCode::DELETE_ROOM_CALLBACK);
 
     Logger::trace("[RoomProtocol] Processing DELETE_ROOM. roomCode = " +
                   roomCode + ", playerId = " + std::to_string(playerId));
@@ -124,8 +124,8 @@ void RoomProtocol::deleteRoom(int clientSocket, SmartBuffer& smartBuffer) {
      * 2 = Room not found
      * 3 = Permission not granted
      */
-    int8_t status = (!player + !room + (room->getOwner() != player));
-    smartBuffer << int8_t(status);
+    int16_t status = (!player + !room + (room->getOwner() != player));
+    smartBuffer << status;
 
     // Delete room if the status authorize it
     if (!status) {
