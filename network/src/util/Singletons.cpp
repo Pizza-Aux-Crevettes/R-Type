@@ -6,7 +6,10 @@
 */
 
 #include "util/Singletons.hpp"
-#include "util/Logger.hpp"
+
+Server& Singletons::getServer() {
+    return Server::getInstance();
+}
 
 RoomManager& Singletons::getRoomManager() {
     return RoomManager::getInstance();

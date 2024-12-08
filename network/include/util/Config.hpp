@@ -24,4 +24,5 @@ enum Config {
     // Game
     DEFAULT_HEALTH = 100,
     DEFAULT_LIVES = 3,
+    DEFAULT_FREQUENCY = 60,
 };

@@ -17,12 +17,20 @@ Player::Player(const std::string& name, const Point& position,
                  std::to_string(position.getY()) + ")");
 }
 
-const std::string& Player::getName() const {
-    return _name;
+void Player::setPosition(const Point& position) {
+    Logger::info("[Player] Setting position for player: " + _name + " to (" +
+                 std::to_string(position.getX()) + ", " +
+                 std::to_string(position.getY()) + ")");
+
+    _position = position;
 }
 
 const Point& Player::getPosition() const {
     return _position;
+}
+
+const std::string& Player::getName() const {
+    return _name;
 }
 
 const Point& Player::getSize() const {
@@ -47,12 +55,4 @@ void Player::move(double deltaX, double deltaY) {
     Logger::info("[Player] New position for player: " + _name + " - (" +
                  std::to_string(_position.getX()) + ", " +
                  std::to_string(_position.getY()) + ")");
-}
-
-void Player::setPosition(const Point& position) {
-    Logger::info("[Player] Setting position for player: " + _name + " to (" +
-                 std::to_string(position.getX()) + ", " +
-                 std::to_string(position.getY()) + ")");
-
-    _position = position;
 }

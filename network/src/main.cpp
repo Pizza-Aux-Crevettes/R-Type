@@ -5,32 +5,19 @@
 ** main.cpp
 */
 
-#include "hypervisor/Hypervisor.hpp"
-#include "socket/Server.hpp"
+#include "util/Config.hpp"
 #include "util/Logger.hpp"
-#include <QApplication>
+#include "util/Singletons.hpp"
 #include <iostream>
 
-int main(int ac, char** av) {
-    int result = SUCCESS;
-
+int main() {
     Logger::info("[Main] Starting application...");
 
-    QApplication app(ac, av);
-
     try {
-        Server server;
-
         Logger::success("[Main] Server successfully initialized on port " +
                         std::to_string(PORT) + ".");
 
-        Hypervisor hypervisor;
-        hypervisor.show();
-        result = app.exec();
-
-        Logger::success("[Main] Hypervisor window displayed successfully.");
-
-        server.start();
+        Singletons::getServer().start();
     } catch (const std::exception& e) {
         Logger::error("[Main] Critical server error: " + std::string(e.what()));
 
@@ -41,5 +28,5 @@ int main(int ac, char** av) {
         return FAILURE;
     }
 
-    return result;
+    return SUCCESS;
 }

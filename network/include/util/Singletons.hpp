@@ -8,10 +8,11 @@
 #pragma once
 
 #include "component/room/RoomManager.hpp"
-#include "protocol/Protocol.hpp"
+#include "socket/Server.hpp"
 
 class Singletons {
   public:
+    static Server& getServer();
     static RoomManager& getRoomManager();
     static Protocol& getProtocol();
 

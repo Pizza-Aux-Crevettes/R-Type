@@ -16,14 +16,15 @@ class Player {
     Player(const std::string& name, const Point& position = Point(),
            const Point& size = Point(), double speed = 0);
 
-    const std::string& getName() const;
+    void setPosition(const Point& position);
     const Point& getPosition() const;
+
+    const std::string& getName() const;
     const Point& getSize() const;
     double getSpeed() const;
     const Health& getHealth() const;
 
     void move(double deltaX, double deltaY);
-    void setPosition(const Point& position);
 
   private:
     std::string _name;
