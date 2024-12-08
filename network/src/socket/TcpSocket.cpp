@@ -1,5 +1,13 @@
-#include "socket/Server.hpp"
+/*
+** EPITECH PROJECT, 2024
+** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
+** File description:
+** TcpSocket.cpp
+*/
+
+#include "socket/TcpSocket.hpp"
 #include "util/Logger.hpp"
+#include "util/Singletons.hpp"
 #include <SmartBuffer.hpp>
 #include <arpa/inet.h>
 #include <cstring>
@@ -13,6 +21,7 @@ TcpSocket::TcpSocket() : _tcpSocket(FAILURE) {
 TcpSocket::~TcpSocket() {
     Logger::socket("[TCP Socket] Instance for port " + std::to_string(PORT) +
                    " is being destroyed.");
+
     close();
 }
 
@@ -24,6 +33,7 @@ void TcpSocket::init() {
 
     if (_tcpSocket == FAILURE) {
         Logger::error("[TCP Socket] Failed to create socket.");
+
         throw std::runtime_error("Failed to create TCP socket.");
     }
 
@@ -35,6 +45,7 @@ void TcpSocket::init() {
         SUCCESS) {
         Logger::error("[TCP Socket] Failed to bind socket to port: " +
                       std::to_string(PORT));
+
         throw std::runtime_error("Bind failed for TCP socket on port " +
                                  std::to_string(PORT));
     }
@@ -42,6 +53,7 @@ void TcpSocket::init() {
     if (::listen(_tcpSocket, 3) < SUCCESS) {
         Logger::error("[TCP Socket] Failed to listen on port: " +
                       std::to_string(PORT));
+
         throw std::runtime_error("Listen failed for TCP socket on port " +
                                  std::to_string(PORT));
     }
@@ -59,6 +71,7 @@ void TcpSocket::listen() {
 
         if (clientSocket < SUCCESS) {
             Logger::warning("[TCP Socket] Failed to accept a connection.");
+
             continue;
         }
 
@@ -85,6 +98,7 @@ void TcpSocket::handleClient(int clientSocket) {
         if (bytesRead <= SUCCESS) {
             Logger::socket("[TCP Socket] Client disconnected. Socket: " +
                            std::to_string(clientSocket));
+
             ::close(clientSocket);
             break;
         }
@@ -97,13 +111,14 @@ void TcpSocket::handleClient(int clientSocket) {
                            bytesRead);
         smartBuffer.resetRead();
 
-        Server::getProtocol().handleMessage(clientSocket, smartBuffer);
+        Singletons::getProtocol().handleMessage(clientSocket, smartBuffer);
     }
 }
 
 void TcpSocket::close() {
     if (_tcpSocket != FAILURE) {
         ::close(_tcpSocket);
+
         Logger::socket("[TCP Socket] Socket on port " + std::to_string(PORT) +
                        " successfully closed.");
     } else {

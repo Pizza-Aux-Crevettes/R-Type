@@ -5,8 +5,9 @@
 ** UdpSocket.cpp
 */
 
-#include "socket/Server.hpp"
+#include "socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
+#include "util/Singletons.hpp"
 #include <SmartBuffer.hpp>
 #include <arpa/inet.h>
 #include <cstring>
@@ -20,6 +21,7 @@ UdpSocket::UdpSocket() : _udpSocket(FAILURE) {
 UdpSocket::~UdpSocket() {
     Logger::socket("[UDP Socket] Instance for port " + std::to_string(PORT) +
                    " is being destroyed.");
+
     close();
 }
 
@@ -31,6 +33,7 @@ void UdpSocket::init() {
 
     if (_udpSocket == FAILURE) {
         Logger::error("[UDP Socket] Failed to create socket.");
+
         throw std::runtime_error("Failed to create UDP socket.");
     }
 
@@ -42,6 +45,7 @@ void UdpSocket::init() {
         SUCCESS) {
         Logger::error("[UDP Socket] Failed to bind socket to port: " +
                       std::to_string(PORT));
+
         throw std::runtime_error("Bind failed for UDP socket on port " +
                                  std::to_string(PORT));
     }
@@ -73,7 +77,7 @@ void UdpSocket::listen() {
                                bytesRead);
             smartBuffer.resetRead();
 
-            Server::getProtocol().handleMessage(_udpSocket, smartBuffer);
+            Singletons::getProtocol().handleMessage(_udpSocket, smartBuffer);
         } else {
             Logger::warning("[UDP Socket] Failed to receive data from client.");
         }
@@ -83,6 +87,7 @@ void UdpSocket::listen() {
 void UdpSocket::close() {
     if (_udpSocket != FAILURE) {
         ::close(_udpSocket);
+
         Logger::socket("[UDP Socket] Socket on port " + std::to_string(PORT) +
                        " successfully closed.");
     } else {
