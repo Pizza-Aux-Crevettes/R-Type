@@ -27,17 +27,17 @@ std::string RoomManager::generateUniqueCode() const {
     std::uniform_int_distribution<size_t> dist(0, sizeof(charset) - 2);
 
     while (true) {
-        std::string code;
+        std::string roomCode;
 
         for (size_t i = 0; i < 6; ++i) {
-            code += charset[dist(rng)];
+            roomCode += charset[dist(rng)];
         }
 
         if (std::none_of(_rooms.begin(), _rooms.end(),
-                         [&code](const std::shared_ptr<Room>& room) {
-                             return room->getCode() == code;
+                         [&roomCode](const std::shared_ptr<Room>& room) {
+                             return room->getCode() == roomCode;
                          })) {
-            return code;
+            return roomCode;
         }
     }
 }
@@ -45,12 +45,12 @@ std::string RoomManager::generateUniqueCode() const {
 std::shared_ptr<Room>
 RoomManager::createRoom(const std::shared_ptr<Player>& owner, size_t capacity,
                         bool isPublic) {
-    std::string code = generateUniqueCode();
-    auto room = std::make_shared<Room>(code, owner, capacity, isPublic);
+    std::string roomCode = generateUniqueCode();
+    auto room = std::make_shared<Room>(roomCode, owner, capacity, isPublic);
 
     _rooms.push_back(room);
 
-    Logger::success("[RoomManager] Created room with Code: " + code +
+    Logger::success("[RoomManager] Created room with roomCode " + roomCode +
                     ", Owner: " + owner->getName() +
                     ", Capacity: " + std::to_string(capacity) +
                     ", Public: " + (isPublic ? "true" : "false"));
@@ -69,7 +69,7 @@ bool RoomManager::deleteRoom(const std::string& roomCode,
         if ((*it)->getOwner() == requester) {
             _rooms.erase(it);
 
-            Logger::success("[RoomManager] Deleted room with Code: " +
+            Logger::success("[RoomManager] Deleted room with roomCode " +
                             roomCode);
 
             return true;
@@ -81,18 +81,20 @@ bool RoomManager::deleteRoom(const std::string& roomCode,
         }
     }
 
-    Logger::warning("[RoomManager] Room not found with Code: " + roomCode);
+    Logger::warning("[RoomManager] Room not found with roomCode: " + roomCode);
 
     return false;
 }
 
 std::shared_ptr<Room>
-RoomManager::findRoomByCode(const std::string& code) const {
+RoomManager::findRoomByCode(const std::string& roomCode) const {
     for (const auto& room : _rooms) {
-        if (room->getCode() == code) {
+        if (room->getCode() == roomCode) {
             return room;
         }
     }
+
+    Logger::warning("[RoomManager] Room not found with roomCode: " + roomCode);
 
     return nullptr;
 }
