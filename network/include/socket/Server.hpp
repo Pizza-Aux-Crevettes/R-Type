@@ -21,13 +21,9 @@ class Server {
 
     int start();
 
-    static Protocol& getProtocol();
-
   private:
     TcpSocket _tcpSocket;
     UdpSocket _udpSocket;
-
-    static Protocol _protocol;
 
     std::vector<std::thread> _clientThreads;
     void closeThreads();
