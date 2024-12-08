@@ -7,14 +7,15 @@
 
 #pragma once
 
-#include "util/Config.hpp"
+#include "../../util/Config.hpp"
 
 class Health {
   public:
-    Health(double health = DEFAULT_HEALTH, double lives = DEFAULT_LIVES);
+    Health(double health = DEFAULT_HEALTH, int lives = DEFAULT_LIVES);
+    ~Health();
 
     double getHealth() const;
-    double getLives() const;
+    int getLives() const;
 
     void takeDamage(double damage);
     void loseLife();
@@ -22,5 +23,5 @@ class Health {
 
   private:
     double _health;
-    double _lives;
+    int _lives;
 };
