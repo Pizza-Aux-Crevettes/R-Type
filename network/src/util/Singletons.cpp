@@ -15,6 +15,10 @@ RoomManager& Singletons::getRoomManager() {
     return RoomManager::getInstance();
 }
 
+PlayerManager& Singletons::getPlayerManager() {
+    return PlayerManager::getInstance();
+}
+
 Protocol& Singletons::getProtocol() {
     return Protocol::getInstance();
 }

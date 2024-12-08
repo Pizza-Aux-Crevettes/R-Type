@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "component/player/PlayerManager.hpp"
 #include "component/room/RoomManager.hpp"
 #include "socket/Server.hpp"
 
@@ -14,6 +15,7 @@ class Singletons {
   public:
     static Server& getServer();
     static RoomManager& getRoomManager();
+    static PlayerManager& getPlayerManager();
     static Protocol& getProtocol();
 
   private:
