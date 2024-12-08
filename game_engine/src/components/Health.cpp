@@ -16,8 +16,8 @@
 /**
  * @brief Constructor for the Health component.
  *
- * This constructor initializes the Health component with the given initial health points.
- * The maximum health points are set to 100 by default.
+ * This constructor initializes the Health component with the given initial
+ * health points. The maximum health points are set to 100 by default.
  *
  * @param initialHp The initial value of the current health points.
  */
@@ -77,7 +77,8 @@ void Health::setMaxHp(int maxHp) {
 /**
  * @brief Display the Health component information.
  *
- * This function displays a message indicating that the Health component is being displayed.
+ * This function displays a message indicating that the Health component is
+ * being displayed.
  */
 void Health::display() const {
     std::cout << "Health component displayed!" << std::endl;

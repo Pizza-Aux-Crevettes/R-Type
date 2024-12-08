@@ -20,7 +20,8 @@
  * This constructor initializes the Collider component with a given size.
  * The size is represented as a pair of doubles (width, height).
  *
- * @param size A pair of doubles representing the size of the collider (width, height).
+ * @param size A pair of doubles representing the size of the collider (width,
+ * height).
  */
 Collider::Collider(std::pair<double, double> size) : _size(size) {}
 
@@ -36,7 +37,8 @@ Collider::~Collider() {}
  *
  * This function retrieves the size of the collider as a pair of doubles.
  *
- * @return A pair of doubles representing the size of the collider (width, height).
+ * @return A pair of doubles representing the size of the collider (width,
+ * height).
  */
 std::pair<double, double> Collider::getCollider() const {
     return this->_size;
@@ -47,7 +49,8 @@ std::pair<double, double> Collider::getCollider() const {
  *
  * This function sets the size of the collider as a pair of doubles.
  *
- * @param size A pair of doubles representing the new size of the collider (width, height).
+ * @param size A pair of doubles representing the new size of the collider
+ * (width, height).
  */
 void Collider::setCollider(std::pair<double, double> size) {
     this->_size = size;
@@ -56,7 +59,8 @@ void Collider::setCollider(std::pair<double, double> size) {
 /**
  * @brief Display the Collider component information.
  *
- * This function displays a message indicating that the Collider component is being displayed.
+ * This function displays a message indicating that the Collider component is
+ * being displayed.
  */
 void Collider::display() const {
     std::cout << "Collider component displayed!" << std::endl;

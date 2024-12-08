@@ -28,7 +28,6 @@ GameEngine::Entity::Entity(const int id) : _id(id) {}
  */
 GameEngine::Entity::~Entity() {}
 
-
 /**
  * @brief Get the ID of the Entity.
  *

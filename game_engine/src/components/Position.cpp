@@ -16,7 +16,8 @@
 /**
  * @brief Constructor for the Position component.
  *
- * This constructor initializes the Position component with the given x and y coordinates.
+ * This constructor initializes the Position component with the given x and y
+ * coordinates.
  *
  * @param x The x-coordinate of the position.
  * @param y The y-coordinate of the position.
@@ -77,7 +78,8 @@ void Position::setPositionY(float y) {
 /**
  * @brief Display the Position component information.
  *
- * This function displays a message indicating that the Position component is being displayed.
+ * This function displays a message indicating that the Position component is
+ * being displayed.
  */
 void Position::display() const {
     std::cout << "Position component displayed!" << std::endl;

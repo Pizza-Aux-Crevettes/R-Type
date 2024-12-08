@@ -16,7 +16,8 @@
 /**
  * @brief Constructor for the Sprite component.
  *
- * This constructor initializes the sprite component with the given texture path and size.
+ * This constructor initializes the sprite component with the given texture path
+ * and size.
  *
  * @param texturePath The path to the texture file for the sprite.
  * @param size The size of the sprite as a pair of width and height.
@@ -78,7 +79,8 @@ void Sprite::setSize(std::pair<double, double> size) {
 /**
  * @brief Display the Sprite component information.
  *
- * This function displays a message indicating that the sprite component is being displayed.
+ * This function displays a message indicating that the sprite component is
+ * being displayed.
  */
 void Sprite::display() const {
     std::cout << "Sprite component displayed!" << std::endl;

@@ -15,8 +15,9 @@
 /**
  * @brief Constructor for the Rigidbody component.
  *
- * This constructor initializes the Rigidbody component with the given parameters for mass, drag,
- * gravity scale, and force in the X and Y directions.
+ * This constructor initializes the Rigidbody component with the given
+ * parameters for mass, drag, gravity scale, and force in the X and Y
+ * directions.
  *
  * @param mass The mass of the rigidbody (usually in kg).
  * @param drag The drag coefficient of the rigidbody.
@@ -105,7 +106,8 @@ void Rigidbody::setGravityScale(float gravityScale) {
 /**
  * @brief Get the force applied to the Rigidbody in the X direction.
  *
- * This function retrieves the force applied to the rigidbody in the X direction.
+ * This function retrieves the force applied to the rigidbody in the X
+ * direction.
  *
  * @return The force in the X direction.
  */
@@ -127,7 +129,8 @@ void Rigidbody::setForceX(float forceX) {
 /**
  * @brief Get the force applied to the Rigidbody in the Y direction.
  *
- * This function retrieves the force applied to the rigidbody in the Y direction.
+ * This function retrieves the force applied to the rigidbody in the Y
+ * direction.
  *
  * @return The force in the Y direction.
  */
@@ -149,7 +152,8 @@ void Rigidbody::setForceY(float forceY) {
 /**
  * @brief Display the Rigidbody component information.
  *
- * This function displays a message indicating that the Rigidbody component is being displayed.
+ * This function displays a message indicating that the Rigidbody component is
+ * being displayed.
  */
 void Rigidbody::display() const {
     std::cout << "Rigidbody component displayed!" << std::endl;

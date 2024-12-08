@@ -16,7 +16,8 @@
 /**
  * @brief Constructor for the Velocity component.
  *
- * This constructor initializes the velocity component with the given x and y values.
+ * This constructor initializes the velocity component with the given x and y
+ * values.
  *
  * @param x The velocity along the X-axis.
  * @param y The velocity along the Y-axis.
@@ -77,7 +78,8 @@ void Velocity::setVelocityY(float y) {
 /**
  * @brief Display the Velocity component information.
  *
- * This function displays a message indicating that the velocity component is being displayed.
+ * This function displays a message indicating that the velocity component is
+ * being displayed.
  */
 void Velocity::display() const {
     std::cout << "Velocity component displayed!" << std::endl;

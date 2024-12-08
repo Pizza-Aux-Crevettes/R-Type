@@ -15,7 +15,8 @@
 /**
  * @brief Constructor for the Bullet component.
  *
- * This constructor initializes the Bullet component with the specified damage value.
+ * This constructor initializes the Bullet component with the specified damage
+ * value.
  *
  * @param damage The damage value of the bullet.
  */
@@ -53,7 +54,8 @@ void Bullet::setDamage(int damage) {
 /**
  * @brief Display the Bullet component information.
  *
- * This function displays a message indicating that the Bullet component is being displayed.
+ * This function displays a message indicating that the Bullet component is
+ * being displayed.
  */
 void Bullet::display() const {
     std::cout << "Bullet component displayed!" << std::endl;

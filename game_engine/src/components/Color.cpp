@@ -46,7 +46,8 @@ std::vector<double> Color::getColor() const {
  *
  * This function sets the color of the entity as a vector of doubles.
  *
- * @param color A vector of doubles representing the new color (e.g., [R, G, B, A]).
+ * @param color A vector of doubles representing the new color (e.g., [R, G, B,
+ * A]).
  */
 void Color::setColor(std::vector<double> color) {
     this->_color = color;
@@ -55,7 +56,8 @@ void Color::setColor(std::vector<double> color) {
 /**
  * @brief Display the Color component information.
  *
- * This function displays a message indicating that the Color component is being displayed.
+ * This function displays a message indicating that the Color component is being
+ * displayed.
  */
 void Color::display() const {
     std::cout << "Color component displayed!" << std::endl;

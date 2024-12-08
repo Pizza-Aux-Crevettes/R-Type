@@ -54,7 +54,8 @@ void Text::setText(std::string text) {
 /**
  * @brief Display the Text component information.
  *
- * This function displays a message indicating that the text component is being displayed.
+ * This function displays a message indicating that the text component is being
+ * displayed.
  */
 void Text::display() const {
     std::cout << "Text component displayed!" << std::endl;

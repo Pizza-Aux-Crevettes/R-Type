@@ -16,9 +16,11 @@
 /**
  * @brief Constructor for the Renderable component.
  *
- * This constructor initializes the Renderable component with the given visibility state.
+ * This constructor initializes the Renderable component with the given
+ * visibility state.
  *
- * @param isVisible A boolean indicating whether the component is visible or not.
+ * @param isVisible A boolean indicating whether the component is visible or
+ * not.
  */
 Renderable::Renderable(bool isVisible) : _isVisible(isVisible) {}
 
@@ -45,7 +47,8 @@ bool Renderable::getIsVisible() const {
  *
  * This function sets the visibility state of the component.
  *
- * @param isVisible A boolean indicating whether the component should be visible or not.
+ * @param isVisible A boolean indicating whether the component should be visible
+ * or not.
  */
 void Renderable::setIsVisible(bool isVisible) {
     this->_isVisible = isVisible;
@@ -54,7 +57,8 @@ void Renderable::setIsVisible(bool isVisible) {
 /**
  * @brief Display the Renderable component information.
  *
- * This function displays a message indicating that the Renderable component is being displayed.
+ * This function displays a message indicating that the Renderable component is
+ * being displayed.
  */
 void Renderable::display() const {
     std::cout << "Renderable component displayed!" << std::endl;

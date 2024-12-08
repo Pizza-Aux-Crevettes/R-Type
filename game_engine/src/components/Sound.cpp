@@ -15,7 +15,8 @@
 /**
  * @brief Constructor for the Sound component.
  *
- * This constructor initializes the sound component with the given sound file and volume.
+ * This constructor initializes the sound component with the given sound file
+ * and volume.
  *
  * @param soundFile The path to the sound file.
  * @param volume The volume level for the sound (typically between 0 and 100).
@@ -33,7 +34,8 @@ Sound::~Sound() {}
 /**
  * @brief Get the sound file path.
  *
- * This function retrieves the path to the sound file used by the sound component.
+ * This function retrieves the path to the sound file used by the sound
+ * component.
  *
  * @return The path to the sound file.
  */
@@ -77,7 +79,8 @@ void Sound::setVolume(int volume) {
 /**
  * @brief Display the Sound component information.
  *
- * This function displays a message indicating that the sound component is being displayed.
+ * This function displays a message indicating that the sound component is being
+ * displayed.
  */
 void Sound::display() const {
     std::cout << "Sound component displayed!" << std::endl;

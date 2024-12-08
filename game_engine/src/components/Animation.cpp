@@ -17,7 +17,8 @@
 /**
  * @brief Constructor for the Animation component.
  *
- * This constructor initializes the Animation component with the specified frame details.
+ * This constructor initializes the Animation component with the specified frame
+ * details.
  *
  * @param currentFrame The current frame of the animation.
  * @param frameDuration The duration each frame should be displayed.
@@ -81,7 +82,8 @@ void Animation::setFrameDuration(float frameDuration) {
 /**
  * @brief Get the elapsed time of the Animation component.
  *
- * This function retrieves the time that has elapsed since the animation started.
+ * This function retrieves the time that has elapsed since the animation
+ * started.
  *
  * @return The elapsed time in seconds.
  */
@@ -103,7 +105,8 @@ void Animation::setElapsedTime(float elapsedTime) {
 /**
  * @brief Display the Animation component information.
  *
- * This function displays a message indicating that the Animation component is being displayed.
+ * This function displays a message indicating that the Animation component is
+ * being displayed.
  */
 void Animation::display() const {
     std::cout << "Animation component displayed!" << std::endl;

@@ -17,10 +17,12 @@
 /**
  * @brief Constructor for the Button component.
  *
- * This constructor initializes the Button component with the specified text and size.
+ * This constructor initializes the Button component with the specified text and
+ * size.
  *
  * @param text A string representing the text on the button.
- * @param size A pair of doubles representing the size of the button (width, height).
+ * @param size A pair of doubles representing the size of the button (width,
+ * height).
  */
 Button::Button(std::string text, std::pair<double, double> size)
     : _text(text), _size(size) {}
@@ -59,7 +61,8 @@ void Button::setText(std::string text) {
  *
  * This function retrieves the size of the button as a pair of doubles.
  *
- * @return A pair of doubles representing the size of the button (width, height).
+ * @return A pair of doubles representing the size of the button (width,
+ * height).
  */
 std::pair<double, double> Button::getSize() const {
     return this->_size;
@@ -70,7 +73,8 @@ std::pair<double, double> Button::getSize() const {
  *
  * This function sets the size of the button as a pair of doubles.
  *
- * @param size A pair of doubles representing the new size of the button (width, height).
+ * @param size A pair of doubles representing the new size of the button (width,
+ * height).
  */
 void Button::setSize(std::pair<double, double> size) {
     this->_size = size;
@@ -79,7 +83,8 @@ void Button::setSize(std::pair<double, double> size) {
 /**
  * @brief Display the Button component information.
  *
- * This function displays a message indicating that the Button component is being displayed.
+ * This function displays a message indicating that the Button component is
+ * being displayed.
  */
 void Button::display() const {
     std::cout << "Button component displayed!" << std::endl;

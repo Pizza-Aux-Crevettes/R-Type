@@ -41,8 +41,8 @@ class Entity {
  * @brief Construct an Entity with an ID and optional components.
  *
  * This constructor initializes the entity with a given ID and adds components
- * to the entity. The components are forwarded as arguments to the `addComponent`
- * function.
+ * to the entity. The components are forwarded as arguments to the
+ * `addComponent` function.
  *
  * @tparam Args Types of the components to be added to the entity.
  * @param id The ID of the entity.
@@ -50,7 +50,8 @@ class Entity {
  *
  * @throws std::runtime_error If a component already exists in the entity.
  */
-template <typename... Args> Entity::Entity(const int id, Args&&... args) : _id(id) {
+template <typename... Args>
+Entity::Entity(const int id, Args&&... args) : _id(id) {
     (addComponent(std::forward<Args>(args)), ...);
 }
 

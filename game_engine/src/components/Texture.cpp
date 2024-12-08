@@ -14,7 +14,8 @@
 /**
  * @brief Constructor for the Texture component.
  *
- * This constructor initializes the texture component with the given texture file path.
+ * This constructor initializes the texture component with the given texture
+ * file path.
  *
  * @param texturePath The path to the texture file.
  */
@@ -45,7 +46,8 @@ void Texture::setTexturePath(std::string texturePath) {
 /**
  * @brief Display the Texture component information.
  *
- * This function displays a message indicating that the texture component is being displayed.
+ * This function displays a message indicating that the texture component is
+ * being displayed.
  */
 void Texture::display() const {
     std::cout << "Texture component displayed!" << std::endl;

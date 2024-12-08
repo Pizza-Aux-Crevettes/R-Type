@@ -17,7 +17,8 @@
 /**
  * @brief Constructor for the Input component.
  *
- * This constructor initializes the Input component with the given boolean values for the input actions.
+ * This constructor initializes the Input component with the given boolean
+ * values for the input actions.
  *
  * @param up Boolean indicating if the "up" action is active.
  * @param right Boolean indicating if the "right" action is active.
@@ -173,7 +174,8 @@ void Input::setAutoFire(bool autoFire) {
 /**
  * @brief Display the Input component information.
  *
- * This function displays a message indicating that the Input component is being displayed.
+ * This function displays a message indicating that the Input component is being
+ * displayed.
  */
 void Input::display() const {
     std::cout << "Input component displayed!" << std::endl;
