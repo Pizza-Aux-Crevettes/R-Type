@@ -7,62 +7,88 @@
 
 #include "component/room/RoomManager.hpp"
 #include "util/Logger.hpp"
+#include <algorithm>
+#include <random>
+
+static const char charset[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                              "0123456789";
 
 RoomManager& RoomManager::getInstance() {
     static RoomManager instance;
     return instance;
 }
 
-RoomManager::RoomManager() : _nextRoomId(1) {}
+RoomManager::RoomManager() {}
 
 RoomManager::~RoomManager() {}
 
-std::shared_ptr<Room> RoomManager::createRoom(const std::string& code,
-                                              size_t capacity) {
-    auto room = std::make_shared<Room>(_nextRoomId++, code, capacity);
+std::string RoomManager::generateUniqueCode() const {
+    static std::mt19937 rng(std::random_device{}());
+    std::uniform_int_distribution<size_t> dist(0, sizeof(charset) - 2);
+
+    while (true) {
+        std::string code;
+
+        for (size_t i = 0; i < 6; ++i) {
+            code += charset[dist(rng)];
+        }
+
+        if (std::none_of(_rooms.begin(), _rooms.end(),
+                         [&code](const std::shared_ptr<Room>& room) {
+                             return room->getCode() == code;
+                         })) {
+            return code;
+        }
+    }
+}
+
+std::shared_ptr<Room>
+RoomManager::createRoom(const std::shared_ptr<Player>& owner, size_t capacity,
+                        bool isPublic) {
+    std::string code = generateUniqueCode();
+    auto room = std::make_shared<Room>(code, owner, capacity, isPublic);
 
     _rooms.push_back(room);
 
-    Logger::success(
-        "[RoomManager] Created room with ID: " + std::to_string(room->getId()) +
-        ", Code: " + code + ", Capacity: " + std::to_string(capacity) + ".");
+    Logger::success("[RoomManager] Created room with Code: " + code +
+                    ", Owner: " + owner->getName() +
+                    ", Capacity: " + std::to_string(capacity) +
+                    ", Public: " + (isPublic ? "true" : "false"));
 
     return room;
 }
 
-bool RoomManager::deleteRoom(int roomId) {
-    auto it = std::remove_if(_rooms.begin(), _rooms.end(),
-                             [roomId](const std::shared_ptr<Room>& room) {
-                                 return room->getId() == roomId;
-                             });
+bool RoomManager::deleteRoom(const std::string& roomCode,
+                             const std::shared_ptr<Player>& requester) {
+    auto it = std::find_if(_rooms.begin(), _rooms.end(),
+                           [&roomCode](const std::shared_ptr<Room>& room) {
+                               return room->getCode() == roomCode;
+                           });
 
     if (it != _rooms.end()) {
-        _rooms.erase(it, _rooms.end());
+        if ((*it)->getOwner() == requester) {
+            _rooms.erase(it);
 
-        Logger::success("[RoomManager] Deleted room with ID: " +
-                        std::to_string(roomId) + ".");
+            Logger::success("[RoomManager] Deleted room with Code: " +
+                            roomCode);
 
-        return true;
+            return true;
+        } else {
+            Logger::warning("[RoomManager] Deletion failed. Requester is not "
+                            "the owner of the room.");
+
+            return false;
+        }
     }
 
-    Logger::warning("[RoomManager] Failed to delete room with ID: " +
-                    std::to_string(roomId) + ".");
+    Logger::warning("[RoomManager] Room not found with Code: " + roomCode);
 
     return false;
 }
 
-std::shared_ptr<Room> RoomManager::findRoomById(int roomId) {
-    for (auto& room : _rooms) {
-        if (room->getId() == roomId) {
-            return room;
-        }
-    }
-
-    return nullptr;
-}
-
-std::shared_ptr<Room> RoomManager::findRoomByCode(const std::string& code) {
-    for (auto& room : _rooms) {
+std::shared_ptr<Room>
+RoomManager::findRoomByCode(const std::string& code) const {
+    for (const auto& room : _rooms) {
         if (room->getCode() == code) {
             return room;
         }

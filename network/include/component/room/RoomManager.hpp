@@ -16,11 +16,12 @@ class RoomManager {
   public:
     static RoomManager& getInstance();
 
-    std::shared_ptr<Room> createRoom(const std::string& code, size_t capacity);
-    bool deleteRoom(int roomId);
+    std::shared_ptr<Room> createRoom(const std::shared_ptr<Player>& owner,
+                                     size_t capacity, bool isPublic);
+    bool deleteRoom(const std::string& roomCode,
+                    const std::shared_ptr<Player>& requester);
 
-    std::shared_ptr<Room> findRoomById(int roomId);
-    std::shared_ptr<Room> findRoomByCode(const std::string& code);
+    std::shared_ptr<Room> findRoomByCode(const std::string& code) const;
 
     const std::vector<std::shared_ptr<Room>>& getRooms() const;
 
@@ -31,6 +32,6 @@ class RoomManager {
     RoomManager(const RoomManager&) = delete;
     RoomManager& operator=(const RoomManager&) = delete;
 
+    std::string generateUniqueCode() const;
     std::vector<std::shared_ptr<Room>> _rooms;
-    int _nextRoomId;
 };

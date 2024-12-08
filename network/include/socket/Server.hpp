@@ -19,15 +19,6 @@ class Server {
 
     int start();
 
-    void setFrequency(int frequency);
-    int getFrequency() const;
-
-    std::string getDateTime() const;
-    std::string getPwd() const;
-    double getMemoryUsageMB() const;
-    double getMemoryUsagePercent() const;
-    double getCpuUsagePercent() const;
-
   private:
     Server();
     ~Server();
@@ -37,9 +28,6 @@ class Server {
 
     TcpSocket _tcpSocket;
     UdpSocket _udpSocket;
-
-    int _frequency;
-    std::chrono::time_point<std::chrono::steady_clock> _lastUpdate;
 
     std::vector<std::thread> _clientThreads;
     void closeThreads();

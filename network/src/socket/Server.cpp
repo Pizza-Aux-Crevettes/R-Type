@@ -10,14 +10,13 @@
 #include "util/Logger.hpp"
 #include <iomanip>
 #include <stdexcept>
-#include <unistd.h>
 
 Server& Server::getInstance() {
     static Server instance;
     return instance;
 }
 
-Server::Server() : _tcpSocket(), _udpSocket(), _frequency(DEFAULT_FREQUENCY) {
+Server::Server() : _tcpSocket(), _udpSocket() {
     Logger::info("[Server] Starting initialization...");
 
     try {
@@ -69,60 +68,6 @@ int Server::start() {
     }
 
     return SUCCESS;
-}
-
-void Server::setFrequency(int frequency) {
-    _frequency = frequency;
-
-    Logger::info("[Server] Frequency set to " + std::to_string(frequency) +
-                 " Hz.");
-}
-
-int Server::getFrequency() const {
-    return _frequency;
-}
-
-std::string Server::getDateTime() const {
-    auto now = std::time(nullptr);
-
-    std::stringstream ss;
-    ss << std::put_time(std::localtime(&now), "%Y-%m-%d %H:%M:%S");
-
-    return ss.str();
-}
-
-std::string Server::getPwd() const {
-    char buffer[256];
-
-    if (getcwd(buffer, sizeof(buffer)) != nullptr) {
-        return std::string(buffer);
-    }
-
-    return "Unknown";
-}
-
-double Server::getMemoryUsageMB() const {
-    struct rusage usage;
-    getrusage(RUSAGE_SELF, &usage);
-
-    return usage.ru_maxrss / 1024.0;
-}
-
-double Server::getMemoryUsagePercent() const {
-    return (getMemoryUsageMB() / 8192.0) * 100.0;
-}
-
-double Server::getCpuUsagePercent() const {
-    static double lastCpuTime = 0;
-    static auto lastTime = std::chrono::steady_clock::now();
-
-    auto now = std::chrono::steady_clock::now();
-    std::chrono::duration<double> elapsed = now - lastTime;
-
-    lastTime = now;
-    lastCpuTime += 10.0;
-
-    return lastCpuTime;
 }
 
 void Server::closeThreads() {
