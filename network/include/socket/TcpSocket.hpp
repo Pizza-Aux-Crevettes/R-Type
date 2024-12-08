@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <SmartBuffer.hpp>
 #include <netinet/in.h>
 #include <thread>
 #include <vector>
@@ -15,6 +16,8 @@ class TcpSocket {
   public:
     TcpSocket();
     ~TcpSocket();
+
+    static void sendTcp(int clientSocket, SmartBuffer& smartBuffer);
 
     void init();
     void listen();

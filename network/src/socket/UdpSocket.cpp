@@ -25,6 +25,21 @@ UdpSocket::~UdpSocket() {
     close();
 }
 
+void UdpSocket::sendUdp(int udpSocket, const sockaddr_in& clientAddr,
+                        SmartBuffer& smartBuffer) {
+    ssize_t bytesSent =
+        sendto(udpSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0,
+               (struct sockaddr*)&clientAddr, sizeof(clientAddr));
+
+    if (bytesSent < 0) {
+        Logger::error("[Socket] UDP send failed for UDP socket: " +
+                      std::to_string(udpSocket));
+    } else {
+        Logger::info("[Socket] UDP send succeeded. Bytes sent: " +
+                     std::to_string(bytesSent));
+    }
+}
+
 void UdpSocket::init() {
     Logger::socket("[UDP Socket] Initializing socket on port: " +
                    std::to_string(PORT));

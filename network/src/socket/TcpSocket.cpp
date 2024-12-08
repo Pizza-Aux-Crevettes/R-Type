@@ -25,6 +25,19 @@ TcpSocket::~TcpSocket() {
     close();
 }
 
+void TcpSocket::sendTcp(int clientSocket, SmartBuffer& smartBuffer) {
+    ssize_t bytesSent =
+        send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0);
+
+    if (bytesSent < 0) {
+        Logger::error("[Socket] TCP send failed for clientSocket: " +
+                      std::to_string(clientSocket));
+    } else {
+        Logger::info("[Socket] TCP send succeeded. Bytes sent: " +
+                     std::to_string(bytesSent));
+    }
+}
+
 void TcpSocket::init() {
     Logger::socket("[TCP Socket] Initializing socket on port: " +
                    std::to_string(PORT));
