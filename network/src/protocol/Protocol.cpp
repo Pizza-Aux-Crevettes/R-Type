@@ -8,6 +8,11 @@
 #include "protocol/Protocol.hpp"
 #include "util/Logger.hpp"
 
+Protocol& Protocol::getInstance() {
+    static Protocol instance;
+    return instance;
+}
+
 Protocol::Protocol() {
     Logger::info("[Protocol] Instance successfully created.");
 }
