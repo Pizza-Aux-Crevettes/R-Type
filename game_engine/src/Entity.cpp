@@ -20,12 +20,8 @@ std::int32_t GameEngine::Entity::getEntityId() const {
     return (_id);
 }
 
-std::vector<std::unique_ptr<Component>>& GameEngine::Entity::getComponents() {
-    return components;
-}
-
 void GameEngine::Entity::displayComponents() const {
-    for (const auto& component : components) {
-        component->display();
+    for (auto& component : _components) {
+        component.second->display();
     }
 }

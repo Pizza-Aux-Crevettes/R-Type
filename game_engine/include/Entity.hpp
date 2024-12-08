@@ -9,56 +9,69 @@
 
 #include "components/Button.hpp"
 #include "components/Components.hpp"
-
-#include <iostream>
 #include <memory>
-#include <typeinfo>
-#include <vector>
+#include <typeindex>
 
 namespace GameEngine {
 
 class Entity {
   public:
     Entity();
+
+    template <typename... Args> Entity(Args&&... args);
+
     ~Entity();
 
     template <typename ComponentType>
-    void addComponent(ComponentType&& component);
+    void addComponent(ComponentType component);
 
     template <typename ComponentType> void removeComponent();
 
-    std::vector<std::unique_ptr<Component>>& getComponents();
+    template <typename ComponentType> ComponentType& getComponent();
+
     void displayComponents() const;
     int getEntityId() const;
 
   private:
     int _id;
-    std::vector<std::unique_ptr<Component>> components;
+    std::map<std::type_index, std::unique_ptr<Component>> _components;
 };
 
+template <typename... Args> Entity::Entity(Args&&... args) : _id(0) {
+    (addComponent(std::forward<Args>(args)), ...);
+}
+
 template <typename ComponentType>
-void Entity::addComponent(ComponentType&& component) {
-    for (auto& tmpComponent : components) {
-        auto& componentRef = *tmpComponent;
-        if (typeid(componentRef) == typeid(ComponentType)) {
-            std::cout << "Component already adding to the Entity" << std::endl;
-            return;
-        }
+void Entity::addComponent(ComponentType component) {
+    const auto component_found =
+        _components.find(std::type_index(typeid(ComponentType)));
+    if (component_found == _components.end()) {
+        _components[std::type_index(typeid(ComponentType))] =
+            std::make_unique<ComponentType>(component);
+        return;
     }
-    components.push_back(std::make_unique<ComponentType>(
-        std::forward<ComponentType>(component)));
+    throw std::runtime_error(
+        "GameEngine::Entity::addComponent: Component already exists");
 }
 
 template <typename ComponentType> void Entity::removeComponent() {
-    int index = 0;
-    for (auto& tmpComponent : components) {
-        auto& componentRef = *tmpComponent;
-        if (typeid(componentRef) == typeid(ComponentType)) {
-            components.erase(components.begin() + index);
-            return;
-        }
-        index++;
+    const auto component_found =
+        _components.find(std::type_index(typeid(ComponentType)));
+    if (component_found == _components.end()) {
+        throw std::runtime_error(
+            "GameEngine::Entity::removeComponent: Component not found");
     }
+    _components.erase(component_found);
+}
+
+template <typename ComponentType> ComponentType& Entity::getComponent() {
+    const auto component_found =
+        _components.find(std::type_index(typeid(ComponentType)));
+    if (component_found == _components.end()) {
+        throw std::runtime_error(
+            "GameEngine::Entity::getComponent: Component not found");
+    }
+    return static_cast<ComponentType&>(*component_found->second);
 }
 
 }; // namespace GameEngine
