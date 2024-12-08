@@ -16,9 +16,9 @@ namespace GameEngine {
 
 class Entity {
   public:
-    Entity();
+    Entity(int id);
 
-    template <typename... Args> Entity(Args&&... args);
+    template <typename... Args> Entity(int id, Args&&... args);
 
     ~Entity();
 
@@ -37,10 +37,34 @@ class Entity {
     std::map<std::type_index, std::unique_ptr<Component>> _components;
 };
 
-template <typename... Args> Entity::Entity(Args&&... args) : _id(0) {
+/**
+ * @brief Construct an Entity with an ID and optional components.
+ *
+ * This constructor initializes the entity with a given ID and adds components
+ * to the entity. The components are forwarded as arguments to the `addComponent`
+ * function.
+ *
+ * @tparam Args Types of the components to be added to the entity.
+ * @param id The ID of the entity.
+ * @param args The components to be added to the entity.
+ *
+ * @throws std::runtime_error If a component already exists in the entity.
+ */
+template <typename... Args> Entity::Entity(const int id, Args&&... args) : _id(id) {
     (addComponent(std::forward<Args>(args)), ...);
 }
 
+/**
+ * @brief Add a component to the Entity.
+ *
+ * This function adds a component to the current entity.
+ * If the component already exists, an exception is thrown.
+ *
+ * @tparam ComponentType The type of the component.
+ * @param component The component to be added to the entity.
+ *
+ * @throws std::runtime_error If the component already exists.
+ */
 template <typename ComponentType>
 void Entity::addComponent(ComponentType component) {
     const auto component_found =
@@ -54,6 +78,16 @@ void Entity::addComponent(ComponentType component) {
         "GameEngine::Entity::addComponent: Component already exists");
 }
 
+/**
+ * @brief Remove a component from the Entity.
+ *
+ * This function removes a specific component from the current entity.
+ * If the component isn't found, an exception is thrown.
+ *
+ * @tparam ComponentType The type of the component.
+ *
+ * @throws std::runtime_error If the component is not found.
+ */
 template <typename ComponentType> void Entity::removeComponent() {
     const auto component_found =
         _components.find(std::type_index(typeid(ComponentType)));
@@ -64,6 +98,18 @@ template <typename ComponentType> void Entity::removeComponent() {
     _components.erase(component_found);
 }
 
+/**
+ * @brief Get a component from the Entity.
+ *
+ * This function retrieves a specific component from the current entity.
+ * If the component isn't found, an exception is thrown.
+ *
+ * @tparam ComponentType The type of the component to retrieve.
+ *
+ * @return A reference to the requested component.
+ *
+ * @throws std::runtime_error If the component is not found.
+ */
 template <typename ComponentType> ComponentType& Entity::getComponent() {
     const auto component_found =
         _components.find(std::type_index(typeid(ComponentType)));

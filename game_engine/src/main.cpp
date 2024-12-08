@@ -14,7 +14,7 @@
 
 int main(int ac, char* av[]) {
     try {
-        GameEngine::Entity player(Health(30), Velocity());
+        GameEngine::Entity player(0, Health(30), Velocity());
         player.displayComponents();
         std::cout << "-----" << std::endl;
         player.addComponent(Button("Player", {0.0 + 1.0, 0.0}));
