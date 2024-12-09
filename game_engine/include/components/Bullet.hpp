@@ -5,21 +5,18 @@
 ** Bullet.hpp
 */
 
-#ifndef BULLET_HPP_
-#define BULLET_HPP_
+#pragma once
 
-#include "../Entity.hpp"
+#include "Components.hpp"
 
-class Bullet {
+class Bullet : public Component {
   public:
     Bullet(int damage = 0);
     ~Bullet();
     int getDamage() const;
     void setDamage(int damage);
+    void display() const override;
 
   private:
     int _damage;
-    Entity _sourceEntity;
 };
-
-#endif /* BULLET_HPP_ */

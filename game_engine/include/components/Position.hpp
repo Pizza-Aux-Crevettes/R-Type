@@ -5,10 +5,10 @@
 ** Position.hpp
 */
 
-#ifndef POSITION_HPP_
-#define POSITION_HPP_
+#pragma once
+#include "Components.hpp"
 
-class Position {
+class Position : public Component {
   public:
     Position(float x = 0.0f, float y = 0.0f);
     ~Position();
@@ -16,10 +16,9 @@ class Position {
     void setPositionX(float x);
     float getPositionY() const;
     void setPositionY(float y);
+    void display() const override;
 
   private:
     float _x;
     float _y;
 };
-
-#endif /* POSITION_HPP_ */

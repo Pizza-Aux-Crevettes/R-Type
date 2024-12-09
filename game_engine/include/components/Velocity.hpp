@@ -5,10 +5,10 @@
 ** Velocity.hpp
 */
 
-#ifndef VELOCITY_HPP_
-#define VELOCITY_HPP_
+#pragma once
+#include "Components.hpp"
 
-class Velocity {
+class Velocity : public Component {
   public:
     Velocity(float x = 0.0f, float y = 0.0f);
     ~Velocity();
@@ -16,10 +16,9 @@ class Velocity {
     void setVelocityX(float x);
     float getVelocityY() const;
     void setVelocityY(float y);
+    void display() const override;
 
   private:
     float _x;
     float _y;
 };
-
-#endif /* VELOCITY_HPP_ */

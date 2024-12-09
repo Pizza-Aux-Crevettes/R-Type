@@ -5,10 +5,10 @@
 ** Rigidbody.hpp
 */
 
-#ifndef RIGIDBODY_HPP_
-#define RIGIDBODY_HPP_
+#pragma once
+#include "Components.hpp"
 
-class Rigidbody {
+class Rigidbody : public Component {
   public:
     Rigidbody(float mass, float drag, float gravityScale, float forceX,
               float forceY);
@@ -23,6 +23,7 @@ class Rigidbody {
     void setForceX(float forceX);
     float getForceY() const;
     void setForceY(float forceY);
+    void display() const override;
 
   protected:
   private:
@@ -32,5 +33,3 @@ class Rigidbody {
     float _forceX;
     float _forceY;
 };
-
-#endif /* !RIGIDBODY_HPP_ */

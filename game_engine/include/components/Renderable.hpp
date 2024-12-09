@@ -5,18 +5,17 @@
 ** Renderable.hpp
 */
 
-#ifndef RENDERABLE_HPP_
-#define RENDERABLE_HPP_
+#pragma once
+#include "Components.hpp"
 
-class Renderable {
+class Renderable : public Component {
   public:
     Renderable(bool isVisible = true);
     ~Renderable();
     bool getIsVisible() const;
     void setIsVisible(bool isVisible);
+    void display() const override;
 
   private:
     bool _isVisible;
 };
-
-#endif /* RENDERABLE_HPP_ */

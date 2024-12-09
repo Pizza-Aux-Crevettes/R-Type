@@ -5,20 +5,19 @@
 ** Collider.hpp
 */
 
-#ifndef COLLIDER_HPP_
-#define COLLIDER_HPP_
+#pragma once
 
+#include "Components.hpp"
 #include <vector>
 
-class Collider {
+class Collider : public Component {
   public:
-    Collider(std::vector<double> size = {0.0, 0.0});
+    Collider(std::pair<double, double> size = {0.0, 0.0});
     ~Collider();
-    std::vector<double> getCollider() const;
-    void setCollider(std::vector<double> size);
+    std::pair<double, double> getCollider() const;
+    void setCollider(std::pair<double, double> size);
+    void display() const override;
 
   private:
-    std::vector<double> _size;
+    std::pair<double, double> _size;
 };
-
-#endif /* COLLIDER_HPP_ */

@@ -5,10 +5,10 @@
 ** Input.hpp
 */
 
-#ifndef INPUT_HPP_
-#define INPUT_HPP_
+#pragma once
+#include "Components.hpp"
 
-class Input {
+class Input : public Component {
   public:
     Input(bool up = false, bool right = false, bool left = false,
           bool down = false, bool attack = false, bool autoFire = false);
@@ -25,6 +25,7 @@ class Input {
     void setAttack(bool attack);
     bool getAutoFire() const;
     void setAutoFire(bool autoFire);
+    void display() const override;
 
   private:
     bool _up;
@@ -34,5 +35,3 @@ class Input {
     bool _attack;
     bool _autoFire;
 };
-
-#endif /* INPUT_HPP_ */

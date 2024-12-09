@@ -5,24 +5,24 @@
 ** Button.hpp
 */
 
-#ifndef BUTTON_HPP_
-#define BUTTON_HPP_
+#pragma once
 
+#include "Components.hpp"
 #include <SFML/Graphics.hpp>
 #include <string>
 
-class Button {
+class Button : public Component {
   public:
-    Button(std::string text = "", sf::Vector2f size = sf::Vector2f(0.0f, 0.0f));
+    Button(std::string text = "", std::pair<double, double> size = {0.0, 0.0});
     ~Button();
     std::string getText() const;
     void setText(std::string text);
-    sf::Vector2f getSize() const;
-    void setSize(sf::Vector2f size);
+    std::pair<double, double> getSize() const;
+    void setSize(std::pair<double, double> size);
+    void display() const override;
 
   private:
     std::string _text;
-    sf::Vector2f _size;
+    std::pair<double, double> _size;
+    enum Shape { Circle, Rectangle };
 };
-
-#endif /* BUTTON_HPP_ */
