@@ -5,9 +5,7 @@
 ** Health.hpp
 */
 
-#ifndef HEALTH_HPP_
-#define HEALTH_HPP_
-#include "Components.hpp"
+#pragma once
 
 class Health : public Component {
   public:
@@ -24,5 +22,3 @@ class Health : public Component {
     int _currentHp;
     int _maxHp;
 };
-
-#endif /* !HEALTH_HPP_ */

@@ -5,9 +5,7 @@
 ** Renderable.hpp
 */
 
-#ifndef RENDERABLE_HPP_
-#define RENDERABLE_HPP_
-#include "Components.hpp"
+#pragma once
 
 class Renderable : public Component {
   public:
@@ -20,5 +18,3 @@ class Renderable : public Component {
   private:
     bool _isVisible;
 };
-
-#endif /* RENDERABLE_HPP_ */

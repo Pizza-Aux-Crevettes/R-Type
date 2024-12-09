@@ -5,9 +5,7 @@
 ** Input.hpp
 */
 
-#ifndef INPUT_HPP_
-#define INPUT_HPP_
-#include "Components.hpp"
+#pragma once
 
 class Input : public Component {
   public:
@@ -36,5 +34,3 @@ class Input : public Component {
     bool _attack;
     bool _autoFire;
 };
-
-#endif /* INPUT_HPP_ */

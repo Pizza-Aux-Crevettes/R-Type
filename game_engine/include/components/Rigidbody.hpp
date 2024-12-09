@@ -5,9 +5,7 @@
 ** Rigidbody.hpp
 */
 
-#ifndef RIGIDBODY_HPP_
-#define RIGIDBODY_HPP_
-#include "Components.hpp"
+#pragma once
 
 class Rigidbody : public Component {
   public:
@@ -34,5 +32,3 @@ class Rigidbody : public Component {
     float _forceX;
     float _forceY;
 };
-
-#endif /* !RIGIDBODY_HPP_ */

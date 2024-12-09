@@ -5,8 +5,7 @@
 ** Button.hpp
 */
 
-#ifndef BUTTON_HPP_
-#define BUTTON_HPP_
+#pragma once
 
 #include "Components.hpp"
 #include <SFML/Graphics.hpp>
@@ -27,5 +26,3 @@ class Button : public Component {
     std::pair<double, double> _size;
     enum Shape { Circle, Rectangle };
 };
-
-#endif /* BUTTON_HPP_ */

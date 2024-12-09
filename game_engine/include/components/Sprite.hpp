@@ -5,8 +5,7 @@
 ** Sprite.hpp
 */
 
-#ifndef SPRITE_HPP_
-#define SPRITE_HPP_
+#pragma once
 
 #include "Components.hpp"
 
@@ -28,5 +27,3 @@ class Sprite : public Component {
     std::string _texturePath;
     std::pair<double, double> _size;
 };
-
-#endif /* SPRITE_HPP_ */

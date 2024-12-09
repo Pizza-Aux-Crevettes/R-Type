@@ -5,8 +5,7 @@
 ** Bullet.hpp
 */
 
-#ifndef BULLET_HPP_
-#define BULLET_HPP_
+#pragma once
 
 #include "Entity.hpp"
 
@@ -21,5 +20,3 @@ class Bullet : public Component {
   private:
     int _damage;
 };
-
-#endif /* BULLET_HPP_ */

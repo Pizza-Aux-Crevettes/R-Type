@@ -5,8 +5,7 @@
 ** Color.hpp
 */
 
-#ifndef COLOR_HPP_
-#define COLOR_HPP_
+#pragma once
 
 #include "Components.hpp"
 
@@ -23,5 +22,3 @@ class Color : public Component {
   private:
     std::vector<double> _color;
 };
-
-#endif /* COLOR_HPP_ */

@@ -5,8 +5,7 @@
 ** Sound.hpp
 */
 
-#ifndef SOUND_HPP_
-#define SOUND_HPP_
+#pragma once
 
 #include "Components.hpp"
 
@@ -26,5 +25,3 @@ class Sound : public Component {
     std::string _soundFile;
     int _volume;
 };
-
-#endif /* SOUND_HPP_ */

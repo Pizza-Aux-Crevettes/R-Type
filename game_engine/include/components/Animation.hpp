@@ -5,9 +5,7 @@
 ** Animation.hpp
 */
 
-#ifndef ANIMATION_HPP_
-#define ANIMATION_HPP_
-#include "Components.hpp"
+#pragma once
 
 class Animation : public Component {
   public:
@@ -27,5 +25,3 @@ class Animation : public Component {
     float _frameDuration;
     float _elapsedTime;
 };
-
-#endif /* ANIMATION_HPP_ */

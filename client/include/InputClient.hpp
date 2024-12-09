@@ -7,30 +7,29 @@
 
 #pragma once
 
+#include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <iostream>
+#include <map>
 
 class InputClient {
   private:
-    sf::Keyboard::Key _up;
-    sf::Keyboard::Key _right;
-    sf::Keyboard::Key _left;
-    sf::Keyboard::Key _down;
-    sf::Keyboard::Key _attack;
-    sf::Keyboard::Key _autoFire;
+    std::map<std::string, sf::Keyboard::Key> _keys;
 
   public:
     InputClient();
     ~InputClient();
     sf::Keyboard::Key getUp();
-    void setUp();
-    sf::Keyboard::Key getRight();
-    void setRight();
-    sf::Keyboard::Key getLeft();
-    void setLeft();
+    void setUp(sf::Keyboard::Key);
     sf::Keyboard::Key getDown();
-    void setDown();
+    void setDown(sf::Keyboard::Key);
+    sf::Keyboard::Key getLeft();
+    void setLeft(sf::Keyboard::Key);
+    sf::Keyboard::Key getRight();
+    void setRight(sf::Keyboard::Key);
     sf::Keyboard::Key getAttack();
-    void setAttack();
+    void setAttack(sf::Keyboard::Key);
     sf::Keyboard::Key getAutoFire();
-    void setAutoFire();
+    void setAutoFire(sf::Keyboard::Key);
+    void checkKey(sf::Event);
 };

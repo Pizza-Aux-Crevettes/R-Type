@@ -5,8 +5,7 @@
 ** Text.hpp
 */
 
-#ifndef TEXT_HPP_
-#define TEXT_HPP_
+#pragma once
 
 #include "Components.hpp"
 
@@ -23,5 +22,3 @@ class Text : public Component {
   private:
     std::string _text;
 };
-
-#endif /* TEXT_HPP_ */

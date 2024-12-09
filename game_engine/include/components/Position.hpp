@@ -5,9 +5,7 @@
 ** Position.hpp
 */
 
-#ifndef POSITION_HPP_
-#define POSITION_HPP_
-#include "Components.hpp"
+#pragma once
 
 class Position : public Component {
   public:
@@ -23,5 +21,3 @@ class Position : public Component {
     float _x;
     float _y;
 };
-
-#endif /* POSITION_HPP_ */

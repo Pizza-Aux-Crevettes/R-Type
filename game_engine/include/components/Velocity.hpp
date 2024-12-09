@@ -5,9 +5,7 @@
 ** Velocity.hpp
 */
 
-#ifndef VELOCITY_HPP_
-#define VELOCITY_HPP_
-#include "Components.hpp"
+#pragma once
 
 class Velocity : public Component {
   public:
@@ -23,5 +21,3 @@ class Velocity : public Component {
     float _x;
     float _y;
 };
-
-#endif /* VELOCITY_HPP_ */
