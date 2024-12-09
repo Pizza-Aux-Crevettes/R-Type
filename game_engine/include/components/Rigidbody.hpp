@@ -6,8 +6,9 @@
 */
 
 #pragma once
+#include "Components.hpp"
 
-class Rigidbody {
+class Rigidbody : public Component {
   public:
     Rigidbody(float mass, float drag, float gravityScale, float forceX,
               float forceY);
@@ -22,6 +23,7 @@ class Rigidbody {
     void setForceX(float forceX);
     float getForceY() const;
     void setForceY(float forceY);
+    void display() const override;
 
   protected:
   private:
