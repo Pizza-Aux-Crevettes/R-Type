@@ -7,9 +7,9 @@
 
 #pragma once
 
+#include "Components.hpp"
 #include <string>
 #include <vector>
-#include "Components.hpp"
 
 class Sprite : public Component {
   public:

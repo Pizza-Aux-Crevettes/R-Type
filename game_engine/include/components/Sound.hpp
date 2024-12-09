@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include <string>
 #include "Components.hpp"
+#include <string>
 
 class Sound : public Component {
   public:

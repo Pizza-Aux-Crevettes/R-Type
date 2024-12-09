@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include <vector>
 #include "Components.hpp"
+#include <vector>
 
 class Collider : public Component {
   public:
