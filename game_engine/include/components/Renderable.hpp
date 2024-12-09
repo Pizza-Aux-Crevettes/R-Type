@@ -6,6 +6,7 @@
 */
 
 #pragma once
+#include "Components.hpp"
 
 class Renderable : public Component {
   public:

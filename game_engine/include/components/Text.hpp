@@ -7,9 +7,8 @@
 
 #pragma once
 
-#include "Components.hpp"
-
 #include <string>
+#include "Components.hpp"
 
 class Text : public Component {
   public:

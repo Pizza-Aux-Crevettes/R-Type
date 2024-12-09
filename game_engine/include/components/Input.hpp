@@ -6,6 +6,7 @@
 */
 
 #pragma once
+#include "Components.hpp"
 
 class Input : public Component {
   public:

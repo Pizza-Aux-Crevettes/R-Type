@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "Components.hpp"
+
 class Animation : public Component {
   public:
     Animation(int currentFrame = 0, float frameDuration = 0.0f,

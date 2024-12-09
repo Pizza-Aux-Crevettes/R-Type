@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Entity.hpp"
+#include "Components.hpp"
 
 class Bullet : public Component {
   public:

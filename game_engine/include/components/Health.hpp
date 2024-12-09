@@ -6,6 +6,7 @@
 */
 
 #pragma once
+#include "Components.hpp"
 
 class Health : public Component {
   public:
