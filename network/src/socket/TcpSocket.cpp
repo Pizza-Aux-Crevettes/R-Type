@@ -5,6 +5,11 @@
 ** TcpSocket.cpp
 */
 
+/**
+ * @file TcpSocket.cpp
+ * @brief Implementation of TcpSocket for handling TCP communication.
+ */
+
 #include "socket/TcpSocket.hpp"
 #include "util/Logger.hpp"
 #include "util/Singletons.hpp"
@@ -13,11 +18,17 @@
 #include <cstring>
 #include <unistd.h>
 
+/**
+ * @brief Constructs a TcpSocket instance and initializes internal variables.
+ */
 TcpSocket::TcpSocket() : _tcpSocket(FAILURE) {
     Logger::socket("[TCP Socket] Instance created for port: " +
                    std::to_string(PORT));
 }
 
+/**
+ * @brief Destroys the TcpSocket instance, ensuring resources are released.
+ */
 TcpSocket::~TcpSocket() {
     Logger::socket("[TCP Socket] Instance for port " + std::to_string(PORT) +
                    " is being destroyed.");
@@ -25,6 +36,11 @@ TcpSocket::~TcpSocket() {
     close();
 }
 
+/**
+ * @brief Sends a TCP packet to a specified client socket.
+ * @param clientSocket The destination client's socket.
+ * @param smartBuffer The data to send, encapsulated in a SmartBuffer.
+ */
 void TcpSocket::sendTcp(int clientSocket, SmartBuffer& smartBuffer) {
     ssize_t bytesSent =
         send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0);
@@ -38,6 +54,10 @@ void TcpSocket::sendTcp(int clientSocket, SmartBuffer& smartBuffer) {
     }
 }
 
+/**
+ * @brief Initializes the TCP socket, binding it to the configured port.
+ * @throws std::runtime_error If socket creation or binding fails.
+ */
 void TcpSocket::init() {
     Logger::socket("[TCP Socket] Initializing socket on port: " +
                    std::to_string(PORT));
@@ -75,6 +95,10 @@ void TcpSocket::init() {
                    std::to_string(PORT));
 }
 
+/**
+ * @brief Continuously listens for incoming TCP connections.
+ * Spawns a new thread for each client connection.
+ */
 void TcpSocket::listen() {
     Logger::socket("[TCP Socket] Waiting for incoming connections on port: " +
                    std::to_string(PORT));
@@ -98,6 +122,11 @@ void TcpSocket::listen() {
     }
 }
 
+/**
+ * @brief Handles communication with a specific client socket.
+ * Reads data from the client and processes it using the protocol handler.
+ * @param clientSocket The client's socket.
+ */
 void TcpSocket::handleClient(int clientSocket) {
     SmartBuffer smartBuffer;
 
@@ -128,6 +157,9 @@ void TcpSocket::handleClient(int clientSocket) {
     }
 }
 
+/**
+ * @brief Closes the TCP socket and releases resources.
+ */
 void TcpSocket::close() {
     if (_tcpSocket != FAILURE) {
         ::close(_tcpSocket);
