@@ -19,5 +19,7 @@ class Color : public Component {
     void display() const override;
 
   private:
-    std::vector<double> _color;
+    std::vector<double> _initColor;
+    sf::Color _color;
+    bool _isLoad = false;
 };

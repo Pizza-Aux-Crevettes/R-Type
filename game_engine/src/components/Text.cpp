@@ -20,7 +20,7 @@
  *
  * @param text The initial text for the component.
  */
-Text::Text(const std::string text) : _text(text) {}
+Text::Text(const std::string text) : _initText(text) {}
 
 /**
  * @brief Destructor for the Text component.
@@ -37,7 +37,7 @@ Text::~Text() {}
  * @return The current text of the component.
  */
 std::string Text::getText() const {
-    return this->_text;
+    return this->_initText;
 }
 
 /**
@@ -48,7 +48,7 @@ std::string Text::getText() const {
  * @param text The new text to be set.
  */
 void Text::setText(std::string text) {
-    this->_text = text;
+    this->_initText = text;
 }
 
 /**

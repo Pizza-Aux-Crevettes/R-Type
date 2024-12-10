@@ -19,5 +19,8 @@ class Text : public Component {
     void display() const override;
 
   private:
-    std::string _text;
+    std::string _initText;
+    sf::Text _text;
+    sf::Font _font;
+    bool _isLoad = false;
 };

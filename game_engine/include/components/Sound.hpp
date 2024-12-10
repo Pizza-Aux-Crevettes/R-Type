@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Components.hpp"
+#include <SFML/Audio.hpp>
 #include <string>
 
 class Sound : public Component {
@@ -23,4 +24,7 @@ class Sound : public Component {
   private:
     std::string _soundFile;
     int _volume;
+    sf::SoundBuffer buffer;
+    sf::Sound sound;
+    bool _isLoad = false;
 };
