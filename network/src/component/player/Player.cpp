@@ -11,7 +11,7 @@
 Player::Player(int32_t playerId, const std::string& name, const Point& position,
                const Point& size, double speed)
     : _userId(playerId), _name(name), _position(position), _size(size),
-      _speed(speed), _health(Health()) {
+      _speed(speed), _health(Health(), _threadId(std::thread::id())) {
     Logger::info("[Player] Created player: " + std::to_string(playerId) +
                  " at position (" + std::to_string(position.getX()) + ", " +
                  std::to_string(position.getY()) + ")");
@@ -28,6 +28,14 @@ void Player::setPosition(const Point& position) {
 
 const Point& Player::getPosition() const {
     return _position;
+}
+
+std::thread::id Player::getThreadId() const {
+    return _threadId;
+}
+
+void Player::setThreadId(const std::thread::id& threadId) {
+    _threadId = threadId;
 }
 
 int32_t Player::getId() const {
