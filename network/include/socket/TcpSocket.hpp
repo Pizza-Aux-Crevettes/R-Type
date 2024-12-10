@@ -7,7 +7,8 @@
 
 /**
  * @file TcpSocket.hpp
- * @brief Declaration of the TcpSocket class for managing TCP socket communication.
+ * @brief Declaration of the TcpSocket class for managing TCP socket
+ * communication.
  */
 
 #pragma once
@@ -25,7 +26,7 @@
  * and managing client threads for TCP sockets.
  */
 class TcpSocket {
-public:
+  public:
     /**
      * @brief Constructs a new TcpSocket instance.
      *
@@ -44,16 +45,19 @@ public:
      * @brief Sends data via TCP to a specified client socket.
      *
      * @param clientSocket The socket descriptor for the client.
-     * @param smartBuffer A reference to the SmartBuffer containing the data to send.
+     * @param smartBuffer A reference to the SmartBuffer containing the data to
+     * send.
      */
     static void sendTcp(int clientSocket, SmartBuffer& smartBuffer);
 
     /**
      * @brief Initializes the TCP socket.
      *
-     * Creates a socket, binds it to the specified port, and prepares it for listening.
+     * Creates a socket, binds it to the specified port, and prepares it for
+     * listening.
      *
-     * @throws std::runtime_error if the socket creation, binding, or listening fails.
+     * @throws std::runtime_error if the socket creation, binding, or listening
+     * fails.
      */
     void init();
 
@@ -71,10 +75,11 @@ public:
      */
     void close();
 
-private:
-    int _tcpSocket;                        /**< The file descriptor for the TCP socket. */
-    sockaddr_in _tcpAddr;                  /**< The address structure for the TCP socket. */
-    std::vector<std::thread> _clientThreads; /**< Vector of threads handling connected clients. */
+  private:
+    int _tcpSocket;       /**< The file descriptor for the TCP socket. */
+    sockaddr_in _tcpAddr; /**< The address structure for the TCP socket. */
+    std::vector<std::thread>
+        _clientThreads; /**< Vector of threads handling connected clients. */
 
     /**
      * @brief Handles communication with a single client.
