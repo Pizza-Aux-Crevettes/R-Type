@@ -76,10 +76,10 @@ class TcpSocket {
     void close();
 
   private:
-    int _tcpSocket;       /**< The file descriptor for the TCP socket. */
-    sockaddr_in _tcpAddr; /**< The address structure for the TCP socket. */
+    int _tcpSocket;       ///< The file descriptor for the TCP socket.
+    sockaddr_in _tcpAddr; ///< The address structure for the TCP socket.
     std::vector<std::thread>
-        _clientThreads; /**< Vector of threads handling connected clients. */
+        _clientThreads; ///< Vector of threads handling connected clients.
 
     /**
      * @brief Handles communication with a single client.

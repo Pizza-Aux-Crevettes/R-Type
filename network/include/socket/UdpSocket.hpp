@@ -79,6 +79,6 @@ class UdpSocket {
     void close();
 
   private:
-    int _udpSocket;       /**< The file descriptor for the UDP socket. */
-    sockaddr_in _udpAddr; /**< The address structure for the UDP socket. */
+    int _udpSocket;       ///< The file descriptor for the UDP socket.
+    sockaddr_in _udpAddr; ///< The address structure for the UDP socket.
 };
