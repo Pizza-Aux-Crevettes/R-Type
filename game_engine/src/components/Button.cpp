@@ -25,7 +25,34 @@
  * height).
  */
 Button::Button(std::string text, std::pair<double, double> size)
-    : _text(text), _size(size) {}
+    : _text(text), _size(size)
+    {
+        this->createButton();
+    }
+
+
+void Button::createButton()
+{
+    if (!_font.loadFromFile("../../../assets/font/arial.ttf")) {
+        std::cerr << "Failed to load font from path." << std::endl;
+    }
+
+    _button.setSize(sf::Vector2f(_size.first, _size.second));
+    _button.setFillColor(sf::Color(100, 100, 250)); //Blue
+
+    _button.setOrigin(_size.first / 2, _size.second / 2);
+
+    _textLabel.setString(_text);
+    _textLabel.setFont(_font);
+    _textLabel.setCharacterSize(20);
+    _textLabel.setFillColor(sf::Color::White);
+
+    sf::FloatRect textRect = _textLabel.getLocalBounds();
+    _textLabel.setOrigin(textRect.left + textRect.width / 2.0f, 
+                         textRect.top + textRect.height / 2.0f);
+
+    //set the button and text with the same position
+}
 
 /**
  * @brief Destructor for the Button component.

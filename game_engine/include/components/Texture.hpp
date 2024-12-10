@@ -21,4 +21,6 @@ class Texture : public Component {
   protected:
   private:
     std::string _texturePath;
+    sf::Texture _texture;
+    bool _isLoad = false;
 };

@@ -20,4 +20,6 @@ class Collider : public Component {
 
   private:
     std::pair<double, double> _size;
+    sf::Rect<int> _rect;
+    bool _isLoad = false;
 };

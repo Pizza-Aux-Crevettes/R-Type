@@ -20,4 +20,7 @@ class Text : public Component {
 
   private:
     std::string _text;
+    sf::Text _text;
+    sf::Font _font;
+    bool _isLoad = false;
 };

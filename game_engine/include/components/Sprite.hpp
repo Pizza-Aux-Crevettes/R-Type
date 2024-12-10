@@ -25,4 +25,6 @@ class Sprite : public Component {
   private:
     std::string _texturePath;
     std::pair<double, double> _size;
+    sf::Sprite _sprite;
+    bool _isLoad = false;
 };

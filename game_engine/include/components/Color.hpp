@@ -10,6 +10,7 @@
 #include "Components.hpp"
 #include <vector>
 
+
 class Color : public Component {
   public:
     Color(std::vector<double> color = {0.0, 0.0, 0.0});
@@ -20,4 +21,7 @@ class Color : public Component {
 
   private:
     std::vector<double> _color;
+    sf::Color _color;
+    bool _isLoad = false;
+
 };
