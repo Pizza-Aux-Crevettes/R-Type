@@ -5,11 +5,6 @@
 ** Protocol.hpp
 */
 
-/**
- * @file Protocol.hpp
- * @brief Declaration of the Protocol class for handling communication opcodes.
- */
-
 #pragma once
 
 #include <SmartBuffer.hpp>

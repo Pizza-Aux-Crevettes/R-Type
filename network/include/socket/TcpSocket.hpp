@@ -5,15 +5,6 @@
 ** TcpSocket.hpp
 */
 
-/**
- * @file TcpSocket.hpp
- * @brief Declaration of the TcpSocket class for managing TCP socket
- * communication.
- */
-
-#pragma once
-
-#include <SmartBuffer.hpp>
 #include <netinet/in.h>
 #include <thread>
 #include <vector>

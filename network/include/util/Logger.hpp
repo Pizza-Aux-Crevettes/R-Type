@@ -5,11 +5,6 @@
 ** Logger.hpp
 */
 
-/**
- * @file Logger.hpp
- * @brief Provides a logging utility for consistent and formatted log messages.
- */
-
 #pragma once
 
 #include <sstream>

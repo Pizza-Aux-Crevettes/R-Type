@@ -7,16 +7,16 @@
 
 #pragma once
 
-#include "../Entity.hpp"
+#include "Components.hpp"
 
-class Bullet {
+class Bullet : public Component {
   public:
     Bullet(int damage = 0);
     ~Bullet();
     int getDamage() const;
     void setDamage(int damage);
+    void display() const override;
 
   private:
     int _damage;
-    Entity _sourceEntity;
 };

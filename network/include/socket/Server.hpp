@@ -5,12 +5,6 @@
 ** Server.hpp
 */
 
-/**
- * @file Server.hpp
- * @brief Declaration of the Server class for managing the application's server
- * operations.
- */
-
 #pragma once
 
 #include "protocol/Protocol.hpp"
