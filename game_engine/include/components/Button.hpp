@@ -19,7 +19,6 @@ class Button : public Component {
     std::pair<double, double> getSize() const;
     void setSize(std::pair<double, double> size);
     void display() const override;
-    void createButton();
 
   private:
     std::string _text;

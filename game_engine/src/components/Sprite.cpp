@@ -32,7 +32,6 @@ Sprite::Sprite(std::string texturePath, std::pair<double, double> size)
  */
 Sprite::~Sprite() {}
 
-
 /**
  * t@brief Get the texture file path of the Sprite.
  *
