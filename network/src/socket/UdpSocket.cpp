@@ -5,6 +5,11 @@
 ** UdpSocket.cpp
 */
 
+/**
+ * @file UdpSocket.cpp
+ * @brief Implements the UdpSocket class for handling UDP communication.
+ */
+
 #include "socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
 #include "util/Singletons.hpp"
@@ -13,11 +18,17 @@
 #include <cstring>
 #include <unistd.h>
 
+/**
+ * @brief Constructs a UdpSocket instance and initializes internal variables.
+ */
 UdpSocket::UdpSocket() : _udpSocket(FAILURE) {
     Logger::socket("[UDP Socket] Instance created for port: " +
                    std::to_string(PORT));
 }
 
+/**
+ * @brief Destroys the UdpSocket instance, closing any open connections.
+ */
 UdpSocket::~UdpSocket() {
     Logger::socket("[UDP Socket] Instance for port " + std::to_string(PORT) +
                    " is being destroyed.");
@@ -25,6 +36,12 @@ UdpSocket::~UdpSocket() {
     close();
 }
 
+/**
+ * @brief Sends a UDP packet to a specified client.
+ * @param udpSocket The socket to send data from.
+ * @param clientAddr The destination client's address.
+ * @param smartBuffer The data to send, encapsulated in a SmartBuffer.
+ */
 void UdpSocket::sendUdp(int udpSocket, const sockaddr_in& clientAddr,
                         SmartBuffer& smartBuffer) {
     ssize_t bytesSent =
@@ -40,6 +57,10 @@ void UdpSocket::sendUdp(int udpSocket, const sockaddr_in& clientAddr,
     }
 }
 
+/**
+ * @brief Initializes the UDP socket, binding it to a port.
+ * @throws std::runtime_error If the socket fails to initialize or bind.
+ */
 void UdpSocket::init() {
     Logger::socket("[UDP Socket] Initializing socket on port: " +
                    std::to_string(PORT));
@@ -69,6 +90,10 @@ void UdpSocket::init() {
                    std::to_string(PORT));
 }
 
+/**
+ * @brief Continuously listens for incoming UDP messages.
+ * Forwards received data to the protocol handler for processing.
+ */
 void UdpSocket::listen() {
     SmartBuffer smartBuffer;
     sockaddr_in clientAddr;
@@ -99,6 +124,9 @@ void UdpSocket::listen() {
     }
 }
 
+/**
+ * @brief Closes the UDP socket, releasing associated resources.
+ */
 void UdpSocket::close() {
     if (_udpSocket != FAILURE) {
         ::close(_udpSocket);
