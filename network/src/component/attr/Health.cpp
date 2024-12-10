@@ -52,7 +52,9 @@ int Health::getLives() const {
  * @param damage The amount of damage to apply.
  */
 void Health::takeDamage(double damage) {
-    _health -= damage if (_health < 0) {
+
+    _health -= damage;
+    if (_health < 0) {
         _health = 0;
     }
 }
