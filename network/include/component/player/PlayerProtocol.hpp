@@ -14,7 +14,7 @@
 #pragma once
 
 #include "protocol/Protocol.hpp"
-#include "util/SmartBuffer.hpp"
+#include <SmartBuffer.hpp>
 
 /**
  * @class PlayerProtocol

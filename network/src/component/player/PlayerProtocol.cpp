@@ -42,7 +42,7 @@ void PlayerProtocol::newPlayer(int clientSocket, SmartBuffer& smartBuffer) {
 
     // Check relevant data
     auto player =
-        PlayerManager::getInstance().getOrCreatePlayerForThread("NewPlayer");
+        PlayerManager::getInstance().createPlayerByThread("NewPlayer");
 
     // Response (CALLBACK) with status
     smartBuffer << player->getId();

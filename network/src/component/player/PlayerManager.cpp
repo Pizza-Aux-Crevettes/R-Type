@@ -87,7 +87,7 @@ std::shared_ptr<Player> PlayerManager::findPlayerById(int32_t playerId) const {
  * @return A shared pointer to the player associated with the current thread.
  */
 std::shared_ptr<Player>
-PlayerManager::findPlayerByThread(const std::string& name) {
+PlayerManager::createPlayerByThread(const std::string& name) {
     std::lock_guard<std::mutex> lock(_mutex);
 
     auto threadId = std::this_thread::get_id();

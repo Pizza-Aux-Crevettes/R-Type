@@ -72,7 +72,7 @@ class PlayerManager {
      * @param name The name to assign to a new player, if created.
      * @return A shared pointer to the existing or newly created Player.
      */
-    std::shared_ptr<Player> findPlayerByThread(const std::string& name);
+    std::shared_ptr<Player> createPlayerByThread(const std::string& name);
 
     /**
      * @brief Get a map of all players managed by the PlayerManager.
