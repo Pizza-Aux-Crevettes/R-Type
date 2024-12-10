@@ -13,7 +13,7 @@
 
 #include "component/room/Room.hpp"
 #include "util/Logger.hpp"
-#include <iostream>
+#include <algorithm>
 
 /**
  * @brief Constructs a new Room object.
