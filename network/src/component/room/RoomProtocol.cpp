@@ -5,12 +5,32 @@
 ** RoomProtocol.cpp
 */
 
+/**
+ * @file RoomProtocol.cpp
+ * @brief Implements room-related operations for the game, such as creating,
+ * joining, and deleting rooms.
+ */
+
 #include "component/room/RoomProtocol.hpp"
 #include "protocol/Protocol.hpp"
 #include "socket/TcpSocket.hpp"
 #include "util/Logger.hpp"
 #include "util/Singletons.hpp"
 
+/**
+ * @brief Handles the creation of a new room.
+ *
+ * Protocol structure:
+ * - Input: int32_t playerId, int16_t capacity, int16_t isPublic
+ * - Output: OpCode, Status, Room Code (if successful)
+ *
+ * Status codes:
+ * - 0 = Room created
+ * - 1 = Player not found
+ *
+ * @param clientSocket The socket of the client making the request.
+ * @param smartBuffer The buffer containing the request data.
+ */
 void RoomProtocol::createRoom(int clientSocket, SmartBuffer& smartBuffer) {
     // Protocol structure
     int32_t playerId;
@@ -32,11 +52,7 @@ void RoomProtocol::createRoom(int clientSocket, SmartBuffer& smartBuffer) {
     // Check relevant data
     auto player = Singletons::getPlayerManager().findPlayerById(playerId);
 
-    /*
-     * Status:
-     * 0 = Room created
-     * 1 = Player not found
-     */
+    // Response (CALLBACK) with status
     int16_t status = !player;
     smartBuffer << status;
 
@@ -59,6 +75,22 @@ void RoomProtocol::createRoom(int clientSocket, SmartBuffer& smartBuffer) {
     }
 }
 
+/**
+ * @brief Handles a request to join a room.
+ *
+ * Protocol structure:
+ * - Input: std::string roomCode, int32_t playerId
+ * - Output: OpCode, Status
+ *
+ * Status codes:
+ * - 0 = Room joined
+ * - 1 = Player not found
+ * - 2 = Room not found
+ * - 3 = Cannot add player to the room
+ *
+ * @param clientSocket The socket of the client making the request.
+ * @param smartBuffer The buffer containing the request data.
+ */
 void RoomProtocol::joinRoom(int clientSocket, SmartBuffer& smartBuffer) {
     // Protocol structure
     std::string roomCode;
@@ -78,13 +110,7 @@ void RoomProtocol::joinRoom(int clientSocket, SmartBuffer& smartBuffer) {
     auto player = Singletons::getPlayerManager().findPlayerById(playerId);
     auto room = Singletons::getRoomManager().findRoomByCode(roomCode);
 
-    /*
-     * Status:
-     * 0 = Room joined
-     * 1 = Player not found
-     * 2 = Room not found
-     * 3 = Can't add player to the room
-     */
+    // Response (CALLBACK) with status
     int16_t status = (!player + !room + (!room->addPlayer(player)));
     smartBuffer << status;
 
@@ -98,6 +124,22 @@ void RoomProtocol::joinRoom(int clientSocket, SmartBuffer& smartBuffer) {
     }
 }
 
+/**
+ * @brief Handles a request to delete a room.
+ *
+ * Protocol structure:
+ * - Input: std::string roomCode, int32_t playerId
+ * - Output: OpCode, Status
+ *
+ * Status codes:
+ * - 0 = Room deleted
+ * - 1 = Player not found
+ * - 2 = Room not found
+ * - 3 = Permission not granted
+ *
+ * @param clientSocket The socket of the client making the request.
+ * @param smartBuffer The buffer containing the request data.
+ */
 void RoomProtocol::deleteRoom(int clientSocket, SmartBuffer& smartBuffer) {
     // Protocol structure
     std::string roomCode;
@@ -117,13 +159,7 @@ void RoomProtocol::deleteRoom(int clientSocket, SmartBuffer& smartBuffer) {
     auto player = Singletons::getPlayerManager().findPlayerById(playerId);
     auto room = Singletons::getRoomManager().findRoomByCode(roomCode);
 
-    /*
-     * Status:
-     * 0 = Room deleted
-     * 1 = Player not found
-     * 2 = Room not found
-     * 3 = Permission not granted
-     */
+    // Response (CALLBACK) with status
     int16_t status = (!player + !room + (room->getOwner() != player));
     smartBuffer << status;
 
