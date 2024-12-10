@@ -29,8 +29,14 @@ RoomManager& RoomManager::getInstance() {
     return instance;
 }
 
+/**
+ * @brief Constructs the RoomManager. Currently does nothing.
+ */
 RoomManager::RoomManager() {}
 
+/**
+ * @brief Destructs the RoomManager. Currently does nothing.
+ */
 RoomManager::~RoomManager() {}
 
 /**

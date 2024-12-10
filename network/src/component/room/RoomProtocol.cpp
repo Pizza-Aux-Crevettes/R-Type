@@ -57,7 +57,7 @@ void RoomProtocol::createRoom(int clientSocket, SmartBuffer& smartBuffer) {
     smartBuffer << status;
 
     // Inject room's code if the status authorize it
-    std::string roomCode = "";
+    std::string roomCode;
     if (!status) {
         roomCode = Singletons::getRoomManager()
                        .createRoom(player, capacity, isPublic)
