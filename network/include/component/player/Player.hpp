@@ -1,15 +1,9 @@
-/*
-** EPITECH PROJECT, 2024
-** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
-** File description:
-** Player.hpp
-*/
-
 #pragma once
 
 #include "component/attr/Health.hpp"
 #include "util/Point.hpp"
 #include <string>
+#include <thread>
 
 class Player {
   public:
@@ -19,6 +13,9 @@ class Player {
 
     void setPosition(const Point& position);
     const Point& getPosition() const;
+
+    std::thread::id getThreadId() const;
+    void setThreadId(const std::thread::id& threadId);
 
     int32_t getId() const;
     const std::string& getName() const;
@@ -35,4 +32,5 @@ class Player {
     Point _size;
     double _speed;
     Health _health;
+    std::thread::id _threadId;
 };

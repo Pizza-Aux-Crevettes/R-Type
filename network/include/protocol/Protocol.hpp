@@ -19,6 +19,8 @@ class Protocol {
         JOIN_ROOM_CALLBACK,
         DELETE_ROOM,
         DELETE_ROOM_CALLBACK,
+        NEW_PLAYER,
+        NEW_PLAYER_CALLBACK,
     };
 
     static Protocol& getInstance();
