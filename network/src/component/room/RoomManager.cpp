@@ -5,14 +5,25 @@
 ** RoomManager.cpp
 */
 
+/**
+ * @file RoomManager.cpp
+ * @brief Implements room management, including creation, deletion, and
+ * retrieval of rooms.
+ */
+
 #include "component/room/RoomManager.hpp"
 #include "util/Logger.hpp"
 #include <algorithm>
 #include <random>
 
+// Character set used for generating unique room codes.
 static const char charset[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                               "0123456789";
 
+/**
+ * @brief Returns the singleton instance of the RoomManager.
+ * @return RoomManager& The singleton instance.
+ */
 RoomManager& RoomManager::getInstance() {
     static RoomManager instance;
     return instance;
@@ -22,6 +33,15 @@ RoomManager::RoomManager() {}
 
 RoomManager::~RoomManager() {}
 
+/**
+ * @brief Generates a unique alphanumeric room code.
+ *
+ * The room code is 6 characters long, consisting of uppercase letters and
+ * digits. The generated code is checked for uniqueness against existing room
+ * codes.
+ *
+ * @return std::string A unique room code.
+ */
 std::string RoomManager::generateUniqueCode() const {
     static std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution<size_t> dist(0, sizeof(charset) - 2);
@@ -42,6 +62,14 @@ std::string RoomManager::generateUniqueCode() const {
     }
 }
 
+/**
+ * @brief Creates a new room.
+ *
+ * @param owner The player who owns the room.
+ * @param capacity The maximum number of players allowed in the room.
+ * @param isPublic Whether the room is publicly visible.
+ * @return std::shared_ptr<Room> The created room.
+ */
 std::shared_ptr<Room>
 RoomManager::createRoom(const std::shared_ptr<Player>& owner, size_t capacity,
                         bool isPublic) {
@@ -58,6 +86,13 @@ RoomManager::createRoom(const std::shared_ptr<Player>& owner, size_t capacity,
     return room;
 }
 
+/**
+ * @brief Deletes a room.
+ *
+ * @param roomCode The unique code of the room to delete.
+ * @param requester The player requesting the deletion.
+ * @return bool True if the room was successfully deleted, false otherwise.
+ */
 bool RoomManager::deleteRoom(const std::string& roomCode,
                              const std::shared_ptr<Player>& requester) {
     auto it = std::find_if(_rooms.begin(), _rooms.end(),
@@ -86,6 +121,12 @@ bool RoomManager::deleteRoom(const std::string& roomCode,
     return false;
 }
 
+/**
+ * @brief Finds a room by its unique code.
+ *
+ * @param roomCode The unique code of the room to find.
+ * @return std::shared_ptr<Room> The room if found, nullptr otherwise.
+ */
 std::shared_ptr<Room>
 RoomManager::findRoomByCode(const std::string& roomCode) const {
     for (const auto& room : _rooms) {
@@ -99,6 +140,12 @@ RoomManager::findRoomByCode(const std::string& roomCode) const {
     return nullptr;
 }
 
+/**
+ * @brief Retrieves all rooms managed by the RoomManager.
+ *
+ * @return const std::vector<std::shared_ptr<Room>>& A vector containing all
+ * rooms.
+ */
 const std::vector<std::shared_ptr<Room>>& RoomManager::getRooms() const {
     return _rooms;
 }
