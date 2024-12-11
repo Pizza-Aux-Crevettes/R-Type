@@ -8,32 +8,31 @@
 #pragma once
 
 #include "component/player/Player.hpp"
-#include <memory>
-#include <mutex>
-#include <string>
 #include <thread>
 #include <unordered_map>
 
 class PlayerManager {
   public:
+    PlayerManager(const PlayerManager&) = delete;
+    PlayerManager& operator=(const PlayerManager&) = delete;
+
     static PlayerManager& getInstance();
 
     std::shared_ptr<Player> createPlayer(int32_t userId,
                                          const std::string& name);
     bool removePlayer(int32_t userId);
-    std::shared_ptr<Player> findPlayerById(int32_t userId) const;
+    [[nodiscard]] [[nodiscard]] std::shared_ptr<Player>
+    findPlayerById(int32_t userId) const;
     std::shared_ptr<Player> createPlayerByThread(const std::string& name);
-    const std::unordered_map<int32_t, std::shared_ptr<Player>>&
+    [[nodiscard]] const std::unordered_map<int32_t, std::shared_ptr<Player>>&
     getPlayers() const;
 
   private:
     PlayerManager();
     ~PlayerManager();
-    PlayerManager(const PlayerManager&) = delete;
-    PlayerManager& operator=(const PlayerManager&) = delete;
 
     std::unordered_map<int32_t, std::shared_ptr<Player>> _players;
     std::unordered_map<std::thread::id, int32_t> _threadIds;
     std::mutex _mutex;
-    int32_t _nextPlayerId = 1;
+    int32_t _nextuserId = 1;
 };
