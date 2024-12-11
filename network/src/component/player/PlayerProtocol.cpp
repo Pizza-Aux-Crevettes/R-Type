@@ -12,15 +12,17 @@
  */
 #include "component/player/PlayerProtocol.hpp"
 #include "component/player/PlayerManager.hpp"
+#include "protocol/Protocol.hpp"
 #include "socket/TcpSocket.hpp"
 #include "util/Logger.hpp"
 
 /**
  * Protocol Details:
  * - Input: std:string name
- * - Output: int16_t opCode (NEW_PLAYER_CALLBACK) << int32_t playerId
+ * - Output: int16_t opCode (NEW_PLAYER_CALLBACK) << int32_t userId
  */
-void PlayerProtocol::newPlayer(int clientSocket, SmartBuffer& smartBuffer) {
+void PlayerProtocol::newPlayer(const int clientSocket,
+                               SmartBuffer& smartBuffer) {
     std::string name;
 
     smartBuffer >> name;
