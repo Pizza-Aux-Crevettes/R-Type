@@ -32,12 +32,12 @@ class Client {
 
     void setUpdateItems(std::map<int, std::map<std::string, std::any>>);
     std::map<int, std::map<std::string, std::any>> getUpdateItems();
-  
+
     void setEntities(std::map<int, std::any>);
     std::map<int, std::any> getEntities();
 
     void listenServer(sf::RenderWindow* win);
     void CompareEntities();
-    void CompareComponents (std::map<std::string, std::any> entity, std::map<std::string, std::any> updateEntity);
-
+    void CompareComponents(std::map<std::string, std::any> entity,
+                           std::map<std::string, std::any> updateEntity);
 };

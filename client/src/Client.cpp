@@ -19,26 +19,53 @@ Client::~Client() {}
 
 void Client::listenServer(sf::RenderWindow* win) {
     std::map<int, std::map<std::string, std::any>> newItems = {
-        {1, {{"PosX", 500}, {"PosY", 500}, {"color", std::string("Rose")}, {"SizeX", 20}, {"SizeY", 30}}},
-        {2, {{"PosX", 400}, {"PosY", 400}, {"color",std::string("Orange")}, {"SizeX", 40}, {"SizeY", 50}}},
-    }; //Le premier truc que nous envoie Benjamin au départ
+        {1,
+         {{"PosX", 500},
+          {"PosY", 500},
+          {"color", std::string("Rose")},
+          {"SizeX", 20},
+          {"SizeY", 30}}},
+        {2,
+         {{"PosX", 400},
+          {"PosY", 400},
+          {"color", std::string("Orange")},
+          {"SizeX", 40},
+          {"SizeY", 50}}},
+    }; // Le premier truc que nous envoie Benjamin au départ
 
     setItems(newItems);
 
     while (win->isOpen()) {
         std::map<int, std::map<std::string, std::any>> updateItems = {
-            {1, {{"PosX", 500}, {"PosY", 500}, {"color", std::string("Red")}, {"SizeX", 20}, {"SizeY", 30}}},
-            {2, {{"PosX", 400}, {"PosY", 400}, {"color", std::string("Green")}, {"SizeX", 40}, {"SizeY", 50}}},
-            {3, {{"PosX", 400}, {"PosY", 400}, {"color", std::string("Yellow")}, {"SizeX", 40}, {"SizeY", 50}}},
+            {1,
+             {{"PosX", 500},
+              {"PosY", 500},
+              {"color", std::string("Red")},
+              {"SizeX", 20},
+              {"SizeY", 30}}},
+            {2,
+             {{"PosX", 400},
+              {"PosY", 400},
+              {"color", std::string("Green")},
+              {"SizeX", 40},
+              {"SizeY", 50}}},
+            {3,
+             {{"PosX", 400},
+              {"PosY", 400},
+              {"color", std::string("Yellow")},
+              {"SizeX", 40},
+              {"SizeY", 50}}},
         }; // exemple des trucs suivant que nous envoie Benjamin
         setUpdateItems(updateItems);
         CompareEntities();
     }
 }
 
-void Client::CompareEntities () {
+void Client::CompareEntities() {
 
-    for (const auto& [id, entity] : _updateItems) { //chercher dans la liste actuelle si l'id de l'update existe ou non
+    for (const auto& [id, entity] :
+         _updateItems) { // chercher dans la liste actuelle si l'id de l'update
+                         // existe ou non
         if (auto search = _items.find(id); search != _items.end()) {
             std::cout << "l'entité existe déjà" << std::endl;
             CompareComponents(entity, search->second);
@@ -49,33 +76,44 @@ void Client::CompareEntities () {
     setItems(_updateItems);
 }
 
-void Client::CompareComponents (std::map<std::string, std::any> entity, std::map<std::string, std::any> updateEntity) {
+void Client::CompareComponents(std::map<std::string, std::any> entity,
+                               std::map<std::string, std::any> updateEntity) {
     for (const auto& [key, component] : updateEntity) {
         if (auto search = entity.find(key); search != entity.end()) {
             if (component.type() == search->second.type()) {
                 if (component.type() == typeid(int)) {
-                    if (std::any_cast<int>(component) == std::any_cast<int>(search->second)) {
+                    if (std::any_cast<int>(component) ==
+                        std::any_cast<int>(search->second)) {
                         std::cout << "tout est à jour" << std::endl;
-                    }else {
-                        std::cout << "il faut appeller system pour update" << std::endl;
+                    } else {
+                        std::cout << "il faut appeller system pour update"
+                                  << std::endl;
                     }
                 } else if (component.type() == typeid(float)) {
-                    if (std::any_cast<float>(component) == std::any_cast<float>(search->second)) {
+                    if (std::any_cast<float>(component) ==
+                        std::any_cast<float>(search->second)) {
                         std::cout << "tout est à jour" << std::endl;
-                    }else {
-                        std::cout << "il faut appeller system pour update" << std::endl;
+                    } else {
+                        std::cout << "il faut appeller system pour update"
+                                  << std::endl;
                     }
                 } else if (component.type() == typeid(std::string)) {
-                    if (std::any_cast<std::string>(component) == std::any_cast<std::string>(search->second)) {
-                        std::cout << std::any_cast<std::string>(component) << " " << std::any_cast<std::string>(search->second) << std::endl;
+                    if (std::any_cast<std::string>(component) ==
+                        std::any_cast<std::string>(search->second)) {
+                        std::cout << std::any_cast<std::string>(component)
+                                  << " "
+                                  << std::any_cast<std::string>(search->second)
+                                  << std::endl;
                         std::cout << "tout est à jour" << std::endl;
-                    }else {
-                        std::cout << "il faut appeller system pour update" << std::endl;
+                    } else {
+                        std::cout << "il faut appeller system pour update"
+                                  << std::endl;
                     }
                 }
             }
         } else {
-            std::cout << "le composant donné n'existe pas dans l'entité" << std::endl;
+            std::cout << "le composant donné n'existe pas dans l'entité"
+                      << std::endl;
         }
     }
 }
@@ -85,7 +123,6 @@ void Client::manageClient() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Client Game");
     std::thread serverThread(std::bind(&Client::listenServer, this, &window));
     InputClient input;
-
 
     while (window.isOpen()) {
         sf::Event event;
@@ -110,14 +147,15 @@ std::map<int, std::map<std::string, std::any>> Client::getItems() {
     return _items;
 }
 
-void Client::setUpdateItems(std::map<int, std::map<std::string, std::any>> updateItems){
+void Client::setUpdateItems(
+    std::map<int, std::map<std::string, std::any>> updateItems) {
     _updateItems = updateItems;
 }
 
 std::map<int, std::map<std::string, std::any>> Client::getUpdateItems() {
     return _updateItems;
 }
-  
+
 void Client::setEntities(std::map<int, std::any> entities) {
     _entities = entities;
 }
