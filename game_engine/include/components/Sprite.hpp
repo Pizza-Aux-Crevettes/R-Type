@@ -13,13 +13,16 @@
 
 class Sprite : public Component {
   public:
-    Sprite(std::string texturePath = "",
-           std::pair<double, double> size = {0.0, 0.0});
+    Sprite();
     ~Sprite();
     std::string getTexturePath() const;
     void setTexturePath(std::string texturePath);
     std::pair<double, double> getSize() const;
     void setSize(std::pair<double, double> size);
+    bool getIsLoaded() const;
+    void setIsLoaded(bool isLoaded);
+    sf::Sprite& getSprite();
+    void setSprite(const sf::Sprite& sprite);
     void display() const override;
 
   private:

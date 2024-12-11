@@ -29,6 +29,8 @@ class Entity {
 
     template <typename ComponentType> ComponentType& getComponent();
 
+    template <typename ComponentType> bool hasComponent() const;
+
     void displayComponents() const;
     int getEntityId() const;
 
@@ -119,6 +121,15 @@ template <typename ComponentType> ComponentType& Entity::getComponent() {
             "GameEngine::Entity::getComponent: Component not found");
     }
     return static_cast<ComponentType&>(*component_found->second);
+}
+
+template <typename ComponentType> bool Entity::hasComponent() const {
+    const auto component_found =
+        _components.find(std::type_index(typeid(ComponentType)));
+    if (component_found == _components.end()) {
+        return false;
+    }
+    return true;
 }
 
 }; // namespace GameEngine

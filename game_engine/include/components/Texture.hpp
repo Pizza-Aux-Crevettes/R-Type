@@ -16,6 +16,10 @@ class Texture : public Component {
     ~Texture();
     std::string getTexturePath() const;
     void setTexturePath(std::string texturePath);
+    bool getIsLoaded() const;
+    void setIsLoaded(bool isLoaded);
+    sf::Texture& getTexture();
+    void setTexture(const sf::Texture& texture);
     void display() const override;
 
   protected:

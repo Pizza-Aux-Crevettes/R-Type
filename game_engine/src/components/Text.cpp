@@ -20,7 +20,8 @@
  *
  * @param text The initial text for the component.
  */
-Text::Text(const std::string text) : _initText(text) {}
+Text::Text(std::string text, std::string filename, unsigned int characterSize)
+    : _initText(text), _fontFile(filename), _charSize(characterSize) {}
 
 /**
  * @brief Destructor for the Text component.
@@ -36,7 +37,7 @@ Text::~Text() {}
  *
  * @return The current text of the component.
  */
-std::string Text::getText() const {
+std::string Text::getString() const {
     return this->_initText;
 }
 
@@ -47,8 +48,32 @@ std::string Text::getText() const {
  *
  * @param text The new text to be set.
  */
-void Text::setText(std::string text) {
+void Text::setString(std::string text) {
     this->_initText = text;
+}
+
+sf::Font& Text::getFont() {
+    return this->_font;
+}
+
+unsigned int Text::getCharacterSize() const {
+    return this->_charSize;
+}
+
+bool Text::getIsLoaded() const {
+    return this->_isLoad;
+}
+
+std::string Text::getFontFile() const {
+    return this->_fontFile;
+}
+
+void Text::setIsLoaded(bool isLoaded) {
+    this->_isLoad = isLoaded;
+}
+
+sf::Text& Text::getText() {
+    return this->_text;
 }
 
 /**
