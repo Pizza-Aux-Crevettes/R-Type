@@ -7,7 +7,7 @@
 
 #include "util/Point.hpp"
 
-Point::Point(double x, double y) : _x(x), _y(y) {}
+Point::Point(const double x, const double y) : _x(x), _y(y) {}
 
 double Point::getX() const {
     return _x;
@@ -17,10 +17,10 @@ double Point::getY() const {
     return _y;
 }
 
-void Point::setX(double x) {
+void Point::setX(const double x) {
     _x = x;
 }
 
-void Point::setY(double y) {
+void Point::setY(const double y) {
     _y = y;
 }

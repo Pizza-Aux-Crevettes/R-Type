@@ -5,10 +5,9 @@
 ** main.cpp
 */
 
+#include "socket/Server.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
-#include "util/Singletons.hpp"
-#include <iostream>
 
 int main() {
     Logger::info("[Main] Starting application...");
@@ -17,7 +16,7 @@ int main() {
         Logger::success("[Main] Server successfully initialized on port " +
                         std::to_string(PORT) + ".");
 
-        Singletons::getServer().start();
+        Server::getInstance().start();
     } catch (const std::exception& e) {
         Logger::error("[Main] Critical server error: " + std::string(e.what()));
 
