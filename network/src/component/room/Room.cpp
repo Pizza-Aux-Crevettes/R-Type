@@ -10,7 +10,7 @@
 #include <algorithm>
 
 Room::Room(const std::string& code, const std::shared_ptr<Player>& owner,
-           size_t capacity, bool isPublic)
+           const size_t capacity, const bool isPublic)
     : _code(code), _owner(owner), _capacity(capacity), _isPublic(isPublic) {
     Logger::info("[Room] Created room with Code: " + code +
                  ", Capacity: " + std::to_string(capacity) +
@@ -41,9 +41,9 @@ bool Room::addPlayer(const std::shared_ptr<Player>& player) {
     if (_players.size() >= _capacity) {
         Logger::warning("[Room] Cannot add player: " + player->getName() +
                         ". Room Code: " + _code + " is full.");
+
         return false;
     }
-
     _players.push_back(player);
 
     Logger::info("[Room] Player " + player->getName() +
@@ -53,11 +53,12 @@ bool Room::addPlayer(const std::shared_ptr<Player>& player) {
 }
 
 bool Room::removePlayer(const std::string& playerName) {
-    auto it =
-        std::remove_if(_players.begin(), _players.end(),
-                       [&playerName](const std::shared_ptr<Player>& player) {
-                           return player->getName() == playerName;
-                       });
+    const auto it = std::ranges::remove_if(
+                        _players,
+                        [&playerName](const std::shared_ptr<Player>& player) {
+                            return player->getName() == playerName;
+                        })
+                        .begin();
 
     if (it != _players.end()) {
         _players.erase(it, _players.end());

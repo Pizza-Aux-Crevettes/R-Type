@@ -8,7 +8,6 @@
 #pragma once
 
 #include "component/player/Player.hpp"
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -17,11 +16,12 @@ class Room {
     Room(const std::string& code, const std::shared_ptr<Player>& owner,
          size_t capacity, bool isPublic);
 
-    const std::string& getCode() const;
-    const std::shared_ptr<Player>& getOwner() const;
-    size_t getCapacity() const;
-    bool isPublic() const;
-    const std::vector<std::shared_ptr<Player>>& getPlayers() const;
+    [[nodiscard]] [[nodiscard]] const std::string& getCode() const;
+    [[nodiscard]] const std::shared_ptr<Player>& getOwner() const;
+    [[nodiscard]] [[nodiscard]] size_t getCapacity() const;
+    [[nodiscard]] bool isPublic() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Player>>&
+    getPlayers() const;
     bool addPlayer(const std::shared_ptr<Player>& player);
     bool removePlayer(const std::string& playerName);
 
