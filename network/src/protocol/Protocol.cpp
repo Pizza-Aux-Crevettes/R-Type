@@ -15,45 +15,35 @@ Protocol& Protocol::getInstance() {
     return instance;
 }
 
-Protocol::Protocol() {}
+Protocol::Protocol() = default;
 
-Protocol::~Protocol() {}
-
-void Protocol::handleMessage(int clientSocket, SmartBuffer& smartBuffer) {
+void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer) {
     int16_t opCode;
     smartBuffer >> opCode;
 
-    Logger::info("[Protocol] Handling OpCode: " + std::to_string(opCode));
-
     switch (opCode) {
-    case CREATE_ROOM:
-        Logger::trace("[Protocol] Dispatching to RoomProtocol::createRoom");
+    case DEFAULT:
+        break;
 
+    case CREATE_ROOM:
         RoomProtocol::createRoom(clientSocket, smartBuffer);
         break;
 
     case JOIN_ROOM:
-        Logger::trace("[Protocol] Dispatching to RoomProtocol::joinRoom");
-
         RoomProtocol::joinRoom(clientSocket, smartBuffer);
         break;
 
     case DELETE_ROOM:
-        Logger::trace("[Protocol] Dispatching to RoomProtocol::deleteRoom");
-
         RoomProtocol::deleteRoom(clientSocket, smartBuffer);
         break;
 
     case NEW_PLAYER:
-        Logger::trace("[Protocol] Dispatching to PlayerProtocol::newPlayer");
-
         PlayerProtocol::newPlayer(clientSocket, smartBuffer);
         break;
 
     default:
         Logger::error("[Protocol] Received unknown OpCode: " +
                       std::to_string(opCode));
-
         break;
     }
 }

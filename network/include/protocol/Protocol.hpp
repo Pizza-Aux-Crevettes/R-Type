@@ -29,17 +29,13 @@ class Protocol {
         HOTKEY_PRESSED
     };
 
-    static Protocol& getInstance();
-
-    void handleMessage(int clientSocket, SmartBuffer& smartBuffer);
-
-  private:
-    Protocol();
-    ~Protocol();
     Protocol(const Protocol&) = delete;
     Protocol& operator=(const Protocol&) = delete;
 
-    void createRoom(int clientSocket, SmartBuffer& smartBuffer);
-    void joinRoom(int clientSocket, SmartBuffer& smartBuffer);
-    void deleteRoom(int clientSocket, SmartBuffer& smartBuffer);
+    static Protocol& getInstance();
+    static void handleMessage(int clientSocket, SmartBuffer& smartBuffer);
+
+  private:
+    Protocol();
+    ~Protocol() = default;
 };
