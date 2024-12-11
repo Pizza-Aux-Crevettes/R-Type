@@ -21,28 +21,33 @@
  * one.
  *
  * Protocol Details:
- * - Input: None
- * - Output:
- *   - OpCode: NEW_PLAYER_CALLBACK
- *   - int32_t: Assigned player ID
+ * - Input: std:string name
+ * - Output: int16_t opCode (NEW_PLAYER_CALLBACK) << int32_t playerId
  *
  * @param clientSocket The socket associated with the client.
  * @param smartBuffer The buffer for receiving and sending data.
  */
 void PlayerProtocol::newPlayer(int clientSocket, SmartBuffer& smartBuffer) {
-    // Protocol structure (EMPTY)
-    //
+    // Protocol structure
+    std::string name;
 
-    // Get the data from SmartBuffer after injection (EMPTY)
-    //
+    // Get the data from SmartBuffer after injection
+    smartBuffer >> name;
 
     // Reset and init for response
     smartBuffer.reset();
-    smartBuffer << int8_t(Protocol::OpCode::NEW_PLAYER_CALLBACK);
+    smartBuffer << int16_t(Protocol::OpCode::NEW_PLAYER_CALLBACK);
+
+    // Generate a default name if none is provided
+    if (name.empty()) {
+        size_t playerNumber = PlayerManager::getInstance().getPlayers().size() + 1;
+
+        name = "Player" + std::to_string(playerNumber);
+    }
 
     // Check relevant data
     auto player =
-        PlayerManager::getInstance().createPlayerByThread("NewPlayer");
+        PlayerManager::getInstance().createPlayerByThread(name);
 
     // Response (CALLBACK) with status
     smartBuffer << player->getId();

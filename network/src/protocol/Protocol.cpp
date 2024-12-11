@@ -68,7 +68,7 @@ void Protocol::handleMessage(int clientSocket, SmartBuffer& smartBuffer) {
 
     case NEW_PLAYER:
         Logger::trace(
-            "[Protocol] Dispatching to PlayerProtocol::createOrGetPlayer");
+            "[Protocol] Dispatching to PlayerProtocol::newPlayer");
 
         PlayerProtocol::newPlayer(clientSocket, smartBuffer);
         break;

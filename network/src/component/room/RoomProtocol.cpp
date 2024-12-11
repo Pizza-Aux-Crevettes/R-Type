@@ -21,8 +21,8 @@
  * @brief Handles the creation of a new room.
  *
  * Protocol structure:
- * - Input: int32_t playerId, int16_t capacity, int16_t isPublic
- * - Output: OpCode, Status, Room Code (if successful)
+ * - Input: int32_t playerId >> int16_t capacity >> int16_t isPublic
+ * - Output: int16_t opCode (CREATE_ROOM_CALLBACK) << int16_t status << std::string roomCode (optional)
  *
  * Status codes:
  * - 0 = Room created
@@ -79,8 +79,8 @@ void RoomProtocol::createRoom(int clientSocket, SmartBuffer& smartBuffer) {
  * @brief Handles a request to join a room.
  *
  * Protocol structure:
- * - Input: std::string roomCode, int32_t playerId
- * - Output: OpCode, Status
+ * - Input: std::string roomCode >> int32_t playerId
+ * - Output: int16_t opCode (JOIN_ROOM_CALLBACK) << int16_t status
  *
  * Status codes:
  * - 0 = Room joined
@@ -128,8 +128,8 @@ void RoomProtocol::joinRoom(int clientSocket, SmartBuffer& smartBuffer) {
  * @brief Handles a request to delete a room.
  *
  * Protocol structure:
- * - Input: std::string roomCode, int32_t playerId
- * - Output: OpCode, Status
+ * - Input: std::string roomCode >> int32_t playerId
+ * - Output: int16_t opCode (DELETE_ROOM_CALLBACK) << int16_t status
  *
  * Status codes:
  * - 0 = Room deleted
