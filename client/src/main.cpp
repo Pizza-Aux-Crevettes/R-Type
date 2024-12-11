@@ -9,7 +9,7 @@
 #include "InputClient.hpp"
 
 int main(int ac, char* av[]) {
-    Client client_test;
+    Client client;
 
-    client_test.manageClient();
+    client.manageClient();
 }
