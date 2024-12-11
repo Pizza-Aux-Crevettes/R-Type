@@ -10,7 +10,7 @@
 
 class Position : public Component {
   public:
-    Position(float x = 0.0f, float y = 0.0f);
+    Position(std::pair<float, float> position = {0.0f, 0.0f});
     ~Position();
     float getPositionX() const;
     void setPositionX(float x);
