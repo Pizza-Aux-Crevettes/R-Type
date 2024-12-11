@@ -14,17 +14,16 @@
 
 class Player {
   public:
-    Player(int32_t userId, const std::string& name,
-           const Point& position = Point(), const Point& size = Point(),
-           double speed = 0);
+    Player(int32_t userId, std::string name, const Point& position = Point(),
+           const Point& size = Point(), double speed = 0);
 
-    int32_t getId() const;
-    const std::string& getName() const;
-    const Point& getPosition() const;
-    const Point& getSize() const;
-    double getSpeed() const;
-    const Health& getHealth() const;
-    std::thread::id getThreadId() const;
+    [[nodiscard]] int32_t getId() const;
+    [[nodiscard]] const std::string& getName() const;
+    [[nodiscard]] const Point& getPosition() const;
+    [[nodiscard]] const Point& getSize() const;
+    [[nodiscard]] double getSpeed() const;
+    [[nodiscard]] const Health& getHealth() const;
+    [[nodiscard]] std::thread::id getThreadId() const;
 
     void setPosition(const Point& position);
     void setThreadId(const std::thread::id& threadId);

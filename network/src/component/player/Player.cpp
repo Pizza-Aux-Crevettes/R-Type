@@ -8,11 +8,11 @@
 #include "component/player/Player.hpp"
 #include "util/Logger.hpp"
 
-Player::Player(int32_t playerId, const std::string& name, const Point& position,
-               const Point& size, double speed)
-    : _userId(playerId), _name(name), _position(position), _size(size),
+Player::Player(const int32_t userId, std::string name, const Point& position,
+               const Point& size, const double speed)
+    : _userId(userId), _name(std::move(name)), _position(position), _size(size),
       _speed(speed), _health(Health()), _threadId(std::thread::id()) {
-    Logger::info("[Player] Created player: " + std::to_string(playerId) +
+    Logger::info("[Player] Created player: " + std::to_string(userId) +
                  " at position (" + std::to_string(position.getX()) + ", " +
                  std::to_string(position.getY()) + ")");
 }
@@ -58,7 +58,7 @@ const Health& Player::getHealth() const {
     return _health;
 }
 
-void Player::move(double deltaX, double deltaY) {
+void Player::move(const double deltaX, const double deltaY) {
     Logger::info("[Player] Moving player: " + std::to_string(_userId) +
                  " by (" + std::to_string(deltaX) + ", " +
                  std::to_string(deltaY) + ")");
