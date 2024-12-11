@@ -22,8 +22,7 @@
  * @param texturePath The path to the texture file for the sprite.
  * @param size The size of the sprite as a pair of width and height.
  */
-Sprite::Sprite(std::string texturePath, std::pair<double, double> size)
-    : _texturePath(texturePath), _size(size) {}
+Sprite::Sprite() {}
 
 /**
  * @brief Destructor for the Sprite component.
@@ -74,6 +73,22 @@ std::pair<double, double> Sprite::getSize() const {
  */
 void Sprite::setSize(std::pair<double, double> size) {
     this->_size = size;
+}
+
+bool Sprite::getIsLoaded() const {
+    return this->_isLoad;
+}
+
+void Sprite::setIsLoaded(const bool isLoaded) {
+    this->_isLoad = isLoaded;
+}
+
+sf::Sprite& Sprite::getSprite() {
+    return this->_sprite;
+}
+
+void Sprite::setSprite(const sf::Sprite& sprite) {
+    this->_sprite = sprite;
 }
 
 /**

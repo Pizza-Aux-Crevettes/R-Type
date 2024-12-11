@@ -43,6 +43,22 @@ void Texture::setTexturePath(std::string texturePath) {
     this->_texturePath = texturePath;
 }
 
+bool Texture::getIsLoaded() const {
+    return this->_isLoad;
+}
+
+void Texture::setIsLoaded(const bool isLoaded) {
+    this->_isLoad = isLoaded;
+}
+
+sf::Texture& Texture::getTexture() {
+    return this->_texture;
+}
+
+void Texture::setTexture(const sf::Texture& texture) {
+    this->_texture = texture;
+}
+
 /**
  * @brief Display the Texture component information.
  *
