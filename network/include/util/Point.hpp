@@ -9,11 +9,10 @@
 
 class Point {
   public:
-    Point(double x = 0, double y = 0);
+    explicit Point(double x = 0, double y = 0);
 
-    double getX() const;
-    double getY() const;
-
+    [[nodiscard]] double getX() const;
+    [[nodiscard]] double getY() const;
     void setX(double x);
     void setY(double y);
 
