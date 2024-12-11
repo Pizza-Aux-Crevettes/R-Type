@@ -1,270 +1,314 @@
-# R-Type Project - Classes Overview
+# R-Type Project - Game Engine Overview
 
-This README provides an overview of the main classes used in the R-Type project. Each class is designed to manage specific features like health, physics, graphics, and user interaction in the game. Below, you'll find detailed descriptions of each class along with its attributes and functions.
+This document provides an overview of the main components used in the R-Type project. Each component is designed to handle specific functionality such as health management, physics, graphics rendering, or user interaction.
 
 ## Table of Contents
+<br>
 
-- [Health Class](#health-class)
-- [Rigidbody Class](#rigidbody-class)
-- [Position Class](#position-class)
-- [Renderable Class](#renderable-class)
-- [Text Class](#text-class)
-- [Sprite Class](#sprite-class)
-- [Bullet Class](#bullet-class)
-- [Button Class](#button-class)
-- [Velocity Class](#velocity-class)
-- [Input Class](#input-class)
-- [Collider Class](#collider-class)
-- [Color Class](#color-class)
-- [Sound Class](#sound-class)
-- [Animation Class](#animation-class)
+1. [Entity](#entity)
+    - [Description](#description)
+    - [Main features](#main-features)
+    - [Methods](#methods)
+        - [Construtor](#constructors)
+        - [Component Management](#component-management)
+        - [Utilities](#utilities)
+<br>
+<br>
+<br>
 
----
-
-## Health Class
-
-### Description:
-The **Health** class manages the health system of an entity in the game, tracking both the current and maximum health.
-
-### Attributes:
-- **_currentHp**: Current health points.
-- **_maxHp**: Maximum health points (fixed at 100).
-
-### Functions:
-- `getCurrentHp()`: Returns the current health points.
-- `setCurrentHp(int currentHp)`: Sets the current health points.
-- `getMaxHp()`: Returns the maximum health points.
-- `setMaxHp(int maxHp)`: Sets the maximum health points.
-
----
-
-## Rigidbody Class
-
-### Description:
-The **Rigidbody** class represents the physics body of an entity, with attributes to manage mass, drag, gravity, and forces.
-
-### Attributes:
-- **_mass**: Mass of the entity.
-- **_drag**: Drag (resistance) factor.
-- **_gravityScale**: Gravity scale applied to the entity.
-- **_forceX**: Horizontal force applied to the entity.
-- **_forceY**: Vertical force applied to the entity.
-
-### Functions:
-- `getMass()`: Returns the mass of the entity.
-- `setMass(float mass)`: Sets the mass of the entity.
-- `getDrag()`: Returns the drag factor.
-- `setDrag(float drag)`: Sets the drag factor.
-- `getGravityScale()`: Returns the gravity scale.
-- `setGravityScale(float gravityScale)`: Sets the gravity scale.
-- `getForceX()`: Returns the horizontal force.
-- `setForceX(float forceX)`: Sets the horizontal force.
-- `getForceY()`: Returns the vertical force.
-- `setForceY(float forceY)`: Sets the vertical force.
+2. [Core Components](#core-components)
+    - [Health](#health)
+    - [Position](#position)
+    - [Velocity](#velocity)
+3. [Physics Components](#physics-components)
+    - [Rigidbody](#rigidbody)
+    - [Collider](#collider)
+4. [Graphics Components](#graphics-components)
+    - [Renderable](#renderable)
+    - [Sprite](#sprite)
+    - [Animation](#animation)
+    - [Text](#text)
+    - [Color](#color)
+5. [UI Components](#ui-components)
+    - [Button](#button)
+6. [Gameplay Components](#gameplay-components)
+    - [Bullet](#bullet)
+    - [Input](#input)
+7. [Audio Components](#audio-components)
+    - [Sound](#sound)
+    
+<br>
 
 ---
 
-## Position Class
+<br>
 
-### Description:
-The **Position** class tracks the position of an entity in 2D space, using `x` and `y` coordinates.
+## Entity
 
-### Attributes:
-- **_x**: Horizontal position.
-- **_y**: Vertical position.
+## Description
+The `Entity` is the core structure of the game engine, serving as a container for components. Each entity represents a game object, such as a player, enemy, or projectile. With its component-based system, `Entity` offers maximum flexibility by allowing functionalities to be added, removed, and managed dynamically.
 
-### Functions:
-- `getPositionX()`: Returns the horizontal position.
-- `getPositionY()`: Returns the vertical position.
-- `setPositionX(float x)`: Sets the horizontal position.
-- `setPositionY(float y)`: Sets the vertical position.
+## Main Features
+- **Dynamic Component Management**: Add and remove components on the fly.
+- **Unique Association with an ID**: Each entity has a unique identifier.
+- **Component Listing**: View all components attached to an entity.
+- **Secure Component Access**: Ensures each component is unique to avoid conflicts.
 
----
+## Methods
 
-## Renderable Class
+### Constructors
+- `Entity(int id)`: Initializes an entity with an identifier.  
+- `Entity(int id, Args&&... args)`: Initializes an entity with an identifier and initial components.
 
-### Description:
-The **Renderable** class determines whether an entity is visible or not in the game world.
+### Component Management
+- `addComponent(ComponentType component)`: Adds a component to the entity. Throws an error if the component already exists.  
+- `removeComponent<ComponentType>()`: Removes a specific component. Throws an error if the component is not found.  
+- `getComponent<ComponentType>()`: Retrieves a reference to the requested component. Throws an error if the component is not found.
 
-### Attributes:
-- **_isVisible**: Visibility flag (true or false).
-
-### Functions:
-- `getIsVisible()`: Returns whether the entity is visible.
-- `setIsVisible(bool isVisible)`: Sets the visibility of the entity.
-
----
-
-## Text Class
-
-### Description:
-The **Text** class handles the display of text on the screen, storing the text content.
-
-### Attributes:
-- **_text**: The text string to be displayed.
-
-### Functions:
-- `getText()`: Returns the text content.
-- `setText(std::string text)`: Sets the text content.
+### Utilities
+- `displayComponents()`: Displays all components attached to the entity.  
+- `getEntityId()`: Returns the unique ID of the entity.
 
 ---
 
-## Sprite Class
+<br>
+<br>
+<br>
+<br>
+<br>
 
-### Description:
-The **Sprite** class handles the visual representation of an entity, including its texture path and size.
+## Core Components
 
-### Attributes:
-- **_texturePath**: Path to the texture file.
-- **_size**: Size of the sprite (width and height).
+### Health
+- **Description**: Manages the health system of an entity, including current and maximum health.
+- **Attributes**:
+  - `_currentHp`: Current health points.
+  - `_maxHp`: Maximum health points (default: 100).
+- **Functions**:
+  - `getCurrentHp()`: Returns the current health points.
+  - `setCurrentHp(int currentHp)`: Sets the current health points.
+  - `getMaxHp()`: Returns the maximum health points.
+  - `setMaxHp(int maxHp)`: Sets the maximum health points.
+  - `getInfo()`: Returns health informations.
 
-### Functions:
-- `getTexturePath()`: Returns the texture file path.
-- `setTexturePath(std::string texturePath)`: Sets the texture file path.
-- `getSize()`: Returns the size of the sprite.
-- `setSize(std::vector<double> size)`: Sets the size of the sprite.
+### Position
+- **Description**: Tracks the 2D position of an entity using `x` and `y` coordinates.
+- **Attributes**:
+  - `_x`: Horizontal position.
+  - `_y`: Vertical position.
+- **Functions**:
+  - `getPositionX()`: Returns the horizontal position.
+  - `getPositionY()`: Returns the vertical position.
+  - `setPositionX(float x)`: Sets the horizontal position.
+  - `setPositionY(float y)`: Sets the vertical position.
+  - `getInfo()`: Returns position informations.
 
----
-
-## Bullet Class
-
-### Description:
-The **Bullet** class manages the properties of a bullet fired by an entity, including damage and source entity.
-
-### Attributes:
-- **_damage**: The damage dealt by the bullet.
-- **_sourceEntity**: The entity that fired the bullet.
-
-### Functions:
-- `getDamage()`: Returns the bullet's damage.
-- `setDamage(int damage)`: Sets the bullet's damage.
-
----
-
-## Button Class
-
-### Description:
-The **Button** class represents a clickable button in the user interface, with text and size properties.
-
-### Attributes:
-- **_text**: The text displayed on the button.
-- **_size**: The size of the button.
-
-### Functions:
-- `getText()`: Returns the button's text.
-- `setText(std::string text)`: Sets the button's text.
-- `getSize()`: Returns the button's size.
-- `setSize(std::vector2f size)`: Sets the button's size.
+### Velocity
+- **Description**: Represents the movement speed of an entity in 2D space.
+- **Attributes**:
+  - `_x`: Horizontal velocity.
+  - `_y`: Vertical velocity.
+- **Functions**:
+  - `getVelocityX()`: Returns the horizontal velocity.
+  - `getVelocityY()`: Returns the vertical velocity.
+  - `setVelocityX(float x)`: Sets the horizontal velocity.
+  - `setVelocityY(float y)`: Sets the vertical velocity.
+  - `getInfo()`: Returns velocity informations.
 
 ---
 
-## Velocity Class
+## Physics Components
 
-### Description:
-The **Velocity** class represents the movement speed of an entity in 2D space.
+### Rigidbody
+- **Description**: Represents the physics body of an entity with attributes for mass, drag, gravity, and forces.
+- **Attributes**:
+  - `_mass`: Entity mass.
+  - `_drag`: Resistance factor.
+  - `_gravityScale`: Gravity scale.
+  - `_forceX`: Horizontal force.
+  - `_forceY`: Vertical force.
+  - `_rect`: Bounding rectangle (for physics).
+  - `_isLoad`: Indicates if the Rigidbody is active.
+- **Functions**:
+  - `getMass()`: Returns the mass of the Rigidbody.
+  - `setMass(float mass)`: Sets the mass of the Rigidbody.
+  - `getDrag()`: Returns the drag factor.
+  - `setDrag(float drag)`: Sets the drag factor.
+  - `getGravityScale()`: Returns the gravity scale.
+  - `setGravityScale(float gravityScale)`: Sets the gravity scale.
+  - `getForceX()`: Returns the horizontal force.
+  - `setForceX(float forceX)`: Sets the horizontal force.
+  - `getForceY()`: Returns the vertical force.
+  - `setForceY(float forceY)`: Sets the vertical force.
+  - `getIsLoad()`: Returns whether the Rigidbody is active.
+  - `setIsLoad(bool isLoad)`: Activates or deactivates the Rigidbody.
+  - `getRect()`:  Returns the sf::rect.
+  - `setRect(sf::rect<int> rect)`: Sets the rect of the RigidBody
+  - `getInfo()`: Returns RigidBody informations.
 
-### Attributes:
-- **_x**: Horizontal velocity.
-- **_y**: Vertical velocity.
-
-### Functions:
-- `getVelocityX()`: Returns the horizontal velocity.
-- `getVelocityY()`: Returns the vertical velocity.
-- `setVelocityX(float x)`: Sets the horizontal velocity.
-- `setVelocityY(float y)`: Sets the vertical velocity.
-
----
-
-## Input Class
-
-### Description:
-The **Input** class tracks user input for player movement and actions, including direction and attack state.
-
-### Attributes:
-- **_up**: Movement up.
-- **_right**: Movement right.
-- **_left**: Movement left.
-- **_down**: Movement down.
-- **_attack**: Whether the player is attacking.
-- **_autoFire**: Whether the player has auto-fire enabled.
-
-### Functions:
-- `getUp()`: Returns the "up" movement state.
-- `getRight()`: Returns the "right" movement state.
-- `getLeft()`: Returns the "left" movement state.
-- `getDown()`: Returns the "down" movement state.
-- `getAttack()`: Returns whether the player is attacking.
-- `getAutoFire()`: Returns whether auto-fire is enabled.
-- `setUp(bool up)`: Sets the "up" movement state.
-- `setRight(bool right)`: Sets the "right" movement state.
-- `setLeft(bool left)`: Sets the "left" movement state.
-- `setDown(bool down)`: Sets the "down" movement state.
-- `setAttack(bool attack)`: Sets the attack state.
-- `setAutoFire(bool autoFire)`: Sets the auto-fire state.
-
----
-
-## Collider Class
-
-### Description:
-The **Collider** class represents the collision boundaries of an entity, typically using a bounding box.
-
-### Attributes:
-- **_size**: Size of the collider.
-
-### Functions:
-- `getCollider()`: Returns the collider size.
-- `setCollider(std::vector<double> size)`: Sets the collider size.
+### Collider
+- **Description**: Defines collision boundaries for an entity using a bounding box.
+- **Attributes**:
+  - `_size`: Collider size.
+  - `_rect`: Bounding rectangle (for collision).
+  - `_isLoad`: Indicates if the Collider is active.
+- **Functions**:
+  - `getCollider()`: Returns the collider's size and position.
+  - `setCollider(std::vector<double> size)`: Sets the collider's size.
+  - `getIsLoad()`: Returns whether the Collider is active.
+  - `setIsLoad(bool isLoad)`: Activates or deactivates the Collider.
+  - `getRect()`:  Returns the sf::rect.
+  - `setRect(sf::rect<int> rect)`: Sets the rect of the Collider
+  - `getInfo()`: Returns Collider informations.
 
 ---
 
-## Color Class
+## Graphics Components
 
-### Description:
-The **Color** class defines the color of an entity using RGBA values stored in a vector.
+### Renderable
+- **Description**: Determines whether an entity is visible in the game world.
+- **Attributes**:
+  - `_isVisible`: Visibility flag.
+- **Functions**:
+  - `getIsVisible()`: Returns whether the entity is visible.
+  - `setIsVisible(bool isVisible)`: Sets the visibility of the entity.
+  - `getInfo()`: Returns Renderable informations.
 
-### Attributes:
-- **_color**: A vector storing the color components (R, G, B, A).
+### Sprite
+- **Description**: Handles the visual representation of an entity, including its texture path and size.
+- **Attributes**:
+  - `_texturePath`: Path to the texture file.
+  - `_size`: Sprite size (width and height).
+  - `_sprite`: Main sprite.
+  - `_isLoad`: Indicates if the Sprite is active.
+- **Functions**:
+  - `getTexturePath()`: Returns the texture file path.
+  - `setTexturePath(std::string texturePath)`: Sets the texture file path.
+  - `getSize()`: Returns the sprite size.
+  - `setSize(std::vector<double> size)`: Sets the sprite size.
+  - `getSprite()`: Returns the  sprite.
+  - `setSprite(sf::Sprite sprite)`: Sets the new sprite.
+  - `getIsLoad()`: Returns whether the Sprite is active.
+  - `setIsLoad(bool isLoad)`: Activates or deactivates the Sprite.
+  - `getInfo()`: Returns Sprite informations.
 
-### Functions:
-- `getColor()`: Returns the color.
-- `setColor(std::vector<double> color)`: Sets the color.
+### Animation
+- **Description**: Handles frame-based animations for entities.
+- **Attributes**:
+  - `_currentFrame`: Current animation frame.
+  - `_frameDuration`: Duration for each frame.
+  - `_elapsedTime`: Time elapsed since the last frame update.
+- **Functions**:
+  - `getCurrentFrame()`: Returns the current frame index.
+  - `setCurrentFrame(int currentFrame)`: Sets the current frame index.
+  - `getFrameDuration()`: Returns the duration of each frame.
+  - `setFrameDuration(float frameDuration)`: Sets the duration of each frame.
+  - `getElapsedTime()`: Returns the elapsed time since the last frame update.
+  - `setElapsedTime(float elapsedTime)`: Sets the elapsed time since the last frame update.
+  - `getInfo()`: Returns Animation informations.
+
+
+### Text
+- **Description**: Manages the display of text on the screen.
+- **Attributes**:
+  - `_initText`: Init text content.
+  - `_text`: Text content.
+  - `_font`: Font text.
+  - `_isLoad`: Indicates if the Text is active.
+- **Functions**:
+  - `getText()`: Returns the current text content.
+  - `setText(std::string text)`: Sets the text content.ù
+  - `getIsLoad()`: Returns whether the Text is active.
+  - `setIsLoad(bool isLoad)`: Activates or deactivates the Text.
+  - `getInfo()`: Returns Text informations.
+
+
+### Color
+- **Description**: Defines the color of an entity using RGBA values.
+- **Attributes**:
+  - `_initColor`: Init vector storing color components (R, G, B, A).
+  - `_color`: Color components.
+- **Functions**:
+  - `getColor()`: Returns the current color.
+  - `setColor(std::vector<double> color)`: Sets the color components.
+  - `getInfo()`: Returns Color informations.
 
 ---
 
-## Sound Class
+## UI Components
 
-### Description:
-The **Sound** class manages sound effects, including the file path and volume.
+### Button
+- **Description**: Represents a clickable button in the user interface.
+- **Attributes**:
+  - `_text`: Button text.
+  - `_size`: Button size.
+  - `enum shape`: { Circle, Rectangle }.
+  - `_button`: Rectangle shape.
+  - `_isLoad`: Indicates if the Button is active.
+- **Functions**:
+  - `getText()`: Returns the button text.
+  - `setText(std::string text)`: Sets the button text.
+  - `getSize()`: Returns the button size.
+  - `setSize(std::vector2f size)`: Sets the button size.
+  - `getIsLoad()`: Returns whether the Button is active.
+  - `setIsLoad(bool isLoad)`: Activates or deactivates the Button.
+  - `getInfo()`: Returns Button informations.
 
-### Attributes:
-- **_soundFile**: Path to the sound file.
-- **_volume**: Volume level for the sound.
+---
 
-### Functions:
-- `getSoundFile()`: Returns the sound file path.
-- `setSoundFile(std::string soundFile)`: Sets the sound file path.
-- `getVolume()`: Returns the volume level.
-- `setVolume(int volume)`: Sets the volume level.
+## Gameplay Components
+
+### Bullet
+- **Description**: Manages properties of a bullet, such as damage and the source entity.
+- **Attributes**:
+  - `_damage`: Bullet damage.
+  - `_sourceEntity`: Entity that fired the bullet.
+- **Functions**:
+  - `getDamage()`: Returns the bullet's damage.
+  - `setDamage(int damage)`: Sets the bullet's damage.
+  - `getInfo()`: Returns Bullet informations.
+
+### Input
+- **Description**: Tracks player input for movement and actions.
+- **Attributes**:
+  - `_up`: Movement up.
+  - `_right`: Movement right.
+  - `_left`: Movement left.
+  - `_down`: Movement down.
+  - `_attack`: Attack state.
+  - `_autoFire`: Auto-fire state.
+- **Functions**:
+  - `getUp()`: Returns if the "up" input is active.
+  - `getRight()`: Returns if the "right" input is active.
+  - `getLeft()`: Returns if the "left" input is active.
+  - `getDown()`: Returns if the "down" input is active.
+  - `getAttack()`: Returns if the attack input is active.
+  - `getAutoFire()`: Returns if auto-fire is enabled.
+  - `setUp(bool up)`: Sets the "up" input state.
+  - `setRight(bool right)`: Sets the "right" input state.
+  - `setLeft(bool left)`: Sets the "left" input state.
+  - `setDown(bool down)`: Sets the "down" input state.
+  - `setAttack(bool attack)`: Sets the attack input state.
+  - `setAutoFire(bool autoFire)`: Enables or disables auto-fire.ù
+  - `getInfo()`: Returns Input informations.
 
 ---
 
-## Animation Class
+## Audio Components
 
-### Description:
-The **Animation** class handles frame-based animations, tracking the current frame and time-related parameters.
-
-### Attributes:
-- **_currentFrame**: The current frame of the animation.
-- **_frameDuration**: Duration each frame should be displayed.
-- **_elapsedTime**: Time elapsed since the last frame update.
-
-### Functions:
-- `getCurrentFrame()`: Returns the current animation frame.
-- `setCurrentFrame(int currentFrame)`: Sets the current animation frame.
-- `getFrameDuration()`: Returns the frame duration.
-- `setFrameDuration(float frameDuration)`: Sets the frame duration.
-- `getElapsedTime()`: Returns the elapsed time.
-- `setElapsedTime(float elapsedTime)`: Sets the elapsed time.
-
----
+### Sound
+- **Description**: Manages sound effects for entities.
+- **Attributes**:
+  - `_soundFile`: Path to the sound file.
+  - `_volume`: Volume level.
+  - `buffer`: Sound buffer.
+  - `sound`: Main sound.
+  - `_isLoad`: Indicates if the Sound is active.
+- **Functions**:
+  - `getSoundFile()`: Returns the sound file path.
+  - `setSoundFile(std::string soundFile)`: Sets the sound file path.
+  - `getVolume()`: Returns the volume level.
+  - `setVolume(int volume)`: Sets the volume level.
+  - `getIsLoad()`: Returns whether the Sound is active.
+  - `setIsLoad(bool isLoad)`: Activates or deactivates the Sound.
+  - `getInfo()`: Returns Sound informations.
