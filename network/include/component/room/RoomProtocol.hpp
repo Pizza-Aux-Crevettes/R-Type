@@ -8,7 +8,6 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
-#include <string>
 
 class RoomProtocol {
   public:
