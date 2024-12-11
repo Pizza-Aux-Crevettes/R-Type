@@ -6,39 +6,27 @@
 */
 
 #include "socket/TcpSocket.hpp"
+#include "protocol/Protocol.hpp"
+#include "socket/Server.hpp"
+#include "util/Config.hpp"
 #include "util/Logger.hpp"
-#include "util/Singletons.hpp"
 #include <SmartBuffer.hpp>
 #include <arpa/inet.h>
-#include <cstring>
 #include <unistd.h>
 
-TcpSocket::TcpSocket() : _tcpSocket(FAILURE) {
-    Logger::socket("[TCP Socket] Instance created.");
-}
+TcpSocket::TcpSocket() : _tcpSocket(FAILURE) {}
 
 TcpSocket::~TcpSocket() {
     close();
 }
 
-void TcpSocket::send(int clientSocket, SmartBuffer& smartBuffer) {
-    ssize_t bytesSent =
-        ::send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0);
-
-    if (bytesSent < 0) {
-        Logger::error("[TCP Socket] Send failed.");
-    } else {
-        Logger::info("[TCP Socket] Sent " + std::to_string(bytesSent) +
-                     " bytes to client.");
-    }
+void TcpSocket::send(const int clientSocket, const SmartBuffer& smartBuffer) {
+    ::send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0);
 }
 
 void TcpSocket::init() {
     _tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
-
     if (_tcpSocket == FAILURE) {
-        Logger::error("[TCP Socket] Failed to create socket.");
-
         throw std::runtime_error("Failed to create TCP socket.");
     }
 
@@ -46,44 +34,41 @@ void TcpSocket::init() {
     _tcpAddr.sin_addr.s_addr = INADDR_ANY;
     _tcpAddr.sin_port = htons(PORT);
 
-    if (bind(_tcpSocket, (struct sockaddr*)&_tcpAddr, sizeof(_tcpAddr)) <
-        SUCCESS) {
-        Logger::error("[TCP Socket] Failed to bind socket.");
-
+    if (bind(_tcpSocket, reinterpret_cast<sockaddr*>(&_tcpAddr),
+             sizeof(_tcpAddr)) < SUCCESS) {
         throw std::runtime_error("Bind failed for TCP socket.");
     }
-
     if (listen(_tcpSocket, 3) < SUCCESS) {
-        Logger::error("[TCP Socket] Failed to listen.");
-
         throw std::runtime_error("Listen failed for TCP socket.");
     }
 
     Logger::socket("[TCP Socket] Successfully initialized.");
 }
 
-void TcpSocket::readLoop() {
+[[noreturn]] void TcpSocket::readLoop() const {
     while (true) {
-        int clientSocket = accept(_tcpSocket, nullptr, nullptr);
+        sockaddr_in clientAddr{};
+        socklen_t addrLen = sizeof(clientAddr);
+        const int clientSocket = accept(
+            _tcpSocket, reinterpret_cast<sockaddr*>(&clientAddr), &addrLen);
 
         if (clientSocket < SUCCESS) {
             Logger::warning("[TCP Socket] Accept failed.");
             continue;
         }
+        handleClientRead(clientSocket);
 
         Logger::socket("[TCP Socket] Client connected: " +
                        std::to_string(clientSocket));
-
-        handleClientRead(clientSocket);
     }
 }
 
-void TcpSocket::handleClientRead(int clientSocket) {
+void TcpSocket::handleClientRead(const int clientSocket) {
     SmartBuffer smartBuffer;
 
     while (true) {
-        char buffer[1024] = {0};
-        int bytesRead = read(clientSocket, buffer, sizeof(buffer));
+        char buffer[1024] = {};
+        const ssize_t bytesRead = read(clientSocket, buffer, sizeof(buffer));
 
         if (bytesRead <= SUCCESS) {
             Logger::socket("[TCP Socket] Client disconnected: " +
@@ -96,11 +81,11 @@ void TcpSocket::handleClientRead(int clientSocket) {
         smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer), bytesRead);
         smartBuffer.resetRead();
 
-        Singletons::getProtocol().handleMessage(clientSocket, smartBuffer);
+        Protocol::handleMessage(clientSocket, smartBuffer);
     }
 }
 
-void TcpSocket::close() {
+void TcpSocket::close() const {
     if (_tcpSocket != FAILURE) {
         ::close(_tcpSocket);
 

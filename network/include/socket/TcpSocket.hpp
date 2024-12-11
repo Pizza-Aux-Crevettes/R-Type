@@ -15,15 +15,14 @@ class TcpSocket {
     TcpSocket();
     ~TcpSocket();
 
-    static void send(int clientSocket, SmartBuffer& smartBuffer);
-
+    static void send(int clientSocket, const SmartBuffer& smartBuffer);
     void init();
-    void readLoop();
-    void close();
+    [[noreturn]] void readLoop() const;
+    void close() const;
 
   private:
     int _tcpSocket;
-    sockaddr_in _tcpAddr;
+    sockaddr_in _tcpAddr{};
 
-    void handleClientRead(int clientSocket);
+    static void handleClientRead(int clientSocket);
 };

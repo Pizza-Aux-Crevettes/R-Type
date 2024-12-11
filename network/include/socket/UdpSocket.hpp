@@ -16,16 +16,20 @@ class UdpSocket {
     ~UdpSocket();
 
     static void send(int udpSocket, const sockaddr_in& clientAddr,
-                     SmartBuffer& smartBuffer);
-
+                     const SmartBuffer& smartBuffer);
     void init();
-    void readLoop();
-    void sendLoop();
-    void close();
+    [[noreturn]] void readLoop();
+    [[noreturn]] void sendLoop();
+    void close() const;
+
+    void addClient(const sockaddr_in& clientAddr);
+    std::vector<sockaddr_in> getClients();
 
   private:
     int _udpSocket;
-    sockaddr_in _udpAddr;
+    sockaddr_in _udpAddr{};
+    std::vector<sockaddr_in> _clients;
+    std::mutex _clientsMutex;
 
     void handleRead();
     void handleSend();
