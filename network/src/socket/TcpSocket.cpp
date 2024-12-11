@@ -22,7 +22,15 @@ TcpSocket::~TcpSocket() {
 }
 
 void TcpSocket::send(int clientSocket, SmartBuffer& smartBuffer) {
-    ::send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0);
+    ssize_t bytesSent =
+        ::send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0);
+
+    if (bytesSent < 0) {
+        Logger::error("[TCP Socket] Send failed.");
+    } else {
+        Logger::info("[TCP Socket] Sent " + std::to_string(bytesSent) +
+                     " bytes to client.");
+    }
 }
 
 void TcpSocket::init() {
@@ -60,7 +68,6 @@ void TcpSocket::readLoop() {
 
         if (clientSocket < SUCCESS) {
             Logger::warning("[TCP Socket] Accept failed.");
-
             continue;
         }
 

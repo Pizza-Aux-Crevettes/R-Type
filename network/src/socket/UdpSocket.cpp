@@ -25,8 +25,16 @@ UdpSocket::~UdpSocket() {
 
 void UdpSocket::send(int udpSocket, const sockaddr_in& clientAddr,
                      SmartBuffer& smartBuffer) {
-    sendto(udpSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0,
-           (struct sockaddr*)&clientAddr, sizeof(clientAddr));
+    ssize_t bytesSent =
+        sendto(udpSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0,
+               (struct sockaddr*)&clientAddr, sizeof(clientAddr));
+
+    if (bytesSent < 0) {
+        Logger::error("[UDP Socket] Send failed.");
+    } else {
+        Logger::info("[UDP Socket] Sent " + std::to_string(bytesSent) +
+                     " bytes to client.");
+    }
 }
 
 void UdpSocket::init() {
@@ -83,7 +91,7 @@ void UdpSocket::handleRead() {
 }
 
 void UdpSocket::handleSend() {
-    // @TODO
+    Logger::info("[UDP Socket] Sending data...");
 }
 
 void UdpSocket::close() {

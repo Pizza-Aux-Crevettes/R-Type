@@ -27,7 +27,7 @@ class Server {
 
     TcpSocket _tcpSocket;
     UdpSocket _udpSocket;
-    std::vector<std::thread> _clientThreads;
+    std::vector<std::thread> _threads;
 
     void closeThreads();
 };

@@ -54,12 +54,17 @@ int Server::start() {
     Logger::info("[Server] Starting main loop. Listening for connections...");
 
     try {
-        std::thread udpThread(&UdpSocket::listen, &_udpSocket);
-        udpThread.detach();
+        _threads.emplace_back(&UdpSocket::readLoop, &_udpSocket);
 
-        Logger::thread("[Server] UDP listener thread started.");
+        Logger::thread("[Server] UDP read loop thread started.");
 
-        _tcpSocket.listen();
+        _threads.emplace_back(&UdpSocket::sendLoop, &_udpSocket);
+
+        Logger::thread("[Server] UDP send loop thread started.");
+
+        _threads.emplace_back(&TcpSocket::readLoop, &_tcpSocket);
+
+        Logger::thread("[Server] TCP read loop thread started.");
     } catch (const std::exception& exception) {
         Logger::error("[Server] Runtime error: " +
                       std::string(exception.what()));
@@ -71,18 +76,20 @@ int Server::start() {
 }
 
 void Server::closeThreads() {
-    Logger::info("[Server] Closing client threads...");
+    Logger::info("[Server] Closing threads...");
 
-    for (auto& thread : _clientThreads) {
+    for (auto& thread : _threads) {
         if (thread.joinable()) {
             thread.join();
 
-            Logger::thread("[Server] Client thread joined successfully.");
+            Logger::thread("[Server] Thread joined successfully.");
         } else {
             Logger::warning(
                 "[Server] Attempted to join a non-joinable thread.");
         }
     }
 
-    Logger::info("[Server] All client threads closed.");
+    _threads.clear();
+
+    Logger::info("[Server] All threads closed.");
 }
