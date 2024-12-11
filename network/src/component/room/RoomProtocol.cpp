@@ -41,8 +41,8 @@ void RoomProtocol::createRoom(int clientSocket, SmartBuffer& smartBuffer) {
 
     if (!status) {
         const std::string roomCode = Singletons::getRoomManager()
-                       .createRoom(player, capacity, isPublic)
-                       ->getCode();
+                                         .createRoom(player, capacity, isPublic)
+                                         ->getCode();
 
         Logger::success("[RoomProtocol] Room created successfully with code: " +
                         roomCode);
@@ -75,7 +75,8 @@ void RoomProtocol::joinRoom(int clientSocket, SmartBuffer& smartBuffer) {
 
     const auto player = Singletons::getPlayerManager().findPlayerById(playerId);
     const auto room = Singletons::getRoomManager().findRoomByCode(roomCode);
-    const auto status = static_cast<int16_t>(!player + !room + (!room->addPlayer(player)));
+    const auto status =
+        static_cast<int16_t>(!player + !room + (!room->addPlayer(player)));
 
     smartBuffer << status;
 
@@ -111,7 +112,8 @@ void RoomProtocol::deleteRoom(int clientSocket, SmartBuffer& smartBuffer) {
 
     const auto player = Singletons::getPlayerManager().findPlayerById(playerId);
     const auto room = Singletons::getRoomManager().findRoomByCode(roomCode);
-    const auto status = static_cast<int16_t>(!player + !room + (room->getOwner() != player));
+    const auto status =
+        static_cast<int16_t>(!player + !room + (room->getOwner() != player));
 
     smartBuffer << status;
 

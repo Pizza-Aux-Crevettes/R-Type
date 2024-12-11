@@ -66,7 +66,9 @@ int Server::start() {
 
         Logger::thread("[Server] TCP read loop thread started.");
 
-       	while (true) std::this_thread::sleep_for(std::chrono::seconds(1)); // DON'T BE EEPY
+        while (true)
+            std::this_thread::sleep_for(
+                std::chrono::seconds(1)); // DON'T BE EEPY
     } catch (const std::exception& exception) {
         Logger::error("[Server] Runtime error: " +
                       std::string(exception.what()));
