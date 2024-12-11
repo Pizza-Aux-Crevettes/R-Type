@@ -25,7 +25,7 @@ void PlayerProtocol::newPlayer(int clientSocket, SmartBuffer& smartBuffer) {
 
     smartBuffer >> name;
     smartBuffer.reset();
-    smartBuffer << int16_t(Protocol::OpCode::NEW_PLAYER_CALLBACK);
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_CALLBACK);
 
     if (name.empty()) {
         name = "Player" +
@@ -33,12 +33,12 @@ void PlayerProtocol::newPlayer(int clientSocket, SmartBuffer& smartBuffer) {
                               1);
     }
 
-    auto player = PlayerManager::getInstance().createPlayerByThread(name);
+    const auto player = PlayerManager::getInstance().createPlayerByThread(name);
 
     smartBuffer << player->getId();
 
-    TcpSocket::send(clientSocket, smartBuffer);
-
     Logger::info("[PlayerProtocol] Assigned player ID " +
                  std::to_string(player->getId()) + " to client.");
+
+    TcpSocket::send(clientSocket, smartBuffer);
 }
