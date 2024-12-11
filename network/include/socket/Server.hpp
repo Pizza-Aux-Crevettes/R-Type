@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "protocol/Protocol.hpp"
 #include "socket/TcpSocket.hpp"
 #include "socket/UdpSocket.hpp"
 #include <thread>
@@ -15,15 +14,15 @@
 
 class Server {
   public:
-    static Server& getInstance();
+    Server(const Server&) = delete;
+    Server& operator=(const Server&) = delete;
 
+    static Server& getInstance();
     int start();
 
   private:
     Server();
     ~Server();
-    Server(const Server&) = delete;
-    Server& operator=(const Server&) = delete;
 
     TcpSocket _tcpSocket;
     UdpSocket _udpSocket;
