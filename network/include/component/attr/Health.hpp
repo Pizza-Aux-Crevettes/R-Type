@@ -11,15 +11,14 @@
 
 class Health {
   public:
-    Health(double health = DEFAULT_HEALTH, int lives = DEFAULT_LIVES);
-    ~Health();
+    explicit Health(double health = DEFAULT_HEALTH, int lives = DEFAULT_LIVES);
+    ~Health() = default;
 
-    double getHealth() const;
-    int getLives() const;
-
+    [[nodiscard]] double getHealth() const;
+    [[nodiscard]] int getLives() const;
     void takeDamage(double damage);
     void loseLife();
-    bool isAlive() const;
+    [[nodiscard]] bool isAlive() const;
 
   private:
     double _health;

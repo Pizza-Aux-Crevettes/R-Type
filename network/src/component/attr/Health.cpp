@@ -7,9 +7,8 @@
 
 #include "component/attr/Health.hpp"
 
-Health::Health(double health, int lives) : _health(health), _lives(lives) {}
-
-Health::~Health() {}
+Health::Health(const double health, const int lives)
+    : _health(health), _lives(lives) {}
 
 double Health::getHealth() const {
     return _health;
@@ -19,7 +18,7 @@ int Health::getLives() const {
     return _lives;
 }
 
-void Health::takeDamage(double damage) {
+void Health::takeDamage(const double damage) {
     _health -= damage;
     if (_health < 0) {
         _health = 0;
