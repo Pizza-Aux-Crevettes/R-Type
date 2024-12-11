@@ -54,7 +54,7 @@ void RoomProtocol::createRoom(int clientSocket, SmartBuffer& smartBuffer) {
         smartBuffer << roomCode;
     }
 
-    TcpSocket::sendTcp(clientSocket, smartBuffer);
+    TcpSocket::send(clientSocket, smartBuffer);
 
     if (!status) {
         Logger::success("[RoomProtocol] Room created successfully with code: " +
@@ -90,7 +90,7 @@ void RoomProtocol::joinRoom(int clientSocket, SmartBuffer& smartBuffer) {
     int16_t status = (!player + !room + (!room->addPlayer(player)));
     smartBuffer << status;
 
-    TcpSocket::sendTcp(clientSocket, smartBuffer);
+    TcpSocket::send(clientSocket, smartBuffer);
 
     if (!status) {
         Logger::info("[RoomProtocol] Player " + player->getName() +
@@ -130,7 +130,7 @@ void RoomProtocol::deleteRoom(int clientSocket, SmartBuffer& smartBuffer) {
         Singletons::getRoomManager().deleteRoom(roomCode, player);
     }
 
-    TcpSocket::sendTcp(clientSocket, smartBuffer);
+    TcpSocket::send(clientSocket, smartBuffer);
 
     if (!status) {
         Logger::info("[RoomProtocol] Room deleted successfully. Room code: " +

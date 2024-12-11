@@ -15,14 +15,18 @@ class UdpSocket {
     UdpSocket();
     ~UdpSocket();
 
-    static void sendUdp(int udpSocket, const sockaddr_in& clientAddr,
-                        SmartBuffer& smartBuffer);
+    static void send(int udpSocket, const sockaddr_in& clientAddr,
+                     SmartBuffer& smartBuffer);
 
     void init();
-    void listen();
+    void readLoop();
+    void sendLoop();
     void close();
 
   private:
     int _udpSocket;
     sockaddr_in _udpAddr;
+
+    void handleRead();
+    void handleSend();
 };

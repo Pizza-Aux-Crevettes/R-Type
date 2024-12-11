@@ -37,7 +37,7 @@ void PlayerProtocol::newPlayer(int clientSocket, SmartBuffer& smartBuffer) {
 
     smartBuffer << player->getId();
 
-    TcpSocket::sendTcp(clientSocket, smartBuffer);
+    TcpSocket::send(clientSocket, smartBuffer);
 
     Logger::info("[PlayerProtocol] Assigned player ID " +
                  std::to_string(player->getId()) + " to client.");

@@ -5,34 +5,25 @@
 ** TcpSocket.hpp
 */
 
-/**
- * @file TcpSocket.hpp
- * @brief Declaration of the TcpSocket class for managing TCP socket
- * communication.
- */
-
 #pragma once
 
 #include <SmartBuffer.hpp>
 #include <netinet/in.h>
-#include <thread>
-#include <vector>
 
 class TcpSocket {
   public:
     TcpSocket();
     ~TcpSocket();
 
-    static void sendTcp(int clientSocket, SmartBuffer& smartBuffer);
+    static void send(int clientSocket, SmartBuffer& smartBuffer);
 
     void init();
-    void listen();
+    void readLoop();
     void close();
 
   private:
     int _tcpSocket;
     sockaddr_in _tcpAddr;
-    std::vector<std::thread> _clientThreads;
 
-    void handleClient(int clientSocket);
+    void handleClientRead(int clientSocket);
 };

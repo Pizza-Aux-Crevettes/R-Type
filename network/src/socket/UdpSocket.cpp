@@ -10,40 +10,26 @@
 #include "util/Singletons.hpp"
 #include <SmartBuffer.hpp>
 #include <arpa/inet.h>
+#include <chrono>
 #include <cstring>
+#include <thread>
 #include <unistd.h>
 
 UdpSocket::UdpSocket() : _udpSocket(FAILURE) {
-    Logger::socket("[UDP Socket] Instance created for port: " +
-                   std::to_string(PORT));
+    Logger::socket("[UDP Socket] Instance created.");
 }
 
 UdpSocket::~UdpSocket() {
-    Logger::socket("[UDP Socket] Instance for port " + std::to_string(PORT) +
-                   " is being destroyed.");
-
     close();
 }
 
-void UdpSocket::sendUdp(int udpSocket, const sockaddr_in& clientAddr,
-                        SmartBuffer& smartBuffer) {
-    ssize_t bytesSent =
-        sendto(udpSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0,
-               (struct sockaddr*)&clientAddr, sizeof(clientAddr));
-
-    if (bytesSent < 0) {
-        Logger::error("[Socket] UDP send failed for UDP socket: " +
-                      std::to_string(udpSocket));
-    } else {
-        Logger::info("[Socket] UDP send succeeded. Bytes sent: " +
-                     std::to_string(bytesSent));
-    }
+void UdpSocket::send(int udpSocket, const sockaddr_in& clientAddr,
+                     SmartBuffer& smartBuffer) {
+    sendto(udpSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0,
+           (struct sockaddr*)&clientAddr, sizeof(clientAddr));
 }
 
 void UdpSocket::init() {
-    Logger::socket("[UDP Socket] Initializing socket on port: " +
-                   std::to_string(PORT));
-
     _udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
 
     if (_udpSocket == FAILURE) {
@@ -58,55 +44,52 @@ void UdpSocket::init() {
 
     if (bind(_udpSocket, (struct sockaddr*)&_udpAddr, sizeof(_udpAddr)) <
         SUCCESS) {
-        Logger::error("[UDP Socket] Failed to bind socket to port: " +
-                      std::to_string(PORT));
+        Logger::error("[UDP Socket] Failed to bind socket.");
 
-        throw std::runtime_error("Bind failed for UDP socket on port " +
-                                 std::to_string(PORT));
+        throw std::runtime_error("Bind failed for UDP socket.");
     }
 
-    Logger::socket("[UDP Socket] Successfully bound to port: " +
-                   std::to_string(PORT));
+    Logger::socket("[UDP Socket] Successfully initialized.");
 }
 
-void UdpSocket::listen() {
-    SmartBuffer smartBuffer;
+void UdpSocket::readLoop() {
+    while (true) {
+        handleRead();
+    }
+}
+
+void UdpSocket::sendLoop() {
+    while (true) {
+        handleSend();
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+}
+
+void UdpSocket::handleRead() {
+    char buffer[1024] = {0};
     sockaddr_in clientAddr;
     socklen_t addrLen = sizeof(clientAddr);
 
-    Logger::socket("[UDP Socket] Listening for incoming messages on port: " +
-                   std::to_string(PORT));
+    int bytesRead = recvfrom(_udpSocket, buffer, sizeof(buffer), 0,
+                             (struct sockaddr*)&clientAddr, &addrLen);
 
-    while (true) {
-        char rawBuffer[1024] = {0};
-        int bytesRead = recvfrom(_udpSocket, rawBuffer, sizeof(rawBuffer), 0,
-                                 (struct sockaddr*)&clientAddr, &addrLen);
+    if (bytesRead > 0) {
+        SmartBuffer smartBuffer;
+        smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer), bytesRead);
+        smartBuffer.resetRead();
 
-        if (bytesRead > 0) {
-            Logger::packet("[UDP Socket] Received " +
-                           std::to_string(bytesRead) + " bytes from " +
-                           inet_ntoa(clientAddr.sin_addr) + ":" +
-                           std::to_string(ntohs(clientAddr.sin_port)));
-
-            smartBuffer.inject(reinterpret_cast<const uint8_t*>(rawBuffer),
-                               bytesRead);
-            smartBuffer.resetRead();
-
-            Singletons::getProtocol().handleMessage(_udpSocket, smartBuffer);
-        } else {
-            Logger::warning("[UDP Socket] Failed to receive data from client.");
-        }
+        Singletons::getProtocol().handleMessage(_udpSocket, smartBuffer);
     }
+}
+
+void UdpSocket::handleSend() {
+    // @TODO
 }
 
 void UdpSocket::close() {
     if (_udpSocket != FAILURE) {
         ::close(_udpSocket);
 
-        Logger::socket("[UDP Socket] Socket on port " + std::to_string(PORT) +
-                       " successfully closed.");
-    } else {
-        Logger::warning("[UDP Socket] Attempted to close an uninitialized or "
-                        "already closed socket.");
+        Logger::socket("[UDP Socket] Closed.");
     }
 }
