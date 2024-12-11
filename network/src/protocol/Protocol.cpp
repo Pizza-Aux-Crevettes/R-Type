@@ -5,42 +5,20 @@
 ** Protocol.cpp
 */
 
-/**
- * @file Protocol.cpp
- * @brief Implementation of the Protocol class for handling different operation
- * codes (OpCodes).
- */
-
 #include "protocol/Protocol.hpp"
 #include "component/player/PlayerProtocol.hpp"
 #include "component/room/RoomProtocol.hpp"
 #include "util/Logger.hpp"
 
-/**
- * @brief Retrieves the singleton instance of the Protocol.
- * @return The singleton instance of the Protocol.
- */
 Protocol& Protocol::getInstance() {
     static Protocol instance;
     return instance;
 }
 
-/**
- * @brief Constructs the Protocol. Currently does nothing.
- */
 Protocol::Protocol() {}
 
-/**
- * @brief Destructs the Protocol. Currently does nothing.
- */
 Protocol::~Protocol() {}
 
-/**
- * @brief Handles an incoming message by dispatching it to the appropriate
- * handler based on the OpCode.
- * @param clientSocket The client socket that sent the message.
- * @param smartBuffer The buffer containing the message data.
- */
 void Protocol::handleMessage(int clientSocket, SmartBuffer& smartBuffer) {
     int16_t opCode;
     smartBuffer >> opCode;
@@ -67,8 +45,7 @@ void Protocol::handleMessage(int clientSocket, SmartBuffer& smartBuffer) {
         break;
 
     case NEW_PLAYER:
-        Logger::trace(
-            "[Protocol] Dispatching to PlayerProtocol::newPlayer");
+        Logger::trace("[Protocol] Dispatching to PlayerProtocol::newPlayer");
 
         PlayerProtocol::newPlayer(clientSocket, smartBuffer);
         break;
