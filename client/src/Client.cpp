@@ -24,39 +24,34 @@ Client::~Client() {}
 
 void Client::listenServer(sf::RenderWindow* win) {
     std::map<int, std::map<std::string, std::any>> newItems = {
-        {
-            1,
-               {{"Texture", std::string("../assets/sprite/tentacles.png")},
-                {"Position", std::pair<float, float>(500.0f, 500.0f)}}
-        },
-           {2,
-           {{"Texture", std::string("../assets/sprite/spaceship.png")},
-           {"Position", std::pair<float, float>(200.0, 200.0)}}}
-    };
-            // Le premier truc que nous envoie Benjamin au départ
+        {1,
+         {{"Texture", std::string("../assets/sprite/tentacles.png")},
+          {"Position", std::pair<float, float>(500.0f, 500.0f)}}},
+        {2,
+         {{"Texture", std::string("../assets/sprite/spaceship.png")},
+          {"Position", std::pair<float, float>(200.0, 200.0)}}}};
+    // Le premier truc que nous envoie Benjamin au départ
 
     setItems(newItems);
     CompareEntities();
 
     while (win->isOpen()) {
         std::map<int, std::map<std::string, std::any>> updateItems = {
-            {
-                1,
-                   {{"Texture", std::string("../assets/sprite/tentacles.png")},
-                    {"Position", std::pair<float, float>(100.0f, 100.0f)}}
-            },
-               {2,
-               {{"Texture", std::string("../assets/sprite/tentacles.png")},
-               {"Position", std::pair<float, float>(100.0, 100.0)}}}
-        }; // exemple des trucs suivant que nous envoie Benjamin
+            {1,
+             {{"Texture", std::string("../assets/sprite/tentacles.png")},
+              {"Position", std::pair<float, float>(100.0f, 100.0f)}}},
+            {2,
+             {{"Texture", std::string("../assets/sprite/tentacles.png")},
+              {"Position", std::pair<float, float>(
+                               100.0, 100.0)}}}}; // exemple des trucs suivant
+                                                  // que nous envoie Benjamin
         setUpdateItems(updateItems);
         CompareEntities();
     }
 }
 
 void Client::CompareEntities() {
-    for (const auto& [id, entity] :
-         _items) {
+    for (const auto& [id, entity] : _items) {
         if (auto search = _updateItems.find(id); search != _updateItems.end()) {
             CompareComponents(entity, search->second, id);
         } else {
@@ -68,32 +63,38 @@ void Client::CompareEntities() {
     }
 }
 
-void Client::CreateEntity (std::map<std::string, std::any> entity, int id) {
+void Client::CreateEntity(std::map<std::string, std::any> entity, int id) {
     auto player = std::make_unique<GameEngine::Entity>(id);
     for (const auto& [key, component] : entity) {
         if (key == "Texture") {
             player->addComponent(Sprite());
-            player->addComponent(Texture(std::any_cast<std::string>(component)));
+            player->addComponent(
+                Texture(std::any_cast<std::string>(component)));
         }
         if (key == "Position") {
-            player->addComponent(Position(std::any_cast<std::pair<float, float>>(component)));
+            player->addComponent(
+                Position(std::any_cast<std::pair<float, float>>(component)));
         }
     }
     _entities.insert_or_assign(id, std::move(player));
 }
 
 void Client::CompareComponents(std::map<std::string, std::any> entity,
-                               std::map<std::string, std::any> updateEntity, int id) {
+                               std::map<std::string, std::any> updateEntity,
+                               int id) {
     GameEngine::System system;
     for (const auto& [key, component] : updateEntity) {
         if (auto search = entity.find(key); search != entity.end()) {
             if (component.type() == search->second.type()) {
                 if (component.type() == typeid(std::pair<float, float>)) {
                     if (std::any_cast<std::pair<float, float>>(component) !=
-                        std::any_cast<std::pair<float, float>>(search->second)) {
+                        std::any_cast<std::pair<float, float>>(
+                            search->second)) {
 
                         std::cout << "tout est à jour" << std::endl;
-                        system.update(*_entities[id],GameEngine::UpdateType::Position, component);
+                        system.update(*_entities[id],
+                                      GameEngine::UpdateType::Position,
+                                      component);
                     }
                 } else if (component.type() == typeid(float)) {
                     if (std::any_cast<float>(component) !=

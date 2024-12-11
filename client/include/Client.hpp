@@ -39,6 +39,7 @@ class Client {
     void listenServer(sf::RenderWindow* win);
     void CompareEntities();
     void CompareComponents(std::map<std::string, std::any> entity,
-                           std::map<std::string, std::any> updateEntity, int id);
-    void CreateEntity (std::map<std::string, std::any>, int);
+                           std::map<std::string, std::any> updateEntity,
+                           int id);
+    void CreateEntity(std::map<std::string, std::any>, int);
 };
