@@ -16,9 +16,9 @@ class Room {
     Room(const std::string& code, const std::shared_ptr<Player>& owner,
          size_t capacity, bool isPublic);
 
-    [[nodiscard]] [[nodiscard]] const std::string& getCode() const;
+    [[nodiscard]] const std::string& getCode() const;
     [[nodiscard]] const std::shared_ptr<Player>& getOwner() const;
-    [[nodiscard]] [[nodiscard]] size_t getCapacity() const;
+    [[nodiscard]] size_t getCapacity() const;
     [[nodiscard]] bool isPublic() const;
     [[nodiscard]] const std::vector<std::shared_ptr<Player>>&
     getPlayers() const;

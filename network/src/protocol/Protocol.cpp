@@ -41,6 +41,9 @@ void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer) {
         PlayerProtocol::newPlayer(clientSocket, smartBuffer);
         break;
 
+    case HOTKEY_PRESSED:
+
+
     default:
         Logger::error("[Protocol] Received unknown OpCode: " +
                       std::to_string(opCode));

@@ -21,7 +21,7 @@ class PlayerManager {
     std::shared_ptr<Player> createPlayer(int32_t userId,
                                          const std::string& name);
     bool removePlayer(int32_t userId);
-    [[nodiscard]] [[nodiscard]] std::shared_ptr<Player>
+    [[nodiscard]] std::shared_ptr<Player>
     findPlayerById(int32_t userId) const;
     std::shared_ptr<Player> createPlayerByThread(const std::string& name);
     [[nodiscard]] const std::unordered_map<int32_t, std::shared_ptr<Player>>&
