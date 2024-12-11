@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <Entity.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <any>
@@ -21,7 +22,7 @@ class Client {
   private:
     std::map<int, std::map<std::string, std::any>> _items;
     std::map<int, std::map<std::string, std::any>> _updateItems;
-    std::map<int, std::any> _entities;
+    std::map<int, std::unique_ptr<GameEngine::Entity>> _entities;
 
   public:
     Client();
@@ -33,11 +34,12 @@ class Client {
     void setUpdateItems(std::map<int, std::map<std::string, std::any>>);
     std::map<int, std::map<std::string, std::any>> getUpdateItems();
 
-    void setEntities(std::map<int, std::any>);
-    std::map<int, std::any> getEntities();
+    std::map<int, std::unique_ptr<GameEngine::Entity>>& getEntities();
 
     void listenServer(sf::RenderWindow* win);
     void CompareEntities();
     void CompareComponents(std::map<std::string, std::any> entity,
-                           std::map<std::string, std::any> updateEntity);
+                           std::map<std::string, std::any> updateEntity,
+                           int id);
+    void CreateEntity(std::map<std::string, std::any>, int);
 };

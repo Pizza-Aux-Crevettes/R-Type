@@ -11,6 +11,11 @@
 
 #include "Client.hpp"
 #include "InputClient.hpp"
+#include <Entity.hpp>
+#include <System.hpp>
+#include <components/Position.hpp>
+#include <components/Sprite.hpp>
+#include <components/Texture.hpp>
 #include <thread>
 
 Client::Client() {}
@@ -20,94 +25,90 @@ Client::~Client() {}
 void Client::listenServer(sf::RenderWindow* win) {
     std::map<int, std::map<std::string, std::any>> newItems = {
         {1,
-         {{"PosX", 500},
-          {"PosY", 500},
-          {"color", std::string("Rose")},
-          {"SizeX", 20},
-          {"SizeY", 30}}},
+         {{"Texture", std::string("../assets/sprite/tentacles.png")},
+          {"Position", std::pair<float, float>(500.0f, 500.0f)}}},
         {2,
-         {{"PosX", 400},
-          {"PosY", 400},
-          {"color", std::string("Orange")},
-          {"SizeX", 40},
-          {"SizeY", 50}}},
-    }; // Le premier truc que nous envoie Benjamin au départ
+         {{"Texture", std::string("../assets/sprite/spaceship.png")},
+          {"Position", std::pair<float, float>(200.0, 200.0)}}}};
+    // Le premier truc que nous envoie Benjamin au départ
 
     setItems(newItems);
+    CompareEntities();
 
     while (win->isOpen()) {
         std::map<int, std::map<std::string, std::any>> updateItems = {
             {1,
-             {{"PosX", 500},
-              {"PosY", 500},
-              {"color", std::string("Red")},
-              {"SizeX", 20},
-              {"SizeY", 30}}},
+             {{"Texture", std::string("../assets/sprite/tentacles.png")},
+              {"Position", std::pair<float, float>(100.0f, 100.0f)}}},
             {2,
-             {{"PosX", 400},
-              {"PosY", 400},
-              {"color", std::string("Green")},
-              {"SizeX", 40},
-              {"SizeY", 50}}},
-            {3,
-             {{"PosX", 400},
-              {"PosY", 400},
-              {"color", std::string("Yellow")},
-              {"SizeX", 40},
-              {"SizeY", 50}}},
-        }; // exemple des trucs suivant que nous envoie Benjamin
+             {{"Texture", std::string("../assets/sprite/tentacles.png")},
+              {"Position", std::pair<float, float>(
+                               100.0, 100.0)}}}}; // exemple des trucs suivant
+                                                  // que nous envoie Benjamin
         setUpdateItems(updateItems);
         CompareEntities();
     }
 }
 
 void Client::CompareEntities() {
-
-    for (const auto& [id, entity] :
-         _updateItems) { // chercher dans la liste actuelle si l'id de l'update
-                         // existe ou non
-        if (auto search = _items.find(id); search != _items.end()) {
-            std::cout << "l'entité existe déjà" << std::endl;
-            CompareComponents(entity, search->second);
+    for (const auto& [id, entity] : _items) {
+        if (auto search = _updateItems.find(id); search != _updateItems.end()) {
+            CompareComponents(entity, search->second, id);
         } else {
-            std::cout << "créer l'entité" << std::endl;
+            CreateEntity(entity, id);
         }
     }
-    setItems(_updateItems);
+    if (_updateItems.size() > 0) {
+        setItems(_updateItems);
+    }
+}
+
+void Client::CreateEntity(std::map<std::string, std::any> entity, int id) {
+    auto player = std::make_unique<GameEngine::Entity>(id);
+    for (const auto& [key, component] : entity) {
+        if (key == "Texture") {
+            player->addComponent(Sprite());
+            player->addComponent(
+                Texture(std::any_cast<std::string>(component)));
+        }
+        if (key == "Position") {
+            player->addComponent(
+                Position(std::any_cast<std::pair<float, float>>(component)));
+        }
+    }
+    _entities.insert_or_assign(id, std::move(player));
 }
 
 void Client::CompareComponents(std::map<std::string, std::any> entity,
-                               std::map<std::string, std::any> updateEntity) {
+                               std::map<std::string, std::any> updateEntity,
+                               int id) {
+    GameEngine::System system;
     for (const auto& [key, component] : updateEntity) {
         if (auto search = entity.find(key); search != entity.end()) {
             if (component.type() == search->second.type()) {
-                if (component.type() == typeid(int)) {
-                    if (std::any_cast<int>(component) ==
-                        std::any_cast<int>(search->second)) {
+                if (component.type() == typeid(std::pair<float, float>)) {
+                    if (std::any_cast<std::pair<float, float>>(component) !=
+                        std::any_cast<std::pair<float, float>>(
+                            search->second)) {
+
                         std::cout << "tout est à jour" << std::endl;
-                    } else {
-                        std::cout << "il faut appeller system pour update"
-                                  << std::endl;
+                        system.update(*_entities[id],
+                                      GameEngine::UpdateType::Position,
+                                      component);
                     }
                 } else if (component.type() == typeid(float)) {
-                    if (std::any_cast<float>(component) ==
+                    if (std::any_cast<float>(component) !=
                         std::any_cast<float>(search->second)) {
                         std::cout << "tout est à jour" << std::endl;
-                    } else {
-                        std::cout << "il faut appeller system pour update"
-                                  << std::endl;
                     }
                 } else if (component.type() == typeid(std::string)) {
-                    if (std::any_cast<std::string>(component) ==
+                    if (std::any_cast<std::string>(component) !=
                         std::any_cast<std::string>(search->second)) {
                         std::cout << std::any_cast<std::string>(component)
                                   << " "
                                   << std::any_cast<std::string>(search->second)
                                   << std::endl;
                         std::cout << "tout est à jour" << std::endl;
-                    } else {
-                        std::cout << "il faut appeller system pour update"
-                                  << std::endl;
                     }
                 }
             }
@@ -123,6 +124,7 @@ void Client::manageClient() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Client Game");
     std::thread serverThread(std::bind(&Client::listenServer, this, &window));
     InputClient input;
+    GameEngine::System system;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -133,7 +135,9 @@ void Client::manageClient() {
                 input.checkKey(event);
         }
         window.clear();
-
+        if (_entities.size() > 0) {
+            system.render(window, _entities);
+        }
         window.display();
     }
     serverThread.join();
@@ -156,10 +160,6 @@ std::map<int, std::map<std::string, std::any>> Client::getUpdateItems() {
     return _updateItems;
 }
 
-void Client::setEntities(std::map<int, std::any> entities) {
-    _entities = entities;
-}
-
-std::map<int, std::any> Client::getEntities() {
+std::map<int, std::unique_ptr<GameEngine::Entity>>& Client::getEntities() {
     return _entities;
 }
