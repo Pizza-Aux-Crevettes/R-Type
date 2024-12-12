@@ -34,6 +34,7 @@ private:
   Protocol(const Protocol&) = delete;
   Protocol& operator=(const Protocol&) = delete;
 
+  void handleDefault(SmartBuffer& smartBuffer);
   void handleCreateRoomCallback(SmartBuffer& smartBuffer);
   void handleCreateRoomBroadcast(SmartBuffer& smartBuffer);
   void handleJoinRoomCallback(SmartBuffer& smartBuffer);
