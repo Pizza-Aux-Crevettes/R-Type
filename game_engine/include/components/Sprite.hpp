@@ -8,17 +8,19 @@
 #pragma once
 
 #include "Components.hpp"
+#include "Texture.hpp"
+
 #include <string>
 #include <vector>
 
 class Sprite : public Component {
   public:
-    Sprite();
+    Sprite(std::pair<float, float> size = {-1, -1});
     ~Sprite();
     std::string getTexturePath() const;
     void setTexturePath(std::string texturePath);
-    std::pair<double, double> getSize() const;
-    void setSize(std::pair<double, double> size);
+    std::pair<float, float> getSize() const;
+    void setSize(std::pair<float, float> size);
     bool getIsLoaded() const;
     void setIsLoaded(bool isLoaded);
     sf::Sprite& getSprite();
@@ -27,7 +29,7 @@ class Sprite : public Component {
 
   private:
     std::string _texturePath;
-    std::pair<double, double> _size;
+    std::pair<float, float> _size;
     sf::Sprite _sprite;
     bool _isLoad = false;
 };
