@@ -28,35 +28,27 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     case CREATE_ROOM_CALLBACK:
         handleCreateRoomCallback(smartBuffer);
         break;
-
     case CREATE_ROOM_BROADCAST:
         handleCreateRoomBroadcast(smartBuffer);
         break;
-
     case JOIN_ROOM_CALLBACK:
         handleJoinRoomCallback(smartBuffer);
         break;
-
     case JOIN_ROOM_BROADCAST:
         handleJoinRoomBroadcast(smartBuffer);
         break;
-
     case DELETE_ROOM_CALLBACK:
         handleDeleteRoomCallback(smartBuffer);
         break;
-
     case DELETE_ROOM_BROADCAST:
         handleDeleteRoomBroadcast(smartBuffer);
         break;
-
     case NEW_PLAYER_BROADCAST:
         handleNewPlayerBroadcast(smartBuffer);
         break;
-
     case PLAYER_UPDATE_POSITION:
         handlePlayerUpdatePosition(smartBuffer);
         break;
-
     default:
         std::cerr << "[Protocol] Unknown OpCode received: " << opCode << std::endl;
         break;
