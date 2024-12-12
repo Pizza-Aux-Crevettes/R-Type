@@ -22,6 +22,9 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     smartBuffer >> opCode;
 
     switch (opCode) {
+    case DEFAULT:
+        handleDefault(smartBuffer);
+        break;
     case CREATE_ROOM_CALLBACK:
         handleCreateRoomCallback(smartBuffer);
         break;
@@ -58,6 +61,12 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
         std::cerr << "[Protocol] Unknown OpCode received: " << opCode << std::endl;
         break;
     }
+}
+
+void Protocol::handleDefault(SmartBuffer& smartBuffer) {
+    std::string test;
+    smartBuffer >> test;
+    std::cout << "[Protocol] DEFAULT - Test: " << test << std::endl;
 }
 
 void Protocol::handleCreateRoomCallback(SmartBuffer& smartBuffer) {

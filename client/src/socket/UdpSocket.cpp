@@ -6,6 +6,8 @@
 */
 
 #include "socket/UdpSocket.hpp"
+
+#include "../../../network/include/util/Logger.hpp"
 #include "util/Config.hpp"
 #include <stdexcept>
 #include <sys/socket.h>
@@ -23,6 +25,9 @@ void UdpSocket::init() {
     if (_socket == FAILURE) {
         throw std::runtime_error("Failed to create UDP socket");
     }
+    SmartBuffer smartBuffer;
+    smartBuffer << static_cast<int16_t>(0);
+    sendBuffer(smartBuffer);
 }
 
 void UdpSocket::sendBuffer(const SmartBuffer& smartBuffer) {
