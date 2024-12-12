@@ -19,7 +19,7 @@
  *
  * @param texturePath The path to the texture file.
  */
-Texture::Texture(std::string texturePath) : _texturePath(texturePath) {}
+Texture::Texture(std::string texturePath, std::vector<int> textureRect) : _texturePath(texturePath), _textureRect(textureRect) {}
 
 /**
  * @brief Get the texture file path.
@@ -41,6 +41,10 @@ std::string Texture::getTexturePath() const {
  */
 void Texture::setTexturePath(std::string texturePath) {
     this->_texturePath = texturePath;
+}
+
+std::vector<int> Texture::getTextureRect() const {
+    return this->_textureRect;
 }
 
 bool Texture::getIsLoaded() const {

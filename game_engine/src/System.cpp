@@ -23,12 +23,20 @@ static void spriteSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
 
         if (!textureComp.getIsLoaded()) {
             textureComp.getTexture().loadFromFile(textureComp.getTexturePath());
+            textureComp.getTexture().setSmooth(true);
             textureComp.setIsLoaded(true);
         }
         if (!spriteComp.getIsLoaded()) {
+            if (textureComp.getTextureRect().size() == 4) {
+                const auto textureRect = textureComp.getTextureRect();
+                spriteComp.getSprite().setTextureRect(sf::IntRect(textureRect[0], textureRect[1], textureRect[2], textureRect[3]));
+            }
             spriteComp.getSprite().setTexture(textureComp.getTexture());
             spriteComp.getSprite().setPosition(positionComp.getPositionX(),
                                                positionComp.getPositionY());
+            if (spriteComp.getSize().first != -1 && spriteComp.getSize().second != -1) {
+                spriteComp.getSprite().setScale(spriteComp.getSize().first, spriteComp.getSize().second);
+            }
             spriteComp.setIsLoaded(true);
         }
         window.draw(spriteComp.getSprite());
