@@ -6,6 +6,7 @@
 */
 
 #include "System.hpp"
+#include <components/Color.hpp>
 #include <components/Position.hpp>
 #include <components/Sprite.hpp>
 #include <components/Text.hpp>
@@ -23,19 +24,29 @@ static void spriteSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
 
         if (!textureComp.getIsLoaded()) {
             textureComp.getTexture().loadFromFile(textureComp.getTexturePath());
-            textureComp.getTexture().setSmooth(true);
             textureComp.setIsLoaded(true);
         }
         if (!spriteComp.getIsLoaded()) {
             if (textureComp.getTextureRect().size() == 4) {
                 const auto textureRect = textureComp.getTextureRect();
-                spriteComp.getSprite().setTextureRect(sf::IntRect(textureRect[0], textureRect[1], textureRect[2], textureRect[3]));
+                spriteComp.getSprite().setTextureRect(
+                    sf::IntRect(textureRect[0], textureRect[1], textureRect[2],
+                                textureRect[3]));
             }
             spriteComp.getSprite().setTexture(textureComp.getTexture());
             spriteComp.getSprite().setPosition(positionComp.getPositionX(),
                                                positionComp.getPositionY());
-            if (spriteComp.getSize().first != -1 && spriteComp.getSize().second != -1) {
-                spriteComp.getSprite().setScale(spriteComp.getSize().first, spriteComp.getSize().second);
+            if (spriteComp.getSize().first != -1 &&
+                spriteComp.getSize().second != -1) {
+                spriteComp.getSprite().setScale(spriteComp.getSize().first,
+                                                spriteComp.getSize().second);
+            }
+            if (entity.hasComponent<Color>() &&
+                entity.getComponent<Color>().getColor().size() == 4) {
+                auto& colorComp = entity.getComponent<Color>();
+                const auto color = colorComp.getColor();
+                spriteComp.getSprite().setColor(
+                    sf::Color(color[0], color[1], color[2], color[3]));
             }
             spriteComp.setIsLoaded(true);
         }
@@ -55,6 +66,13 @@ static void textSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
             textComp.getText().setCharacterSize(textComp.getCharacterSize());
             textComp.getText().setPosition(positionComp.getPositionX(),
                                            positionComp.getPositionY());
+            if (entity.hasComponent<Color>() &&
+                entity.getComponent<Color>().getColor().size() == 4) {
+                auto& colorComp = entity.getComponent<Color>();
+                const auto color = colorComp.getColor();
+                textComp.getText().setColor(
+                    sf::Color(color[0], color[1], color[2], color[3]));
+            }
             textComp.setIsLoaded(true);
         }
         window.draw(textComp.getText());
