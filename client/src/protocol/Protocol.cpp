@@ -54,10 +54,6 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
         handlePlayerUpdatePosition(smartBuffer);
         break;
 
-    case HOTKEY_PRESSED:
-        handleHotkeyPressed(smartBuffer);
-        break;
-
     default:
         std::cerr << "[Protocol] Unknown OpCode received: " << opCode << std::endl;
         break;
@@ -116,12 +112,4 @@ void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
     smartBuffer >> playerId >> x >> y;
     std::cout << "[Protocol] PLAYER_UPDATE_POSITION - Player ID: " << playerId
               << ", X: " << x << ", Y: " << y << std::endl;
-}
-
-void Protocol::handleHotkeyPressed(SmartBuffer& smartBuffer) {
-    int32_t playerId;
-    int16_t hotkey;
-    smartBuffer >> playerId >> hotkey;
-    std::cout << "[Protocol] HOTKEY_PRESSED - Player ID: " << playerId
-              << ", Hotkey: " << hotkey << std::endl;
 }
