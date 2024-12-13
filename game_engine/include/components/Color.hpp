@@ -12,7 +12,7 @@
 
 class Color : public Component {
   public:
-    Color(std::vector<double> color = {0.0, 0.0, 0.0});
+    Color(std::vector<double> color = {});
     ~Color();
     std::vector<double> getColor() const;
     void setColor(std::vector<double> color);
@@ -20,6 +20,4 @@ class Color : public Component {
 
   private:
     std::vector<double> _initColor;
-    sf::Color _color;
-    bool _isLoad = false;
 };
