@@ -1,0 +1,273 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"sfml_export_targets"
+		],
+		"files" : 
+		[
+			"external/SFML/CMakeLists.txt",
+			"external/SFML/cmake/Macros.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 318,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 418,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 419,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 451,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 457,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 461,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 465,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 469,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 473,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 477,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 529,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 440,
+				"parent" : 11
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 444,
+				"parent" : 11
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "devel",
+			"destination" : ".",
+			"paths" : 
+			[
+				"external/SFML/include"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "share/doc/SFML",
+			"paths" : 
+			[
+				"external/SFML/license.md"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "share/doc/SFML",
+			"paths" : 
+			[
+				"external/SFML/readme.md"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"external/SFML/extlibs/libs-osx/Frameworks/freetype.framework"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"external/SFML/extlibs/libs-osx/Frameworks/FLAC.framework"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"external/SFML/extlibs/libs-osx/Frameworks/ogg.framework"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 7,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"external/SFML/extlibs/libs-osx/Frameworks/vorbis.framework"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 8,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"external/SFML/extlibs/libs-osx/Frameworks/vorbisenc.framework"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 9,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"external/SFML/extlibs/libs-osx/Frameworks/vorbisfile.framework"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 10,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"external/SFML/extlibs/libs-osx/Frameworks/OpenAL.framework"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 12,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/SFML",
+			"exportName" : "SFMLConfigExport",
+			"exportTargets" : 
+			[
+				{
+					"id" : "sfml-system::@d9df169e66821bd60c7a",
+					"index" : 6
+				},
+				{
+					"id" : "sfml-window::@7c316fa3aa9796628c8b",
+					"index" : 7
+				},
+				{
+					"id" : "OpenGL::@7c316fa3aa9796628c8b",
+					"index" : 0
+				},
+				{
+					"id" : "sfml-network::@672e1b0d94f8633b57c2",
+					"index" : 5
+				},
+				{
+					"id" : "sfml-graphics::@d7496ad088900c52e5be",
+					"index" : 4
+				},
+				{
+					"id" : "Freetype::@d7496ad088900c52e5be",
+					"index" : 0
+				},
+				{
+					"id" : "OpenAL::@6e82b9a58484f53fd140",
+					"index" : 0
+				},
+				{
+					"id" : "VORBIS::@6e82b9a58484f53fd140",
+					"index" : 0
+				},
+				{
+					"id" : "FLAC::@6e82b9a58484f53fd140",
+					"index" : 0
+				},
+				{
+					"id" : "sfml-audio::@6e82b9a58484f53fd140",
+					"index" : 3
+				}
+			],
+			"paths" : 
+			[
+				"external/SFML/CMakeFiles/Export/3937c6824958577f216dad0a66bc6149/SFMLSharedTargets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 13,
+			"component" : "devel",
+			"destination" : "lib/cmake/SFML",
+			"paths" : 
+			[
+				"cmake-build-debug/external/SFML/SFMLConfig.cmake",
+				"cmake-build-debug/external/SFML/SFMLConfigDependencies.cmake",
+				"cmake-build-debug/external/SFML/SFMLConfigVersion.cmake"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "external/SFML",
+		"source" : "external/SFML"
+	}
+}

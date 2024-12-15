@@ -5,11 +5,11 @@
 ** NetworkClient.cpp
 */
 
+#include <iostream>
+#include <thread>
 #include "protocol/NetworkClient.hpp"
 #include "protocol/Protocol.hpp"
 #include "util/Logger.hpp"
-#include <iostream>
-#include <thread>
 
 NetworkClient::NetworkClient(const std::string& serverAddress,
                              const int serverPort)
@@ -32,30 +32,30 @@ void NetworkClient::connectUDP() {
     Logger::info("[NetworkClient] UDP initialized.");
 }
 
-void NetworkClient::run() {
-    std::thread tcpThread(&NetworkClient::handleTcpMessages, this);
-    std::thread udpThread(&NetworkClient::handleUdpMessages, this);
+void NetworkClient::run(Client *client) {
+    std::thread tcpThread(&NetworkClient::handleTcpMessages, this, client);
+    std::thread udpThread(&NetworkClient::handleUdpMessages, this, client);
 
     tcpThread.join();
     udpThread.join();
 }
 
-void NetworkClient::handleTcpMessages() const {
+void NetworkClient::handleTcpMessages(Client *client) const {
     try {
         while (true) {
             SmartBuffer buffer = tcpSocket.receive();
-            Protocol::get().handleMessage(buffer);
+            Protocol::get().handleMessage(buffer, client);
         }
     } catch (const std::exception& e) {
         Logger::error("[NetworkClient] TCP Error: " + std::string(e.what()));
     }
 }
 
-void NetworkClient::handleUdpMessages() {
+void NetworkClient::handleUdpMessages(Client *client) {
     try {
         while (true) {
             SmartBuffer buffer = udpSocket.receive();
-            Protocol::get().handleMessage(buffer);
+            Protocol::get().handleMessage(buffer, client);
         }
     } catch (const std::exception& e) {
         Logger::error("[NetworkClient] UDP Error: " + std::string(e.what()));

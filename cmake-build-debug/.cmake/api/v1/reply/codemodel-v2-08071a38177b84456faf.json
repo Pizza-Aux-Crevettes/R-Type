@@ -1,0 +1,372 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						8,
+						9,
+						10,
+						11
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "external/SFML",
+					"childIndexes" : 
+					[
+						2
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-external.SFML-Debug-95c910caedf12b39ea6f.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.7.2"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "external/SFML"
+				},
+				{
+					"build" : "external/SFML/src/SFML",
+					"childIndexes" : 
+					[
+						3,
+						4,
+						5,
+						6,
+						7
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-external.SFML.src.SFML-Debug-9a770813b5a7611487d2.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.7.2"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "external/SFML/src/SFML"
+				},
+				{
+					"build" : "external/SFML/src/SFML/System",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-external.SFML.src.SFML.System-Debug-4d8369476cd590f2324a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.7.2"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 1,
+					"source" : "external/SFML/src/SFML/System",
+					"targetIndexes" : 
+					[
+						6
+					]
+				},
+				{
+					"build" : "external/SFML/src/SFML/Window",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-external.SFML.src.SFML.Window-Debug-10ccab682a8b8d9cee82.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.7.2"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 1,
+					"source" : "external/SFML/src/SFML/Window",
+					"targetIndexes" : 
+					[
+						7
+					]
+				},
+				{
+					"build" : "external/SFML/src/SFML/Network",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-external.SFML.src.SFML.Network-Debug-4779718d1d6949b76a60.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.7.2"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 1,
+					"source" : "external/SFML/src/SFML/Network",
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"build" : "external/SFML/src/SFML/Graphics",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-external.SFML.src.SFML.Graphics-Debug-197d03f5dc9271069889.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.7.2"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 1,
+					"source" : "external/SFML/src/SFML/Graphics",
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"build" : "external/SFML/src/SFML/Audio",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-external.SFML.src.SFML.Audio-Debug-f27edb70dc16bf063759.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.7.2"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 1,
+					"source" : "external/SFML/src/SFML/Audio",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "external/smart-buffer-cpp",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-external.smart-buffer-cpp-Debug-1ff630d529bc402122c8.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "external/smart-buffer-cpp",
+					"targetIndexes" : 
+					[
+						8
+					]
+				},
+				{
+					"build" : "game_engine",
+					"jsonFile" : "directory-game_engine-Debug-b6ad68f15201e192db75.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "game_engine",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "network",
+					"jsonFile" : "directory-network-Debug-5de104fc96d9b5a94d96.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 4,
+					"source" : "network",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "client",
+					"jsonFile" : "directory-client-Debug-eda4c8a4dacec2844350.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 5,
+					"source" : "client",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "RType"
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					],
+					"name" : "SFML",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						3,
+						4,
+						5,
+						6,
+						7
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						8
+					],
+					"name" : "SmartBuffer",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						8
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						9
+					],
+					"name" : "game_engine",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						10
+					],
+					"name" : "network",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						11
+					],
+					"name" : "client",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 11,
+					"id" : "Client::@b0c487aac068df482bf0",
+					"jsonFile" : "target-Client-Debug-5f44acadaefb8b97f614.json",
+					"name" : "Client",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 9,
+					"id" : "GameEngine::@8c493319eda5f7e18bf5",
+					"jsonFile" : "target-GameEngine-Debug-33d210868b2d7c18c60a.json",
+					"name" : "GameEngine",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 10,
+					"id" : "Network::@39732e8ab9fc593479e7",
+					"jsonFile" : "target-Network-Debug-7482cd5bd22e450bfa98.json",
+					"name" : "Network",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "sfml-audio::@6e82b9a58484f53fd140",
+					"jsonFile" : "target-sfml-audio-Debug-ff3ce77e06cf4351fd0b.json",
+					"name" : "sfml-audio",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "sfml-graphics::@d7496ad088900c52e5be",
+					"jsonFile" : "target-sfml-graphics-Debug-ebac8343e633453410ee.json",
+					"name" : "sfml-graphics",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "sfml-network::@672e1b0d94f8633b57c2",
+					"jsonFile" : "target-sfml-network-Debug-c726ff26dafe372bf01a.json",
+					"name" : "sfml-network",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "sfml-system::@d9df169e66821bd60c7a",
+					"jsonFile" : "target-sfml-system-Debug-06ef06087c4c1e48c741.json",
+					"name" : "sfml-system",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "sfml-window::@7c316fa3aa9796628c8b",
+					"jsonFile" : "target-sfml-window-Debug-ef59f2a9669c4ff0c957.json",
+					"name" : "sfml-window",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "smart_buffer::@4d429c4a6bab8ce91945",
+					"jsonFile" : "target-smart_buffer-Debug-1c33ef21066f3e4913c0.json",
+					"name" : "smart_buffer",
+					"projectIndex" : 2
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/anastasiabouby/Developer/Epitech/R-Types/cmake-build-debug",
+		"source" : "/Users/anastasiabouby/Developer/Epitech/R-Types"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

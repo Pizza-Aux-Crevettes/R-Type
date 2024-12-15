@@ -23,29 +23,10 @@ Client::Client() {}
 Client::~Client() {}
 
 void Client::listenServer(sf::RenderWindow* win) {
-    std::map<int, std::map<std::string, std::any>> newItems = {
-        {1,
-         {{"Texture", std::string("../assets/sprite/tentacles.png")},
-          {"Position", std::pair<float, float>(500.0f, 500.0f)}}},
-        {2,
-         {{"Texture", std::string("../assets/sprite/spaceship.png")},
-          {"Position", std::pair<float, float>(200.0, 200.0)}}}};
-    // Le premier truc que nous envoie Benjamin au départ
-
-    setItems(newItems);
     CompareEntities();
 
     while (win->isOpen()) {
-        std::map<int, std::map<std::string, std::any>> updateItems = {
-            {1,
-             {{"Texture", std::string("../assets/sprite/tentacles.png")},
-              {"Position", std::pair<float, float>(100.0f, 100.0f)}}},
-            {2,
-             {{"Texture", std::string("../assets/sprite/tentacles.png")},
-              {"Position", std::pair<float, float>(
-                               100.0, 100.0)}}}}; // exemple des trucs suivant
-                                                  // que nous envoie Benjamin
-        setUpdateItems(updateItems);
+
         CompareEntities();
     }
 }
@@ -55,16 +36,19 @@ void Client::CompareEntities() {
         if (auto search = _updateItems.find(id); search != _updateItems.end()) {
             CompareComponents(entity, search->second, id);
         } else {
+            std::cout << "Create new entity" << std::endl;
             CreateEntity(entity, id);
         }
     }
     if (_updateItems.size() > 0) {
         setItems(_updateItems);
+    } else {
+        setUpdateItems(_items);
     }
 }
 
 void Client::CreateEntity(std::map<std::string, std::any> entity, int id) {
-    auto player = std::make_unique<GameEngine::Entity>(id);
+    auto player = std::make_shared<GameEngine::Entity>(id);
     for (const auto& [key, component] : entity) {
         if (key == "Texture") {
             player->addComponent(Sprite());
@@ -147,6 +131,10 @@ void Client::setItems(std::map<int, std::map<std::string, std::any>> items) {
     _items = items;
 }
 
+void Client::addItem(std::map<int, std::map<std::string, std::any>> items) {
+    _items.insert(items.begin(), items.end());
+}
+
 std::map<int, std::map<std::string, std::any>> Client::getItems() {
     return _items;
 }
@@ -160,6 +148,6 @@ std::map<int, std::map<std::string, std::any>> Client::getUpdateItems() {
     return _updateItems;
 }
 
-std::map<int, std::unique_ptr<GameEngine::Entity>>& Client::getEntities() {
+std::map<int, std::shared_ptr<GameEngine::Entity>>& Client::getEntities() {
     return _entities;
 }
