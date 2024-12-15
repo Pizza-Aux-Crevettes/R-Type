@@ -50,7 +50,7 @@ void RoomProtocol::createRoom(const int clientSocket,
                         roomCode);
     }
 
-    TcpSocket::send(clientSocket, smartBuffer);
+    TcpSocket::sendToOne(clientSocket, smartBuffer);
 }
 
 /**
@@ -87,7 +87,7 @@ void RoomProtocol::joinRoom(const int clientSocket, SmartBuffer& smartBuffer) {
                      " joined room: " + roomCode);
     }
 
-    TcpSocket::send(clientSocket, smartBuffer);
+    TcpSocket::sendToOne(clientSocket, smartBuffer);
 }
 
 /**
@@ -127,5 +127,5 @@ void RoomProtocol::deleteRoom(const int clientSocket,
                      roomCode);
     }
 
-    TcpSocket::send(clientSocket, smartBuffer);
+    TcpSocket::sendToOne(clientSocket, smartBuffer);
 }

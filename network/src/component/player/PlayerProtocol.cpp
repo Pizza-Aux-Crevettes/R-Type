@@ -26,10 +26,14 @@ void PlayerProtocol::newPlayer(const int clientSocket,
 
     const auto player = PlayerManager::get().createPlayer(name);
 
-    smartBuffer << player->getId();
-
     Logger::info("[PlayerProtocol] Assigned player ID " +
                  std::to_string(player->getId()) + " to client.");
 
-    TcpSocket::send(clientSocket, smartBuffer);
+    smartBuffer << player->getId();
+    TcpSocket::sendToOne(clientSocket, smartBuffer);
+
+    smartBuffer.reset();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_BROADCAST);
+    smartBuffer << player->getId() << std::string{player->getName()};
+    TcpSocket::sendToAll(smartBuffer);
 }
