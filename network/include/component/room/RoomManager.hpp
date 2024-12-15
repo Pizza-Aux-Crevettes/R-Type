@@ -16,8 +16,7 @@ class RoomManager {
     RoomManager(const RoomManager&) = delete;
     RoomManager& operator=(const RoomManager&) = delete;
 
-    static RoomManager& getInstance();
-
+    static RoomManager& get();
     std::shared_ptr<Room> createRoom(const std::shared_ptr<Player>& owner,
                                      size_t capacity, bool isPublic);
     bool deleteRoom(const std::string& roomCode,

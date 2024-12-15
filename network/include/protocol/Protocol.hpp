@@ -32,7 +32,7 @@ class Protocol {
     Protocol(const Protocol&) = delete;
     Protocol& operator=(const Protocol&) = delete;
 
-    static Protocol& getInstance();
+    static Protocol& get();
     static void handleMessage(int clientSocket, SmartBuffer& smartBuffer);
 
   private:

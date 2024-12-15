@@ -13,7 +13,7 @@
 static constexpr char charset[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                   "0123456789";
 
-RoomManager& RoomManager::getInstance() {
+RoomManager& RoomManager::get() {
     static RoomManager instance;
     return instance;
 }

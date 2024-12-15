@@ -17,7 +17,7 @@ class Server {
     Server(const Server&) = delete;
     Server& operator=(const Server&) = delete;
 
-    static Server& getInstance();
+    static Server& get();
     int start();
 
   private:

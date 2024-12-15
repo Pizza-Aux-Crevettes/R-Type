@@ -14,14 +14,25 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+std::vector<int> TcpSocket::_clients;
+std::mutex TcpSocket::_clientsMutex;
+
 TcpSocket::TcpSocket() : _tcpSocket(FAILURE) {}
 
 TcpSocket::~TcpSocket() {
     close();
 }
 
-void TcpSocket::send(const int clientSocket, const SmartBuffer& smartBuffer) {
-    ::send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0);
+void TcpSocket::sendToOne(const int clientSocket, const SmartBuffer& smartBuffer) {
+    send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0);
+}
+
+void TcpSocket::sendToAll(const SmartBuffer& smartBuffer) {
+    std::lock_guard lock(_clientsMutex);
+
+    for (const int clientSocket : _clients) {
+        send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0);
+    }
 }
 
 void TcpSocket::init() {
@@ -56,14 +67,17 @@ void TcpSocket::init() {
             Logger::warning("[TCP Socket] Accept failed.");
             continue;
         }
-        handleClientRead(clientSocket);
+
+        addClient(clientSocket);
 
         Logger::socket("[TCP Socket] Client connected: " +
                        std::to_string(clientSocket));
+
+        handleRead(clientSocket);
     }
 }
 
-void TcpSocket::handleClientRead(const int clientSocket) {
+void TcpSocket::handleRead(const int clientSocket) {
     SmartBuffer smartBuffer;
 
     while (true) {
@@ -75,6 +89,7 @@ void TcpSocket::handleClientRead(const int clientSocket) {
                            std::to_string(clientSocket));
 
             ::close(clientSocket);
+            removeClient(clientSocket);
             break;
         }
 
@@ -83,6 +98,22 @@ void TcpSocket::handleClientRead(const int clientSocket) {
 
         Protocol::handleMessage(clientSocket, smartBuffer);
     }
+}
+
+void TcpSocket::addClient(const int clientSocket) {
+    std::lock_guard lock(_clientsMutex);
+    _clients.push_back(clientSocket);
+}
+
+void TcpSocket::removeClient(const int clientSocket) {
+    std::lock_guard lock(_clientsMutex);
+    std::erase(_clients, clientSocket);
+}
+
+std::vector<int> TcpSocket::getClients() {
+    std::lock_guard lock(_clientsMutex);
+
+    return _clients;
 }
 
 void TcpSocket::close() const {

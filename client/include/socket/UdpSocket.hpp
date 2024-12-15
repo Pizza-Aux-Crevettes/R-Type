@@ -10,12 +10,12 @@
 #include "Socket.hpp"
 #include <SmartBuffer.hpp>
 
-class UdpSocket : public Socket {
+class UdpSocket final : public Socket {
   public:
     UdpSocket(const std::string& serverAddress, int port);
     ~UdpSocket() override;
 
     void init();
-    void sendBuffer(const SmartBuffer& smartBuffer);
-    SmartBuffer receiveBuffer();
+    static void send(const SmartBuffer& smartBuffer);
+    SmartBuffer receive();
 };

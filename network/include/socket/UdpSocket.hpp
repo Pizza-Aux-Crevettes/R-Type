@@ -21,7 +21,6 @@ class UdpSocket {
     [[noreturn]] void readLoop();
     [[noreturn]] void sendLoop();
     void close() const;
-
     void addClient(const sockaddr_in& clientAddr);
     std::vector<sockaddr_in> getClients();
 

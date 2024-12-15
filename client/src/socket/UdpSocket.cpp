@@ -6,9 +6,10 @@
 */
 
 #include "socket/UdpSocket.hpp"
-
-#include "../../../network/include/util/Logger.hpp"
+#include "protocol/Protocol.hpp"
+#include "socket/Singleton.hpp"
 #include "util/Config.hpp"
+#include "util/Logger.hpp"
 #include <stdexcept>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -17,7 +18,7 @@ UdpSocket::UdpSocket(const std::string& serverAddress, int port)
     : Socket(serverAddress, port) {}
 
 UdpSocket::~UdpSocket() {
-    closeSocket();
+    close();
 }
 
 void UdpSocket::init() {
@@ -25,24 +26,31 @@ void UdpSocket::init() {
     if (_socket == FAILURE) {
         throw std::runtime_error("Failed to create UDP socket");
     }
+    Singleton::get().setSavedUdpSocket(_socket);
     SmartBuffer smartBuffer;
-    smartBuffer << static_cast<int16_t>(0);
-    sendBuffer(smartBuffer);
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::DEFAULT);
+    send(smartBuffer);
+    smartBuffer.reset();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER)
+                << std::string{"Benjamin"};
+    send(smartBuffer);
 }
 
-void UdpSocket::sendBuffer(const SmartBuffer& smartBuffer) {
-    if (sendto(_socket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0,
-               reinterpret_cast<sockaddr*>(&_serverAddr),
-               sizeof(_serverAddr)) < SUCCESS) {
+void UdpSocket::send(const SmartBuffer& smartBuffer) {
+    const auto& serverAddress = Singleton::get().getSavedServerAddress();
+    if (sendto(Singleton::get().getSavedUdpSocket(), smartBuffer.getBuffer(),
+               smartBuffer.getSize(), 0,
+               reinterpret_cast<const sockaddr*>(&serverAddress),
+               sizeof(serverAddress)) < SUCCESS) {
         throw std::runtime_error("Failed to send UDP message");
     }
 }
 
-SmartBuffer UdpSocket::receiveBuffer() {
+SmartBuffer UdpSocket::receive() {
     SmartBuffer smartBuffer;
     char buffer[1024];
     socklen_t serverLen = sizeof(_serverAddr);
-    ssize_t bytesReceived =
+    const ssize_t bytesReceived =
         recvfrom(_socket, buffer, sizeof(buffer), 0,
                  reinterpret_cast<sockaddr*>(&_serverAddr), &serverLen);
 
