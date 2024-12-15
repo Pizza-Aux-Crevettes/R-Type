@@ -5,11 +5,11 @@
 ** Client.cpp
 */
 
-#include <thread>
 #include "Client.hpp"
 #include "protocol/NetworkClient.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
+#include <thread>
 
 int main() {
     try {
@@ -24,7 +24,8 @@ int main() {
             try {
                 networkClient.run();
             } catch (const std::exception& e) {
-                Logger::error("[Server Thread] Error: " + std::string(e.what()));
+                Logger::error("[Server Thread] Error: " +
+                              std::string(e.what()));
             }
         });
 

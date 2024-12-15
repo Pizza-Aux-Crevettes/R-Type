@@ -10,6 +10,6 @@
 #include <SmartBuffer.hpp>
 
 class HotkeysProtocol {
-public:
+  public:
     static void processHotkey(int clientSocket, SmartBuffer& smartBuffer);
 };

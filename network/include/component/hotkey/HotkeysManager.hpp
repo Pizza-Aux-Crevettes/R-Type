@@ -7,17 +7,17 @@
 
 #pragma once
 
-#include <unordered_map>
-#include <functional>
 #include <cstdint>
+#include <functional>
+#include <unordered_map>
 
 class HotkeysManager {
-public:
+  public:
     static HotkeysManager& getInstance();
 
     void handleHotkey(int32_t playerId, int16_t hotkey);
 
-private:
+  private:
     HotkeysManager();
     ~HotkeysManager() = default;
 

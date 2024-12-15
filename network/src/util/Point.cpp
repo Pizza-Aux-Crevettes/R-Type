@@ -18,7 +18,7 @@ double Point::getY() const {
 }
 
 Point Point::getPoint() const {
-    return Point(_x,_y);
+    return Point(_x, _y);
 }
 
 void Point::setX(const double x) {
