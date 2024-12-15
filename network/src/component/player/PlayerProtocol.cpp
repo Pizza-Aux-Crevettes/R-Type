@@ -5,11 +5,6 @@
 ** PlayerProtocol.cpp
 */
 
-/**
- * @file PlayerProtocol.cpp
- * @brief Handles player-related protocols, such as creating or retrieving a
- * player.
- */
 #include "component/player/PlayerProtocol.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "protocol/Protocol.hpp"
