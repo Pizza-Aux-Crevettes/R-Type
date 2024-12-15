@@ -39,11 +39,12 @@ class Protocol {
 
     static Protocol& get();
     static void handleMessage(SmartBuffer& smartBuffer, Client *client);
-    std::unordered_map<int32_t, std::pair<float, float>> _playerPositions;
 
   private:
     Protocol();
     ~Protocol();
+
+    static std::unordered_map<int32_t, std::pair<float, float>> _playerPositions;
 
     static void handleDefault(SmartBuffer& smartBuffer);
     static void handleCreateRoomCallback(SmartBuffer& smartBuffer);
