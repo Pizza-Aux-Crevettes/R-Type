@@ -6,6 +6,8 @@
 */
 
 #include "socket/UdpSocket.hpp"
+
+#include "component/player/PlayerManager.hpp"
 #include "protocol/Protocol.hpp"
 #include "socket/Server.hpp"
 #include "util/Config.hpp"
@@ -54,7 +56,7 @@ void UdpSocket::init() {
 
 [[noreturn]] void UdpSocket::sendLoop() {
     while (true) {
-        // handleSend();
+        handleSend();
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
@@ -79,16 +81,21 @@ void UdpSocket::handleRead() {
 }
 
 void UdpSocket::handleSend() {
-    SmartBuffer smartBuffer;
-    smartBuffer << static_cast<int16_t>(0) << std::string("Test Message");
-
     const auto clients = getClients();
+    const auto& players = PlayerManager::get().getPlayers();
 
-    if (clients.empty()) {
+    if (clients.empty() || players.empty()) {
         return;
     }
+
     for (const auto& client : clients) {
-        send(_udpSocket, client, smartBuffer);
+        for (const auto& [playerId, player] : players) {
+            SmartBuffer smartBuffer;
+            smartBuffer << static_cast<int16_t>(Protocol::OpCode::PLAYER_UPDATE_POSITION)
+                        << playerId << player->getPosition().getX() << player->getPosition().getY();
+
+            send(_udpSocket, client, smartBuffer);
+        }
     }
 }
 

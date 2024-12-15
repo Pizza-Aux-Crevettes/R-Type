@@ -54,11 +54,12 @@ void HotkeysManager::handlePlayerPosition(const int32_t playerId,
                                           const int deltaX, const int deltaY) {
     try {
         const auto player = PlayerManager::get().findPlayerById(playerId);
-        const Point position = player->getPosition();
-        Point newPosition;
+        const Point& currentPosition = player->getPosition();
+        Point newPosition = currentPosition;
+        newPosition.setPoint(currentPosition.getX() + deltaX,
+                             currentPosition.getY() + deltaY);
 
-        newPosition.setPoint(position.getX() + deltaX,
-                             position.getY() + deltaY);
+        player->setPosition(newPosition);
 
         Logger::info("[HotkeysManager] Player " + std::to_string(playerId) +
                      " moved to position (" +
