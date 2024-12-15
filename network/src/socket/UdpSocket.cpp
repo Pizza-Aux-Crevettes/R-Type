@@ -54,7 +54,7 @@ void UdpSocket::init() {
 
 [[noreturn]] void UdpSocket::sendLoop() {
     while (true) {
-        handleSend();
+        // handleSend();
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }

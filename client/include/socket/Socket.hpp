@@ -15,7 +15,7 @@ class Socket {
     Socket(const std::string& serverAddress, int port);
     virtual ~Socket();
 
-    void closeSocket();
+    void close();
 
   protected:
     int _socket;

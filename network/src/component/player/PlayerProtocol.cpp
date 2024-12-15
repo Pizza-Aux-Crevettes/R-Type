@@ -24,13 +24,7 @@ void PlayerProtocol::newPlayer(const int clientSocket,
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_CALLBACK);
 
-    if (name.empty()) {
-        name = "Player" +
-               std::to_string(PlayerManager::getInstance().getPlayers().size() +
-                              1);
-    }
-
-    const auto player = PlayerManager::getInstance().createPlayerByThread(name);
+    const auto player = PlayerManager::get().createPlayer(name);
 
     smartBuffer << player->getId();
 

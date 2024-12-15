@@ -10,7 +10,7 @@
 #include "util/Logger.hpp"
 #include <stdexcept>
 
-Server& Server::getInstance() {
+Server& Server::get() {
     static Server instance;
     return instance;
 }

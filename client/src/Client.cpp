@@ -10,7 +10,7 @@
 */
 
 #include "Client.hpp"
-#include "InputClient.hpp"
+#include "component/hotkey/HotkeysManager.hpp"
 #include <Entity.hpp>
 #include <System.hpp>
 #include <components/Position.hpp>
@@ -123,7 +123,7 @@ void Client::manageClient() {
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "Client Game");
     std::thread serverThread(std::bind(&Client::listenServer, this, &window));
-    InputClient input;
+    HotkeysManager input;
     GameEngine::System system;
 
     while (window.isOpen()) {

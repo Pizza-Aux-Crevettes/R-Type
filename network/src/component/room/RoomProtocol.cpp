@@ -36,13 +36,13 @@ void RoomProtocol::createRoom(const int clientSocket,
                   ", capacity = " + std::to_string(capacity) +
                   ", isPublic = " + std::to_string(isPublic));
 
-    const auto player = PlayerManager::getInstance().findPlayerById(userId);
+    const auto player = PlayerManager::get().findPlayerById(userId);
     const auto status = static_cast<int16_t>(!player);
 
     smartBuffer << status;
 
     if (!status) {
-        const std::string roomCode = RoomManager::getInstance()
+        const std::string roomCode = RoomManager::get()
                                          .createRoom(player, capacity, isPublic)
                                          ->getCode();
 
@@ -75,8 +75,8 @@ void RoomProtocol::joinRoom(const int clientSocket, SmartBuffer& smartBuffer) {
     Logger::trace("[RoomProtocol] Processing JOIN_ROOM. roomCode = " +
                   roomCode + ", userId = " + std::to_string(userId));
 
-    const auto player = PlayerManager::getInstance().findPlayerById(userId);
-    const auto room = RoomManager::getInstance().findRoomByCode(roomCode);
+    const auto player = PlayerManager::get().findPlayerById(userId);
+    const auto room = RoomManager::get().findRoomByCode(roomCode);
     const auto status =
         static_cast<int16_t>(!player + !room + !room->addPlayer(player));
 
@@ -113,15 +113,15 @@ void RoomProtocol::deleteRoom(const int clientSocket,
     Logger::trace("[RoomProtocol] Processing DELETE_ROOM. roomCode = " +
                   roomCode + ", userId = " + std::to_string(userId));
 
-    const auto player = PlayerManager::getInstance().findPlayerById(userId);
-    const auto room = RoomManager::getInstance().findRoomByCode(roomCode);
+    const auto player = PlayerManager::get().findPlayerById(userId);
+    const auto room = RoomManager::get().findRoomByCode(roomCode);
     const auto status =
         static_cast<int16_t>(!player + !room + (room->getOwner() != player));
 
     smartBuffer << status;
 
     if (!status) {
-        RoomManager::getInstance().deleteRoom(roomCode, player);
+        RoomManager::get().deleteRoom(roomCode, player);
 
         Logger::info("[RoomProtocol] Room deleted successfully. Room code: " +
                      roomCode);

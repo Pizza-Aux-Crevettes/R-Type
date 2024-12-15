@@ -7,8 +7,10 @@
 
 #include "component/player/PlayerManager.hpp"
 #include "util/Logger.hpp"
+#include <algorithm>
+#include <ranges>
 
-PlayerManager& PlayerManager::getInstance() {
+PlayerManager& PlayerManager::get() {
     static PlayerManager instance;
     return instance;
 }
@@ -17,11 +19,21 @@ PlayerManager::PlayerManager() = default;
 
 PlayerManager::~PlayerManager() = default;
 
-std::shared_ptr<Player> PlayerManager::createPlayer(int32_t userId,
-                                                    const std::string& name) {
+int32_t PlayerManager::getNextUserId() const {
+    if (_players.empty()) {
+        return 1;
+    }
+
+    return *std::ranges::max_element(_players | std::views::keys) + 1;
+}
+
+std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
+    const int32_t userId = getNextUserId();
+
     if (_players.contains(userId)) {
         Logger::warning("[PlayerManager] Player with userId " +
                         std::to_string(userId) + " already exists.");
+
         return nullptr;
     }
 
