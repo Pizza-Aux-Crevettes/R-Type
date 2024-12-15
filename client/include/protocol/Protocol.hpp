@@ -37,22 +37,22 @@ class Protocol {
     Protocol(const Protocol&) = delete;
     Protocol& operator=(const Protocol&) = delete;
 
-     Protocol& get();
-     void handleMessage(SmartBuffer& smartBuffer, Client *client);
+    static Protocol& get();
+    static void handleMessage(SmartBuffer& smartBuffer, Client *client);
     std::unordered_map<int32_t, std::pair<float, float>> _playerPositions;
 
   private:
     Protocol();
     ~Protocol();
 
-     void handleDefault(SmartBuffer& smartBuffer);
-     void handleCreateRoomCallback(SmartBuffer& smartBuffer);
-     void handleCreateRoomBroadcast(SmartBuffer& smartBuffer);
-     void handleJoinRoomCallback(SmartBuffer& smartBuffer);
-     void handleJoinRoomBroadcast(SmartBuffer& smartBuffer);
-     void handleDeleteRoomCallback(SmartBuffer& smartBuffer);
-     void handleDeleteRoomBroadcast(SmartBuffer& smartBuffer);
-     void handleNewPlayerBroadcast(SmartBuffer& smartBuffer, Client *client);
-     void handlePlayerCallback(SmartBuffer& smartBuffer, Client *client);
-    void handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client *client);
+    static void handleDefault(SmartBuffer& smartBuffer);
+    static void handleCreateRoomCallback(SmartBuffer& smartBuffer);
+    static void handleCreateRoomBroadcast(SmartBuffer& smartBuffer);
+    static void handleJoinRoomCallback(SmartBuffer& smartBuffer);
+    static void handleJoinRoomBroadcast(SmartBuffer& smartBuffer);
+    static void handleDeleteRoomCallback(SmartBuffer& smartBuffer);
+    static void handleDeleteRoomBroadcast(SmartBuffer& smartBuffer);
+    static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer, Client *client);
+    static void handlePlayerCallback(SmartBuffer& smartBuffer, Client *client);
+    static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client *client);
 };
