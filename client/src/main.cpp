@@ -6,14 +6,13 @@
 */
 
 #include "Client.hpp"
-#include "util/Logger.hpp"
 #include "protocol/NetworkClient.hpp"
 #include "util/Config.hpp"
+#include "util/Logger.hpp"
 
 int main() {
     try {
-        NetworkClient networkClient("127.0.0.1",
-                                    SERVER_PORT);
+        NetworkClient networkClient("127.0.0.1", SERVER_PORT);
         networkClient.init();
         networkClient.connectTCP();
         networkClient.connectUDP();

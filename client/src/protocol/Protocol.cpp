@@ -50,7 +50,8 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
         handlePlayerUpdatePosition(smartBuffer);
         break;
     default:
-        std::cerr << "[Protocol] Unknown OpCode received: " << opCode << std::endl;
+        std::cerr << "[Protocol] Unknown OpCode received: " << opCode
+                  << std::endl;
         break;
     }
 }
@@ -64,19 +65,22 @@ void Protocol::handleDefault(SmartBuffer& smartBuffer) {
 void Protocol::handleCreateRoomCallback(SmartBuffer& smartBuffer) {
     int16_t statusCode;
     smartBuffer >> statusCode;
-    std::cout << "[Protocol] CREATE_ROOM_CALLBACK - Status Code: " << statusCode << std::endl;
+    std::cout << "[Protocol] CREATE_ROOM_CALLBACK - Status Code: " << statusCode
+              << std::endl;
 }
 
 void Protocol::handleCreateRoomBroadcast(SmartBuffer& smartBuffer) {
     std::string roomCode;
     smartBuffer >> roomCode;
-    std::cout << "[Protocol] CREATE_ROOM_BROADCAST - Room Code: " << roomCode << std::endl;
+    std::cout << "[Protocol] CREATE_ROOM_BROADCAST - Room Code: " << roomCode
+              << std::endl;
 }
 
 void Protocol::handleJoinRoomCallback(SmartBuffer& smartBuffer) {
     int16_t statusCode;
     smartBuffer >> statusCode;
-    std::cout << "[Protocol] JOIN_ROOM_CALLBACK - Status Code: " << statusCode << std::endl;
+    std::cout << "[Protocol] JOIN_ROOM_CALLBACK - Status Code: " << statusCode
+              << std::endl;
 }
 
 void Protocol::handleJoinRoomBroadcast(SmartBuffer& smartBuffer) {
@@ -90,13 +94,15 @@ void Protocol::handleJoinRoomBroadcast(SmartBuffer& smartBuffer) {
 void Protocol::handleDeleteRoomCallback(SmartBuffer& smartBuffer) {
     int16_t statusCode;
     smartBuffer >> statusCode;
-    std::cout << "[Protocol] DELETE_ROOM_CALLBACK - Status Code: " << statusCode << std::endl;
+    std::cout << "[Protocol] DELETE_ROOM_CALLBACK - Status Code: " << statusCode
+              << std::endl;
 }
 
 void Protocol::handleDeleteRoomBroadcast(SmartBuffer& smartBuffer) {
     std::string roomCode;
     smartBuffer >> roomCode;
-    std::cout << "[Protocol] DELETE_ROOM_BROADCAST - Room Code: " << roomCode << std::endl;
+    std::cout << "[Protocol] DELETE_ROOM_BROADCAST - Room Code: " << roomCode
+              << std::endl;
 }
 
 void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {

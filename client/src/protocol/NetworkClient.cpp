@@ -5,8 +5,8 @@
 ** NetworkClient.cpp
 */
 
-#include "util/Logger.hpp"
 #include "protocol/NetworkClient.hpp"
+#include "util/Logger.hpp"
 #include <iostream>
 
 NetworkClient::NetworkClient(const std::string& serverAddress, int serverPort)
