@@ -20,5 +20,5 @@ void HotkeysProtocol::processHotkey(int clientSocket,
                  std::to_string(hotkey) + " for player " +
                  std::to_string(playerId));
 
-    HotkeysManager::getInstance().handleHotkey(playerId, hotkey);
+    HotkeysManager::get().handleHotkey(playerId, hotkey);
 }
