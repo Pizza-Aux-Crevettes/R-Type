@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <Entity.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <any>
@@ -19,13 +20,26 @@
 
 class Client {
   private:
-    std::vector<std::any> _items;
+    std::map<int, std::map<std::string, std::any>> _items;
+    std::map<int, std::map<std::string, std::any>> _updateItems;
+    std::map<int, std::unique_ptr<GameEngine::Entity>> _entities;
 
   public:
     Client();
     ~Client();
     void manageClient();
-    void setItems(std::vector<std::any> items);
-    std::vector<std::any> getItems();
+    void setItems(std::map<int, std::map<std::string, std::any>>);
+    std::map<int, std::map<std::string, std::any>> getItems();
+
+    void setUpdateItems(std::map<int, std::map<std::string, std::any>>);
+    std::map<int, std::map<std::string, std::any>> getUpdateItems();
+
+    std::map<int, std::unique_ptr<GameEngine::Entity>>& getEntities();
+
     void listenServer(sf::RenderWindow* win);
+    void CompareEntities();
+    void CompareComponents(std::map<std::string, std::any> entity,
+                           std::map<std::string, std::any> updateEntity,
+                           int id);
+    void CreateEntity(std::map<std::string, std::any>, int);
 };

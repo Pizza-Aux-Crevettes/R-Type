@@ -32,4 +32,6 @@ class Rigidbody : public Component {
     float _gravityScale;
     float _forceX;
     float _forceY;
+    sf::Rect<int> _rect;
+    bool _isLoad = false;
 };

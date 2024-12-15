@@ -7,22 +7,30 @@
 
 #pragma once
 
-#include "util/Config.hpp"
+#include <SmartBuffer.hpp>
 #include <netinet/in.h>
-#include <vector>
 
 class UdpSocket {
   public:
-    UdpSocket(Config port = PORT);
+    UdpSocket();
     ~UdpSocket();
 
+    static void send(int udpSocket, const sockaddr_in& clientAddr,
+                     const SmartBuffer& smartBuffer);
     void init();
-    void listen();
-    void close();
+    [[noreturn]] void readLoop();
+    [[noreturn]] void sendLoop();
+    void close() const;
+
+    void addClient(const sockaddr_in& clientAddr);
+    std::vector<sockaddr_in> getClients();
 
   private:
-    Config port;
+    int _udpSocket;
+    sockaddr_in _udpAddr{};
+    std::vector<sockaddr_in> _clients;
+    std::mutex _clientsMutex;
 
-    int udpSocket;
-    sockaddr_in udpAddr;
+    void handleRead();
+    void handleSend();
 };

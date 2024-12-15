@@ -8,7 +8,6 @@
 #pragma once
 
 #include "Components.hpp"
-#include <SFML/Graphics.hpp>
 #include <string>
 
 class Button : public Component {
@@ -25,4 +24,6 @@ class Button : public Component {
     std::string _text;
     std::pair<double, double> _size;
     enum Shape { Circle, Rectangle };
+    sf::RectangleShape _button;
+    bool _isLoad = false;
 };

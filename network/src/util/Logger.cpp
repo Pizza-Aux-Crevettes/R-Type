@@ -65,11 +65,11 @@ void Logger::log(const std::string& message, const std::string& color,
 }
 
 std::string Logger::getTimestamp() {
-    auto now = std::chrono::system_clock::now();
-    auto nowTime = std::chrono::system_clock::to_time_t(now);
-    auto nowMs = std::chrono::duration_cast<std::chrono::milliseconds>(
-                     now.time_since_epoch()) %
-                 1000;
+    const auto now = std::chrono::system_clock::now();
+    const auto nowTime = std::chrono::system_clock::to_time_t(now);
+    const auto nowMs = std::chrono::duration_cast<std::chrono::milliseconds>(
+                           now.time_since_epoch()) %
+                       1000;
 
     std::ostringstream timestamp;
     timestamp << std::put_time(std::localtime(&nowTime), "%Y-%m-%d %H:%M:%S")

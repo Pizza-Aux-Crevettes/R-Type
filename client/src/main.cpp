@@ -6,10 +6,24 @@
 */
 
 #include "Client.hpp"
-#include "InputClient.hpp"
+#include "protocol/NetworkClient.hpp"
+#include "util/Config.hpp"
+#include "util/Logger.hpp"
 
-int main(int ac, char* av[]) {
-    Client client_test;
+int main() {
+    try {
+        NetworkClient networkClient("127.0.0.1", SERVER_PORT);
+        networkClient.init();
+        networkClient.connectTCP();
+        networkClient.connectUDP();
+        networkClient.run();
 
-    client_test.manageClient();
+        Client client;
+        client.manageClient();
+    } catch (const std::exception& e) {
+        Logger::error("[Main] Error: " + std::string(e.what()));
+        return FAILURE;
+    }
+
+    return SUCCESS;
 }

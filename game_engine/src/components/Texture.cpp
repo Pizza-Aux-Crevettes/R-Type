@@ -19,7 +19,8 @@
  *
  * @param texturePath The path to the texture file.
  */
-Texture::Texture(std::string texturePath) : _texturePath(texturePath) {}
+Texture::Texture(std::string texturePath, std::vector<int> textureRect)
+    : _texturePath(texturePath), _textureRect(textureRect) {}
 
 /**
  * @brief Get the texture file path.
@@ -41,6 +42,26 @@ std::string Texture::getTexturePath() const {
  */
 void Texture::setTexturePath(std::string texturePath) {
     this->_texturePath = texturePath;
+}
+
+std::vector<int> Texture::getTextureRect() const {
+    return this->_textureRect;
+}
+
+bool Texture::getIsLoaded() const {
+    return this->_isLoad;
+}
+
+void Texture::setIsLoaded(const bool isLoaded) {
+    this->_isLoad = isLoaded;
+}
+
+sf::Texture& Texture::getTexture() {
+    return this->_texture;
+}
+
+void Texture::setTexture(const sf::Texture& texture) {
+    this->_texture = texture;
 }
 
 /**

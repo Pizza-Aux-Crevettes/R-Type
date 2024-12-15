@@ -7,32 +7,26 @@
 
 #pragma once
 
-#include "protocol/Protocol.hpp"
 #include "socket/TcpSocket.hpp"
 #include "socket/UdpSocket.hpp"
-#include "util/Config.hpp"
-#include <SmartBuffer.hpp>
 #include <thread>
 #include <vector>
 
 class Server {
   public:
-    Server(Config port = PORT);
-    ~Server();
+    Server(const Server&) = delete;
+    Server& operator=(const Server&) = delete;
 
+    static Server& getInstance();
     int start();
 
-    static Protocol& getProtocol();
-
   private:
-    Config port;
+    Server();
+    ~Server();
 
-    TcpSocket tcpSocket;
-    UdpSocket udpSocket;
+    TcpSocket _tcpSocket;
+    UdpSocket _udpSocket;
+    std::vector<std::thread> _threads;
 
-    SmartBuffer smartBuffer;
-    static Protocol protocol;
-
-    std::vector<std::thread> clientThreads;
     void closeThreads();
 };

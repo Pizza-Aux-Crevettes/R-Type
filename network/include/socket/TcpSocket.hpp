@@ -7,26 +7,22 @@
 
 #pragma once
 
-#include "util/Config.hpp"
+#include <SmartBuffer.hpp>
 #include <netinet/in.h>
-#include <thread>
-#include <vector>
 
 class TcpSocket {
   public:
-    TcpSocket(Config port = PORT);
+    TcpSocket();
     ~TcpSocket();
 
+    static void send(int clientSocket, const SmartBuffer& smartBuffer);
     void init();
-    void listen();
-    void close();
+    [[noreturn]] void readLoop() const;
+    void close() const;
 
   private:
-    Config port;
+    int _tcpSocket;
+    sockaddr_in _tcpAddr{};
 
-    int tcpSocket;
-    sockaddr_in tcpAddr;
-
-    std::vector<std::thread> clientThreads;
-    void handleClient(int clientSocket);
+    static void handleClientRead(int clientSocket);
 };

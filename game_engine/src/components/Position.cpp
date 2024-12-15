@@ -22,7 +22,8 @@
  * @param x The x-coordinate of the position.
  * @param y The y-coordinate of the position.
  */
-Position::Position(float x, float y) : _x(x), _y(y) {}
+Position::Position(std::pair<float, float> pos)
+    : _x(pos.first), _y(pos.second) {}
 
 /**
  * @brief Destructor for the Position component.

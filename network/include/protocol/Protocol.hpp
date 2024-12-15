@@ -15,19 +15,27 @@ class Protocol {
         DEFAULT,
         CREATE_ROOM,
         CREATE_ROOM_CALLBACK,
+        CREATE_ROOM_BROADCAST,
         JOIN_ROOM,
         JOIN_ROOM_CALLBACK,
+        JOIN_ROOM_BROADCAST,
         DELETE_ROOM,
         DELETE_ROOM_CALLBACK,
+        DELETE_ROOM_BROADCAST,
+        NEW_PLAYER,
+        NEW_PLAYER_CALLBACK,
+        NEW_PLAYER_BROADCAST,
+        PLAYER_UPDATE_POSITION,
+        HOTKEY_PRESSED
     };
 
-    Protocol();
-    ~Protocol();
+    Protocol(const Protocol&) = delete;
+    Protocol& operator=(const Protocol&) = delete;
 
-    void handleMessage(int clientSocket, SmartBuffer& smartBuffer);
+    static Protocol& getInstance();
+    static void handleMessage(int clientSocket, SmartBuffer& smartBuffer);
 
   private:
-    void createRoom(int clientSocket, SmartBuffer& smartBuffer);
-    void joinRoom(int clientSocket, SmartBuffer& smartBuffer);
-    void deleteRoom(int clientSocket, SmartBuffer& smartBuffer);
+    Protocol();
+    ~Protocol() = default;
 };

@@ -22,8 +22,7 @@
  * @param texturePath The path to the texture file for the sprite.
  * @param size The size of the sprite as a pair of width and height.
  */
-Sprite::Sprite(std::string texturePath, std::pair<double, double> size)
-    : _texturePath(texturePath), _size(size) {}
+Sprite::Sprite(std::pair<float, float> size) : _size(size) {}
 
 /**
  * @brief Destructor for the Sprite component.
@@ -33,7 +32,7 @@ Sprite::Sprite(std::string texturePath, std::pair<double, double> size)
 Sprite::~Sprite() {}
 
 /**
- * @brief Get the texture file path of the Sprite.
+ * t@brief Get the texture file path of the Sprite.
  *
  * This function retrieves the file path of the texture used by the sprite.
  *
@@ -61,7 +60,7 @@ void Sprite::setTexturePath(std::string texturePath) {
  *
  * @return A pair representing the width and height of the sprite.
  */
-std::pair<double, double> Sprite::getSize() const {
+std::pair<float, float> Sprite::getSize() const {
     return this->_size;
 }
 
@@ -72,8 +71,24 @@ std::pair<double, double> Sprite::getSize() const {
  *
  * @param size A pair representing the width and height to set for the sprite.
  */
-void Sprite::setSize(std::pair<double, double> size) {
+void Sprite::setSize(std::pair<float, float> size) {
     this->_size = size;
+}
+
+bool Sprite::getIsLoaded() const {
+    return this->_isLoad;
+}
+
+void Sprite::setIsLoaded(const bool isLoaded) {
+    this->_isLoad = isLoaded;
+}
+
+sf::Sprite& Sprite::getSprite() {
+    return this->_sprite;
+}
+
+void Sprite::setSprite(const sf::Sprite& sprite) {
+    this->_sprite = sprite;
 }
 
 /**
