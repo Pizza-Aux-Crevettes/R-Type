@@ -1,13 +1,10 @@
-/*
-** EPITECH PROJECT, 2024
-** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
-** File description:
-** Protocol.cpp
-*/
-
 #include <iostream>
 #include "protocol/Protocol.hpp"
 #include "util/Logger.hpp"
+#include <mutex>
+
+std::unordered_map<int32_t, std::pair<float, float>> Protocol::_playerPositions;
+std::mutex Protocol::_playerPositionsMutex;
 
 Protocol& Protocol::get() {
     static Protocol instance;
@@ -18,7 +15,12 @@ Protocol::Protocol() {}
 
 Protocol::~Protocol() {}
 
-void Protocol::handleMessage(SmartBuffer& smartBuffer, Client *client) {
+void Protocol::handleMessage(SmartBuffer& smartBuffer, Client* client) {
+    if (!client) {
+        Logger::error("[Protocol] Null Client pointer passed to handleMessage.");
+        return;
+    }
+
     int16_t opCode;
     smartBuffer >> opCode;
 
@@ -51,8 +53,7 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer, Client *client) {
         handlePlayerUpdatePosition(smartBuffer, client);
         break;
     default:
-        std::cerr << "[Protocol] Unknown OpCode received: " << opCode
-                  << std::endl;
+        Logger::warning("[Protocol] Unknown OpCode received: " + std::to_string(opCode));
         break;
     }
 }
@@ -60,67 +61,68 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer, Client *client) {
 void Protocol::handleDefault(SmartBuffer& smartBuffer) {
     std::string test;
     smartBuffer >> test;
-    std::cout << "[Protocol] DEFAULT - Test: " << test << std::endl;
+    Logger::info("[Protocol] DEFAULT - Test: " + test);
 }
 
 void Protocol::handleCreateRoomCallback(SmartBuffer& smartBuffer) {
     int16_t statusCode;
     smartBuffer >> statusCode;
-    std::cout << "[Protocol] CREATE_ROOM_CALLBACK - Status Code: " << statusCode
-              << std::endl;
+    Logger::info("[Protocol] CREATE_ROOM_CALLBACK - Status Code: " + std::to_string(statusCode));
 }
 
 void Protocol::handleCreateRoomBroadcast(SmartBuffer& smartBuffer) {
     std::string roomCode;
     smartBuffer >> roomCode;
-    std::cout << "[Protocol] CREATE_ROOM_BROADCAST - Room Code: " << roomCode
-              << std::endl;
+    Logger::info("[Protocol] CREATE_ROOM_BROADCAST - Room Code: " + roomCode);
 }
 
 void Protocol::handleJoinRoomCallback(SmartBuffer& smartBuffer) {
     int16_t statusCode;
     smartBuffer >> statusCode;
-    std::cout << "[Protocol] JOIN_ROOM_CALLBACK - Status Code: " << statusCode
-              << std::endl;
+    Logger::info("[Protocol] JOIN_ROOM_CALLBACK - Status Code: " + std::to_string(statusCode));
 }
 
 void Protocol::handleJoinRoomBroadcast(SmartBuffer& smartBuffer) {
     std::string roomCode;
     int32_t playerId;
     smartBuffer >> roomCode >> playerId;
-    std::cout << "[Protocol] JOIN_ROOM_BROADCAST - Room Code: " << roomCode
-              << ", Player ID: " << playerId << std::endl;
+    Logger::info("[Protocol] JOIN_ROOM_BROADCAST - Room Code: " + roomCode +
+                 ", Player ID: " + std::to_string(playerId));
 }
 
 void Protocol::handleDeleteRoomCallback(SmartBuffer& smartBuffer) {
     int16_t statusCode;
     smartBuffer >> statusCode;
-    std::cout << "[Protocol] DELETE_ROOM_CALLBACK - Status Code: " << statusCode
-              << std::endl;
+    Logger::info("[Protocol] DELETE_ROOM_CALLBACK - Status Code: " + std::to_string(statusCode));
 }
 
 void Protocol::handleDeleteRoomBroadcast(SmartBuffer& smartBuffer) {
     std::string roomCode;
     smartBuffer >> roomCode;
-    std::cout << "[Protocol] DELETE_ROOM_BROADCAST - Room Code: " << roomCode
-              << std::endl;
+    Logger::info("[Protocol] DELETE_ROOM_BROADCAST - Room Code: " + roomCode);
 }
 
-void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer, Client *client) {
+void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer, Client* client) {
     int32_t playerId;
     std::string playerName;
     smartBuffer >> playerId >> playerName;
-    std::cout << "[Protocol] NEW_PLAYER_BROADCAST - Player ID: " << playerId
-              << ", Player Name: " << playerName << std::endl;
-    std::map<int, std::map<std::string, std::any>> newItems = {
+
+    Logger::info("[Protocol] NEW_PLAYER_BROADCAST - Player ID: " + std::to_string(playerId) +
+                 ", Player Name: " + playerName);
+
+    {
+        std::lock_guard<std::mutex> lock(_playerPositionsMutex);
+
+        if (_playerPositions.find(playerId) == _playerPositions.end()) {
+            _playerPositions[playerId] = {0.0f, 0.0f};
+        }
+    }
+
+    std::map<int, std::map<std::string, std::any>> newPlayer = {
         {playerId,
-         {
-             {"Texture", std::string("../assets/sprite/tentacles.png")},
-            {"Position", std::pair<float, float>(0.0f, 0.0f)}
-         }
-        },
-    };
-    client->addItem(newItems);
+         {{"Texture", "../assets/sprite/tentacles.png"},
+          {"Position", std::make_pair(0.0f, 0.0f)}}}};
+    client->addItem(newPlayer);
 }
 
 void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client* client) {
@@ -128,27 +130,29 @@ void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client* clie
     float x, y;
     smartBuffer >> playerId >> x >> y;
 
-    if (_playerPositions.find(playerId) == _playerPositions.end()) {
-        Logger::info("[Protocol] Creating new player entry for Player ID: " + std::to_string(playerId));
+    Logger::info("[Protocol] Updating Player Position - Player ID: " + std::to_string(playerId) +
+                 ", New Position: (" + std::to_string(x) + ", " + std::to_string(y) + ").");
 
-        _playerPositions[playerId] = std::make_pair(0.0f, 0.0f);
+    {
+        std::lock_guard<std::mutex> lock(_playerPositionsMutex);
 
-        std::map<int, std::map<std::string, std::any>> newPlayer = {
-            {playerId,
-             {{"Texture", std::string("../assets/sprite/tentacles.png")},
-              {"Position", std::make_pair(0.0f, 0.0f)}}}};
-        client->addItem(newPlayer);
+        if (_playerPositions.find(playerId) == _playerPositions.end()) {
+            Logger::info("[Protocol] Creating new player entry for Player ID: " + std::to_string(playerId));
+            _playerPositions[playerId] = {0.0f, 0.0f};
 
-        Logger::success("[Protocol] Player " + std::to_string(playerId) +
-                        " created with default position (0,0).");
+            std::map<int, std::map<std::string, std::any>> newPlayer = {
+                {playerId,
+                 {{"Texture", "../assets/sprite/tentacles.png"},
+                  {"Position", std::make_pair(0.0f, 0.0f)}}}};
+            client->addItem(newPlayer);
+        }
+
+        _playerPositions[playerId] = {x, y};
     }
-
-    _playerPositions[playerId] = std::make_pair(x, y);
 
     std::map<int, std::map<std::string, std::any>> updatedPlayer = {
         {playerId, {{"Position", std::make_pair(x, y)}}}};
     client->setUpdateItems(updatedPlayer);
 
-    Logger::info("[Protocol] Updated Player Position - Player ID: " + std::to_string(playerId) +
-                 ", X: " + std::to_string(x) + ", Y: " + std::to_string(y));
+    Logger::info("[Protocol] Player position updated successfully for Player ID: " + std::to_string(playerId));
 }

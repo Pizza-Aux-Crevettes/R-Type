@@ -1,10 +1,3 @@
-/*
-** EPITECH PROJECT, 2024
-** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
-** File description:
-** Protocol.hpp
-*/
-
 #pragma once
 
 #include <SmartBuffer.hpp>
@@ -12,10 +5,12 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <unordered_map>
 #include <utility>
+#include <mutex>
 
 class Protocol {
-  public:
+public:
     enum OpCode {
         DEFAULT,
         CREATE_ROOM,
@@ -38,13 +33,14 @@ class Protocol {
     Protocol& operator=(const Protocol&) = delete;
 
     static Protocol& get();
-    static void handleMessage(SmartBuffer& smartBuffer, Client *client);
+    static void handleMessage(SmartBuffer& smartBuffer, Client* client);
 
-  private:
+private:
     Protocol();
     ~Protocol();
 
     static std::unordered_map<int32_t, std::pair<float, float>> _playerPositions;
+    static std::mutex _playerPositionsMutex;
 
     static void handleDefault(SmartBuffer& smartBuffer);
     static void handleCreateRoomCallback(SmartBuffer& smartBuffer);
@@ -53,7 +49,6 @@ class Protocol {
     static void handleJoinRoomBroadcast(SmartBuffer& smartBuffer);
     static void handleDeleteRoomCallback(SmartBuffer& smartBuffer);
     static void handleDeleteRoomBroadcast(SmartBuffer& smartBuffer);
-    static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer, Client *client);
-    static void handlePlayerCallback(SmartBuffer& smartBuffer, Client *client);
-    static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client *client);
+    static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer, Client* client);
+    static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client* client);
 };
