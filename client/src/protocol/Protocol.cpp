@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "protocol/Protocol.hpp"
+#include "util/Logger.hpp"
 
 Protocol& Protocol::get() {
     static Protocol instance;
@@ -129,19 +130,24 @@ void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client* clie
 
     if (_playerPositions.find(playerId) == _playerPositions.end()) {
         Logger::info("[Protocol] Creating new player entry for Player ID: " + std::to_string(playerId));
+
         _playerPositions[playerId] = std::make_pair(0.0f, 0.0f);
+
         std::map<int, std::map<std::string, std::any>> newPlayer = {
             {playerId,
              {{"Texture", std::string("../assets/sprite/tentacles.png")},
               {"Position", std::make_pair(0.0f, 0.0f)}}}};
         client->addItem(newPlayer);
+
         Logger::success("[Protocol] Player " + std::to_string(playerId) +
                         " created with default position (0,0).");
     }
+
     _playerPositions[playerId] = std::make_pair(x, y);
-    std::map<int, std::map<std::string, std::any>> updateItems = {
+
+    std::map<int, std::map<std::string, std::any>> updatedPlayer = {
         {playerId, {{"Position", std::make_pair(x, y)}}}};
-    client->updateItem(updateItems);
+    client->setUpdateItems(updatedPlayer);
 
     Logger::info("[Protocol] Updated Player Position - Player ID: " + std::to_string(playerId) +
                  ", X: " + std::to_string(x) + ", Y: " + std::to_string(y));
