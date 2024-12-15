@@ -5,6 +5,7 @@
 ** Client.cpp
 */
 
+#include <thread>
 #include "Client.hpp"
 #include "protocol/NetworkClient.hpp"
 #include "util/Config.hpp"
@@ -16,10 +17,22 @@ int main() {
         networkClient.init();
         networkClient.connectTCP();
         networkClient.connectUDP();
-        networkClient.run();
 
         Client client;
+
+        std::thread serverThread([&networkClient]() {
+            try {
+                networkClient.run();
+            } catch (const std::exception& e) {
+                Logger::error("[Server Thread] Error: " + std::string(e.what()));
+            }
+        });
+
         client.manageClient();
+
+        if (serverThread.joinable()) {
+            serverThread.join();
+        }
     } catch (const std::exception& e) {
         Logger::error("[Main] Error: " + std::string(e.what()));
         return FAILURE;
