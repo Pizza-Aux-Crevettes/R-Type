@@ -43,7 +43,6 @@ void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer) {
 
     case HOTKEY_PRESSED:
 
-
     default:
         Logger::error("[Protocol] Received unknown OpCode: " +
                       std::to_string(opCode));
