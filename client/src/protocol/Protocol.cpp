@@ -127,27 +127,18 @@ void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client* clie
     float x, y;
     smartBuffer >> playerId >> x >> y;
 
-    // Check if the player exists in the local map
     if (_playerPositions.find(playerId) == _playerPositions.end()) {
-        // Automatically create the player if not found
         Logger::info("[Protocol] Creating new player entry for Player ID: " + std::to_string(playerId));
-        _playerPositions[playerId] = std::make_pair(0.0f, 0.0f); // Default starting position
-
-        // Add the player to the client as well
+        _playerPositions[playerId] = std::make_pair(0.0f, 0.0f);
         std::map<int, std::map<std::string, std::any>> newPlayer = {
             {playerId,
              {{"Texture", std::string("../assets/sprite/tentacles.png")},
               {"Position", std::make_pair(0.0f, 0.0f)}}}};
         client->addItem(newPlayer);
-
         Logger::success("[Protocol] Player " + std::to_string(playerId) +
                         " created with default position (0,0).");
     }
-
-    // Update the player's position
     _playerPositions[playerId] = std::make_pair(x, y);
-
-    // Update the client-side map for rendering
     std::map<int, std::map<std::string, std::any>> updateItems = {
         {playerId, {{"Position", std::make_pair(x, y)}}}};
     client->updateItem(updateItems);
