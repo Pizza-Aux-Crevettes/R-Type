@@ -8,7 +8,7 @@
 #include "protocol/Protocol.hpp"
 #include <iostream>
 
-Protocol& Protocol::getInstance() {
+Protocol& Protocol::get() {
     static Protocol instance;
     return instance;
 }
@@ -111,12 +111,14 @@ void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
     smartBuffer >> playerId >> playerName;
     std::cout << "[Protocol] NEW_PLAYER_BROADCAST - Player ID: " << playerId
               << ", Player Name: " << playerName << std::endl;
+    // Ici tu créé un nouveau player en pos 0 0 (on fera au propre plus tard)
 }
 
 void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
     int32_t playerId;
-    float x, y;
+    double x, y;
     smartBuffer >> playerId >> x >> y;
     std::cout << "[Protocol] PLAYER_UPDATE_POSITION - Player ID: " << playerId
               << ", X: " << x << ", Y: " << y << std::endl;
+    // Ici tu update le player avec son ID et tu met a jour ses positions X et Y 0 (on fera au propre plus tard)
 }
