@@ -16,7 +16,7 @@ int main() {
         Logger::success("[Main] Server successfully initialized on port " +
                         std::to_string(PORT) + ".");
 
-        Server::getInstance().start();
+        Server::get().start();
     } catch (const std::exception& e) {
         Logger::error("[Main] Critical server error: " + std::string(e.what()));
 

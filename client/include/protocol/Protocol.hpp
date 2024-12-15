@@ -8,6 +8,7 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
+#include "Client.hpp"
 
 class Protocol {
   public:
@@ -29,23 +30,24 @@ class Protocol {
         HOTKEY_PRESSED
     };
 
-    static Protocol& getInstance();
+    Protocol(const Protocol&) = delete;
+    Protocol& operator=(const Protocol&) = delete;
 
-    void handleMessage(SmartBuffer& smartBuffer);
+    static Protocol& get();
+    static void handleMessage(SmartBuffer& smartBuffer, Client *client);
 
   private:
     Protocol();
     ~Protocol();
-    Protocol(const Protocol&) = delete;
-    Protocol& operator=(const Protocol&) = delete;
 
-    void handleDefault(SmartBuffer& smartBuffer);
-    void handleCreateRoomCallback(SmartBuffer& smartBuffer);
-    void handleCreateRoomBroadcast(SmartBuffer& smartBuffer);
-    void handleJoinRoomCallback(SmartBuffer& smartBuffer);
-    void handleJoinRoomBroadcast(SmartBuffer& smartBuffer);
-    void handleDeleteRoomCallback(SmartBuffer& smartBuffer);
-    void handleDeleteRoomBroadcast(SmartBuffer& smartBuffer);
-    void handleNewPlayerBroadcast(SmartBuffer& smartBuffer);
-    void handlePlayerUpdatePosition(SmartBuffer& smartBuffer);
+    static void handleDefault(SmartBuffer& smartBuffer);
+    static void handleCreateRoomCallback(SmartBuffer& smartBuffer);
+    static void handleCreateRoomBroadcast(SmartBuffer& smartBuffer);
+    static void handleJoinRoomCallback(SmartBuffer& smartBuffer);
+    static void handleJoinRoomBroadcast(SmartBuffer& smartBuffer);
+    static void handleDeleteRoomCallback(SmartBuffer& smartBuffer);
+    static void handleDeleteRoomBroadcast(SmartBuffer& smartBuffer);
+    static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer, Client *client);
+    static void handlePlayerCallback(SmartBuffer& smartBuffer, Client *client);
+    static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client *client);
 };

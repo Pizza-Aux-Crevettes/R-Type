@@ -9,20 +9,28 @@
 
 #include <SmartBuffer.hpp>
 #include <netinet/in.h>
+#include <vector>
+#include <mutex>
 
 class TcpSocket {
-  public:
+public:
     TcpSocket();
     ~TcpSocket();
 
-    static void send(int clientSocket, const SmartBuffer& smartBuffer);
+    static void sendToOne(int clientSocket, const SmartBuffer& smartBuffer);
+    static void sendToAll(const SmartBuffer& smartBuffer);
     void init();
     [[noreturn]] void readLoop() const;
     void close() const;
+    static std::vector<int> getClients();
 
-  private:
+private:
     int _tcpSocket;
     sockaddr_in _tcpAddr{};
+    static std::vector<int> _clients;
+    static std::mutex _clientsMutex;
 
-    static void handleClientRead(int clientSocket);
+    static void handleRead(int clientSocket);
+    static void addClient(int clientSocket);
+    static void removeClient(int clientSocket);
 };

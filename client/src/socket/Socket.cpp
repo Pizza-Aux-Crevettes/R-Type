@@ -8,6 +8,7 @@
 #include "socket/Socket.hpp"
 #include "util/Config.hpp"
 #include <arpa/inet.h>
+#include <socket/Singleton.hpp>
 #include <stdexcept>
 #include <unistd.h>
 
@@ -18,15 +19,16 @@ Socket::Socket(const std::string& serverAddress, int port) : _socket(FAILURE) {
         SUCCESS) {
         throw std::runtime_error("Invalid server address");
     }
+    Singleton::get().setSavedServerAddress(_serverAddr);
 }
 
 Socket::~Socket() {
-    closeSocket();
+    close();
 }
 
-void Socket::closeSocket() {
+void Socket::close() {
     if (_socket != FAILURE) {
-        close(_socket);
+        ::close(_socket);
         _socket = FAILURE;
     }
 }

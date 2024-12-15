@@ -5,11 +5,6 @@
 ** PlayerProtocol.cpp
 */
 
-/**
- * @file PlayerProtocol.cpp
- * @brief Handles player-related protocols, such as creating or retrieving a
- * player.
- */
 #include "component/player/PlayerProtocol.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "protocol/Protocol.hpp"
@@ -29,18 +24,16 @@ void PlayerProtocol::newPlayer(const int clientSocket,
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_CALLBACK);
 
-    if (name.empty()) {
-        name = "Player" +
-               std::to_string(PlayerManager::getInstance().getPlayers().size() +
-                              1);
-    }
-
-    const auto player = PlayerManager::getInstance().createPlayerByThread(name);
-
-    smartBuffer << player->getId();
+    const auto player = PlayerManager::get().createPlayer(name);
 
     Logger::info("[PlayerProtocol] Assigned player ID " +
                  std::to_string(player->getId()) + " to client.");
 
-    TcpSocket::send(clientSocket, smartBuffer);
+    smartBuffer << player->getId();
+    TcpSocket::sendToOne(clientSocket, smartBuffer);
+
+    smartBuffer.reset();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_BROADCAST);
+    smartBuffer << player->getId() << std::string{player->getName()};
+    TcpSocket::sendToAll(smartBuffer);
 }

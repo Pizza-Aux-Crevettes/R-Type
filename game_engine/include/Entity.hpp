@@ -36,7 +36,7 @@ class Entity {
 
   private:
     int _id;
-    std::map<std::type_index, std::unique_ptr<Component>> _components;
+    std::map<std::type_index, std::shared_ptr<Component>> _components;
 };
 
 /**

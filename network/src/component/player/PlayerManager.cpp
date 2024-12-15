@@ -5,15 +5,12 @@
 ** PlayerManager.cpp
 */
 
-/**
- * @file PlayerManager.cpp
- * @brief Manages the lifecycle and association of players with threads or IDs.
- */
-
 #include "component/player/PlayerManager.hpp"
 #include "util/Logger.hpp"
+#include <algorithm>
+#include <ranges>
 
-PlayerManager& PlayerManager::getInstance() {
+PlayerManager& PlayerManager::get() {
     static PlayerManager instance;
     return instance;
 }
@@ -22,16 +19,26 @@ PlayerManager::PlayerManager() = default;
 
 PlayerManager::~PlayerManager() = default;
 
-std::shared_ptr<Player> PlayerManager::createPlayer(int32_t userId,
-                                                    const std::string& name) {
+int32_t PlayerManager::getNextUserId() const {
+    if (_players.empty()) {
+        return 1;
+    }
+
+    return *std::ranges::max_element(_players | std::views::keys) + 1;
+}
+
+std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
+    const int32_t userId = getNextUserId();
+
     if (_players.contains(userId)) {
         Logger::warning("[PlayerManager] Player with userId " +
                         std::to_string(userId) + " already exists.");
+
         return nullptr;
     }
 
     auto player =
-        std::make_shared<Player>(userId, name, Point(0, 0), Point(1, 1), 1.0);
+        std::make_shared<Player>(userId, name, Point(0, 0), Point(20, 10), 1.0);
 
     _players[userId] = player;
 
@@ -51,28 +58,6 @@ PlayerManager::findPlayerById(const int32_t userId) const {
                     std::to_string(userId) + " not found.");
 
     return nullptr;
-}
-
-std::shared_ptr<Player>
-PlayerManager::createPlayerByThread(const std::string& name) {
-    std::lock_guard lock(_mutex);
-    const auto threadId = std::this_thread::get_id();
-
-    if (const auto it = _threadIds.find(threadId); it != _threadIds.end()) {
-        return findPlayerById(it->second);
-    }
-
-    const int32_t newUserId = _nextuserId++;
-    auto newPlayer = createPlayer(newUserId, name);
-    newPlayer->setThreadId(threadId);
-
-    _threadIds[threadId] = newUserId;
-
-    Logger::info("[PlayerManager] Created player for thread " +
-                 std::to_string(std::hash<std::thread::id>{}(threadId)) +
-                 " with ID " + std::to_string(newUserId));
-
-    return newPlayer;
 }
 
 bool PlayerManager::removePlayer(const int32_t userId) {

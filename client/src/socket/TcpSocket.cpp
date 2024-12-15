@@ -6,16 +6,17 @@
 */
 
 #include "socket/TcpSocket.hpp"
+#include "socket/Singleton.hpp"
 #include "util/Config.hpp"
 #include <stdexcept>
 #include <sys/socket.h>
 #include <unistd.h>
 
-TcpSocket::TcpSocket(const std::string& serverAddress, int port)
+TcpSocket::TcpSocket(const std::string& serverAddress, const int port)
     : Socket(serverAddress, port) {}
 
 TcpSocket::~TcpSocket() {
-    closeSocket();
+    close();
 }
 
 void TcpSocket::init() {
@@ -23,27 +24,27 @@ void TcpSocket::init() {
     if (_socket == FAILURE) {
         throw std::runtime_error("Failed to create TCP socket");
     }
+    Singleton::get().setSavedTcpSocket(_socket);
 }
 
-void TcpSocket::connectSocket() {
-    if (connect(_socket, reinterpret_cast<sockaddr*>(&_serverAddr),
-                sizeof(_serverAddr)) < SUCCESS) {
+void TcpSocket::connect() {
+    if (::connect(_socket, reinterpret_cast<sockaddr*>(&_serverAddr),
+                  sizeof(_serverAddr)) < SUCCESS) {
         throw std::runtime_error("Failed to connect to TCP server");
     }
 }
 
-void TcpSocket::sendBuffer(const SmartBuffer& smartBuffer) {
-    if (send(_socket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0) <
-        SUCCESS) {
+void TcpSocket::send(const SmartBuffer& smartBuffer) {
+    if (::send(Singleton::get().getSavedTcpSocket(), smartBuffer.getBuffer(),
+               smartBuffer.getSize(), 0) < SUCCESS) {
         throw std::runtime_error("Failed to send TCP message");
     }
 }
 
-SmartBuffer TcpSocket::receiveBuffer() {
+SmartBuffer TcpSocket::receive() const {
     SmartBuffer smartBuffer;
     char buffer[1024];
-    ssize_t bytesReceived = recv(_socket, buffer, sizeof(buffer), 0);
-
+    const ssize_t bytesReceived = recv(_socket, buffer, sizeof(buffer), 0);
     if (bytesReceived <= SUCCESS) {
         throw std::runtime_error("Failed to receive TCP message");
     }

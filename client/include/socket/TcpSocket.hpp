@@ -10,13 +10,13 @@
 #include "Socket.hpp"
 #include <SmartBuffer.hpp>
 
-class TcpSocket : public Socket {
+class TcpSocket final : public Socket {
   public:
     TcpSocket(const std::string& serverAddress, int port);
     ~TcpSocket() override;
 
     void init();
-    void connectSocket();
-    void sendBuffer(const SmartBuffer& smartBuffer);
-    SmartBuffer receiveBuffer();
+    void connect();
+    static void send(const SmartBuffer& smartBuffer);
+    SmartBuffer receive() const;
 };
