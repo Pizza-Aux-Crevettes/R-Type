@@ -12,44 +12,35 @@
  */
 #include "component/player/PlayerProtocol.hpp"
 #include "component/player/PlayerManager.hpp"
+#include "protocol/Protocol.hpp"
 #include "socket/TcpSocket.hpp"
 #include "util/Logger.hpp"
 
 /**
- * @brief Processes the NEW_PLAYER protocol. Assigns a player ID to the client,
- *        either by reusing an existing player for the thread or creating a new
- * one.
- *
  * Protocol Details:
- * - Input: None
- * - Output:
- *   - OpCode: NEW_PLAYER_CALLBACK
- *   - int32_t: Assigned player ID
- *
- * @param clientSocket The socket associated with the client.
- * @param smartBuffer The buffer for receiving and sending data.
+ * - Input: std:string name
+ * - Output: int16_t opCode (NEW_PLAYER_CALLBACK) << int32_t userId
  */
-void PlayerProtocol::newPlayer(int clientSocket, SmartBuffer& smartBuffer) {
-    // Protocol structure (EMPTY)
-    //
+void PlayerProtocol::newPlayer(const int clientSocket,
+                               SmartBuffer& smartBuffer) {
+    std::string name;
 
-    // Get the data from SmartBuffer after injection (EMPTY)
-    //
-
-    // Reset and init for response
+    smartBuffer >> name;
     smartBuffer.reset();
-    smartBuffer << int8_t(Protocol::OpCode::NEW_PLAYER_CALLBACK);
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_CALLBACK);
 
-    // Check relevant data
-    auto player =
-        PlayerManager::getInstance().createPlayerByThread("NewPlayer");
+    if (name.empty()) {
+        name = "Player" +
+               std::to_string(PlayerManager::getInstance().getPlayers().size() +
+                              1);
+    }
 
-    // Response (CALLBACK) with status
+    const auto player = PlayerManager::getInstance().createPlayerByThread(name);
+
     smartBuffer << player->getId();
-
-    // Send back the data to client
-    TcpSocket::sendTcp(clientSocket, smartBuffer);
 
     Logger::info("[PlayerProtocol] Assigned player ID " +
                  std::to_string(player->getId()) + " to client.");
+
+    TcpSocket::send(clientSocket, smartBuffer);
 }
