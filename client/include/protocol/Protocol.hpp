@@ -54,5 +54,5 @@ class Protocol {
     static void handleDeleteRoomBroadcast(SmartBuffer& smartBuffer);
     static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer, Client *client);
     static void handlePlayerCallback(SmartBuffer& smartBuffer, Client *client);
-    static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client *client);
+    void handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client *client);
 };
