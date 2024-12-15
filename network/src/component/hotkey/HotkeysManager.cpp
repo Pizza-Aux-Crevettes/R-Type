@@ -10,7 +10,7 @@
 #include "component/player/PlayerManager.hpp"
 #include "util/Logger.hpp"
 
-HotkeysManager& HotkeysManager::getInstance() {
+HotkeysManager& HotkeysManager::get() {
     static HotkeysManager instance;
     return instance;
 }
@@ -53,8 +53,7 @@ void HotkeysManager::handleHotkey(const int32_t playerId,
 void HotkeysManager::handlePlayerPosition(const int32_t playerId,
                                           const int deltaX, const int deltaY) {
     try {
-        const auto player =
-            PlayerManager::getInstance().findPlayerById(playerId);
+        const auto player = PlayerManager::get().findPlayerById(playerId);
         const Point position = player->getPosition();
         Point newPosition;
 

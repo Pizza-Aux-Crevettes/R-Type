@@ -13,7 +13,7 @@
 
 class HotkeysManager {
   public:
-    static HotkeysManager& getInstance();
+    static HotkeysManager& get();
 
     void handleHotkey(int32_t playerId, int16_t hotkey);
 
