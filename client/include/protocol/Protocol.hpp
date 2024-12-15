@@ -9,6 +9,10 @@
 
 #include <SmartBuffer.hpp>
 #include "Client.hpp"
+#include <iostream>
+#include <map>
+#include <string>
+#include <utility>
 
 class Protocol {
   public:
@@ -35,6 +39,7 @@ class Protocol {
 
     static Protocol& get();
     static void handleMessage(SmartBuffer& smartBuffer, Client *client);
+    std::unordered_map<int32_t, std::pair<float, float>> _playerPositions;
 
   private:
     Protocol();
