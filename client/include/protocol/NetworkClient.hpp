@@ -9,6 +9,7 @@
 
 #include "socket/TcpSocket.hpp"
 #include "socket/UdpSocket.hpp"
+#include "Client.hpp"
 
 class NetworkClient {
   public:
@@ -18,12 +19,12 @@ class NetworkClient {
     void init();
     void connectTCP();
     static void connectUDP();
-    void run();
+    void run(Client *client);
 
   private:
     TcpSocket tcpSocket;
     UdpSocket udpSocket;
 
-    void handleTcpMessages() const;
-    void handleUdpMessages();
+    void handleTcpMessages(Client *client) const;
+    void handleUdpMessages(Client *client);
 };

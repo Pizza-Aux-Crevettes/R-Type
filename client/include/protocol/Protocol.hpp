@@ -8,6 +8,7 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
+#include "Client.hpp"
 
 class Protocol {
   public:
@@ -33,7 +34,7 @@ class Protocol {
     Protocol& operator=(const Protocol&) = delete;
 
     static Protocol& get();
-    static void handleMessage(SmartBuffer& smartBuffer);
+    static void handleMessage(SmartBuffer& smartBuffer, Client *client);
 
   private:
     Protocol();
@@ -46,6 +47,7 @@ class Protocol {
     static void handleJoinRoomBroadcast(SmartBuffer& smartBuffer);
     static void handleDeleteRoomCallback(SmartBuffer& smartBuffer);
     static void handleDeleteRoomBroadcast(SmartBuffer& smartBuffer);
-    static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer);
-    static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer);
+    static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer, Client *client);
+    static void handlePlayerCallback(SmartBuffer& smartBuffer, Client *client);
+    static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client *client);
 };

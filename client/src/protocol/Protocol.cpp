@@ -5,8 +5,8 @@
 ** Protocol.cpp
 */
 
-#include "protocol/Protocol.hpp"
 #include <iostream>
+#include "protocol/Protocol.hpp"
 
 Protocol& Protocol::get() {
     static Protocol instance;
@@ -17,7 +17,7 @@ Protocol::Protocol() {}
 
 Protocol::~Protocol() {}
 
-void Protocol::handleMessage(SmartBuffer& smartBuffer) {
+void Protocol::handleMessage(SmartBuffer& smartBuffer, Client *client) {
     int16_t opCode;
     smartBuffer >> opCode;
 
@@ -44,10 +44,10 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
         handleDeleteRoomBroadcast(smartBuffer);
         break;
     case NEW_PLAYER_BROADCAST:
-        handleNewPlayerBroadcast(smartBuffer);
+        handleNewPlayerBroadcast(smartBuffer, client);
         break;
     case PLAYER_UPDATE_POSITION:
-        handlePlayerUpdatePosition(smartBuffer);
+        handlePlayerUpdatePosition(smartBuffer, client);
         break;
     default:
         std::cerr << "[Protocol] Unknown OpCode received: " << opCode
@@ -105,20 +105,28 @@ void Protocol::handleDeleteRoomBroadcast(SmartBuffer& smartBuffer) {
               << std::endl;
 }
 
-void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
+void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer, Client *client) {
     int32_t playerId;
     std::string playerName;
     smartBuffer >> playerId >> playerName;
     std::cout << "[Protocol] NEW_PLAYER_BROADCAST - Player ID: " << playerId
               << ", Player Name: " << playerName << std::endl;
-    // Ici tu créé un nouveau player en pos 0 0 (on fera au propre plus tard)
+    std::map<int, std::map<std::string, std::any>> newItems = {
+        {playerId,
+         {
+             {"Texture", std::string("../assets/sprite/tentacles.png")},
+            {"Position", std::pair<float, float>(0.0f, 0.0f)}
+         }
+        },
+    };
+    client->addItem(newItems);
 }
 
-void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
+void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client *client) {
     int32_t playerId;
     double x, y;
     smartBuffer >> playerId >> x >> y;
     std::cout << "[Protocol] PLAYER_UPDATE_POSITION - Player ID: " << playerId
               << ", X: " << x << ", Y: " << y << std::endl;
-    // Ici tu update le player avec son ID et tu met a jour ses positions X et Y 0 (on fera au propre plus tard)
+    client->getUpdateItems()[playerId]["Position"] = std::pair<float, float>(x, y);
 }
