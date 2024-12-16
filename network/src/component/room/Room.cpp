@@ -5,9 +5,9 @@
 ** Room.cpp
 */
 
+#include "component/room/Room.hpp"
 #include <algorithm>
 #include <memory>
-#include "component/room/Room.hpp"
 #include "util/Logger.hpp"
 
 Room::Room(const std::string& code, const std::shared_ptr<Player>& owner,

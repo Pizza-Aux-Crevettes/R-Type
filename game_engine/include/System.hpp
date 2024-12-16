@@ -11,7 +11,6 @@
 #include <memory>
 #include "Entity.hpp"
 
-
 namespace GameEngine {
 
 enum class UpdateType { Position, Health, Velocity };

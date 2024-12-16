@@ -6,11 +6,11 @@
 */
 
 #include "socket/Socket.hpp"
-#include "util/Config.hpp"
 #include <arpa/inet.h>
 #include <socket/Singleton.hpp>
 #include <stdexcept>
 #include <unistd.h>
+#include "util/Config.hpp"
 
 Socket::Socket(const std::string& serverAddress, int port) : _socket(FAILURE) {
     _serverAddr.sin_family = AF_INET;

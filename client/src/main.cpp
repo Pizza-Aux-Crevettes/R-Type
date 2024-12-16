@@ -10,7 +10,7 @@
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
-void runNetworkClient(NetworkClient& networkClient, Client *client) {
+void runNetworkClient(NetworkClient& networkClient, Client* client) {
     try {
         networkClient.run(client);
     } catch (const std::exception& e) {
@@ -32,7 +32,8 @@ int main() {
         NetworkClient networkClient("127.0.0.1", SERVER_PORT);
 
         initializeNetwork(networkClient);
-        std::thread serverThread(runNetworkClient, std::ref(networkClient), &client);
+        std::thread serverThread(runNetworkClient, std::ref(networkClient),
+                                 &client);
         client.manageClient();
 
         if (serverThread.joinable()) {

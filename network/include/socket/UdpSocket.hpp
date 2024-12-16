@@ -8,8 +8,8 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
-#include <netinet/in.h>
 #include <mutex>
+#include <netinet/in.h>
 
 class UdpSocket {
   public:

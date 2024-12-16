@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "Components.hpp"
 #include <vector>
+#include "Components.hpp"
 
 class Color : public Component {
   public:
