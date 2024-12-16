@@ -9,6 +9,7 @@
 
 #include <SmartBuffer.hpp>
 #include <netinet/in.h>
+#include <mutex>
 
 class UdpSocket {
   public:
