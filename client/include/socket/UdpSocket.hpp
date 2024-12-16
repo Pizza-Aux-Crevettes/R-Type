@@ -7,8 +7,10 @@
 
 #pragma once
 
-#include "Socket.hpp"
+#include <mutex>
 #include <SmartBuffer.hpp>
+#include <netinet/in.h>
+#include "Socket.hpp"
 
 class UdpSocket final : public Socket {
   public:
