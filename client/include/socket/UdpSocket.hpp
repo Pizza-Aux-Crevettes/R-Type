@@ -7,8 +7,9 @@
 
 #pragma once
 
-#include "Socket.hpp"
+#include <mutex>
 #include <SmartBuffer.hpp>
+#include "Socket.hpp"
 
 class UdpSocket final : public Socket {
   public:
