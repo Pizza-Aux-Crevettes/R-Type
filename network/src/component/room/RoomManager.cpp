@@ -5,11 +5,10 @@
 ** RoomManager.cpp
 */
 
-
+#include "component/room/RoomManager.hpp"
 #include <algorithm>
 #include <memory>
 #include <random>
-#include "component/room/RoomManager.hpp"
 #include "util/Logger.hpp"
 
 static constexpr char charset[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

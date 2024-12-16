@@ -5,9 +5,9 @@
 ** NetworkClient.cpp
 */
 
+#include "protocol/NetworkClient.hpp"
 #include <iostream>
 #include <thread>
-#include "protocol/NetworkClient.hpp"
 #include "protocol/Protocol.hpp"
 #include "util/Logger.hpp"
 
@@ -32,7 +32,7 @@ void NetworkClient::connectUDP() {
     Logger::info("[NetworkClient] UDP initialized.");
 }
 
-void NetworkClient::run(Client *client) {
+void NetworkClient::run(Client* client) {
     std::thread tcpThread(&NetworkClient::handleTcpMessages, this, client);
     std::thread udpThread(&NetworkClient::handleUdpMessages, this, client);
 
@@ -40,7 +40,7 @@ void NetworkClient::run(Client *client) {
     udpThread.join();
 }
 
-void NetworkClient::handleTcpMessages(Client *client) const {
+void NetworkClient::handleTcpMessages(Client* client) const {
     try {
         while (true) {
             SmartBuffer buffer = tcpSocket.receive();
@@ -51,7 +51,7 @@ void NetworkClient::handleTcpMessages(Client *client) const {
     }
 }
 
-void NetworkClient::handleUdpMessages(Client *client) {
+void NetworkClient::handleUdpMessages(Client* client) {
     try {
         while (true) {
             SmartBuffer buffer = udpSocket.receive();

@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "component/hotkey/HotkeysCodes.hpp"
 #include <SFML/Window.hpp>
 #include <unordered_map>
+#include "component/hotkey/HotkeysCodes.hpp"
 
 class HotkeysManager {
   public:

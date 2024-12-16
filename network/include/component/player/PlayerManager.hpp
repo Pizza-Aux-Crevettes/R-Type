@@ -11,7 +11,6 @@
 #include <unordered_map>
 #include "component/player/Player.hpp"
 
-
 class PlayerManager {
   public:
     PlayerManager(const PlayerManager&) = delete;

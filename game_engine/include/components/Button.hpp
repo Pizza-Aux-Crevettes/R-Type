@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "Components.hpp"
 #include <string>
+#include "Components.hpp"
 
 class Button : public Component {
   public:
