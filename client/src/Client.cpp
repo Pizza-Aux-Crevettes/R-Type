@@ -9,14 +9,15 @@
 ** Client.cpp
 */
 
-#include "Client.hpp"
-#include "component/hotkey/HotkeysManager.hpp"
 #include <Entity.hpp>
 #include <System.hpp>
 #include <components/Position.hpp>
 #include <components/Sprite.hpp>
 #include <components/Texture.hpp>
 #include <thread>
+#include "Client.hpp"
+#include "component/hotkey/HotkeysManager.hpp"
+
 
 Client::Client() {}
 

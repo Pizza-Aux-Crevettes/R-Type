@@ -5,9 +5,10 @@
 ** Room.cpp
 */
 
+#include <algorithm>
+#include <memory>
 #include "component/room/Room.hpp"
 #include "util/Logger.hpp"
-#include <algorithm>
 
 Room::Room(const std::string& code, const std::shared_ptr<Player>& owner,
            const size_t capacity, const bool isPublic)
