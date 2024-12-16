@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include "components/Button.hpp"
-#include "components/Components.hpp"
 #include <memory>
 #include <typeindex>
+#include "components/Button.hpp"
+#include "components/Components.hpp"
 
 namespace GameEngine {
 

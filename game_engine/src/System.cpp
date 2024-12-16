@@ -5,13 +5,13 @@
 ** System.cpp
 */
 
-#include "System.hpp"
 #include <components/Color.hpp>
 #include <components/Position.hpp>
 #include <components/Sprite.hpp>
 #include <components/Text.hpp>
 #include <components/Texture.hpp>
 #include <iostream>
+#include "System.hpp"
 
 GameEngine::System::System() {}
 

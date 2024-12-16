@@ -7,8 +7,10 @@
 
 #pragma once
 
-#include "component/player/Player.hpp"
+#include <memory>
 #include <unordered_map>
+#include "component/player/Player.hpp"
+
 
 class PlayerManager {
   public:

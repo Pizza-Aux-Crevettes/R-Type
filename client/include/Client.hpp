@@ -17,6 +17,7 @@
 #include <any>
 #include <functional>
 #include <iostream>
+#include <memory>
 
 class Client {
   private:
