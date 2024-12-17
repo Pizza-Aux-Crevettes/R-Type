@@ -6,9 +6,9 @@
 */
 
 #include "component/room/Room.hpp"
-#include "util/Logger.hpp"
 #include <algorithm>
 #include <memory>
+#include "util/Logger.hpp"
 
 Room::Room(const std::string& code, const std::shared_ptr<Player>& owner,
            const size_t capacity, const bool isPublic)

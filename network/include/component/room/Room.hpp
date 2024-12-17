@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "component/player/Player.hpp"
 #include <string>
 #include <vector>
+#include "component/player/Player.hpp"
 
 class Room {
   public:

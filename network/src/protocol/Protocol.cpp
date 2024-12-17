@@ -22,8 +22,6 @@ void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer) {
     int16_t opCode;
     smartBuffer >> opCode;
 
-    Logger::debug(std::to_string(opCode));
-
     switch (opCode) {
     case DEFAULT:
         break;
