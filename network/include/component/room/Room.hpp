@@ -9,6 +9,7 @@
 
 #include <string>
 #include <vector>
+#include "component/map/Map.hpp"
 #include "component/player/Player.hpp"
 
 class Room {
@@ -24,6 +25,8 @@ class Room {
     getPlayers() const;
     bool addPlayer(const std::shared_ptr<Player>& player);
     bool removePlayer(const std::string& playerName);
+    void setMap(const std::shared_ptr<Map>& map);
+    std::shared_ptr<Map> getMap() const;
 
   private:
     std::string _code;
@@ -31,4 +34,5 @@ class Room {
     size_t _capacity;
     bool _isPublic;
     std::vector<std::shared_ptr<Player>> _players;
+    std::shared_ptr<Map> _map;
 };
