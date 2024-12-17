@@ -9,6 +9,11 @@
 #include "component/hotkey/HotkeysManager.hpp"
 #include "util/Logger.hpp"
 
+/**
+ * Protocol Details:
+ * - Input: int32_t playerId >> int16_t hotkey
+ * - Output: Nothing
+ */
 void HotkeysProtocol::processHotkey(int clientSocket,
                                     SmartBuffer& smartBuffer) {
     int32_t playerId;

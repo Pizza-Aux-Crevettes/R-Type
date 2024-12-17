@@ -17,6 +17,7 @@ class PlayerManager {
     PlayerManager& operator=(const PlayerManager&) = delete;
 
     static PlayerManager& get();
+
     [[nodiscard]] int32_t getNextUserId() const;
     std::shared_ptr<Player> createPlayer(const std::string& name);
     bool removePlayer(int32_t userId);
@@ -25,8 +26,8 @@ class PlayerManager {
     getPlayers() const;
 
   private:
-    PlayerManager();
-    ~PlayerManager();
+    PlayerManager() = default;
+    ~PlayerManager() = default;
 
     std::unordered_map<int32_t, std::shared_ptr<Player>> _players;
 };

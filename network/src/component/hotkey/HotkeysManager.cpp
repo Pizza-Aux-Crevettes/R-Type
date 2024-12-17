@@ -10,13 +10,13 @@
 #include "component/player/PlayerManager.hpp"
 #include "util/Logger.hpp"
 
+HotkeysManager::HotkeysManager() {
+    initHotkeys();
+}
+
 HotkeysManager& HotkeysManager::get() {
     static HotkeysManager instance;
     return instance;
-}
-
-HotkeysManager::HotkeysManager() {
-    initHotkeys();
 }
 
 void HotkeysManager::initHotkeys() {
