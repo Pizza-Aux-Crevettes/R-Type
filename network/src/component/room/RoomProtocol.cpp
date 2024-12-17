@@ -47,7 +47,7 @@ void RoomProtocol::createRoom(const int clientSocket,
 
     if (!status) {
         auto room = RoomManager::get().createRoom(player, capacity, isPublic);
-        auto selectedMap = MapManager::get().loadMap(mapId);
+        auto selectedMap = MapManager::get().getMapById(mapId);
         room->setMap(selectedMap);
 
         Logger::success("[RoomProtocol] Room created with code: " +

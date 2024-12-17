@@ -5,9 +5,9 @@
 ** MapProtocol.cpp
 */
 
-#include "MapProtocol.hpp"
-#include "TcpSocket.hpp"
+#include "component/map/MapProtocol.hpp"
 #include "protocol/Protocol.hpp"
+#include "socket/TcpSocket.hpp"
 
 void MapProtocol::sendViewportUpdate(int clientSocket, int viewport) {
     SmartBuffer smartBuffer;
@@ -17,18 +17,15 @@ void MapProtocol::sendViewportUpdate(int clientSocket, int viewport) {
     TcpSocket::sendToOne(clientSocket, smartBuffer);
 }
 
-void MapProtocol::sendBlocksUpdate(int clientSocket,
-                                   const std::vector<Obstacle>& blocks) {
+void MapProtocol::sendObstaclesUpdate(int clientSocket,
+                                      const std::vector<Obstacle>& obstacles) {
     SmartBuffer smartBuffer;
 
-    for (const auto& block : blocks) {
+    for (const auto& obstacle : obstacles) {
         smartBuffer << static_cast<int16_t>(Protocol::OpCode::BLOCKS_UPDATE);
-        smartBuffer << static_cast<int16_t>(block.getX())
-                    << static_cast<int16_t>(block.getY())
-                    << static_cast<int16_t>(block.getWidth())
-                    << static_cast<int16_t>(block.getHeight())
-                    << static_cast<int16_t>(block.getType())
-                    << static_cast<int16_t>(block.isTraversable());
+        smartBuffer << static_cast<int16_t>(obstacle._x)
+                    << static_cast<int16_t>(obstacle._y)
+                    << static_cast<int16_t>(obstacle._type);
         TcpSocket::sendToOne(clientSocket, smartBuffer);
     }
 }

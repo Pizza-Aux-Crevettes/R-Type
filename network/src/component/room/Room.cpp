@@ -18,6 +18,14 @@ Room::Room(const std::string& code, const std::shared_ptr<Player>& owner,
                  ", Public: " + (isPublic ? "true" : "false"));
 }
 
+void Room::setMap(const std::shared_ptr<Map>& map) {
+    _map = map;
+}
+
+std::shared_ptr<Map> Room::getMap() const {
+    return _map;
+}
+
 const std::string& Room::getCode() const {
     return _code;
 }

@@ -5,6 +5,7 @@
 ** main.cpp
 */
 
+#include "component/map/MapManager.hpp"
 #include "socket/Server.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
@@ -16,7 +17,10 @@ int main() {
         Logger::success("[Main] Server successfully initialized on port " +
                         std::to_string(PORT) + ".");
 
-        Server::get().start();
+        MapManager::get().preloadMapsFromFolder("./network/maps");
+
+            Server::get()
+                .start();
     } catch (const std::exception& e) {
         Logger::error("[Main] Critical server error: " + std::string(e.what()));
 
