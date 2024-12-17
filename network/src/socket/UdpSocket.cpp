@@ -6,7 +6,6 @@
 */
 
 #include "socket/UdpSocket.hpp"
-
 #include <SmartBuffer.hpp>
 #include <arpa/inet.h>
 #include <chrono>
@@ -49,19 +48,23 @@ void UdpSocket::init() {
 }
 
 [[noreturn]] void UdpSocket::readLoop() {
+    SmartBuffer smartBuffer;
+
     while (true) {
-        handleRead();
+        handleRead(smartBuffer);
     }
 }
 
 [[noreturn]] void UdpSocket::sendLoop() {
+    SmartBuffer smartBuffer;
+
     while (true) {
-        handleSend();
+        handleSend(smartBuffer);
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
-void UdpSocket::handleRead() {
+void UdpSocket::handleRead(SmartBuffer &smartBuffer) {
     char buffer[1024] = {};
     sockaddr_in clientAddr{};
     socklen_t addrLen = sizeof(clientAddr);
@@ -72,15 +75,14 @@ void UdpSocket::handleRead() {
     if (bytesRead > 0) {
         addClient(clientAddr);
 
-        SmartBuffer smartBuffer;
+        smartBuffer.reset();
         smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer), bytesRead);
-        smartBuffer.resetRead();
 
         Protocol::handleMessage(_udpSocket, smartBuffer);
     }
 }
 
-void UdpSocket::handleSend() {
+void UdpSocket::handleSend(SmartBuffer &smartBuffer) {
     const auto clients = getClients();
     const auto& players = PlayerManager::get().getPlayers();
 
@@ -90,7 +92,7 @@ void UdpSocket::handleSend() {
 
     for (const auto& client : clients) {
         for (const auto& [playerId, player] : players) {
-            SmartBuffer smartBuffer;
+            smartBuffer.reset();
             smartBuffer << static_cast<int16_t>(
                                Protocol::OpCode::PLAYER_UPDATE_POSITION)
                         << playerId << player->getPosition().getX()

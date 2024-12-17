@@ -30,7 +30,7 @@ class TcpSocket {
     static std::vector<int> _clients;
     static std::mutex _clientsMutex;
 
-    static void handleRead(int clientSocket);
+    static void handleRead(int clientSocket, SmartBuffer &smartBuffer);
     static void addClient(int clientSocket);
     static void removeClient(int clientSocket);
 };

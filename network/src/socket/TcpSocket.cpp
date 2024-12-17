@@ -76,13 +76,14 @@ void TcpSocket::init() {
                        std::to_string(clientSocket));
 
         std::thread([this, clientSocket]() {
-            this->handleRead(clientSocket);
+            SmartBuffer smartBuffer;
+            
+            this->handleRead(clientSocket, smartBuffer);
         }).detach();
     }
 }
 
-void TcpSocket::handleRead(const int clientSocket) {
-    SmartBuffer smartBuffer;
+void TcpSocket::handleRead(const int clientSocket, SmartBuffer &smartBuffer) {
 
     while (true) {
         char buffer[1024] = {};
@@ -97,8 +98,8 @@ void TcpSocket::handleRead(const int clientSocket) {
             break;
         }
 
+        smartBuffer.reset();
         smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer), bytesRead);
-        smartBuffer.resetRead();
 
         Protocol::handleMessage(clientSocket, smartBuffer);
     }
