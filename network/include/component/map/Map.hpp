@@ -14,7 +14,7 @@
 class Map {
   public:
     Map(const std::string& name, int width, int height, int blockSize);
-    ~Map() = default; 
+    ~Map() = default;
 
     void updateViewport();
     [[nodiscard]] int getViewport() const;

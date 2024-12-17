@@ -77,13 +77,13 @@ void TcpSocket::init() {
 
         std::thread([this, clientSocket]() {
             SmartBuffer smartBuffer;
-            
+
             this->handleRead(clientSocket, smartBuffer);
         }).detach();
     }
 }
 
-void TcpSocket::handleRead(const int clientSocket, SmartBuffer &smartBuffer) {
+void TcpSocket::handleRead(const int clientSocket, SmartBuffer& smartBuffer) {
 
     while (true) {
         char buffer[1024] = {};

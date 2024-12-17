@@ -17,7 +17,8 @@ void MapProtocol::sendViewportUpdate(int clientSocket, int viewport) {
     TcpSocket::sendToOne(clientSocket, smartBuffer);
 }
 
-void MapProtocol::sendBlocksUpdate(int clientSocket, const std::vector<Obstacle>& blocks) {
+void MapProtocol::sendBlocksUpdate(int clientSocket,
+                                   const std::vector<Obstacle>& blocks) {
     SmartBuffer smartBuffer;
 
     for (const auto& block : blocks) {

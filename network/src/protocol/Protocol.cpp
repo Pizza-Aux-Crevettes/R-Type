@@ -13,13 +13,13 @@
 
 Protocol& Protocol::get() {
     static Protocol instance;
-    
+
     return instance;
 }
 
 void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer) {
     int16_t opCode;
-    
+
     smartBuffer >> opCode;
 
     switch (opCode) {

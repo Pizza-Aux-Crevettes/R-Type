@@ -70,7 +70,7 @@ std::string Logger::getTimestamp() {
     const auto nowMs = std::chrono::duration_cast<std::chrono::milliseconds>(
                            now.time_since_epoch()) %
                        1000;
-                       
+
     std::ostringstream timestamp;
 
     timestamp << std::put_time(std::localtime(&nowTime), "%Y-%m-%d %H:%M:%S")

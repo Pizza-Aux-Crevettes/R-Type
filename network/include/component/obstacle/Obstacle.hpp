@@ -12,16 +12,13 @@
 
 #pragma once
 
-enum class ObstacleType {
-    NONE,
-    ROCK,
-    TREE,
-    WALL
-};
+enum class ObstacleType { NONE, ROCK, TREE, WALL };
 
 class Obstacle {
   public:
-    Obstacle(ObstacleType type = ObstacleType::NONE, int16_t x = 0, int16_t y = 0, int16_t width = 0, int16_t height = 0, bool traversable = false);
+    Obstacle(ObstacleType type = ObstacleType::NONE, int16_t x = 0,
+             int16_t y = 0, int16_t width = 0, int16_t height = 0,
+             bool traversable = false);
 
     [[nodiscard]] ObstacleType getType() const;
     [[nodiscard]] int16_t getX() const;

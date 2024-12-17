@@ -64,7 +64,7 @@ void UdpSocket::init() {
     }
 }
 
-void UdpSocket::handleRead(SmartBuffer &smartBuffer) {
+void UdpSocket::handleRead(SmartBuffer& smartBuffer) {
     char buffer[1024] = {};
     sockaddr_in clientAddr{};
     socklen_t addrLen = sizeof(clientAddr);
@@ -82,7 +82,7 @@ void UdpSocket::handleRead(SmartBuffer &smartBuffer) {
     }
 }
 
-void UdpSocket::handleSend(SmartBuffer &smartBuffer) {
+void UdpSocket::handleSend(SmartBuffer& smartBuffer) {
     const auto clients = getClients();
     const auto& players = PlayerManager::get().getPlayers();
 

@@ -6,16 +6,17 @@
 */
 
 #include "component/room/RoomProtocol.hpp"
+#include "component/map/MapManager.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "component/room/RoomManager.hpp"
-#include "component/map/MapManager.hpp"
 #include "protocol/Protocol.hpp"
 #include "socket/TcpSocket.hpp"
 #include "util/Logger.hpp"
 
 /**
  * Protocol structure:
- * - Input: int32_t userId >> int16_t capacity >> int16_t isPublic >> int16_t mapId
+ * - Input: int32_t userId >> int16_t capacity >> int16_t isPublic >> int16_t
+ * mapId
  * - Output: int16_t opCode (CREATE_ROOM_CALLBACK) << int16_t status
  *
  * Status codes:

@@ -18,7 +18,7 @@ std::shared_ptr<Map> MapManager::loadMap(int mapId) {
     case 1:
         return std::make_shared<Map>("Map1", 100, 50, 200);
     case 2:
-        return std::make_shared<Map>("Map2", 200, 100,200);
+        return std::make_shared<Map>("Map2", 200, 100, 200);
     default:
         return std::make_shared<Map>("DefaultMap", 50, 25, 200);
     }

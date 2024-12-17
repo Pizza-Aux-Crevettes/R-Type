@@ -13,5 +13,6 @@
 class MapProtocol {
   public:
     static void sendViewportUpdate(int clientSocket, int viewport);
-    static void sendBlocksUpdate(int clientSocket, const std::vector<Obstacle>& blocks);
+    static void sendBlocksUpdate(int clientSocket,
+                                 const std::vector<Obstacle>& blocks);
 };

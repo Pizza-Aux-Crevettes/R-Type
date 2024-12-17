@@ -13,7 +13,7 @@
 
 PlayerManager& PlayerManager::get() {
     static PlayerManager instance;
-    
+
     return instance;
 }
 

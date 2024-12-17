@@ -8,7 +8,8 @@
 #include "component/map/Map.hpp"
 
 Map::Map(const std::string& name, int width, int height, int blockSize)
-    : _name(name), _width(width), _height(height), _blockSize(blockSize), _viewport(0) {
+    : _name(name), _width(width), _height(height), _blockSize(blockSize),
+      _viewport(0) {
     _blocks.resize(height, std::vector<Obstacle>(width, Obstacle()));
 }
 
@@ -32,6 +33,6 @@ std::vector<Obstacle> Map::getVisibleBlocks(int range) const {
             }
         }
     }
-    
+
     return visibleBlocks;
 }
