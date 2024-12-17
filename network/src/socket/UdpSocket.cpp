@@ -7,16 +7,16 @@
 
 #include "socket/UdpSocket.hpp"
 
-#include <SmartBuffer.hpp>
-#include <arpa/inet.h>
-#include <chrono>
-#include <thread>
-#include <unistd.h>
 #include "component/player/PlayerManager.hpp"
 #include "protocol/Protocol.hpp"
 #include "socket/Server.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
+#include <SmartBuffer.hpp>
+#include <arpa/inet.h>
+#include <chrono>
+#include <thread>
+#include <unistd.h>
 
 UdpSocket::UdpSocket() : _udpSocket(FAILURE) {}
 
@@ -91,10 +91,8 @@ void UdpSocket::handleSend() {
     for (const auto& client : clients) {
         for (const auto& [playerId, player] : players) {
             SmartBuffer smartBuffer;
-            smartBuffer << static_cast<int16_t>(
-                               Protocol::OpCode::PLAYER_UPDATE_POSITION)
-                        << playerId << player->getPosition().getX()
-                        << player->getPosition().getY();
+            smartBuffer << static_cast<int16_t>(Protocol::OpCode::PLAYER_UPDATE_POSITION)
+                        << playerId << player->getPosition().getX() << player->getPosition().getY();
 
             send(_udpSocket, client, smartBuffer);
         }

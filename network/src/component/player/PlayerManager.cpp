@@ -6,10 +6,11 @@
 */
 
 #include "component/player/PlayerManager.hpp"
-#include <algorithm>
-#include <memory>
-#include <ranges>
 #include "util/Logger.hpp"
+#include <algorithm>
+#include <ranges>
+#include <memory>
+
 PlayerManager& PlayerManager::get() {
     static PlayerManager instance;
     return instance;

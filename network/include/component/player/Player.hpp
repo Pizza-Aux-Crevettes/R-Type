@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include <string>
-#include <thread>
 #include "component/attr/Health.hpp"
 #include "util/Point.hpp"
+#include <string>
+#include <thread>
 
 class Player {
   public:

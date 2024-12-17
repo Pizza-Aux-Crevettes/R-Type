@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include <thread>
-#include <vector>
 #include "socket/TcpSocket.hpp"
 #include "socket/UdpSocket.hpp"
+#include <thread>
+#include <vector>
 
 class Server {
   public:

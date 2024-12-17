@@ -6,13 +6,13 @@
 */
 
 #include "socket/TcpSocket.hpp"
-#include <SmartBuffer.hpp>
-#include <arpa/inet.h>
-#include <unistd.h>
 #include "protocol/Protocol.hpp"
 #include "socket/Server.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
+#include <SmartBuffer.hpp>
+#include <arpa/inet.h>
+#include <unistd.h>
 
 std::vector<int> TcpSocket::_clients;
 std::mutex TcpSocket::_clientsMutex;
@@ -23,8 +23,7 @@ TcpSocket::~TcpSocket() {
     close();
 }
 
-void TcpSocket::sendToOne(const int clientSocket,
-                          const SmartBuffer& smartBuffer) {
+void TcpSocket::sendToOne(const int clientSocket, const SmartBuffer& smartBuffer) {
     send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0);
 }
 

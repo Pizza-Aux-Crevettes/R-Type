@@ -8,12 +8,12 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
-#include <mutex>
 #include <netinet/in.h>
 #include <vector>
+#include <mutex>
 
 class TcpSocket {
-  public:
+public:
     TcpSocket();
     ~TcpSocket();
 
@@ -24,7 +24,7 @@ class TcpSocket {
     void close() const;
     static std::vector<int> getClients();
 
-  private:
+private:
     int _tcpSocket;
     sockaddr_in _tcpAddr{};
     static std::vector<int> _clients;

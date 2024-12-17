@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include <memory>
+#include "component/player/Player.hpp"
 #include <string>
 #include <vector>
-#include "component/player/Player.hpp"
+
 class Room {
   public:
     Room(const std::string& code, const std::shared_ptr<Player>& owner,
