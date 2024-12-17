@@ -106,11 +106,13 @@ void TcpSocket::handleRead(const int clientSocket) {
 
 void TcpSocket::addClient(const int clientSocket) {
     std::lock_guard lock(_clientsMutex);
+
     _clients.push_back(clientSocket);
 }
 
 void TcpSocket::removeClient(const int clientSocket) {
     std::lock_guard lock(_clientsMutex);
+
     std::erase(_clients, clientSocket);
 }
 
