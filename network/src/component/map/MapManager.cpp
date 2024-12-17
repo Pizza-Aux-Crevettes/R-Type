@@ -6,11 +6,11 @@
 */
 
 #include "component/map/MapManager.hpp"
-#include "util/Logger.hpp"
 #include <filesystem>
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include "util/Logger.hpp"
 
 namespace fs = std::filesystem;
 
@@ -30,19 +30,22 @@ void MapManager::preloadMapsFromFolder(const std::string& folderPath) {
 
                 _maps[mapId++] = map;
 
-                Logger::info("[MapManager] Loaded map: " + entry.path().string());
+                Logger::info("[MapManager] Loaded map: " +
+                             entry.path().string());
             } catch (const std::exception& e) {
-                Logger::error("[MapManager] Failed to load map: " + std::string(e.what()));
+                Logger::error("[MapManager] Failed to load map: " +
+                              std::string(e.what()));
             }
         }
     }
 
-    Logger::info("[MapManager] Preloaded " + std::to_string(_maps.size()) + " maps.");
+    Logger::info("[MapManager] Preloaded " + std::to_string(_maps.size()) +
+                 " maps.");
 }
 
 std::shared_ptr<Map> MapManager::loadMapFromFile(const std::string& filePath) {
     std::ifstream file(filePath);
-    
+
     if (!file.is_open()) {
         throw std::runtime_error("Failed to open map file: " + filePath);
     }
@@ -65,7 +68,8 @@ std::shared_ptr<Map> MapManager::loadMapFromFile(const std::string& filePath) {
                 std::string block = line.substr(x, 4);
 
                 if (block == "0001") {
-                    obstacles.emplace_back(ObstacleType::BLOCK, static_cast<int>(x / 4), y);
+                    obstacles.emplace_back(ObstacleType::BLOCK,
+                                           static_cast<int>(x / 4), y);
                 }
             }
 
@@ -83,5 +87,6 @@ std::shared_ptr<Map> MapManager::getMapById(int mapId) const {
         return _maps.at(mapId);
     }
 
-    throw std::runtime_error("Map with ID " + std::to_string(mapId) + " not found.");
+    throw std::runtime_error("Map with ID " + std::to_string(mapId) +
+                             " not found.");
 }

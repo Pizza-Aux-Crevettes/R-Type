@@ -19,8 +19,7 @@ int main() {
 
         MapManager::get().preloadMapsFromFolder("./network/maps");
 
-            Server::get()
-                .start();
+        Server::get().start();
     } catch (const std::exception& e) {
         Logger::error("[Main] Critical server error: " + std::string(e.what()));
 
