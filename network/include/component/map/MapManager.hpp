@@ -8,18 +8,25 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
 #include "component/map/Map.hpp"
 
 class MapManager {
   public:
-    MapManager(const MapManager&) = delete;
+  MapManager(const MapManager&) = delete;
     MapManager& operator=(const MapManager&) = delete;
+
 
     static MapManager& get();
 
-    std::shared_ptr<Map> loadMap(int mapId);
+    void preloadMapsFromFolder(const std::string& folderPath);
+    std::shared_ptr<Map> getMapById(int mapId) const;
 
   private:
-    MapManager() = default;
+     MapManager() = default;
     ~MapManager() = default;
+
+    std::shared_ptr<Map> loadMapFromFile(const std::string& filePath);
+
+    std::unordered_map<int, std::shared_ptr<Map>> _maps;
 };

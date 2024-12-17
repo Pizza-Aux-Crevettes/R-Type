@@ -7,24 +7,19 @@
 
 #pragma once
 
-#include <string>
 #include <vector>
 #include "component/obstacle/Obstacle.hpp"
 
 class Map {
   public:
-    Map(const std::string& name, int width, int height, int blockSize);
-    ~Map() = default;
+    Map(const std::string& name, const std::vector<Obstacle>& obstacles);
 
-    void updateViewport();
-    [[nodiscard]] int getViewport() const;
-    [[nodiscard]] std::vector<Obstacle> getVisibleBlocks(int range) const;
+    void setViewport(int viewport);
+    int getViewport() const;
+    const std::vector<Obstacle>& getObstacles() const;
 
   private:
     std::string _name;
-    int _width;
-    int _height;
-    int _blockSize;
+    std::vector<Obstacle> _obstacles;
     int _viewport;
-    std::vector<std::vector<Obstacle>> _blocks;
 };
