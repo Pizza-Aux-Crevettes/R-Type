@@ -7,31 +7,12 @@
 
 #pragma once
 
-#include <string>
-#include <utility>
+enum class ObstacleType { NONE = 0, BLOCK = 1 };
 
-#pragma once
-
-enum class ObstacleType { NONE, ROCK, TREE, WALL };
-
-class Obstacle {
-  public:
-    Obstacle(ObstacleType type = ObstacleType::NONE, int16_t x = 0,
-             int16_t y = 0, int16_t width = 0, int16_t height = 0,
-             bool traversable = false);
-
-    [[nodiscard]] ObstacleType getType() const;
-    [[nodiscard]] int16_t getX() const;
-    [[nodiscard]] int16_t getY() const;
-    [[nodiscard]] int16_t getWidth() const;
-    [[nodiscard]] int16_t getHeight() const;
-    [[nodiscard]] bool isTraversable() const;
-
-  private:
+struct Obstacle {
     ObstacleType _type;
-    int16_t _x;
-    int16_t _y;
-    int16_t _width;
-    int16_t _height;
-    bool _traversable;
+    int _x;
+    int _y;
+
+    Obstacle(ObstacleType type, int x, int y) : _type(type), _x(x), _y(y) {}
 };
