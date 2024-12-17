@@ -13,12 +13,9 @@
 
 PlayerManager& PlayerManager::get() {
     static PlayerManager instance;
+    
     return instance;
 }
-
-PlayerManager::PlayerManager() = default;
-
-PlayerManager::~PlayerManager() = default;
 
 int32_t PlayerManager::getNextUserId() const {
     if (_players.empty()) {
