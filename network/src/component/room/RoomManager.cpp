@@ -16,12 +16,9 @@ static constexpr char charset[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 RoomManager& RoomManager::get() {
     static RoomManager instance;
+    
     return instance;
 }
-
-RoomManager::RoomManager() = default;
-
-RoomManager::~RoomManager() = default;
 
 std::string RoomManager::generateUniqueCode() const {
     static std::mt19937 rng(std::random_device{}());
