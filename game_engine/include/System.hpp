@@ -20,7 +20,7 @@ class System {
     System();
     ~System();
     void render(sf::RenderWindow& window,
-                std::map<int, std::shared_ptr<Entity>>& entities);
+                std::map<int, Entity>& entities);
     void update(Entity& entity, UpdateType type, std::any value);
 };
 

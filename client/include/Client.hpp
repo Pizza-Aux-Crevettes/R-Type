@@ -29,19 +29,4 @@ class Client {
     Client();
     ~Client();
     void manageClient();
-    void setItems(std::map<int, std::map<std::string, std::any>>);
-    std::map<int, std::map<std::string, std::any>> getItems();
-    void addItem(std::map<int, std::map<std::string, std::any>> items);
-
-    void setUpdateItems(std::map<int, std::map<std::string, std::any>>);
-    std::map<int, std::map<std::string, std::any>> getUpdateItems();
-
-    std::map<int, std::shared_ptr<GameEngine::Entity>>& getEntities();
-
-    void listenServer(sf::RenderWindow* win);
-    void CompareEntities();
-    void CompareComponents(std::map<std::string, std::any> entity,
-                           std::map<std::string, std::any> updateEntity,
-                           int id);
-    void CreateEntity(std::map<std::string, std::any>, int);
 };
