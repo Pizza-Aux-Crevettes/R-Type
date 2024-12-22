@@ -7,6 +7,7 @@
 
 #include "protocol/Protocol.hpp"
 #include <iostream>
+#include "EntityManager.hpp"
 
 Protocol& Protocol::get() {
     static Protocol instance;
@@ -17,7 +18,7 @@ Protocol::Protocol() {}
 
 Protocol::~Protocol() {}
 
-void Protocol::handleMessage(SmartBuffer& smartBuffer, Client* client) {
+void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     int16_t opCode;
     smartBuffer >> opCode;
 
@@ -44,10 +45,10 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer, Client* client) {
         handleDeleteRoomBroadcast(smartBuffer);
         break;
     case NEW_PLAYER_BROADCAST:
-        handleNewPlayerBroadcast(smartBuffer, client);
+        handleNewPlayerBroadcast(smartBuffer);
         break;
     case PLAYER_UPDATE_POSITION:
-        handlePlayerUpdatePosition(smartBuffer, client);
+        handlePlayerUpdatePosition(smartBuffer);
         break;
     default:
         std::cerr << "[Protocol] Unknown OpCode received: " << opCode
@@ -105,28 +106,24 @@ void Protocol::handleDeleteRoomBroadcast(SmartBuffer& smartBuffer) {
               << std::endl;
 }
 
-void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer,
-                                        Client* client) {
+void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
     int32_t playerId;
     std::string playerName;
     smartBuffer >> playerId >> playerName;
     std::cout << "[Protocol] NEW_PLAYER_BROADCAST - Player ID: " << playerId
               << ", Player Name: " << playerName << std::endl;
-    std::map<int, std::map<std::string, std::any>> newItems = {
-        {playerId,
-         {{"Texture", std::string("../assets/sprite/tentacles.png")},
-          {"Position", std::pair<float, float>(0.0f, 0.0f)}}},
-    };
-    client->addItem(newItems);
+    std::map<std::string, std::any> newItems = {
+        {{"Texture", std::string("../assets/sprite/spaceship.png")},
+         {"Position", std::pair<float, float>(0.0f, 0.0f)}}};
+    EntityManager::get().CompareEntities(playerId, newItems, {0.0f, 0.0f});
 }
 
-void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer,
-                                          Client* client) {
+void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
     int32_t playerId;
     double x, y;
     smartBuffer >> playerId >> x >> y;
     std::cout << "[Protocol] PLAYER_UPDATE_POSITION - Player ID: " << playerId
               << ", X: " << x << ", Y: " << y << std::endl;
-    client->getUpdateItems()[playerId]["Position"] =
-        std::pair<float, float>(x, y);
+    std::map<std::string, std::any> emptyMap;
+    EntityManager::get().CompareEntities(playerId, emptyMap, {x, y});
 }
