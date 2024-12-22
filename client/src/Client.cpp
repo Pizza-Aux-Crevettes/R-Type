@@ -16,8 +16,8 @@
 #include <components/Sprite.hpp>
 #include <components/Texture.hpp>
 #include <thread>
-#include "component/hotkey/HotkeysManager.hpp"
 #include "EntityManager.hpp"
+#include "component/hotkey/HotkeysManager.hpp"
 
 Client::Client() {}
 
@@ -30,7 +30,8 @@ void Client::manageClient() {
     GameEngine::System system;
 
     while (window.isOpen()) {
-        std::map<int, GameEngine::Entity> entitiesList = EntityManager::get().getEntityList();
+        std::map<int, GameEngine::Entity> entitiesList =
+            EntityManager::get().getEntityList();
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)

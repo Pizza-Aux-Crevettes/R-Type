@@ -5,8 +5,8 @@
 ** Protocol.cpp
 */
 
-#include <iostream>
 #include "protocol/Protocol.hpp"
+#include <iostream>
 #include "EntityManager.hpp"
 
 Protocol& Protocol::get() {
@@ -113,8 +113,8 @@ void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
     std::cout << "[Protocol] NEW_PLAYER_BROADCAST - Player ID: " << playerId
               << ", Player Name: " << playerName << std::endl;
     std::map<std::string, std::any> newItems = {
-         {{"Texture", std::string("../assets/sprite/spaceship.png")},
-          {"Position", std::pair<float, float>(0.0f, 0.0f)}}};
+        {{"Texture", std::string("../assets/sprite/spaceship.png")},
+         {"Position", std::pair<float, float>(0.0f, 0.0f)}}};
     EntityManager::get().CompareEntities(playerId, newItems, {0.0f, 0.0f});
 }
 

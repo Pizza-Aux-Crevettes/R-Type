@@ -79,9 +79,8 @@ static void textSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
     }
 }
 
-void GameEngine::System::render(
-    sf::RenderWindow& window,
-    std::map<int, Entity>& entities) {
+void GameEngine::System::render(sf::RenderWindow& window,
+                                std::map<int, Entity>& entities) {
     for (auto& [id, entity] : entities) {
         spriteSystem(window, entity);
         textSystem(window, entity);
