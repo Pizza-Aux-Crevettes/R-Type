@@ -19,8 +19,7 @@ class System {
   public:
     System();
     ~System();
-    void render(sf::RenderWindow& window,
-                std::map<int, std::shared_ptr<Entity>>& entities);
+    void render(sf::RenderWindow& window, std::map<int, Entity>& entities);
     void update(Entity& entity, UpdateType type, std::any value);
 };
 
