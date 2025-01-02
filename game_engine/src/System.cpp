@@ -7,6 +7,7 @@
 
 #include "System.hpp"
 #include <components/Color.hpp>
+#include <components/Link.hpp>
 #include <components/Position.hpp>
 #include <components/Sprite.hpp>
 #include <components/Text.hpp>
@@ -14,6 +15,48 @@
 #include <iostream>
 
 GameEngine::System::System() {}
+
+static void updateSpritePos(GameEngine::Entity& entity,
+                            std::pair<float, float> pos) {
+    if (entity.hasComponent<Sprite>() && entity.hasComponent<Position>()) {
+        auto& spriteComp = entity.getComponent<Sprite>();
+        auto& positionComp = entity.getComponent<Position>();
+        positionComp.setPositionX(pos.first);
+        positionComp.setPositionY(pos.second);
+        spriteComp.getSprite().setPosition(pos.first, pos.second);
+    }
+}
+
+static void updateTextPos(GameEngine::Entity& entity,
+                          std::pair<float, float> pos) {
+    if (entity.hasComponent<Text>() && entity.hasComponent<Position>()) {
+        auto& textComp = entity.getComponent<Text>();
+        auto& positionComp = entity.getComponent<Position>();
+        positionComp.setPositionX(pos.first);
+        positionComp.setPositionY(pos.second);
+        textComp.getText().setPosition(pos.first, pos.second);
+    }
+}
+
+static void linkSystem(int id, std::map<int, GameEngine::Entity>& entities,
+                       std::pair<float, float> newLinkedEntityPos) {
+    for (int i = 0; i < entities.size(); i++) {
+        if (entities[i].hasComponent<Link>() &&
+            entities[i].getComponent<Link>().getId() == id) {
+            GameEngine::Entity entity = entities[i];
+            GameEngine::Entity entityLinked = entities[id];
+            auto oldLinkedEntityPos = entityLinked.getComponent<Position>();
+            const std::pair dist = {
+                newLinkedEntityPos.first - oldLinkedEntityPos.getPositionX(),
+                newLinkedEntityPos.second - oldLinkedEntityPos.getPositionY()};
+            auto entityPos = entity.getComponent<Position>();
+            const std::pair newPos = {entityPos.getPositionX() + dist.first,
+                                      entityPos.getPositionY() + dist.second};
+            updateSpritePos(entity, newPos);
+            updateTextPos(entity, newPos);
+        }
+    }
+}
 
 static void spriteSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
     if (entity.hasComponent<Sprite>() && entity.hasComponent<Texture>() &&
@@ -70,7 +113,7 @@ static void textSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
                 entity.getComponent<Color>().getColor().size() == 4) {
                 auto& colorComp = entity.getComponent<Color>();
                 const auto color = colorComp.getColor();
-                textComp.getText().setColor(
+                textComp.getText().setFillColor(
                     sf::Color(color[0], color[1], color[2], color[3]));
             }
             textComp.setIsLoaded(true);
@@ -87,15 +130,15 @@ void GameEngine::System::render(sf::RenderWindow& window,
     }
 }
 
-void GameEngine::System::update(Entity& entity, const UpdateType type,
-                                std::any value) {
+void GameEngine::System::update(int id, std::map<int, Entity>& entities,
+                                const UpdateType type, std::any value) {
+    Entity entity = entities[id];
     switch (type) {
     case UpdateType::Position: {
         auto pos = std::any_cast<std::pair<float, float>>(value);
-        entity.getComponent<Position>().setPositionX(pos.first);
-        entity.getComponent<Position>().setPositionY(pos.second);
-        entity.getComponent<Sprite>().getSprite().setPosition(pos.first,
-                                                              pos.second);
+        linkSystem(id, entities, pos);
+        updateSpritePos(entity, pos);
+        updateTextPos(entity, pos);
         break;
     }
     default:;
