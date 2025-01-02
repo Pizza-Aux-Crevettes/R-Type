@@ -12,15 +12,20 @@
 */
 
 #include "components/Link.hpp"
+#include <iostream>
 
 Link::Link(int id) : _id(id) {}
 
 int Link::getId() const {
-    return _id;
+    return this->_id;
 }
 
 void Link::setId(int id) {
-    _id = id;
+    this->_id = id;
+}
+
+void Link::display() const {
+    std::cout << "Link component displayed!" << std::endl;
 }
 
 Link::~Link() {}

@@ -9,13 +9,13 @@
 #include "Components.hpp"
 
 class Link : public Component {
-public:
+  public:
     Link(int id);
     ~Link();
     int getId() const;
     void setId(int id);
     void display() const override;
 
-private:
+  private:
     int _id;
 };
