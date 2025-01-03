@@ -16,25 +16,39 @@
 
 GameEngine::System::System() {}
 
-static void updateSpritePos(GameEngine::Entity& entity,
-                            std::pair<float, float> pos) {
-    if (entity.hasComponent<Sprite>() && entity.hasComponent<Position>()) {
-        auto& spriteComp = entity.getComponent<Sprite>();
+template <typename Drawable>
+static void updatePos(GameEngine::Entity& entity, Drawable& drawable,
+                      const std::pair<float, float>& pos) {
+    if (entity.hasComponent<Position>()) {
         auto& positionComp = entity.getComponent<Position>();
         positionComp.setPositionX(pos.first);
         positionComp.setPositionY(pos.second);
-        spriteComp.getSprite().setPosition(pos.first, pos.second);
+        drawable.setPosition(pos.first, pos.second);
     }
 }
 
-static void updateTextPos(GameEngine::Entity& entity,
-                          std::pair<float, float> pos) {
-    if (entity.hasComponent<Text>() && entity.hasComponent<Position>()) {
-        auto& textComp = entity.getComponent<Text>();
+template <typename Drawable>
+void setColor(GameEngine::Entity& entity, Drawable& drawable) {
+    if (entity.hasComponent<Color>() &&
+        entity.getComponent<Color>().getColor().size() == 4) {
+        auto& colorComp = entity.getComponent<Color>();
+        const auto& color = colorComp.getColor();
+        if constexpr (std::is_same_v<Drawable, sf::Sprite>) {
+            drawable.setColor(
+                sf::Color(color[0], color[1], color[2], color[3]));
+        } else if constexpr (std::is_same_v<Drawable, sf::Text>) {
+            drawable.setFillColor(
+                sf::Color(color[0], color[1], color[2], color[3]));
+        }
+    }
+}
+
+template <typename Drawable>
+static void setPosition(GameEngine::Entity& entity, Drawable& drawable) {
+    if (entity.hasComponent<Position>()) {
         auto& positionComp = entity.getComponent<Position>();
-        positionComp.setPositionX(pos.first);
-        positionComp.setPositionY(pos.second);
-        textComp.getText().setPosition(pos.first, pos.second);
+        drawable.setPosition(positionComp.getPositionX(),
+                             positionComp.getPositionY());
     }
 }
 
@@ -52,8 +66,14 @@ static void linkSystem(int id, std::map<int, GameEngine::Entity>& entities,
             auto entityPos = entity.getComponent<Position>();
             const std::pair newPos = {entityPos.getPositionX() + dist.first,
                                       entityPos.getPositionY() + dist.second};
-            updateSpritePos(entity, newPos);
-            updateTextPos(entity, newPos);
+            if (entity.hasComponent<Sprite>()) {
+                updatePos(entity, entity.getComponent<Sprite>().getSprite(),
+                          newPos);
+            }
+            if (entity.hasComponent<Text>()) {
+                updatePos(entity, entity.getComponent<Text>().getText(),
+                          newPos);
+            }
         }
     }
 }
@@ -63,34 +83,25 @@ static void spriteSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
         entity.hasComponent<Position>()) {
         auto& spriteComp = entity.getComponent<Sprite>();
         auto& textureComp = entity.getComponent<Texture>();
-        auto& positionComp = entity.getComponent<Position>();
-
         if (!textureComp.getIsLoaded()) {
             textureComp.getTexture().loadFromFile(textureComp.getTexturePath());
             textureComp.setIsLoaded(true);
         }
         if (!spriteComp.getIsLoaded()) {
             if (textureComp.getTextureRect().size() == 4) {
-                const auto textureRect = textureComp.getTextureRect();
+                const auto& textureRect = textureComp.getTextureRect();
                 spriteComp.getSprite().setTextureRect(
                     sf::IntRect(textureRect[0], textureRect[1], textureRect[2],
                                 textureRect[3]));
             }
             spriteComp.getSprite().setTexture(textureComp.getTexture());
-            spriteComp.getSprite().setPosition(positionComp.getPositionX(),
-                                               positionComp.getPositionY());
+            setPosition(entity, spriteComp.getSprite());
             if (spriteComp.getSize().first != -1 &&
                 spriteComp.getSize().second != -1) {
                 spriteComp.getSprite().setScale(spriteComp.getSize().first,
                                                 spriteComp.getSize().second);
             }
-            if (entity.hasComponent<Color>() &&
-                entity.getComponent<Color>().getColor().size() == 4) {
-                auto& colorComp = entity.getComponent<Color>();
-                const auto color = colorComp.getColor();
-                spriteComp.getSprite().setColor(
-                    sf::Color(color[0], color[1], color[2], color[3]));
-            }
+            setColor(entity, spriteComp.getSprite());
             spriteComp.setIsLoaded(true);
         }
         window.draw(spriteComp.getSprite());
@@ -100,22 +111,13 @@ static void spriteSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
 static void textSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
     if (entity.hasComponent<Text>() && entity.hasComponent<Position>()) {
         auto& textComp = entity.getComponent<Text>();
-        auto& positionComp = entity.getComponent<Position>();
-
         if (!textComp.getIsLoaded()) {
             textComp.getFont().loadFromFile(textComp.getFontFile());
             textComp.getText().setFont(textComp.getFont());
             textComp.getText().setString(textComp.getString());
             textComp.getText().setCharacterSize(textComp.getCharacterSize());
-            textComp.getText().setPosition(positionComp.getPositionX(),
-                                           positionComp.getPositionY());
-            if (entity.hasComponent<Color>() &&
-                entity.getComponent<Color>().getColor().size() == 4) {
-                auto& colorComp = entity.getComponent<Color>();
-                const auto color = colorComp.getColor();
-                textComp.getText().setFillColor(
-                    sf::Color(color[0], color[1], color[2], color[3]));
-            }
+            setPosition(entity, textComp.getText());
+            setColor(entity, textComp.getText());
             textComp.setIsLoaded(true);
         }
         window.draw(textComp.getText());
@@ -137,8 +139,12 @@ void GameEngine::System::update(int id, std::map<int, Entity>& entities,
     case UpdateType::Position: {
         auto pos = std::any_cast<std::pair<float, float>>(value);
         linkSystem(id, entities, pos);
-        updateSpritePos(entity, pos);
-        updateTextPos(entity, pos);
+        if (entity.hasComponent<Sprite>()) {
+            updatePos(entity, entity.getComponent<Sprite>().getSprite(), pos);
+        }
+        if (entity.hasComponent<Text>()) {
+            updatePos(entity, entity.getComponent<Text>().getText(), pos);
+        }
         break;
     }
     default:;
