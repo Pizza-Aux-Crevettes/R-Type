@@ -49,7 +49,7 @@ void EntityManager::CreateEntity(int id,
         }
         if (key == "Position") {
             newEntity.addComponent(
-                Position(std::any_cast<std::pair<float, float>>(component)));
+                Position({std::any_cast<std::pair<float, float>>(component)}));
         }
     }
     _entities.emplace(id, std::move(newEntity));
