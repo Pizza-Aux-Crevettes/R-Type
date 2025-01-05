@@ -21,7 +21,7 @@ class System {
     ~System();
     void render(sf::RenderWindow& window, std::map<int, Entity>& entities);
     void update(int id, std::map<int, Entity>& entities, UpdateType type,
-                std::any value);
+                std::any value, int posId = 0);
 };
 
 } // namespace GameEngine

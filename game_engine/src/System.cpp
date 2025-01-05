@@ -18,11 +18,11 @@ GameEngine::System::System() {}
 
 template <typename Drawable>
 static void updatePos(GameEngine::Entity& entity, Drawable& drawable,
-                      const std::pair<float, float>& pos) {
+                      const std::pair<float, float>& pos, const int posId) {
     if (entity.hasComponent<Position>()) {
         auto& positionComp = entity.getComponent<Position>();
-        positionComp.setPositionX(pos.first);
-        positionComp.setPositionY(pos.second);
+        positionComp.setPositionX(posId, pos.first);
+        positionComp.setPositionY(posId, pos.second);
         drawable.setPosition(pos.first, pos.second);
     }
 }
@@ -47,32 +47,34 @@ template <typename Drawable>
 static void setPosition(GameEngine::Entity& entity, Drawable& drawable) {
     if (entity.hasComponent<Position>()) {
         auto& positionComp = entity.getComponent<Position>();
-        drawable.setPosition(positionComp.getPositionX(),
-                             positionComp.getPositionY());
+        drawable.setPosition(positionComp.getPositionX(0),
+                             positionComp.getPositionY(0));
     }
 }
 
 static void linkSystem(int id, std::map<int, GameEngine::Entity>& entities,
-                       std::pair<float, float> newLinkedEntityPos) {
+                       std::pair<float, float> newLinkedEntityPos,
+                       const int posId) {
     for (int i = 0; i < entities.size(); i++) {
         if (entities[i].hasComponent<Link>() &&
             entities[i].getComponent<Link>().getId() == id) {
             GameEngine::Entity entity = entities[i];
             GameEngine::Entity entityLinked = entities[id];
             auto oldLinkedEntityPos = entityLinked.getComponent<Position>();
-            const std::pair dist = {
-                newLinkedEntityPos.first - oldLinkedEntityPos.getPositionX(),
-                newLinkedEntityPos.second - oldLinkedEntityPos.getPositionY()};
+            const std::pair dist = {newLinkedEntityPos.first -
+                                        oldLinkedEntityPos.getPositionX(posId),
+                                    newLinkedEntityPos.second -
+                                        oldLinkedEntityPos.getPositionY(posId)};
             auto entityPos = entity.getComponent<Position>();
-            const std::pair newPos = {entityPos.getPositionX() + dist.first,
-                                      entityPos.getPositionY() + dist.second};
+            const std::pair newPos = {entityPos.getPositionX(0) + dist.first,
+                                      entityPos.getPositionY(0) + dist.second};
             if (entity.hasComponent<Sprite>()) {
                 updatePos(entity, entity.getComponent<Sprite>().getSprite(),
-                          newPos);
+                          newPos, 0);
             }
             if (entity.hasComponent<Text>()) {
-                updatePos(entity, entity.getComponent<Text>().getText(),
-                          newPos);
+                updatePos(entity, entity.getComponent<Text>().getText(), newPos,
+                          0);
             }
         }
     }
@@ -104,7 +106,16 @@ static void spriteSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
             setColor(entity, spriteComp.getSprite());
             spriteComp.setIsLoaded(true);
         }
-        window.draw(spriteComp.getSprite());
+        if (entity.getComponent<Position>().getPositions().size() > 1) {
+            auto& positionComp = entity.getComponent<Position>();
+            for (auto& position : positionComp.getPositions()) {
+                spriteComp.getSprite().setPosition(position.first,
+                                                   position.second);
+                window.draw(spriteComp.getSprite());
+            }
+        } else {
+            window.draw(spriteComp.getSprite());
+        }
     }
 }
 
@@ -133,17 +144,20 @@ void GameEngine::System::render(sf::RenderWindow& window,
 }
 
 void GameEngine::System::update(int id, std::map<int, Entity>& entities,
-                                const UpdateType type, std::any value) {
+                                const UpdateType type, std::any value,
+                                const int posId) {
     Entity entity = entities[id];
     switch (type) {
     case UpdateType::Position: {
         auto pos = std::any_cast<std::pair<float, float>>(value);
-        linkSystem(id, entities, pos);
+        linkSystem(id, entities, pos, posId);
         if (entity.hasComponent<Sprite>()) {
-            updatePos(entity, entity.getComponent<Sprite>().getSprite(), pos);
+            updatePos(entity, entity.getComponent<Sprite>().getSprite(), pos,
+                      posId);
         }
         if (entity.hasComponent<Text>()) {
-            updatePos(entity, entity.getComponent<Text>().getText(), pos);
+            updatePos(entity, entity.getComponent<Text>().getText(), pos,
+                      posId);
         }
         break;
     }
