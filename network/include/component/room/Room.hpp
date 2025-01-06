@@ -17,6 +17,9 @@ class Room {
     Room(const std::string& code, const std::shared_ptr<Player>& owner,
          size_t capacity, bool isPublic);
 
+    void startGame();
+    void stopGame();
+    bool isGameStarted() const;
     [[nodiscard]] const std::string& getCode() const;
     [[nodiscard]] const std::shared_ptr<Player>& getOwner() const;
     [[nodiscard]] size_t getCapacity() const;
@@ -30,6 +33,7 @@ class Room {
 
   private:
     std::string _code;
+    bool _gameStarted;
     std::shared_ptr<Player> _owner;
     size_t _capacity;
     bool _isPublic;
