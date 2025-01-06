@@ -8,11 +8,16 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
+#include <netinet/in.h>
 #include "component/map/MapManager.hpp"
 
 class MapProtocol {
   public:
-    static void sendViewportUpdate(int clientSocket, int viewport);
-    static void sendObstaclesUpdate(int clientSocket,
-                                    const std::vector<Obstacle>& obstacles);
+    static void sendViewportUpdate(const int udpSocket,
+                                   const sockaddr_in& clientAddr, int viewport,
+                                   SmartBuffer& smartBuffer);
+    static void sendObstaclesUpdate(const int udpSocket,
+                                    const sockaddr_in& clientAddr,
+                                    const std::vector<Obstacle>& obstacles,
+                                    SmartBuffer& smartBuffer);
 };
