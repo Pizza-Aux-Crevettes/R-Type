@@ -15,6 +15,7 @@
 #include <components/Position.hpp>
 #include <components/Sprite.hpp>
 #include <components/Texture.hpp>
+#include <menu/OptionMenu.hpp>
 #include <thread>
 #include "EntityManager.hpp"
 #include "component/hotkey/HotkeysManager.hpp"
@@ -28,6 +29,7 @@ void Client::manageClient() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Client Game");
     HotkeysManager input;
     GameEngine::System system;
+    OptionMenu menu;
 
     while (window.isOpen()) {
         std::map<int, GameEngine::Entity> entitiesList =
@@ -40,9 +42,10 @@ void Client::manageClient() {
                 input.checkKey(event);
         }
         window.clear();
-        if (entitiesList.size() > 0) {
-            system.render(window, entitiesList);
-        }
+        menu.displayOptionMenu(window, system);
+        // if (entitiesList.size() > 0) {
+        //     system.render(window, entitiesList);
+        // }
         window.display();
     }
 }
