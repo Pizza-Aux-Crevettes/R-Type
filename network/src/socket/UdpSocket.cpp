@@ -7,16 +7,16 @@
 
 #include "socket/UdpSocket.hpp"
 
-#include "component/player/PlayerManager.hpp"
-#include "protocol/Protocol.hpp"
-#include "socket/Server.hpp"
-#include "util/Config.hpp"
-#include "util/Logger.hpp"
 #include <SmartBuffer.hpp>
 #include <arpa/inet.h>
 #include <chrono>
 #include <thread>
 #include <unistd.h>
+#include "component/player/PlayerManager.hpp"
+#include "protocol/Protocol.hpp"
+#include "socket/Server.hpp"
+#include "util/Config.hpp"
+#include "util/Logger.hpp"
 
 UdpSocket::UdpSocket() : _udpSocket(FAILURE) {}
 

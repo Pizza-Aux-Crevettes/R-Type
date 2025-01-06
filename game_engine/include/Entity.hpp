@@ -7,15 +7,16 @@
 
 #pragma once
 
-#include "components/Button.hpp"
-#include "components/Components.hpp"
 #include <memory>
 #include <typeindex>
+#include "components/Button.hpp"
+#include "components/Components.hpp"
 
 namespace GameEngine {
 
 class Entity {
   public:
+    Entity() : _id(0) {}
     Entity(int id);
 
     template <typename... Args> Entity(int id, Args&&... args);
@@ -74,7 +75,7 @@ void Entity::addComponent(ComponentType component) {
         _components.find(std::type_index(typeid(ComponentType)));
     if (component_found == _components.end()) {
         _components[std::type_index(typeid(ComponentType))] =
-            std::make_unique<ComponentType>(component);
+            std::make_shared<ComponentType>(component);
         return;
     }
     throw std::runtime_error(

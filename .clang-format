@@ -36,3 +36,9 @@ AccessModifierOffset: -2
 
 SortIncludes: true
 IncludeBlocks: Preserve
+
+IncludeCategories:
+  - Regex: '^<.*>$'
+    Priority: 1
+  - Regex: '^".*"$'
+    Priority: 2

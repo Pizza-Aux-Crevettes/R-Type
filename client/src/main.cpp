@@ -18,7 +18,7 @@
 
 void runNetworkClient(NetworkClient& networkClient, Client* client) {
     try {
-        networkClient.run(client);
+        networkClient.run();
     } catch (const std::exception& e) {
         Logger::error("[Server Thread] Error: " + std::string(e.what()));
     }

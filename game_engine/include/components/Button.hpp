@@ -10,6 +10,7 @@
 #include "Components.hpp"
 #include <iostream>
 #include <string>
+#include "Components.hpp"
 
 class Button : public Component {
   public:

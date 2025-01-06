@@ -6,9 +6,10 @@
 */
 
 #include "component/room/RoomManager.hpp"
-#include "util/Logger.hpp"
 #include <algorithm>
+#include <memory>
 #include <random>
+#include "util/Logger.hpp"
 
 static constexpr char charset[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                   "0123456789";

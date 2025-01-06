@@ -6,10 +6,10 @@
 */
 
 #pragma once
-#include "Entity.hpp"
 #include <SFML/Graphics/Sprite.hpp>
 #include <any>
 #include <memory>
+#include "Entity.hpp"
 
 namespace GameEngine {
 
@@ -22,7 +22,8 @@ class System {
     void onClick(sf::RenderWindow& window, std::map<int, Entity>& entities,
                  sf::Vector2i mousePos);
     void render(sf::RenderWindow& window, std::map<int, Entity>& entities);
-    void update(Entity& entity, UpdateType type, std::any value);
+    void update(int id, std::map<int, Entity>& entities, UpdateType type,
+                std::any value, int posId = 0);
 };
 
 } // namespace GameEngine

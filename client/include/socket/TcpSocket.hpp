@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "Socket.hpp"
 #include <SmartBuffer.hpp>
+#include "Socket.hpp"
 
 class TcpSocket final : public Socket {
   public:

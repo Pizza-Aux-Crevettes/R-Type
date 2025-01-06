@@ -7,9 +7,10 @@
 
 #pragma once
 
-#include "component/room/Room.hpp"
+#include <memory>
 #include <string>
 #include <vector>
+#include "component/room/Room.hpp"
 
 class RoomManager {
   public:
