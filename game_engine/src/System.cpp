@@ -180,15 +180,19 @@ static void buttonSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
     }
 }
 
-void GameEngine::System::onClick(sf::RenderWindow& window,
-                                 std::map<int, Entity>& entities,
-                                 sf::Vector2i mousePos) {
+int GameEngine::System::onClick(sf::RenderWindow& window,
+                                std::map<int, Entity>& entities,
+                                sf::Vector2i mousePos,
+                                GameEngine::System system) {
     for (auto& [id, entity] : entities) {
         if (entity.hasComponent<Button>() && entity.hasComponent<Position>()) {
             auto& buttonComp = entity.getComponent<Button>();
             auto& positionComp = entity.getComponent<Position>();
 
             if (buttonComp.isHovered(mousePos)) {
+                if (id == 3) {
+                    return 2;
+                }
                 if (id == 4) {
                     window.close();
                 }
