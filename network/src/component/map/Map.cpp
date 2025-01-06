@@ -10,8 +10,8 @@
 Map::Map(const std::string& name, const std::vector<Obstacle>& obstacles)
     : _name(name), _obstacles(obstacles), _viewport(0) {}
 
-void Map::setViewport(int viewport) {
-    _viewport = viewport;
+void Map::incrementViewport() {
+    _viewport += 1;
 }
 
 int Map::getViewport() const {

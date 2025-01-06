@@ -7,25 +7,24 @@
 
 #include "component/map/MapProtocol.hpp"
 #include "protocol/Protocol.hpp"
-#include "socket/TcpSocket.hpp"
+#include "socket/UdpSocket.hpp"
 
-void MapProtocol::sendViewportUpdate(int clientSocket, int viewport) {
-    SmartBuffer smartBuffer;
+void MapProtocol::sendViewportUpdate(const int udpSocket,
+                                     const sockaddr_in& clientAddr,
+                                     int viewport, SmartBuffer& smartBuffer) {
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::VIEWPORT_UPDATE);
     smartBuffer << static_cast<int32_t>(viewport);
-
-    TcpSocket::sendToOne(clientSocket, smartBuffer);
+    UdpSocket::send(udpSocket, clientAddr, smartBuffer);
 }
 
-void MapProtocol::sendObstaclesUpdate(int clientSocket,
-                                      const std::vector<Obstacle>& obstacles) {
-    SmartBuffer smartBuffer;
-
+void MapProtocol::sendObstaclesUpdate(const int udpSocket,
+                                      const sockaddr_in& clientAddr,
+                                      const std::vector<Obstacle>& obstacles,
+                                      SmartBuffer& smartBuffer) {
     for (const auto& obstacle : obstacles) {
+        smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(Protocol::OpCode::BLOCKS_UPDATE);
-        smartBuffer << static_cast<int16_t>(obstacle._x)
-                    << static_cast<int16_t>(obstacle._y)
-                    << static_cast<int16_t>(obstacle._type);
-        TcpSocket::sendToOne(clientSocket, smartBuffer);
+        smartBuffer << obstacle._x << obstacle._y << obstacle._type;
+        UdpSocket::send(udpSocket, clientAddr, smartBuffer);
     }
 }

@@ -11,10 +11,12 @@
 #include <chrono>
 #include <thread>
 #include <unistd.h>
+#include "component/map/MapProtocol.hpp"
 #include "component/player/PlayerManager.hpp"
+#include "component/player/PlayerProtocol.hpp"
+#include "component/room/RoomManager.hpp"
 #include "protocol/Protocol.hpp"
 #include "socket/Server.hpp"
-#include "component/map/MapProtocol.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
@@ -79,33 +81,45 @@ void UdpSocket::handleRead(SmartBuffer& smartBuffer) {
         smartBuffer.reset();
         smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer), bytesRead);
 
-        Protocol::handleMessage(_udpSocket, smartBuffer);
+        Protocol::handleMessage(_udpSocket, smartBuffer, clientAddr);
     }
 }
 
 void UdpSocket::handleSend(SmartBuffer& smartBuffer) {
-    const auto clients = getClients();
-    const auto& players = PlayerManager::get().getPlayers();
+    const auto& rooms = RoomManager::get().getRooms();
 
-    if (clients.empty() || players.empty()) {
+    if (rooms.empty()) {
         return;
     }
 
-    for (const auto& client : clients) {
-        for (const auto& [playerId, player] : players) {
-            smartBuffer.reset();
-            smartBuffer << static_cast<int16_t>(
-                               Protocol::OpCode::PLAYER_UPDATE_POSITION)
-                        << playerId << player->getPosition().getX()
-                        << player->getPosition().getY();
-
-            send(_udpSocket, client, smartBuffer);
-
-            MapProtocol::sendViewportUpdate(client, smartBuffer);
-            MapProtocol::sendObstaclesUpdate(client, smartBuffer);
+    for (const auto& room : rooms) {
+        if (!room->isGameStarted()) {
+            continue;
         }
 
-    }w  
+        auto map = room->getMap();
+
+        if (!map) {
+            Logger::warning("[UdpSocket] Room " + room->getCode() +
+                            " has no map assigned.");
+
+            continue;
+        }
+
+        map->incrementViewport();
+
+        const auto& players = room->getPlayers();
+        for (const auto& player : players) {
+            PlayerProtocol::sendPlayerPositionUpdate(_udpSocket, players,
+                                                     player, smartBuffer);
+            MapProtocol::sendViewportUpdate(_udpSocket,
+                                            player->getClientAddress(),
+                                            map->getViewport(), smartBuffer);
+            MapProtocol::sendObstaclesUpdate(_udpSocket,
+                                             player->getClientAddress(),
+                                             map->getObstacles(), smartBuffer);
+        }
+    }
 }
 
 void UdpSocket::addClient(const sockaddr_in& clientAddr) {

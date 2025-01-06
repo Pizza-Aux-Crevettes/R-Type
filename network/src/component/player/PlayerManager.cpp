@@ -25,7 +25,9 @@ int32_t PlayerManager::getNextUserId() const {
     return *std::ranges::max_element(_players | std::views::keys) + 1;
 }
 
-std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
+std::shared_ptr<Player>
+PlayerManager::createPlayer(const std::string& name,
+                            const sockaddr_in& clientAddr) {
     const int32_t userId = getNextUserId();
 
     if (_players.contains(userId)) {
@@ -37,7 +39,7 @@ std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
 
     auto player =
         std::make_shared<Player>(userId, name, Point(0, 0), Point(20, 10), 1.0);
-
+    player->setClientAddress(clientAddr);
     _players[userId] = player;
 
     Logger::success("[PlayerManager] Created player with userId " +

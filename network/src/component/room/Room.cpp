@@ -18,6 +18,22 @@ Room::Room(const std::string& code, const std::shared_ptr<Player>& owner,
                  ", Public: " + (isPublic ? "true" : "false"));
 }
 
+void Room::startGame() {
+    _gameStarted = true;
+
+    Logger::info("[Room] Game started in Room Code: " + _code);
+}
+
+void Room::stopGame() {
+    _gameStarted = false;
+
+    Logger::info("[Room] Game stopped in Room Code: " + _code);
+}
+
+bool Room::isGameStarted() const {
+    return _gameStarted;
+}
+
 void Room::setMap(const std::shared_ptr<Map>& map) {
     _map = map;
 }
