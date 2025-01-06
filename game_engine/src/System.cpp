@@ -13,6 +13,7 @@
 #include <components/Sprite.hpp>
 #include <components/Text.hpp>
 #include <components/Texture.hpp>
+#include <components/Button.hpp>
 #include <iostream>
 
 GameEngine::System::System() {}
