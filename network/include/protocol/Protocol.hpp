@@ -8,6 +8,7 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
+#include <netinet/in.h>
 
 class Protocol {
   public:
@@ -43,7 +44,8 @@ class Protocol {
 
     static Protocol& get();
 
-    static void handleMessage(int clientSocket, SmartBuffer& smartBuffer);
+    static void handleMessage(int clientSocket, SmartBuffer& smartBuffer,
+                              const sockaddr_in& clientAddr);
 
   private:
     Protocol() = default;
