@@ -140,6 +140,64 @@ static void textSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
     }
 }
 
+static void buttonSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
+    if (entity.hasComponent<Button>() && entity.hasComponent<Position>()) {
+        auto& buttonComp = entity.getComponent<Button>();
+        auto& positionComp = entity.getComponent<Position>();
+
+        if (!buttonComp.getIsLoaded()) {
+
+            buttonComp.getFont().loadFromFile(buttonComp.getFontFile());
+
+            buttonComp.getText().setFont(buttonComp.getFont());
+            buttonComp.getText().setString(buttonComp.getString());
+            buttonComp.getText().setCharacterSize(
+                buttonComp.getCharacterSize());
+            buttonComp.getText().setFillColor(sf::Color::White);
+
+            sf::FloatRect textBounds = buttonComp.getText().getGlobalBounds();
+
+            buttonComp.getButton().setSize(
+                sf::Vector2f(textBounds.width, textBounds.height));
+            buttonComp.getButton().setFillColor(sf::Color::Transparent);
+            buttonComp.getButton().setPosition(positionComp.getPositionX(0),
+                                               positionComp.getPositionY(0));
+
+            buttonComp.getText().setOrigin(textBounds.width / 2,
+                                           textBounds.height / 2);
+            buttonComp.getText().setPosition(
+                buttonComp.getButton().getPosition().x +
+                    buttonComp.getButton().getSize().x / 2,
+                (buttonComp.getButton().getPosition().y +
+                 buttonComp.getButton().getSize().y / 2) -
+                    15);
+
+            buttonComp.setIsLoaded(true);
+        }
+
+        window.draw(buttonComp.getButton());
+        window.draw(buttonComp.getText());
+    }
+}
+
+void GameEngine::System::onClick(sf::RenderWindow& window,
+                                 std::map<int, Entity>& entities,
+                                 sf::Vector2i mousePos) {
+    for (auto& [id, entity] : entities) {
+        if (entity.hasComponent<Button>() && entity.hasComponent<Position>()) {
+            auto& buttonComp = entity.getComponent<Button>();
+            auto& positionComp = entity.getComponent<Position>();
+
+            if (buttonComp.isHovered(mousePos)) {
+                if (id == 4) {
+                    window.close();
+                }
+                std::cout << "Button " << id << " clicked!" << std::endl;
+            }
+        }
+    }
+}
+
 static void shapeSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
     if (entity.hasComponent<Shape>() && entity.hasComponent<Position>()) {
         auto& shapeComp = entity.getComponent<Shape>();
@@ -312,6 +370,7 @@ void GameEngine::System::render(sf::RenderWindow& window,
     for (auto& [id, entity] : entities) {
         spriteSystem(window, entity);
         textSystem(window, entity);
+        buttonSystem(window, entity);
         optionButtonSystem(window, entity);
         sliderSystem(window, entity);
         shapeSystem(window, entity);
