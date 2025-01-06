@@ -7,13 +7,14 @@
 
 #pragma once
 
-#include <string>
 #include <functional>
+#include <string>
 #include "Components.hpp"
 
 class OptionButton : public Component {
   public:
-    OptionButton(std::string text = "", std::pair<double, double> size = {0.0, 0.0});
+    OptionButton(std::string text = "",
+                 std::pair<double, double> size = {0.0, 0.0});
     ~OptionButton();
     std::string getText() const;
     void setText(std::string text);

@@ -12,10 +12,10 @@
 #include "Client.hpp"
 #include <Entity.hpp>
 #include <System.hpp>
-#include <menu/OptionMenu.hpp>
 #include <components/Position.hpp>
 #include <components/Sprite.hpp>
 #include <components/Texture.hpp>
+#include <menu/OptionMenu.hpp>
 #include <thread>
 #include "EntityManager.hpp"
 #include "component/hotkey/HotkeysManager.hpp"

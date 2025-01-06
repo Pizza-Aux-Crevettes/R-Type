@@ -4,7 +4,8 @@
 ** File description:
 ** OptionButton.cpp
 **
-** The OptionButton class represents a UI option button with a text label and a size.
+** The OptionButton class represents a UI option button with a text label and a
+*size.
 ** It holds a `text` as a string and `size` as a `std::pair<double, double>` for
 *the option button's
 ** width and height.
@@ -17,12 +18,12 @@
 /**
  * @brief Constructor for the OptionButton component.
  *
- * This constructor initializes the OptionButton component with the specified text and
- * size.
+ * This constructor initializes the OptionButton component with the specified
+ * text and size.
  *
  * @param text A string representing the text on the option button.
- * @param size A pair of doubles representing the size of the option button (width,
- * height).
+ * @param size A pair of doubles representing the size of the option button
+ * (width, height).
  */
 OptionButton::OptionButton(std::string text, std::pair<double, double> size)
     : _text(text), _size(size) {}
@@ -50,7 +51,8 @@ std::string OptionButton::getText() const {
  *
  * This function sets the text displayed on the option button.
  *
- * @param text A string representing the new text to display on the option button.
+ * @param text A string representing the new text to display on the option
+ * button.
  */
 void OptionButton::setText(std::string text) {
     this->_text = text;
@@ -73,8 +75,8 @@ std::pair<double, double> OptionButton::getSize() const {
  *
  * This function sets the size of the option button as a pair of doubles.
  *
- * @param size A pair of doubles representing the new size of the option button (width,
- * height).
+ * @param size A pair of doubles representing the new size of the option button
+ * (width, height).
  */
 void OptionButton::setSize(std::pair<double, double> size) {
     this->_size = size;
@@ -130,7 +132,8 @@ void OptionButton::setIsLoaded() {
  * @return True if the OptionButton is active, false otherwise.
  */
 bool OptionButton::getChecked() const {
-    return this->_isChecked;}
+    return this->_isChecked;
+}
 
 /**
  * @brief Set whether the OptionButton component is checked.
@@ -145,7 +148,8 @@ void OptionButton::setChecked() {
  * @brief Set function for callback.
  *
  * This function sets the callback state of the Slider component.
- * @param callback An std::function object representing the function to callback.
+ * @param callback An std::function object representing the function to
+ * callback.
  */
 void OptionButton::setCallback(std::function<void()> callback) {
     _callback = callback;
@@ -165,8 +169,8 @@ void OptionButton::executeCallback() {
 /**
  * @brief Display the OptionButton component information.
  *
- * This function displays a message indicating that the OptionButton component is
- * being displayed.
+ * This function displays a message indicating that the OptionButton component
+ * is being displayed.
  */
 void OptionButton::display() const {
     std::cout << "OptionButton component displayed!" << std::endl;

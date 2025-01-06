@@ -7,11 +7,11 @@
 
 #pragma once
 
-#include <functional>
-#include <System.hpp>
-#include <memory>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <System.hpp>
+#include <functional>
+#include <memory>
 
 class OptionMenu {
   private:
@@ -29,11 +29,17 @@ class OptionMenu {
   public:
     OptionMenu();
     ~OptionMenu();
-    GameEngine::Entity createEntityText(int, const std::string, const std::pair<int, int>, unsigned int);
-    GameEngine::Entity createEntityOptionButton(int, const std::pair<int, int>,std::function<void()>);
-    GameEngine::Entity createEntitySlider(int, const std::pair<int, int>, const std::pair<int, int>, std::function<float()>, std::function<void(float)>);
-    
-    void displayOptionMenu(sf::RenderWindow &, GameEngine::System);
+    GameEngine::Entity createEntityText(int, const std::string,
+                                        const std::pair<int, int>,
+                                        unsigned int);
+    GameEngine::Entity createEntityOptionButton(int, const std::pair<int, int>,
+                                                std::function<void()>);
+    GameEngine::Entity createEntitySlider(int, const std::pair<int, int>,
+                                          const std::pair<int, int>,
+                                          std::function<float()>,
+                                          std::function<void(float)>);
+
+    void displayOptionMenu(sf::RenderWindow&, GameEngine::System);
     int getVolumnMusic();
     void setVolumnMusic(int);
     int getVolumnGame();

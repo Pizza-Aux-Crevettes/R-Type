@@ -7,12 +7,12 @@
 
 #include "System.hpp"
 #include <components/Color.hpp>
+#include <components/OptionButton.hpp>
 #include <components/Position.hpp>
+#include <components/Slider.hpp>
 #include <components/Sprite.hpp>
 #include <components/Text.hpp>
 #include <components/Texture.hpp>
-#include <components/OptionButton.hpp>
-#include <components/Slider.hpp>
 #include <iostream>
 
 GameEngine::System::System() {}
@@ -81,16 +81,20 @@ static void textSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
     }
 }
 
-static void optionButtonSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
-    if (entity.hasComponent<OptionButton>() && entity.hasComponent<Position>()) {
+static void optionButtonSystem(sf::RenderWindow& window,
+                               GameEngine::Entity& entity) {
+    if (entity.hasComponent<OptionButton>() &&
+        entity.hasComponent<Position>()) {
         auto& buttonComp = entity.getComponent<OptionButton>();
         auto& positionComp = entity.getComponent<Position>();
 
         if (!buttonComp.getIsLoaded()) {
             sf::RectangleShape buttonShape;
-            buttonShape.setSize({static_cast<float>(buttonComp.getSize().first), 
-                                 static_cast<float>(buttonComp.getSize().second)});
-            buttonShape.setPosition(positionComp.getPositionX(), positionComp.getPositionY());
+            buttonShape.setSize(
+                {static_cast<float>(buttonComp.getSize().first),
+                 static_cast<float>(buttonComp.getSize().second)});
+            buttonShape.setPosition(positionComp.getPositionX(),
+                                    positionComp.getPositionY());
             buttonShape.setOutlineThickness(2);
             if (entity.hasComponent<Color>() &&
                 entity.getComponent<Color>().getColor().size() == 4) {
@@ -109,7 +113,8 @@ static void optionButtonSystem(sf::RenderWindow& window, GameEngine::Entity& ent
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::FloatRect buttonBounds = buttonComp.getShape().getGlobalBounds();
 
-        if (buttonBounds.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+        if (buttonBounds.contains(static_cast<float>(mousePos.x),
+                                  static_cast<float>(mousePos.y))) {
             bool isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 
             if (isPressed && !wasPressedMap[&entity]) {
@@ -138,13 +143,16 @@ static void sliderSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
 
         if (!sliderComp.getIsLoaded()) {
             sf::RectangleShape barShape;
-            barShape.setPosition(positionComp.getPositionX(), positionComp.getPositionY());
-            barShape.setSize({static_cast<float>(sliderComp.getSize().first), static_cast<float>(sliderComp.getSize().second)});
+            barShape.setPosition(positionComp.getPositionX(),
+                                 positionComp.getPositionY());
+            barShape.setSize({static_cast<float>(sliderComp.getSize().first),
+                              static_cast<float>(sliderComp.getSize().second)});
             barShape.setOutlineThickness(5);
             barShape.setOutlineColor(sf::Color::Transparent);
 
             sf::CircleShape cursorShape;
-            cursorShape.setPosition(positionComp.getPositionX(), positionComp.getPositionY() - 7);
+            cursorShape.setPosition(positionComp.getPositionX(),
+                                    positionComp.getPositionY() - 7);
             cursorShape.setRadius(9.f);
 
             sliderComp.setBarShape(barShape);
@@ -166,7 +174,8 @@ static void sliderSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::FloatRect barBounds = sliderComp.getBarShape().getGlobalBounds();
 
-        if (barBounds.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+        if (barBounds.contains(static_cast<float>(mousePos.x),
+                               static_cast<float>(mousePos.y))) {
             bool isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 
             if (isPressed && !wasPressedMap[&entity]) {
@@ -175,18 +184,21 @@ static void sliderSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
                 wasPressedMap[&entity] = false;
             }
             if (wasPressedMap[&entity]) {
-                float newValue = sliderComp.triggerGetCallback();
+                float newValue =
+                    (mousePos.x - barBounds.left) / barBounds.width;
                 newValue = std::clamp(newValue, 0.f, 1.f);
 
-                float sliderValue = sliderComp.getMinValue() + newValue * (sliderComp.getMaxValue() - sliderComp.getMinValue());
+                float sliderValue = sliderComp.getMinValue() +
+                                    newValue * (sliderComp.getMaxValue() -
+                                                sliderComp.getMinValue());
 
                 sliderComp.setValue(sliderValue);
 
                 float cursorX = barBounds.left + newValue * barBounds.width;
                 sliderComp.getCursorShape().setPosition(
-                    cursorX - sliderComp.getCursorShape().getRadius(), 
-                    sliderComp.getCursorShape().getPosition().y
-                );
+                    cursorX - sliderComp.getCursorShape().getRadius(),
+                    sliderComp.getCursorShape().getPosition().y);
+
                 sliderComp.triggerSetCallback(sliderValue);
             }
         }
