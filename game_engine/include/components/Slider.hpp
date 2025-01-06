@@ -37,7 +37,7 @@ class Slider : public Component {
         void setSetCallback(std::function<void(float)>);
         void setGetCallback(std::function<float()>);
         float triggerSetCallback(float value);
-        float triggerGetCallback(float value);
+        float triggerGetCallback();
         void display() const;
 
     private:

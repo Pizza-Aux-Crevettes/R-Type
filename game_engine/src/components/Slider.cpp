@@ -226,11 +226,11 @@ float Slider::triggerSetCallback(float newValue) {
  *
  * This function call the function get in callback of the Slider component.
  */
-float Slider::triggerGetCallback(float newValue) {
-        if (getCallback) {
-            return getCallback();
-        }
-        return 0.0f;
+float Slider::triggerGetCallback() {
+    if (getCallback) {
+        return getCallback();
+    }
+    return 0.0f;
 }
 
 

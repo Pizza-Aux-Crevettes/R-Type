@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <functional>
 #include <System.hpp>
 #include <memory>
 #include <SFML/Graphics.hpp>
@@ -16,11 +17,11 @@ class OptionMenu {
   private:
     std::map<int, GameEngine::Entity> _entitiesMenuOption;
     bool _entitiesInitialized = false;
-    int _volumnMusic = 25;
-    int _volumnGame = 25;
+    int _volumnMusic = 0;
+    int _volumnGame = 0;
     int _resolution = 1;
     bool _adaptabilityText = false;
-    float _elementSize = 1;
+    float _elementSize = 0;
     bool _difficulty = false;
     bool _control = false;
     bool _constrast = false;
@@ -29,7 +30,7 @@ class OptionMenu {
     OptionMenu();
     ~OptionMenu();
     GameEngine::Entity createEntityText(int, const std::string, const std::pair<int, int>, unsigned int);
-    GameEngine::Entity createEntityButton(int, const std::pair<int, int>,std::function<void()>);
+    GameEngine::Entity createEntityOptionButton(int, const std::pair<int, int>,std::function<void()>);
     GameEngine::Entity createEntitySlider(int, const std::pair<int, int>, const std::pair<int, int>, std::function<float()>, std::function<void(float)>);
     
     void displayOptionMenu(sf::RenderWindow &, GameEngine::System);

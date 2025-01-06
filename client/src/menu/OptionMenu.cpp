@@ -10,7 +10,7 @@
 #include "Client.hpp"
 #include <SFML/Graphics.hpp>
 #include <Entity.hpp>
-#include "components/Button.hpp"
+#include "components/OptionButton.hpp"
 #include "components/Color.hpp"
 #include "components/Text.hpp"
 #include "components/Position.hpp"
@@ -28,9 +28,9 @@ GameEngine::Entity OptionMenu::createEntityText(int id, const std::string text, 
     return newEntity;
 }
 
-GameEngine::Entity OptionMenu::createEntityButton(int id, const std::pair<int, int> position, std::function<void()> callback) {
+GameEngine::Entity OptionMenu::createEntityOptionButton(int id, std::pair<int, int> position, std::function<void()> callback) {
     auto newEntity = GameEngine::Entity(id);
-    auto button = Button("Button", {20, 20});
+    auto button = OptionButton("OptionButton", {20, 20});
     button.setCallback(callback);
     newEntity.addComponent(button);
     newEntity.addComponent(Position(position));
@@ -60,10 +60,10 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow &window, GameEngine::System 
         _entitiesMenuOption.emplace(entityId, createEntityText(entityId++, "High contrast", {40, 380}, 20));
         _entitiesMenuOption.emplace(entityId, createEntityText(entityId++, "High difficulty", {40, 450}, 20));
         _entitiesMenuOption.emplace(entityId, createEntityText(entityId++, "Controller  mode", {40, 520}, 20));
-        _entitiesMenuOption.emplace(entityId, createEntityButton(entityId++, {720, 240}, [this]() { setAdaptabilityText(); }));
-        _entitiesMenuOption.emplace(entityId, createEntityButton(entityId++, {720, 380}, [this]() { setContrast(); }));
-        _entitiesMenuOption.emplace(entityId, createEntityButton(entityId++, {720, 450}, [this]() { setDifficulty(); }));
-        _entitiesMenuOption.emplace(entityId, createEntityButton(entityId++, {720, 820}, [this]() { setControl(); }));
+        _entitiesMenuOption.emplace(entityId, createEntityOptionButton(entityId++, {720, 240}, [this]() { setAdaptabilityText(); }));
+        _entitiesMenuOption.emplace(entityId, createEntityOptionButton(entityId++, {720, 380}, [this]() { setContrast(); }));
+        _entitiesMenuOption.emplace(entityId, createEntityOptionButton(entityId++, {720, 450}, [this]() { setDifficulty(); }));
+        _entitiesMenuOption.emplace(entityId, createEntityOptionButton(entityId++, {720, 520}, [this]() { setControl(); }));
         _entitiesMenuOption.emplace(entityId, createEntityText(entityId++, "Game effects", {160, 85}, 15));
         _entitiesMenuOption.emplace(entityId, createEntityText(entityId++,  std::to_string(getVolumnGame()), {140, 105}, 15));
         _entitiesMenuOption.emplace(entityId, createEntitySlider(entityId++, {0, 100}, {160, 115}, [this]() { return static_cast<float>(getVolumnMusic()); }, [this](float newValue) { setVolumnMusic(static_cast<int>(newValue));}));

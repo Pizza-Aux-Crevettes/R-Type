@@ -11,7 +11,7 @@
 #include <components/Sprite.hpp>
 #include <components/Text.hpp>
 #include <components/Texture.hpp>
-#include <components/Button.hpp>
+#include <components/OptionButton.hpp>
 #include <components/Slider.hpp>
 #include <iostream>
 
@@ -81,9 +81,9 @@ static void textSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
     }
 }
 
-static void buttonSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
-    if (entity.hasComponent<Button>() && entity.hasComponent<Position>()) {
-        auto& buttonComp = entity.getComponent<Button>();
+static void optionButtonSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
+    if (entity.hasComponent<OptionButton>() && entity.hasComponent<Position>()) {
+        auto& buttonComp = entity.getComponent<OptionButton>();
         auto& positionComp = entity.getComponent<Position>();
 
         if (!buttonComp.getIsLoaded()) {
@@ -175,7 +175,7 @@ static void sliderSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
                 wasPressedMap[&entity] = false;
             }
             if (wasPressedMap[&entity]) {
-                float newValue = (mousePos.x - barBounds.left) / barBounds.width;
+                float newValue = sliderComp.triggerGetCallback();
                 newValue = std::clamp(newValue, 0.f, 1.f);
 
                 float sliderValue = sliderComp.getMinValue() + newValue * (sliderComp.getMaxValue() - sliderComp.getMinValue());
@@ -187,7 +187,6 @@ static void sliderSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
                     cursorX - sliderComp.getCursorShape().getRadius(), 
                     sliderComp.getCursorShape().getPosition().y
                 );
-
                 sliderComp.triggerSetCallback(sliderValue);
             }
         }
@@ -202,7 +201,7 @@ void GameEngine::System::render(sf::RenderWindow& window,
     for (auto& [id, entity] : entities) {
         spriteSystem(window, entity);
         textSystem(window, entity);
-        buttonSystem(window, entity);
+        optionButtonSystem(window, entity);
         sliderSystem(window, entity);
     }
 }
