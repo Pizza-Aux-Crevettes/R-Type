@@ -14,7 +14,7 @@ class Map {
   public:
     Map(const std::string& name, const std::vector<Obstacle>& obstacles);
 
-    void setViewport(int viewport);
+    void incrementViewport();
     int getViewport() const;
     const std::vector<Obstacle>& getObstacles() const;
 
