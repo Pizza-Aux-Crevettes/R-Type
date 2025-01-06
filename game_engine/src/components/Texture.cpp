@@ -20,7 +20,8 @@
  * @param texturePath The path to the texture file.
  * @param textureRect
  */
-Texture::Texture(const std::string& texturePath, const std::vector<int>& textureRect)
+Texture::Texture(const std::string& texturePath,
+                 const std::vector<int>& textureRect)
     : _texturePath(texturePath), _textureRect(textureRect) {}
 
 /**

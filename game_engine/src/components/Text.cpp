@@ -23,7 +23,8 @@
  * @param fontFile
  * @param characterSize
  */
-Text::Text(const std::string& text, const std::string& fontFile, const unsigned int characterSize)
+Text::Text(const std::string& text, const std::string& fontFile,
+           const unsigned int characterSize)
     : _initText(text), _fontFile(fontFile), _charSize(characterSize) {}
 
 /**

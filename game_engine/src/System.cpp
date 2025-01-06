@@ -137,8 +137,7 @@ static void textSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
         if (entity.getComponent<Position>().getPositions().size() > 1) {
             auto& positionComp = entity.getComponent<Position>();
             for (auto& position : positionComp.getPositions()) {
-                textComp.getText().setPosition(position.first,
-                                                   position.second);
+                textComp.getText().setPosition(position.first, position.second);
                 window.draw(textComp.getText());
             }
         } else {

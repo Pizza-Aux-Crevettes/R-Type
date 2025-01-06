@@ -15,7 +15,8 @@ enum ShapeType { Circle, Rectangle };
 class Shape : public Component {
   public:
     Shape(ShapeType type = Rectangle,
-          const std::pair<double, double>& size = {0.0, 0.0}, float radius = 1.0);
+          const std::pair<double, double>& size = {0.0, 0.0},
+          float radius = 1.0);
     ~Shape();
     void setShape(const sf::RectangleShape& rect);
     void setShape(const sf::CircleShape& circle);

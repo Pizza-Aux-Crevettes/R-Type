@@ -12,7 +12,7 @@
 
 class Color : public Component {
   public:
-    Color(const std::vector<double> &color = {});
+    Color(const std::vector<double>& color = {});
     ~Color();
     std::vector<double> getColor() const;
     void setColor(const std::vector<double>& color);

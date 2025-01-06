@@ -17,7 +17,8 @@
 #include "components/Shape.hpp"
 #include <iostream>
 
-Shape::Shape(const ShapeType type, const std::pair<double, double>& size, const float radius)
+Shape::Shape(const ShapeType type, const std::pair<double, double>& size,
+             const float radius)
     : _type(type), _size(size), _radius(radius) {}
 
 std::pair<double, double> Shape::getSize() const {

@@ -12,7 +12,8 @@
 
 class Texture : public Component {
   public:
-    Texture(const std::string& texturePath = "", const std::vector<int>& textureRect = {});
+    Texture(const std::string& texturePath = "",
+            const std::vector<int>& textureRect = {});
     ~Texture();
     std::string getTexturePath() const;
     void setTexturePath(const std::string& texturePath);
