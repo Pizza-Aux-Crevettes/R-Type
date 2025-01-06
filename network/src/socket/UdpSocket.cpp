@@ -14,6 +14,7 @@
 #include "component/player/PlayerManager.hpp"
 #include "protocol/Protocol.hpp"
 #include "socket/Server.hpp"
+#include "component/map/MapProtocol.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
@@ -99,8 +100,12 @@ void UdpSocket::handleSend(SmartBuffer& smartBuffer) {
                         << player->getPosition().getY();
 
             send(_udpSocket, client, smartBuffer);
+
+            MapProtocol::sendViewportUpdate(client, smartBuffer);
+            MapProtocol::sendObstaclesUpdate(client, smartBuffer);
         }
-    }
+
+    }w  
 }
 
 void UdpSocket::addClient(const sockaddr_in& clientAddr) {

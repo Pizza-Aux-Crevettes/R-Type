@@ -14,20 +14,29 @@ class Protocol {
   public:
     enum OpCode {
         DEFAULT,
+        
+        // Client -> Server
         CREATE_ROOM,
-        CREATE_ROOM_CALLBACK,
-        CREATE_ROOM_BROADCAST,
         JOIN_ROOM,
-        JOIN_ROOM_CALLBACK,
-        JOIN_ROOM_BROADCAST,
         DELETE_ROOM,
-        DELETE_ROOM_CALLBACK,
-        DELETE_ROOM_BROADCAST,
         NEW_PLAYER,
+        HOTKEY_PRESSED,
+
+        // Server -> Client
+        CREATE_ROOM_CALLBACK,
+        JOIN_ROOM_CALLBACK,
+        DELETE_ROOM_CALLBACK,
         NEW_PLAYER_CALLBACK,
+
+        // Server -> All clients
+        CREATE_ROOM_BROADCAST,
+        JOIN_ROOM_BROADCAST,
+        DELETE_ROOM_BROADCAST,
         NEW_PLAYER_BROADCAST,
         PLAYER_UPDATE_POSITION,
-        HOTKEY_PRESSED
+        PLAYER_UPDATE_LIFE,
+        VIEWPORT_UPDATE,
+        BLOCKS_UPDATE,
     };
 
     Protocol(const Protocol&) = delete;
