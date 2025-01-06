@@ -91,8 +91,10 @@ void UdpSocket::handleSend() {
     for (const auto& client : clients) {
         for (const auto& [playerId, player] : players) {
             SmartBuffer smartBuffer;
-            smartBuffer << static_cast<int16_t>(Protocol::OpCode::PLAYER_UPDATE_POSITION)
-                        << playerId << player->getPosition().getX() << player->getPosition().getY();
+            smartBuffer << static_cast<int16_t>(
+                               Protocol::OpCode::PLAYER_UPDATE_POSITION)
+                        << playerId << player->getPosition().getX()
+                        << player->getPosition().getY();
 
             send(_udpSocket, client, smartBuffer);
         }

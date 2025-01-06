@@ -23,7 +23,8 @@ TcpSocket::~TcpSocket() {
     close();
 }
 
-void TcpSocket::sendToOne(const int clientSocket, const SmartBuffer& smartBuffer) {
+void TcpSocket::sendToOne(const int clientSocket,
+                          const SmartBuffer& smartBuffer) {
     send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0);
 }
 
