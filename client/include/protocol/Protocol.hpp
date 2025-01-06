@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "Client.hpp"
 #include <SmartBuffer.hpp>
+#include "Client.hpp"
 
 class Protocol {
   public:

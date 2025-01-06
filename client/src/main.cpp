@@ -5,6 +5,8 @@
 ** main.cpp
 */
 
+#include <SFML/Audio.hpp>
+#include <thread>
 #include "System.hpp"
 #include "components/Position.hpp"
 #include "components/Sprite.hpp"
@@ -13,8 +15,6 @@
 #include "protocol/NetworkClient.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
-#include <SFML/Audio.hpp>
-#include <thread>
 
 void runNetworkClient(NetworkClient& networkClient, Client* client) {
     try {

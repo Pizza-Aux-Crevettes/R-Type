@@ -10,8 +10,6 @@
 #include <thread>
 #include "protocol/Protocol.hpp"
 #include "util/Logger.hpp"
-#include <iostream>
-#include <thread>
 
 NetworkClient::NetworkClient(const std::string& serverAddress,
                              const int serverPort)
@@ -41,7 +39,6 @@ void NetworkClient::run() {
     tcpThread.join();
     udpThread.join();
 }
-
 
 void NetworkClient::handleTcpMessages() const {
     try {
