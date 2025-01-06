@@ -5,17 +5,17 @@
 ** main.cpp
 */
 
+#include <System.hpp>
+#include <components/Color.hpp>
+#include <components/Link.hpp>
+#include <components/Position.hpp>
+#include <components/Shape.hpp>
+#include <components/Sprite.hpp>
+#include <components/Text.hpp>
 #include <thread>
 #include "protocol/NetworkClient.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
-#include <System.hpp>
-#include <components/Text.hpp>
-#include <components/Link.hpp>
-#include <components/Position.hpp>
-#include <components/Sprite.hpp>
-#include <components/Shape.hpp>
-#include <components/Color.hpp>
 
 void runNetworkClient(NetworkClient& networkClient, Client* client) {
     try {
