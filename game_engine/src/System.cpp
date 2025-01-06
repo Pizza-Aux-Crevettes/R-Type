@@ -6,6 +6,7 @@
 */
 
 #include "System.hpp"
+#include <components/Button.hpp>
 #include <components/Color.hpp>
 #include <components/Link.hpp>
 #include <components/OptionButton.hpp>
@@ -21,7 +22,7 @@ GameEngine::System::System() {}
 
 template <typename Drawable>
 static void updatePos(GameEngine::Entity& entity, Drawable& drawable,
-                      const std::pair<float, float>& pos, const int posId) {
+                      const std::pair<float, float>& pos, const int& posId) {
     if (entity.hasComponent<Position>()) {
         auto& positionComp = entity.getComponent<Position>();
         positionComp.setPositionX(posId, pos.first);
@@ -136,7 +137,15 @@ static void textSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
             setColor(entity, textComp.getText());
             textComp.setIsLoaded(true);
         }
-        window.draw(textComp.getText());
+        if (entity.getComponent<Position>().getPositions().size() > 1) {
+            auto& positionComp = entity.getComponent<Position>();
+            for (auto& position : positionComp.getPositions()) {
+                textComp.getText().setPosition(position.first, position.second);
+                window.draw(textComp.getText());
+            }
+        } else {
+            window.draw(textComp.getText());
+        }
     }
 }
 
@@ -201,7 +210,7 @@ void GameEngine::System::onClick(sf::RenderWindow& window,
 static void shapeSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
     if (entity.hasComponent<Shape>() && entity.hasComponent<Position>()) {
         auto& shapeComp = entity.getComponent<Shape>();
-        if (shapeComp.getShapeType() == ShapeType::Rectangle) {
+        if (shapeComp.getShapeType() == Rectangle) {
             if (!shapeComp.getIsLoaded()) {
                 sf::RectangleShape rectangle;
                 rectangle.setSize(sf::Vector2f(shapeComp.getSize().first,
@@ -222,7 +231,7 @@ static void shapeSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
             }
             window.draw(shapeComp.getRect());
         }
-        if (shapeComp.getShapeType() == ShapeType::Circle) {
+        if (shapeComp.getShapeType() == Circle) {
             if (!shapeComp.getIsLoaded()) {
                 sf::CircleShape circle;
                 circle.setRadius(shapeComp.getRadius());
@@ -377,8 +386,8 @@ void GameEngine::System::render(sf::RenderWindow& window,
     }
 }
 
-void GameEngine::System::update(int id, std::map<int, Entity>& entities,
-                                const UpdateType type, std::any value,
+void GameEngine::System::update(const int id, std::map<int, Entity>& entities,
+                                const UpdateType type, const std::any& value,
                                 const int posId) {
     Entity entity = entities[id];
     switch (type) {

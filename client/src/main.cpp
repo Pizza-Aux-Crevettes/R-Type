@@ -6,6 +6,7 @@
 */
 
 #include <SFML/Audio.hpp>
+#include <components/Button.hpp>
 #include <thread>
 #include "System.hpp"
 #include "components/Position.hpp"

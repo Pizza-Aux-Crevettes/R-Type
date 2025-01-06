@@ -4,8 +4,10 @@
 ** File description:
 ** OptionButton.cpp
 **
-** The OptionButton class represents a UI option button with a text label and a size.
-** It holds a `text` as a string and `size` as a `std::pair<double, double>` for the option button's width and height.
+** The OptionButton class represents a UI option button with a text label and a
+*size.
+** It holds a `text` as a string and `size` as a `std::pair<double, double>` for
+*the option button's width and height.
 ** The constructor allows initializing these attributes with default values.
 */
 
@@ -22,8 +24,7 @@
  * @param size A pair of doubles representing the size of the option button
  * (width, height).
  */
-OptionButton::OptionButton(std::pair<double, double> size)
-    : _size(size) {}
+OptionButton::OptionButton(std::pair<double, double> size) : _size(size) {}
 
 /**
  * @brief Destructor for the OptionButton component.
