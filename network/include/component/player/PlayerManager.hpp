@@ -19,7 +19,8 @@ class PlayerManager {
     static PlayerManager& get();
 
     [[nodiscard]] int32_t getNextUserId() const;
-    std::shared_ptr<Player> createPlayer(const std::string& name);
+    std::shared_ptr<Player> createPlayer(const std::string& name,
+                                         const sockaddr_in& clientAddr);
     bool removePlayer(int32_t userId);
     [[nodiscard]] std::shared_ptr<Player> findPlayerById(int32_t userId) const;
     [[nodiscard]] const std::unordered_map<int32_t, std::shared_ptr<Player>>&
