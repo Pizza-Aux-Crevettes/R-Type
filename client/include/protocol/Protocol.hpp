@@ -14,7 +14,7 @@ class Protocol {
   public:
     enum OpCode {
         DEFAULT,
-        
+
         // Client -> Server
         CREATE_ROOM,
         JOIN_ROOM,
