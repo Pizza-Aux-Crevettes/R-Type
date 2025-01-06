@@ -17,14 +17,14 @@
 #include "components/Shape.hpp"
 #include <iostream>
 
-Shape::Shape(ShapeType type, std::pair<double, double> size, float radius)
+Shape::Shape(const ShapeType type, const std::pair<double, double>& size, const float radius)
     : _type(type), _size(size), _radius(radius) {}
 
 std::pair<double, double> Shape::getSize() const {
     return _size;
 }
 
-void Shape::setSize(std::pair<double, double> size) {
+void Shape::setSize(const std::pair<double, double>& size) {
     _size = size;
 }
 
@@ -48,7 +48,7 @@ bool Shape::getIsLoaded() const {
     return _isLoad;
 }
 
-void Shape::setIsLoaded(bool isLoad) {
+void Shape::setIsLoaded(const bool isLoad) {
     _isLoad = isLoad;
 }
 

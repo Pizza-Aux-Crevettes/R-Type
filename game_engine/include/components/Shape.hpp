@@ -15,7 +15,7 @@ enum ShapeType { Circle, Rectangle };
 class Shape : public Component {
   public:
     Shape(ShapeType type = Rectangle,
-          std::pair<double, double> size = {0.0, 0.0}, float radius = 1.0);
+          const std::pair<double, double>& size = {0.0, 0.0}, float radius = 1.0);
     ~Shape();
     void setShape(const sf::RectangleShape& rect);
     void setShape(const sf::CircleShape& circle);
@@ -26,7 +26,7 @@ class Shape : public Component {
     float getRadius() const;
     ShapeType getShapeType() const;
     std::pair<double, double> getSize() const;
-    void setSize(std::pair<double, double> size);
+    void setSize(const std::pair<double, double>& size);
     void display() const override;
 
   private:

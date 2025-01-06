@@ -81,7 +81,7 @@ void Position::setPositionY(const int id, const float y) {
     this->_positions[id].second = y;
 }
 
-void Position::addPosition(float x, float y) {
+void Position::addPosition(const float x, const float y) {
     this->_positions.emplace_back(x, y);
 }
 

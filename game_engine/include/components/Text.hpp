@@ -12,7 +12,7 @@
 
 class Text : public Component {
   public:
-    Text(std::string text = "", std::string fontFile = "",
+    Text(const std::string& text = "", const std::string& fontFile = "",
          unsigned int characterSize = 30);
     ~Text();
     std::string getString() const;
@@ -22,7 +22,7 @@ class Text : public Component {
     std::string getFontFile() const;
     sf::Text& getText();
     void setIsLoaded(bool isLoaded);
-    void setString(std::string text);
+    void setString(const std::string& text);
     void display() const override;
 
   private:
