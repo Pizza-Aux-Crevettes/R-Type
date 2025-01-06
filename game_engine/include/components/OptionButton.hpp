@@ -13,11 +13,8 @@
 
 class OptionButton : public Component {
   public:
-    OptionButton(std::string text = "",
-                 std::pair<double, double> size = {0.0, 0.0});
+    OptionButton(std::pair<double, double> size = {0.0, 0.0});
     ~OptionButton();
-    std::string getText() const;
-    void setText(std::string text);
     std::pair<double, double> getSize() const;
     void setSize(std::pair<double, double> size);
     sf::RectangleShape& getShape();
@@ -31,7 +28,6 @@ class OptionButton : public Component {
     void display() const override;
 
   private:
-    std::string _text;
     std::pair<double, double> _size;
     enum Shape { Circle, Rectangle };
     sf::RectangleShape _optionbutton;

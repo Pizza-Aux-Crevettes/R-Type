@@ -4,11 +4,8 @@
 ** File description:
 ** OptionButton.cpp
 **
-** The OptionButton class represents a UI option button with a text label and a
-*size.
-** It holds a `text` as a string and `size` as a `std::pair<double, double>` for
-*the option button's
-** width and height.
+** The OptionButton class represents a UI option button with a text label and a size.
+** It holds a `text` as a string and `size` as a `std::pair<double, double>` for the option button's width and height.
 ** The constructor allows initializing these attributes with default values.
 */
 
@@ -25,8 +22,8 @@
  * @param size A pair of doubles representing the size of the option button
  * (width, height).
  */
-OptionButton::OptionButton(std::string text, std::pair<double, double> size)
-    : _text(text), _size(size) {}
+OptionButton::OptionButton(std::pair<double, double> size)
+    : _size(size) {}
 
 /**
  * @brief Destructor for the OptionButton component.
@@ -34,29 +31,6 @@ OptionButton::OptionButton(std::string text, std::pair<double, double> size)
  * This destructor cleans up any resources used by the OptionButton component.
  */
 OptionButton::~OptionButton() {}
-
-/**
- * @brief Get the text of the OptionButton component.
- *
- * This function retrieves the text displayed on the option button.
- *
- * @return A string representing the text on the option button.
- */
-std::string OptionButton::getText() const {
-    return this->_text;
-}
-
-/**
- * @brief Set the text of the OptionButton component.
- *
- * This function sets the text displayed on the option button.
- *
- * @param text A string representing the new text to display on the option
- * button.
- */
-void OptionButton::setText(std::string text) {
-    this->_text = text;
-}
 
 /**
  * @brief Get the size of the OptionButton component.

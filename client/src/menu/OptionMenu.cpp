@@ -20,10 +20,10 @@ OptionMenu::OptionMenu() {}
 
 OptionMenu::~OptionMenu() {}
 
-GameEngine::Entity
-OptionMenu::createEntityText(int id, const std::string text,
-                             const std::pair<int, int> position,
-                             unsigned int fontSize) {
+GameEngine::Entity OptionMenu::createEntityText(
+    int id, const std::string text,
+    const std::vector<std::pair<float, float>> position,
+    unsigned int fontSize) {
     auto newEntity = GameEngine::Entity(id);
     ;
     newEntity.addComponent(Text(text, "../assets/font/arial.ttf", fontSize));
@@ -32,11 +32,11 @@ OptionMenu::createEntityText(int id, const std::string text,
     return newEntity;
 }
 
-GameEngine::Entity
-OptionMenu::createEntityOptionButton(int id, std::pair<int, int> position,
-                                     std::function<void()> callback) {
+GameEngine::Entity OptionMenu::createEntityOptionButton(
+    int id, std::vector<std::pair<float, float>> position,
+    std::function<void()> callback) {
     auto newEntity = GameEngine::Entity(id);
-    auto button = OptionButton("OptionButton", {20, 20});
+    auto button = OptionButton({20, 20});
     button.setCallback(callback);
     newEntity.addComponent(button);
     newEntity.addComponent(Position(position));
@@ -44,11 +44,10 @@ OptionMenu::createEntityOptionButton(int id, std::pair<int, int> position,
     return newEntity;
 }
 
-GameEngine::Entity
-OptionMenu::createEntitySlider(int id, const std::pair<int, int> values,
-                               const std::pair<int, int> position,
-                               std::function<float()> getter,
-                               std::function<void(float)> setter) {
+GameEngine::Entity OptionMenu::createEntitySlider(
+    int id, const std::pair<int, int> values,
+    const std::vector<std::pair<float, float>> position,
+    std::function<float()> getter, std::function<void(float)> setter) {
     auto newEntity = GameEngine::Entity(id);
     auto slider = Slider(values, {200, 3});
     slider.setGetCallback(getter);
@@ -64,81 +63,82 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
     if (!_entitiesInitialized) {
         int entityId = 0;
         _entitiesMenuOption.emplace(
-            entityId, createEntityText(entityId++, "OPTIONS", {300, 10}, 45));
+            entityId, createEntityText(entityId++, "OPTIONS", {{300, 10}}, 45));
         _entitiesMenuOption.emplace(
-            entityId, createEntityText(entityId++, "Sound", {40, 100}, 20));
+            entityId, createEntityText(entityId++, "Sound", {{40, 100}}, 20));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityText(entityId++, "Key control", {40, 170}, 20));
+            createEntityText(entityId++, "Key control", {{40, 170}}, 20));
         _entitiesMenuOption.emplace(
             entityId,
             createEntityText(entityId++,
                              "Font for people with reading difficulties",
-                             {40, 240}, 20));
+                             {{40, 240}}, 20));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityText(entityId++, "Size of elements", {40, 310}, 20));
+            createEntityText(entityId++, "Size of elements", {{40, 310}}, 20));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityText(entityId++, "High contrast", {40, 380}, 20));
+            createEntityText(entityId++, "High contrast", {{40, 380}}, 20));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityText(entityId++, "High difficulty", {40, 450}, 20));
+            createEntityText(entityId++, "High difficulty", {{40, 450}}, 20));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityText(entityId++, "Controller  mode", {40, 520}, 20));
+            createEntityText(entityId++, "Controller  mode", {{40, 520}}, 20));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityOptionButton(entityId++, {720, 240},
+            createEntityOptionButton(entityId++, {{720, 240}},
                                      [this]() { setAdaptabilityText(); }));
         _entitiesMenuOption.emplace(
-            entityId, createEntityOptionButton(entityId++, {720, 380},
+            entityId, createEntityOptionButton(entityId++, {{720, 380}},
                                                [this]() { setContrast(); }));
         _entitiesMenuOption.emplace(
-            entityId, createEntityOptionButton(entityId++, {720, 450},
+            entityId, createEntityOptionButton(entityId++, {{720, 450}},
                                                [this]() { setDifficulty(); }));
         _entitiesMenuOption.emplace(
-            entityId, createEntityOptionButton(entityId++, {720, 520},
+            entityId, createEntityOptionButton(entityId++, {{720, 520}},
                                                [this]() { setControl(); }));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityText(entityId++, "Game effects", {160, 85}, 15));
+            createEntityText(entityId++, "Game effects", {{160, 85}}, 15));
         _entitiesMenuOption.emplace(
             entityId,
             createEntityText(entityId++, std::to_string(getVolumnGame()),
-                             {140, 105}, 15));
+                             {{140, 105}}, 15));
         _entitiesMenuOption.emplace(
             entityId,
             createEntitySlider(
-                entityId++, {0, 100}, {160, 115},
+                entityId++, {0, 100}, {{160, 115}},
                 [this]() { return static_cast<float>(getVolumnMusic()); },
                 [this](float newValue) {
                     setVolumnMusic(static_cast<int>(newValue));
                 }));
         _entitiesMenuOption.emplace(
-            entityId, createEntityText(entityId++, "Music", {545, 85}, 15));
+            entityId, createEntityText(entityId++, "Music", {{545, 85}}, 15));
         _entitiesMenuOption.emplace(
             entityId,
             createEntityText(entityId++, std::to_string(getVolumnMusic()),
-                             {525, 105}, 15));
+                             {{525, 105}}, 15));
         _entitiesMenuOption.emplace(
             entityId,
             createEntitySlider(
-                entityId++, {0, 100}, {545, 115},
+                entityId++, {0, 100}, {{545, 115}},
                 [this]() { return static_cast<float>(getVolumnGame()); },
                 [this](float newValue) {
                     setVolumnGame(static_cast<int>(newValue));
                 }));
         _entitiesMenuOption.emplace(
-            entityId, createEntityText(entityId++, "Enlarge", {545, 280}, 15));
+            entityId,
+            createEntityText(entityId++, "Enlarge", {{545, 280}}, 15));
         _entitiesMenuOption.emplace(
             entityId,
             createEntityText(entityId++, std::to_string(getElementSize()),
-                             {525, 300}, 15));
+                             {{525, 300}}, 15));
         _entitiesMenuOption.emplace(
             entityId,
             createEntitySlider(
-                entityId++, {0, 2}, {545, 310},
+                entityId++, {0, 2}, {{545, 310}},
                 [this]() { return static_cast<float>(getElementSize()); },
                 [this](float newValue) { setElementSize(newValue); }));
         _entitiesInitialized = true;

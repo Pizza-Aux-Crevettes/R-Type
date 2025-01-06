@@ -45,7 +45,6 @@ class Slider : public Component {
     float _minValue;
     float _maxValue;
     float _currentValue;
-    bool _isDragging = false;
     bool _isLoad = false;
     sf::RectangleShape _barShape;
     sf::CircleShape _cursorShape;

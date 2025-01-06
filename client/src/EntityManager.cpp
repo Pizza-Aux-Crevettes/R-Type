@@ -31,7 +31,7 @@ void EntityManager::CompareEntities(int id,
                                     std::pair<float, float> updatePosition) {
     GameEngine::System system;
     if (auto search = _entities.find(id); search != _entities.end()) {
-        system.update(_entities[id], GameEngine::UpdateType::Position,
+        system.update(id, _entities, GameEngine::UpdateType::Position,
                       updatePosition);
     } else {
         CreateEntity(id, components);
@@ -49,7 +49,7 @@ void EntityManager::CreateEntity(int id,
         }
         if (key == "Position") {
             newEntity.addComponent(
-                Position(std::any_cast<std::pair<float, float>>(component)));
+                Position({std::any_cast<std::pair<float, float>>(component)}));
         }
     }
     _entities.emplace(id, std::move(newEntity));

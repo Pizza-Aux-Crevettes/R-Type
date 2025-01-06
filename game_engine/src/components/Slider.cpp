@@ -26,7 +26,7 @@
  */
 Slider::Slider(std::pair<double, double> lenght, std::pair<double, double> size)
     : _minValue(lenght.first), _maxValue(lenght.second),
-      _currentValue(lenght.first), _size(size) {}
+      _currentValue(lenght.second / 2), _size(size) {}
 
 /**
  * @brief Destructor for the Slider component.
@@ -128,6 +128,7 @@ void Slider::setIsLoaded() {
  * @param value The new value of the slider.
  */
 void Slider::setValue(float value) {
+    // std::cout << "current value ->" << _currentValue << std::endl;
     this->_currentValue = value;
 }
 

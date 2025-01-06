@@ -29,15 +29,16 @@ class OptionMenu {
   public:
     OptionMenu();
     ~OptionMenu();
-    GameEngine::Entity createEntityText(int, const std::string,
-                                        const std::pair<int, int>,
-                                        unsigned int);
-    GameEngine::Entity createEntityOptionButton(int, const std::pair<int, int>,
-                                                std::function<void()>);
-    GameEngine::Entity createEntitySlider(int, const std::pair<int, int>,
-                                          const std::pair<int, int>,
-                                          std::function<float()>,
-                                          std::function<void(float)>);
+    GameEngine::Entity
+    createEntityText(int, const std::string,
+                     const std::vector<std::pair<float, float>>, unsigned int);
+    GameEngine::Entity
+    createEntityOptionButton(int, std::vector<std::pair<float, float>>,
+                             std::function<void()>);
+    GameEngine::Entity
+    createEntitySlider(int, const std::pair<int, int>,
+                       const std::vector<std::pair<float, float>>,
+                       std::function<float()>, std::function<void(float)>);
 
     void displayOptionMenu(sf::RenderWindow&, GameEngine::System);
     int getVolumnMusic();
