@@ -5,8 +5,8 @@
 ** Protocol.cpp
 */
 
-#include <iostream>
 #include "protocol/Protocol.hpp"
+#include <iostream>
 
 Protocol& Protocol::get() {
     static Protocol instance;
@@ -17,7 +17,7 @@ Protocol::Protocol() {}
 
 Protocol::~Protocol() {}
 
-void Protocol::handleMessage(SmartBuffer& smartBuffer, Client *client) {
+void Protocol::handleMessage(SmartBuffer& smartBuffer, Client* client) {
     int16_t opCode;
     smartBuffer >> opCode;
 
@@ -105,7 +105,8 @@ void Protocol::handleDeleteRoomBroadcast(SmartBuffer& smartBuffer) {
               << std::endl;
 }
 
-void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer, Client *client) {
+void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer,
+                                        Client* client) {
     int32_t playerId;
     std::string playerName;
     smartBuffer >> playerId >> playerName;
@@ -113,20 +114,19 @@ void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer, Client *client
               << ", Player Name: " << playerName << std::endl;
     std::map<int, std::map<std::string, std::any>> newItems = {
         {playerId,
-         {
-             {"Texture", std::string("../assets/sprite/tentacles.png")},
-            {"Position", std::pair<float, float>(0.0f, 0.0f)}
-         }
-        },
+         {{"Texture", std::string("../assets/sprite/tentacles.png")},
+          {"Position", std::pair<float, float>(0.0f, 0.0f)}}},
     };
     client->addItem(newItems);
 }
 
-void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client *client) {
+void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer,
+                                          Client* client) {
     int32_t playerId;
     double x, y;
     smartBuffer >> playerId >> x >> y;
     std::cout << "[Protocol] PLAYER_UPDATE_POSITION - Player ID: " << playerId
               << ", X: " << x << ", Y: " << y << std::endl;
-    client->getUpdateItems()[playerId]["Position"] = std::pair<float, float>(x, y);
+    client->getUpdateItems()[playerId]["Position"] =
+        std::pair<float, float>(x, y);
 }

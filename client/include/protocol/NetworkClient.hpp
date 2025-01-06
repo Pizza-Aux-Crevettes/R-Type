@@ -7,9 +7,9 @@
 
 #pragma once
 
+#include "Client.hpp"
 #include "socket/TcpSocket.hpp"
 #include "socket/UdpSocket.hpp"
-#include "Client.hpp"
 
 class NetworkClient {
   public:
@@ -19,12 +19,12 @@ class NetworkClient {
     void init();
     void connectTCP();
     static void connectUDP();
-    void run(Client *client);
+    void run(Client* client);
 
   private:
     TcpSocket tcpSocket;
     UdpSocket udpSocket;
 
-    void handleTcpMessages(Client *client) const;
-    void handleUdpMessages(Client *client);
+    void handleTcpMessages(Client* client) const;
+    void handleUdpMessages(Client* client);
 };

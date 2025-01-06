@@ -15,6 +15,7 @@ class Text : public Component {
     Text(std::string text = "", std::string fontFile = "",
          unsigned int characterSize = 30);
     ~Text();
+
     std::string getString() const;
     sf::Font& getFont();
     unsigned int getCharacterSize() const;

@@ -120,7 +120,7 @@ void Client::manageClient() {
         }
         window.clear();
         if (_entities.size() > 0) {
-            system.render(window, _entities);
+            // system.render(window, _entities);
         }
         window.display();
     }
