@@ -11,4 +11,4 @@ add_executable(Client ${SOURCES} ${HEADERS})
 
 target_include_directories(Client PUBLIC include ../external/smart-buffer-cpp/include)
 
-target_link_libraries(Client sfml-graphics sfml-window sfml-system smart_buffer GameEngine)
+target_link_libraries(Client sfml-graphics sfml-window sfml-system sfml-audio smart_buffer GameEngine)
