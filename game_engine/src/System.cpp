@@ -158,8 +158,8 @@ static void buttonSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
             buttonComp.getButton().setSize(
                 sf::Vector2f(textBounds.width, textBounds.height));
             buttonComp.getButton().setFillColor(sf::Color::Transparent);
-            buttonComp.getButton().setPosition(positionComp.getPositionX(),
-                                               positionComp.getPositionY());
+            buttonComp.getButton().setPosition(positionComp.getPositionX(0),
+                                               positionComp.getPositionY(0));
 
             buttonComp.getText().setOrigin(textBounds.width / 2,
                                            textBounds.height / 2);
@@ -192,6 +192,9 @@ void GameEngine::System::onClick(sf::RenderWindow& window,
                 }
                 std::cout << "Button " << id << " clicked!" << std::endl;
             }
+        }
+    }
+}
 
 static void shapeSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
     if (entity.hasComponent<Shape>() && entity.hasComponent<Position>()) {
