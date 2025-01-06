@@ -8,6 +8,7 @@
 #pragma once
 
 #include <string>
+#include <functional>
 #include "Components.hpp"
 
 class Button : public Component {
@@ -18,6 +19,14 @@ class Button : public Component {
     void setText(std::string text);
     std::pair<double, double> getSize() const;
     void setSize(std::pair<double, double> size);
+    sf::RectangleShape& getShape();
+    void setShape(const sf::RectangleShape&);
+    bool getIsLoaded() const;
+    void setIsLoaded();
+    bool getChecked() const;
+    void setChecked();
+    void setCallback(std::function<void()>);
+    void executeCallback();
     void display() const override;
 
   private:
@@ -26,4 +35,6 @@ class Button : public Component {
     enum Shape { Circle, Rectangle };
     sf::RectangleShape _button;
     bool _isLoad = false;
+    bool _isChecked = false;
+    std::function<void()> _callback;
 };

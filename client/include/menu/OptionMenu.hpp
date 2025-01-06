@@ -7,25 +7,32 @@
 
 #pragma once
 
+#include <System.hpp>
 #include <memory>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
 class OptionMenu {
   private:
-    int _volumnMusic;
-    int _volumnGame;
-    int _resolution;
-    bool _adaptabilityText;
-    float _elementSize;
-    bool _difficulty;
-    bool _control;
-    bool _constrast;
+    std::map<int, GameEngine::Entity> _entitiesMenuOption;
+    bool _entitiesInitialized = false;
+    int _volumnMusic = 25;
+    int _volumnGame = 25;
+    int _resolution = 1;
+    bool _adaptabilityText = false;
+    float _elementSize = 1;
+    bool _difficulty = false;
+    bool _control = false;
+    bool _constrast = false;
 
   public:
     OptionMenu();
     ~OptionMenu();
-    void displayOptionMenu(sf::RenderWindow &);
+    GameEngine::Entity createEntityText(int, const std::string, const std::pair<int, int>, unsigned int);
+    GameEngine::Entity createEntityButton(int, const std::pair<int, int>,std::function<void()>);
+    GameEngine::Entity createEntitySlider(int, const std::pair<int, int>, const std::pair<int, int>, std::function<float()>, std::function<void(float)>);
+    
+    void displayOptionMenu(sf::RenderWindow &, GameEngine::System);
     int getVolumnMusic();
     void setVolumnMusic(int);
     int getVolumnGame();

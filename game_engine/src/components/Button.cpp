@@ -81,6 +81,88 @@ void Button::setSize(std::pair<double, double> size) {
 }
 
 /**
+ * @brief Get the shape of the Button component.
+ *
+ * This function gets the sf::RectangleShape of the button.
+ *
+ * @return An sf::RectangleShape object representing the button.
+ */
+sf::RectangleShape& Button::getShape() {
+    return this->_button;
+}
+
+/**
+ * @brief Set the shape of the Button component.
+ *
+ * This function sets the sf::RectangleShape of the button.
+ *
+ * @param shape An sf::RectangleShape object representing the button.
+ */
+void Button::setShape(const sf::RectangleShape& shape) {
+    this->_button = shape;
+}
+
+/**
+ * @brief Get whether the Button component is loaded.
+ *
+ * This function checks if the Button component has been initialized.
+ *
+ * @return True if the Button is loaded, false otherwise.
+ */
+bool Button::getIsLoaded() const {
+    return this->_isLoad;
+}
+
+/**
+ * @brief Set whether the Button component is loaded.
+ *
+ * This function sets the loaded state of the Button component.
+ */
+void Button::setIsLoaded() {
+    this->_isLoad = !this->_isLoad;
+}
+
+/**
+ * @brief Get whether the Button component is checked.
+ *
+ * This function checks if the Button component has been activated.
+ *
+ * @return True if the Button is active, false otherwise.
+ */
+bool Button::getChecked() const {
+    return this->_isChecked;}
+
+/**
+ * @brief Set whether the Button component is checked.
+ *
+ * This function sets the activated state of the Button component.
+ */
+void Button::setChecked() {
+    this->_isChecked = !this->_isChecked;
+}
+
+/**
+ * @brief Set function for callback.
+ *
+ * This function sets the callback state of the Slider component.
+ * @param callback An std::function object representing the function to callback.
+ */
+void Button::setCallback(std::function<void()> callback) {
+    _callback = callback;
+}
+
+/**
+ * @brief Execute function callback.
+ *
+ * This function call the function in callback of the Slider component.
+ */
+void Button::executeCallback() {
+    if (_callback) {
+        _callback();
+    }
+}
+
+/**
  * @brief Display the Button component information.
  *
  * This function displays a message indicating that the Button component is
