@@ -9,6 +9,7 @@
 
 #include <any>
 #include <components/Position.hpp>
+#include <components/Shape.hpp>
 #include <components/Sprite.hpp>
 #include <components/Texture.hpp>
 #include <iostream>
@@ -37,4 +38,5 @@ class EntityManager {
     void addItem(std::map<int, std::map<std::string, std::any>> items);
     void setUpdateItems(std::map<int, std::map<std::string, std::any>>);
     std::map<int, std::map<std::string, std::any>> getUpdateItems();
+    sf::Texture manageBackground();
 };

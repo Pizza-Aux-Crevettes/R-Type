@@ -14,6 +14,7 @@
 #include <Entity.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <System.hpp>
 #include <any>
 #include <functional>
 #include <iostream>
@@ -29,4 +30,6 @@ class Client {
     Client();
     ~Client();
     void manageClient();
+    void manageBackground(GameEngine::System system, sf::Clock clock,
+                          sf::Texture background);
 };
