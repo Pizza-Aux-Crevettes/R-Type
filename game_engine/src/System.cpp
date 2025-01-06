@@ -9,6 +9,7 @@
 #include <components/Color.hpp>
 #include <components/Link.hpp>
 #include <components/Position.hpp>
+#include <components/Shape.hpp>
 #include <components/Sprite.hpp>
 #include <components/Text.hpp>
 #include <components/Texture.hpp>
@@ -36,7 +37,9 @@ void setColor(GameEngine::Entity& entity, Drawable& drawable) {
         if constexpr (std::is_same_v<Drawable, sf::Sprite>) {
             drawable.setColor(
                 sf::Color(color[0], color[1], color[2], color[3]));
-        } else if constexpr (std::is_same_v<Drawable, sf::Text>) {
+        } else if constexpr (std::is_same_v<Drawable, sf::Text> ||
+                             std::is_same_v<Drawable, sf::RectangleShape> ||
+                             std::is_same_v<Drawable, sf::CircleShape>) {
             drawable.setFillColor(
                 sf::Color(color[0], color[1], color[2], color[3]));
         }
@@ -135,11 +138,59 @@ static void textSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
     }
 }
 
+static void shapeSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
+    if (entity.hasComponent<Shape>() && entity.hasComponent<Position>()) {
+        auto& shapeComp = entity.getComponent<Shape>();
+        if (shapeComp.getShapeType() == ShapeType::Rectangle) {
+            if (!shapeComp.getIsLoaded()) {
+                sf::RectangleShape rectangle;
+                rectangle.setSize(sf::Vector2f(shapeComp.getSize().first,
+                                               shapeComp.getSize().second));
+                setPosition(entity, rectangle);
+                setColor(entity, rectangle);
+                shapeComp.setShape(rectangle);
+                if (entity.hasComponent<Texture>() &&
+                    !entity.getComponent<Texture>().getIsLoaded()) {
+                    auto& textureComp = entity.getComponent<Texture>();
+                    textureComp.getTexture().loadFromFile(
+                        textureComp.getTexturePath());
+                    textureComp.setIsLoaded(true);
+                    shapeComp.getRect().setTexture(&textureComp.getTexture());
+                    std::cout << "Texture loaded" << std::endl;
+                }
+                shapeComp.setIsLoaded(true);
+            }
+            window.draw(shapeComp.getRect());
+        }
+        if (shapeComp.getShapeType() == ShapeType::Circle) {
+            if (!shapeComp.getIsLoaded()) {
+                sf::CircleShape circle;
+                circle.setRadius(shapeComp.getRadius());
+                setPosition(entity, circle);
+                setColor(entity, circle);
+                shapeComp.setShape(circle);
+                if (entity.hasComponent<Texture>() &&
+                    !entity.getComponent<Texture>().getIsLoaded()) {
+                    auto& textureComp = entity.getComponent<Texture>();
+                    textureComp.getTexture().loadFromFile(
+                        textureComp.getTexturePath());
+                    textureComp.setIsLoaded(true);
+                    shapeComp.getCircle().setTexture(&textureComp.getTexture());
+                    std::cout << "Texture loaded" << std::endl;
+                }
+                shapeComp.setIsLoaded(true);
+            }
+            window.draw(shapeComp.getCircle());
+        }
+    }
+}
+
 void GameEngine::System::render(sf::RenderWindow& window,
                                 std::map<int, Entity>& entities) {
     for (auto& [id, entity] : entities) {
         spriteSystem(window, entity);
         textSystem(window, entity);
+        shapeSystem(window, entity);
     }
 }
 
