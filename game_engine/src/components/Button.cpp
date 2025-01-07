@@ -150,6 +150,28 @@ bool Button::getIsLoaded() const {
 }
 
 /**
+ * @brief Set function for callback.
+ *
+ * This function sets the callback state of the Slider component.
+ * @param callback An std::function object representing the function to
+ * callback.
+ */
+void Button::setCallback(std::function<void()> callback) {
+    _callback = callback;
+}
+
+/**
+ * @brief Execute function callback.
+ *
+ * This function call the function in callback of the Slider component.
+ */
+void Button::executeCallback() {
+    if (_callback) {
+        _callback();
+    }
+}
+
+/**
  * @brief Display the Button component information.
  *
  * This function displays a message indicating that the Button component is

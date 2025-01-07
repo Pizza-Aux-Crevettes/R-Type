@@ -9,71 +9,102 @@
 
 Menu::Menu() {}
 
-void Menu::initMainMenu(std::map<int, GameEngine::Entity>& entities) {
-    float totalButtonHeight = 3;
-    float verticalSpacing = (1080 - totalButtonHeight) / (3 + 2);
+Menu::~Menu() {}
 
-    auto map =
-        GameEngine::Entity(1, Sprite({8, 8}), Texture("assets/sprite/map.png"),
-                           Position({{-1300, -300}}));
-    auto buttonPlay = GameEngine::Entity(
-        2, Button("PLAY", "assets/font/Inter_Bold.ttf", 50),
-        Position({{1920 / 2 - 60, (verticalSpacing + 130)}}));
-    auto buttonOption = GameEngine::Entity(
-        3, Button("OPTION", "assets/font/Inter_Bold.ttf", 50),
-        Position({{1920 / 2 - 100, verticalSpacing * 2 + 50}}));
-    auto buttonExit = GameEngine::Entity(
-        4, Button("EXIT", "assets/font/Inter_Bold.ttf", 50),
-        Position({{1920 / 2 - 50, verticalSpacing * 3 - 20}}));
-    auto spaceShip = GameEngine::Entity(
-        5, Sprite({6, 6}),
-        Texture("assets/sprite/spaceship.png", {0, 18, 34, 15}),
-        Position({{30, 100}}));
-    auto shootBlue = GameEngine::Entity(
-        6, Sprite({5, 5}),
-        Texture("assets/sprite/shoot_blue.png", {165, 0, 65, 15}),
-        Position({{350, 100}}));
-    auto enemy = GameEngine::Entity(
-        7, Sprite({5, 5}), Texture("assets/sprite/enemy.png", {0, 0, 50, 80}),
-        Position({{280, 820}}));
-    auto canonUp = GameEngine::Entity(
-        8, Sprite({5, 5}), Texture("assets/sprite/canon.png", {165, 0, 33, 30}),
-        Position({{1600, -50}}));
-    auto canonDown = GameEngine::Entity(
-        9, Sprite({5, 5}), Texture("assets/sprite/canon.png", {33, 33, 33, 30}),
-        Position({{1600, 970}}));
-    auto boss = GameEngine::Entity(
-        10, Sprite({3, 3}),
-        Texture("assets/sprite/intact-boss.png", {0, 0, 200, 200}),
-        Position({{1400, 200}}));
-    entities.emplace(1, std::move(map));
-    entities.emplace(2, std::move(buttonPlay));
-    entities.emplace(3, std::move(buttonOption));
-    entities.emplace(4, std::move(buttonExit));
-    entities.emplace(5, std::move(spaceShip));
-    entities.emplace(6, std::move(shootBlue));
-    entities.emplace(7, std::move(enemy));
-    entities.emplace(8, std::move(canonUp));
-    entities.emplace(9, std::move(canonDown));
-    entities.emplace(10, std::move(boss));
+GameEngine::Entity
+Menu::createEntityButton(int id, std::string title, std::string font,
+                         int fontSize,
+                         std::vector<std::pair<float, float>> position,
+                         std::function<void()> callback) {
+    auto newEntity = GameEngine::Entity(id);
+    auto button = Button(title, font, fontSize);
+    button.setCallback(callback);
+    newEntity.addComponent(button);
+    newEntity.addComponent(Position(position));
+    newEntity.addComponent(Color({255, 255, 255, 255}));
+    return newEntity;
 }
 
-void Menu::initLifeBar(std::map<int, GameEngine::Entity>& entities) {
-    auto rocket = GameEngine::Entity(
-        11, Sprite({1, 1}),
-        Texture("assets/sprite/rocket.png", {0, 0, 100, 200}),
-        Position({{150, 930}}));
-    auto numberLife =
-        GameEngine::Entity(12, Text("3", "assets/font/Inter_Bold.ttf", 60),
-                           Position({{250, 950}}));
-    entities.emplace(11, std::move(rocket));
-    entities.emplace(12, std::move(numberLife));
+GameEngine::Entity
+Menu::createEntitySprite(int id, const std::pair<float, float> size,
+                         std::string texture, std::vector<int> textureRect,
+                         const std::vector<std::pair<float, float>> position) {
+    auto newEntity = GameEngine::Entity(id);
+    newEntity.addComponent(Sprite(size));
+    newEntity.addComponent(Texture(texture, textureRect));
+    newEntity.addComponent(Position(position));
+    return newEntity;
 }
 
-void Menu::game(sf::RenderWindow& window, GameEngine::System system) {
+void Menu::isClickedPlay() {
+    std::cout << "Button play clicked!" << std::endl;
+}
+
+void Menu::isClickedExit() {
+    std::cout << "Button Exit clicked!" << std::endl;
+}
+
+void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
+    if (_currentMenuState == MenuState::MainMenu) {
+        if (!_entitiesInitialized) {
+            int entityId = 0;
+
+            float totalButtonHeight = 3;
+            float verticalSpacing = (1080 - totalButtonHeight) / (3 + 2);
+
+            _entitiesMenu.emplace(
+                entityId,
+                createEntitySprite(entityId++, {8, 8}, "assets/sprite/map.png",
+                                {0, 0, 200, 200}, {{-1300, -300}}));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityButton(entityId++, "PLAY", "assets/font/Inter_Bold.ttf",
+                                50, {{1920 / 2 - 60, (verticalSpacing + 130)}},
+                                [this]() { isClickedPlay(); }));
+            _entitiesMenu.emplace(
+                entityId, createEntityButton(
+                            entityId++, "OPTION", "assets/font/Inter_Bold.ttf",
+                            50, {{1920 / 2 - 100, verticalSpacing * 2 + 50}},
+                            [this]() {
+                                _currentMenuState = MenuState::OptionMenu;
+                            }));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityButton(entityId++, "EXIT", "assets/font/Inter_Bold.ttf",
+                                50, {{1920 / 2 - 50, verticalSpacing * 3 - 20}},
+                                [this]() { isClickedExit(); }));
+            _entitiesMenu.emplace(entityId,
+                                createEntitySprite(entityId++, {6, 6},
+                                                    "assets/sprite/spaceship.png",
+                                                    {0, 18, 34, 15}, {{30, 100}}));
+            _entitiesMenu.emplace(
+                entityId, createEntitySprite(entityId++, {5, 5},
+                                            "assets/sprite/shoot_blue.png",
+                                            {165, 0, 65, 15}, {{350, 100}}));
+            _entitiesMenu.emplace(entityId,
+                                createEntitySprite(entityId++, {5, 5},
+                                                    "assets/sprite/enemy.png",
+                                                    {0, 0, 50, 80}, {{280, 820}}));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntitySprite(entityId++, {5, 5}, "assets/sprite/canon.png",
+                                {165, 0, 33, 30}, {{1600, -50}}));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntitySprite(entityId++, {5, 5}, "assets/sprite/canon.png",
+                                {33, 33, 33, 30}, {{1600, 970}}));
+            _entitiesMenu.emplace(
+                entityId, createEntitySprite(entityId++, {5, 5},
+                                            "assets/sprite/intact-boss.png",
+                                            {0, 0, 200, 200}, {{1400, 200}}));
+        }
+        system.render(window, _entitiesMenu);
+    }
+}
+
+void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system) {
     std::map<int, GameEngine::Entity> entities;
     OptionMenu optionMenu;
-
     sf::SoundBuffer ambienBuffer;
     sf::SoundBuffer clickBuffer;
 
@@ -93,23 +124,13 @@ void Menu::game(sf::RenderWindow& window, GameEngine::System system) {
 
     ambienSound.play();
 
-    initMainMenu(entities);
-
-    sf::Event event;
-    while (window.pollEvent(event)) {
-        if (event.type == sf::Event::MouseButtonPressed) {
-            if (event.mouseButton.button == sf::Mouse::Left) {
-                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-                clickMenuSound.play();
-                int onClickValue =
-                    system.onClick(window, entities, mousePos, system);
-                if (onClickValue == 2) {
-                    optionMenu.displayOptionMenu(window, system);
-                }
-            }
-        }
+    switch (_currentMenuState) {
+        case MenuState::MainMenu:
+            initMainMenu(window, system);
+            break;
+        case MenuState::OptionMenu: {
+            optionMenu.displayOptionMenu(window, system);
+            break;
+        };
     }
-    system.render(window, entities);
 }
-
-Menu::~Menu() {}

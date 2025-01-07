@@ -25,8 +25,7 @@ GameEngine::Entity OptionMenu::createEntityText(
     const std::vector<std::pair<float, float>> position,
     unsigned int fontSize) {
     auto newEntity = GameEngine::Entity(id);
-    ;
-    newEntity.addComponent(Text(text, "../assets/font/arial.ttf", fontSize));
+    newEntity.addComponent(Text(text, "assets/font/arial.ttf", fontSize));
     newEntity.addComponent(Position(position));
     newEntity.addComponent(Color({255, 255, 255, 255}));
     return newEntity;

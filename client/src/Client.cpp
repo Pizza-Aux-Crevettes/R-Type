@@ -30,7 +30,6 @@ void Client::manageClient() {
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "RTYPE");
     HotkeysManager input;
     GameEngine::System system;
-    // OptionMenu optionMenu;
     Menu menu;
 
     while (window.isOpen()) {
@@ -44,7 +43,7 @@ void Client::manageClient() {
                 input.checkKey(event);
         }
         window.clear();
-        menu.game(window, system);
+        menu.displayMenu(window, system);
         // if (entitiesList.size() > 0) {
         //     system.render(window, entitiesList);
         // }
