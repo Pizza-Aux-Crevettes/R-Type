@@ -19,17 +19,31 @@
 #include <thread>
 #include "EntityManager.hpp"
 #include "component/hotkey/HotkeysManager.hpp"
+#include "menu/Menu.hpp"
 
 Client::Client() {}
 
 Client::~Client() {}
 
+Client& Client::get() {
+    static Client instance;
+    return instance;
+}
+
+void Client::setIsPlayed() {
+    _isPlay = !_isPlay;
+}
+
+bool Client::getIsPlayed() {
+    return _isPlay;
+}
+
 void Client::manageClient() {
 
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Client Game");
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "RTYPE");
     HotkeysManager input;
     GameEngine::System system;
-    OptionMenu menu;
+    Menu menu;
 
     while (window.isOpen()) {
         std::map<int, GameEngine::Entity> entitiesList =
@@ -42,10 +56,13 @@ void Client::manageClient() {
                 input.checkKey(event);
         }
         window.clear();
-        menu.displayOptionMenu(window, system);
-        // if (entitiesList.size() > 0) {
-        //     system.render(window, entitiesList);
-        // }
+        if (!Client::get().getIsPlayed()) {
+            menu.displayMenu(window, system);
+        } else {
+            if (entitiesList.size() > 0) {
+                system.render(window, entitiesList);
+            }
+        }
         window.display();
     }
 }

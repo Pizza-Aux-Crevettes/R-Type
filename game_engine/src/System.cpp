@@ -183,27 +183,22 @@ static void buttonSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
 
             buttonComp.setIsLoaded(true);
         }
+        static std::map<GameEngine::Entity*, bool> wasPressedMap;
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        sf::FloatRect buttonBounds = buttonComp.getButton().getGlobalBounds();
 
-        window.draw(buttonComp.getButton());
-        window.draw(buttonComp.getText());
-    }
-}
-
-void GameEngine::System::onClick(sf::RenderWindow& window,
-                                 std::map<int, Entity>& entities,
-                                 sf::Vector2i mousePos) {
-    for (auto& [id, entity] : entities) {
-        if (entity.hasComponent<Button>() && entity.hasComponent<Position>()) {
-            auto& buttonComp = entity.getComponent<Button>();
-            auto& positionComp = entity.getComponent<Position>();
-
-            if (buttonComp.isHovered(mousePos)) {
-                if (id == 4) {
-                    window.close();
-                }
-                std::cout << "Button " << id << " clicked!" << std::endl;
+        if (buttonBounds.contains(static_cast<float>(mousePos.x),
+                                  static_cast<float>(mousePos.y))) {
+            bool isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+            if (isPressed && !wasPressedMap[&entity]) {
+                buttonComp.executeCallback();
+                wasPressedMap[&entity] = true;
+            } else if (!isPressed) {
+                wasPressedMap[&entity] = false;
             }
         }
+        window.draw(buttonComp.getButton());
+        window.draw(buttonComp.getText());
     }
 }
 

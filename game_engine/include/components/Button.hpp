@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <functional>
 #include <iostream>
 #include <string>
 #include "Components.hpp"
@@ -36,6 +37,9 @@ class Button : public Component {
     void display() const override;
     bool isHovered(sf::Vector2i mousePos);
 
+    void setCallback(std::function<void()>);
+    void executeCallback();
+
   private:
     sf::RectangleShape _button;
     sf::Text _text;
@@ -44,6 +48,7 @@ class Button : public Component {
     sf::Font _font;
     unsigned int _charSize;
     std::pair<double, double> _size;
+    std::function<void()> _callback;
     // enum Shape { Circle, Rectangle };
     // sf::Color _buttonColor;
     bool _isLoad = false;
