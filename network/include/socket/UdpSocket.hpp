@@ -8,6 +8,7 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
+#include <memory>
 #include <netinet/in.h>
 
 class UdpSocket {

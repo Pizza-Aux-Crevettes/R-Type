@@ -9,6 +9,7 @@
 
 #include <SmartBuffer.hpp>
 #include <mutex>
+#include <memory>
 #include <netinet/in.h>
 #include <vector>
 

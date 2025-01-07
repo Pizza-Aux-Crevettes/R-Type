@@ -9,6 +9,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "component/obstacle/Obstacle.hpp"
 
 class Map {

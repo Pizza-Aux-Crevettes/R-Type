@@ -9,6 +9,7 @@
 
 #include <thread>
 #include <vector>
+#include <memory>
 #include "socket/TcpSocket.hpp"
 #include "socket/UdpSocket.hpp"
 

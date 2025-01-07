@@ -9,6 +9,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "component/map/Map.hpp"
 #include "component/player/Player.hpp"
 

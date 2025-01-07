@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <memory>
 #include <SmartBuffer.hpp>
 #include <netinet/in.h>
 
