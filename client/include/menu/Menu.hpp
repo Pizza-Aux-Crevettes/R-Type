@@ -13,6 +13,7 @@
 #include <components/Color.hpp>
 #include <components/Link.hpp>
 #include <components/OptionButton.hpp>
+#include <components/Button.hpp>
 #include <components/Position.hpp>
 #include <components/Shape.hpp>
 #include <components/Slider.hpp>
@@ -44,10 +45,6 @@ class Menu {
     std::map<int, GameEngine::Entity> _entitiesMenu;
     bool _entitiesInitialized = false;
     bool _canDisplay = true;
-    enum class MenuState {
-      MainMenu,
-      OptionMenu
-    };
+    enum class MenuState { MainMenu, OptionMenu };
     MenuState _currentMenuState = MenuState::MainMenu;
-
 };

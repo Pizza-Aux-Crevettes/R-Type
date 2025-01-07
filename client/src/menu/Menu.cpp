@@ -6,6 +6,7 @@
 */
 
 #include "menu/Menu.hpp"
+#include "Client.hpp"
 
 Menu::Menu() {}
 
@@ -38,6 +39,7 @@ Menu::createEntitySprite(int id, const std::pair<float, float> size,
 
 void Menu::isClickedPlay() {
     std::cout << "Button play clicked!" << std::endl;
+    Client::get().setIsPlayed();
 }
 
 void Menu::isClickedExit() {
@@ -55,48 +57,47 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
             _entitiesMenu.emplace(
                 entityId,
                 createEntitySprite(entityId++, {8, 8}, "assets/sprite/map.png",
-                                {0, 0, 200, 200}, {{-1300, -300}}));
-            _entitiesMenu.emplace(
-                entityId,
-                createEntityButton(entityId++, "PLAY", "assets/font/Inter_Bold.ttf",
-                                50, {{1920 / 2 - 60, (verticalSpacing + 130)}},
-                                [this]() { isClickedPlay(); }));
+                                   {0, 0, 200, 200}, {{-1300, -300}}));
             _entitiesMenu.emplace(
                 entityId, createEntityButton(
-                            entityId++, "OPTION", "assets/font/Inter_Bold.ttf",
-                            50, {{1920 / 2 - 100, verticalSpacing * 2 + 50}},
-                            [this]() {
-                                _currentMenuState = MenuState::OptionMenu;
-                            }));
+                              entityId++, "PLAY", "assets/font/Inter_Bold.ttf",
+                              50, {{1920 / 2 - 60, (verticalSpacing + 130)}},
+                              [this]() { isClickedPlay(); }));
             _entitiesMenu.emplace(
                 entityId,
-                createEntityButton(entityId++, "EXIT", "assets/font/Inter_Bold.ttf",
-                                50, {{1920 / 2 - 50, verticalSpacing * 3 - 20}},
-                                [this]() { isClickedExit(); }));
-            _entitiesMenu.emplace(entityId,
-                                createEntitySprite(entityId++, {6, 6},
-                                                    "assets/sprite/spaceship.png",
-                                                    {0, 18, 34, 15}, {{30, 100}}));
+                createEntityButton(
+                    entityId++, "OPTION", "assets/font/Inter_Bold.ttf", 50,
+                    {{1920 / 2 - 100, verticalSpacing * 2 + 50}},
+                    [this]() { _currentMenuState = MenuState::OptionMenu; }));
+            _entitiesMenu.emplace(
+                entityId, createEntityButton(
+                              entityId++, "EXIT", "assets/font/Inter_Bold.ttf",
+                              50, {{1920 / 2 - 50, verticalSpacing * 3 - 20}},
+                              [this]() { isClickedExit(); }));
+            _entitiesMenu.emplace(
+                entityId, createEntitySprite(entityId++, {6, 6},
+                                             "assets/sprite/spaceship.png",
+                                             {0, 18, 34, 15}, {{30, 100}}));
             _entitiesMenu.emplace(
                 entityId, createEntitySprite(entityId++, {5, 5},
-                                            "assets/sprite/shoot_blue.png",
-                                            {165, 0, 65, 15}, {{350, 100}}));
-            _entitiesMenu.emplace(entityId,
-                                createEntitySprite(entityId++, {5, 5},
-                                                    "assets/sprite/enemy.png",
-                                                    {0, 0, 50, 80}, {{280, 820}}));
-            _entitiesMenu.emplace(
-                entityId,
-                createEntitySprite(entityId++, {5, 5}, "assets/sprite/canon.png",
-                                {165, 0, 33, 30}, {{1600, -50}}));
-            _entitiesMenu.emplace(
-                entityId,
-                createEntitySprite(entityId++, {5, 5}, "assets/sprite/canon.png",
-                                {33, 33, 33, 30}, {{1600, 970}}));
+                                             "assets/sprite/shoot_blue.png",
+                                             {165, 0, 65, 15}, {{350, 100}}));
             _entitiesMenu.emplace(
                 entityId, createEntitySprite(entityId++, {5, 5},
-                                            "assets/sprite/intact-boss.png",
-                                            {0, 0, 200, 200}, {{1400, 200}}));
+                                             "assets/sprite/enemy.png",
+                                             {0, 0, 50, 80}, {{280, 820}}));
+            _entitiesMenu.emplace(
+                entityId, createEntitySprite(entityId++, {5, 5},
+                                             "assets/sprite/canon.png",
+                                             {165, 0, 33, 30}, {{1600, -50}}));
+            _entitiesMenu.emplace(
+                entityId, createEntitySprite(entityId++, {5, 5},
+                                             "assets/sprite/canon.png",
+                                             {33, 33, 33, 30}, {{1600, 970}}));
+            _entitiesMenu.emplace(
+                entityId, createEntitySprite(entityId++, {5, 5},
+                                             "assets/sprite/intact-boss.png",
+                                             {0, 0, 200, 200}, {{1400, 200}}));
         }
         system.render(window, _entitiesMenu);
     }
@@ -125,12 +126,12 @@ void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system) {
     ambienSound.play();
 
     switch (_currentMenuState) {
-        case MenuState::MainMenu:
-            initMainMenu(window, system);
-            break;
-        case MenuState::OptionMenu: {
-            optionMenu.displayOptionMenu(window, system);
-            break;
-        };
+    case MenuState::MainMenu:
+        initMainMenu(window, system);
+        break;
+    case MenuState::OptionMenu: {
+        optionMenu.displayOptionMenu(window, system);
+        break;
+    };
     }
 }

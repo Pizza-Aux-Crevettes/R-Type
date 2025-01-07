@@ -25,6 +25,19 @@ Client::Client() {}
 
 Client::~Client() {}
 
+Client& Client::get() {
+    static Client instance;
+    return instance;
+}
+
+void Client::setIsPlayed() {
+    _isPlay = !_isPlay;
+}
+
+bool Client::getIsPlayed() {
+    return _isPlay;
+}
+
 void Client::manageClient() {
 
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "RTYPE");
@@ -43,10 +56,13 @@ void Client::manageClient() {
                 input.checkKey(event);
         }
         window.clear();
-        menu.displayMenu(window, system);
-        // if (entitiesList.size() > 0) {
-        //     system.render(window, entitiesList);
-        // }
+        if (!Client::get().getIsPlayed()) {
+            menu.displayMenu(window, system);
+        } else {
+            if (entitiesList.size() > 0) {
+                system.render(window, entitiesList);
+            }
+        }
         window.display();
     }
 }
