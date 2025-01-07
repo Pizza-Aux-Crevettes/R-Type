@@ -8,8 +8,8 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
-#include <mutex>
 #include <memory>
+#include <mutex>
 #include <netinet/in.h>
 #include <vector>
 

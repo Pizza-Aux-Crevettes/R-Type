@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include <memory>
 #include <SmartBuffer.hpp>
+#include <memory>
 #include <netinet/in.h>
 
 class Protocol {

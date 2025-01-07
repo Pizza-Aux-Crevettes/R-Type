@@ -7,10 +7,10 @@
 
 #pragma once
 
+#include <memory>
 #include <netinet/in.h>
 #include <string>
 #include <thread>
-#include <memory>
 #include "component/attr/Health.hpp"
 #include "util/Point.hpp"
 
