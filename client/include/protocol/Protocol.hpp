@@ -43,7 +43,7 @@ class Protocol {
     Protocol& operator=(const Protocol&) = delete;
 
     static Protocol& get();
-    static void handleMessage(SmartBuffer& smartBuffer, Client* client);
+    static void handleMessage(SmartBuffer& smartBuffer);
 
   private:
     Protocol();
@@ -56,9 +56,7 @@ class Protocol {
     static void handleJoinRoomBroadcast(SmartBuffer& smartBuffer);
     static void handleDeleteRoomCallback(SmartBuffer& smartBuffer);
     static void handleDeleteRoomBroadcast(SmartBuffer& smartBuffer);
-    static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer,
-                                         Client* client);
-    static void handlePlayerCallback(SmartBuffer& smartBuffer, Client* client);
-    static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer,
-                                           Client* client);
+    static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer);
+    static void handlePlayerCallback(SmartBuffer& smartBuffer);
+    static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer);
 };

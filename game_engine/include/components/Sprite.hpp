@@ -15,12 +15,12 @@
 
 class Sprite : public Component {
   public:
-    Sprite(std::pair<float, float> size = {-1, -1});
+    Sprite(const std::pair<float, float>& size = {-1, -1});
     ~Sprite();
     std::string getTexturePath() const;
-    void setTexturePath(std::string texturePath);
+    void setTexturePath(const std::string& texturePath);
     std::pair<float, float> getSize() const;
-    void setSize(std::pair<float, float> size);
+    void setSize(const std::pair<float, float>& size);
     bool getIsLoaded() const;
     void setIsLoaded(bool isLoaded);
     sf::Sprite& getSprite();

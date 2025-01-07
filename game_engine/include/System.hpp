@@ -19,9 +19,11 @@ class System {
   public:
     System();
     ~System();
-    void render(sf::RenderWindow& window,
-                std::map<int, std::shared_ptr<Entity>>& entities);
-    void update(Entity& entity, UpdateType type, std::any value);
+    void onClick(sf::RenderWindow& window, std::map<int, Entity>& entities,
+                 sf::Vector2i mousePos);
+    void render(sf::RenderWindow& window, std::map<int, Entity>& entities);
+    void update(int id, std::map<int, Entity>& entities, UpdateType type,
+                const std::any& value, int posId = 0);
 };
 
 } // namespace GameEngine

@@ -19,12 +19,11 @@ class NetworkClient {
     void init();
     void connectTCP();
     static void connectUDP();
-    void run(Client* client);
+    void run();
 
   private:
     TcpSocket tcpSocket;
     UdpSocket udpSocket;
-
-    void handleTcpMessages(Client* client) const;
-    void handleUdpMessages(Client* client);
+    void handleTcpMessages() const;
+    void handleUdpMessages();
 };

@@ -19,11 +19,10 @@
  * This constructor initializes the Position component with the given x and y
  * coordinates.
  *
- * @param x The x-coordinate of the position.
- * @param y The y-coordinate of the position.
+ * @param positions
  */
-Position::Position(std::pair<float, float> pos)
-    : _x(pos.first), _y(pos.second) {}
+Position::Position(const std::vector<std::pair<float, float>>& positions)
+    : _positions(positions) {}
 
 /**
  * @brief Destructor for the Position component.
@@ -32,6 +31,10 @@ Position::Position(std::pair<float, float> pos)
  */
 Position::~Position() {}
 
+std::vector<std::pair<float, float>> Position::getPositions() const {
+    return _positions;
+}
+
 /**
  * @brief Get the x-coordinate of the Position component.
  *
@@ -39,8 +42,8 @@ Position::~Position() {}
  *
  * @return The x-coordinate of the position.
  */
-float Position::getPositionX() const {
-    return this->_x;
+float Position::getPositionX(const int id) const {
+    return this->_positions[id].first;
 }
 
 /**
@@ -50,8 +53,8 @@ float Position::getPositionX() const {
  *
  * @return The y-coordinate of the position.
  */
-float Position::getPositionY() const {
-    return this->_y;
+float Position::getPositionY(const int id) const {
+    return this->_positions[id].second;
 }
 
 /**
@@ -59,10 +62,11 @@ float Position::getPositionY() const {
  *
  * This function sets the x-coordinate of the Position component.
  *
+ * @param id
  * @param x The new x-coordinate for the position.
  */
-void Position::setPositionX(float x) {
-    this->_x = x;
+void Position::setPositionX(const int id, const float x) {
+    this->_positions[id].first = x;
 }
 
 /**
@@ -70,10 +74,19 @@ void Position::setPositionX(float x) {
  *
  * This function sets the y-coordinate of the Position component.
  *
+ * @param id
  * @param y The new y-coordinate for the position.
  */
-void Position::setPositionY(float y) {
-    this->_y = y;
+void Position::setPositionY(const int id, const float y) {
+    this->_positions[id].second = y;
+}
+
+void Position::addPosition(const float x, const float y) {
+    this->_positions.emplace_back(x, y);
+}
+
+void Position::removePosition(const int id) {
+    this->_positions.erase(this->_positions.begin() + id);
 }
 
 /**
