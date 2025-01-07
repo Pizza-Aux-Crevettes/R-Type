@@ -12,6 +12,7 @@
 
 Server& Server::get() {
     static Server instance;
+
     return instance;
 }
 

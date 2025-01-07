@@ -8,6 +8,7 @@
 #include "socket/TcpSocket.hpp"
 #include <SmartBuffer.hpp>
 #include <arpa/inet.h>
+#include <thread>
 #include <unistd.h>
 #include "protocol/Protocol.hpp"
 #include "socket/Server.hpp"
@@ -74,12 +75,16 @@ void TcpSocket::init() {
         Logger::socket("[TCP Socket] Client connected: " +
                        std::to_string(clientSocket));
 
-        handleRead(clientSocket);
+        std::thread([this, clientSocket, clientAddr]() {
+            SmartBuffer smartBuffer;
+
+            this->handleRead(clientSocket, smartBuffer, clientAddr);
+        }).detach();
     }
 }
 
-void TcpSocket::handleRead(const int clientSocket) {
-    SmartBuffer smartBuffer;
+void TcpSocket::handleRead(const int clientSocket, SmartBuffer& smartBuffer,
+                           const sockaddr_in& clientAddr) {
 
     while (true) {
         char buffer[1024] = {};
@@ -94,20 +99,22 @@ void TcpSocket::handleRead(const int clientSocket) {
             break;
         }
 
+        smartBuffer.reset();
         smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer), bytesRead);
-        smartBuffer.resetRead();
 
-        Protocol::handleMessage(clientSocket, smartBuffer);
+        Protocol::handleMessage(clientSocket, smartBuffer, clientAddr);
     }
 }
 
 void TcpSocket::addClient(const int clientSocket) {
     std::lock_guard lock(_clientsMutex);
+
     _clients.push_back(clientSocket);
 }
 
 void TcpSocket::removeClient(const int clientSocket) {
     std::lock_guard lock(_clientsMutex);
+
     std::erase(_clients, clientSocket);
 }
 

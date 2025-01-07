@@ -122,8 +122,6 @@ void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
     int32_t playerId;
     double x, y;
     smartBuffer >> playerId >> x >> y;
-    std::cout << "[Protocol] PLAYER_UPDATE_POSITION - Player ID: " << playerId
-              << ", X: " << x << ", Y: " << y << std::endl;
     std::map<std::string, std::any> emptyMap;
     EntityManager::get().CompareEntities(playerId, emptyMap, {x, y});
 }
