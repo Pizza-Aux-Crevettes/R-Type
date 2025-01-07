@@ -61,10 +61,9 @@ static void setPosition(GameEngine::Entity& entity, Drawable& drawable) {
 static void linkSystem(int id, std::map<int, GameEngine::Entity>& entities,
                        std::pair<float, float> newLinkedEntityPos,
                        const int posId) {
-    for (int i = 0; i < entities.size(); i++) {
-        if (entities[i].hasComponent<Link>() &&
-            entities[i].getComponent<Link>().getId() == id) {
-            GameEngine::Entity entity = entities[i];
+    for (auto& [_, entity] : entities) {
+        if (entity.hasComponent<Link>() &&
+            entity.getComponent<Link>().getId() == id) {
             GameEngine::Entity entityLinked = entities[id];
             auto oldLinkedEntityPos = entityLinked.getComponent<Position>();
             const std::pair dist = {newLinkedEntityPos.first -
@@ -377,6 +376,7 @@ static void sliderSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
 void GameEngine::System::render(sf::RenderWindow& window,
                                 std::map<int, Entity>& entities) {
     for (auto& [id, entity] : entities) {
+        std::cout << id << std::endl;
         spriteSystem(window, entity);
         textSystem(window, entity);
         buttonSystem(window, entity);
@@ -389,7 +389,10 @@ void GameEngine::System::render(sf::RenderWindow& window,
 void GameEngine::System::update(const int id, std::map<int, Entity>& entities,
                                 const UpdateType type, const std::any& value,
                                 const int posId) {
-    Entity entity = entities[id];
+    if (!entities.contains(id)) {
+        return;
+    }
+    Entity& entity = entities.at(id);
     switch (type) {
     case UpdateType::Position: {
         auto pos = std::any_cast<std::pair<float, float>>(value);
