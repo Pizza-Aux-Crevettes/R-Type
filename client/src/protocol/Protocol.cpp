@@ -113,7 +113,7 @@ void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
     std::cout << "[Protocol] NEW_PLAYER_BROADCAST - Player ID: " << playerId
               << ", Player Name: " << playerName << std::endl;
     std::map<std::string, std::any> newItems = {
-        {{"Texture", std::string("../assets/sprite/spaceship.png")},
+        {{"Texture", std::string("assets/sprite/spaceship.png")},
          {"Position", std::pair<float, float>(0.0f, 0.0f)}}};
     EntityManager::get().CompareEntities(playerId, newItems, {0.0f, 0.0f});
 }
@@ -122,8 +122,6 @@ void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
     int32_t playerId;
     double x, y;
     smartBuffer >> playerId >> x >> y;
-    std::cout << "[Protocol] PLAYER_UPDATE_POSITION - Player ID: " << playerId
-              << ", X: " << x << ", Y: " << y << std::endl;
     std::map<std::string, std::any> emptyMap;
     EntityManager::get().CompareEntities(playerId, emptyMap, {x, y});
 }

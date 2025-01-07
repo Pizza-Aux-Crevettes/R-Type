@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <memory>
+#include <netinet/in.h>
 #include <string>
 #include <thread>
 #include "component/attr/Health.hpp"
@@ -24,9 +26,11 @@ class Player {
     [[nodiscard]] double getSpeed() const;
     [[nodiscard]] const Health& getHealth() const;
     [[nodiscard]] std::thread::id getThreadId() const;
+    [[nodiscard]] const sockaddr_in& getClientAddress() const;
 
     void setPosition(const Point& position);
     void setThreadId(const std::thread::id& threadId);
+    void setClientAddress(const sockaddr_in& clientAddr);
 
     void move(double deltaX, double deltaY);
 
@@ -38,4 +42,5 @@ class Player {
     double _speed;
     Health _health;
     std::thread::id _threadId;
+    sockaddr_in _clientAddr;
 };

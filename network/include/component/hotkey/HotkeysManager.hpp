@@ -13,6 +13,9 @@
 
 class HotkeysManager {
   public:
+    HotkeysManager(const HotkeysManager&) = delete;
+    HotkeysManager& operator=(const HotkeysManager&) = delete;
+
     static HotkeysManager& get();
 
     void handleHotkey(int32_t playerId, int16_t hotkey);

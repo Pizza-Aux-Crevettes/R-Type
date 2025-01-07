@@ -7,23 +7,49 @@
 
 #pragma once
 
+#include <functional>
+#include <iostream>
 #include <string>
 #include "Components.hpp"
 
 class Button : public Component {
   public:
-    Button(std::string text = "", std::pair<double, double> size = {0.0, 0.0});
+    Button(std::string text = "", std::string fontFile = "",
+           unsigned int characterSize = 30);
     ~Button();
-    std::string getText() const;
-    void setText(std::string text);
+
+    sf::RectangleShape& getButton();
+    sf::Text& getText();
+
+    std::string getString() const;
+    void setString(std::string text);
+
+    std::string getFontFile() const;
+    sf::Font& getFont();
+
+    unsigned int getCharacterSize() const;
+
     std::pair<double, double> getSize() const;
-    void setSize(std::pair<double, double> size);
+
+    void setIsLoaded(bool isLoaded);
+    bool getIsLoaded() const;
+
     void display() const override;
+    bool isHovered(sf::Vector2i mousePos);
+
+    void setCallback(std::function<void()>);
+    void executeCallback();
 
   private:
-    std::string _text;
-    std::pair<double, double> _size;
-    enum Shape { Circle, Rectangle };
     sf::RectangleShape _button;
+    sf::Text _text;
+    std::string _initText;
+    std::string _fontFile;
+    sf::Font _font;
+    unsigned int _charSize;
+    std::pair<double, double> _size;
+    std::function<void()> _callback;
+    // enum Shape { Circle, Rectangle };
+    // sf::Color _buttonColor;
     bool _isLoad = false;
 };

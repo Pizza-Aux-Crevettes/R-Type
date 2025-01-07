@@ -14,9 +14,11 @@
 #include <components/Position.hpp>
 #include <components/Sprite.hpp>
 #include <components/Texture.hpp>
+#include <menu/OptionMenu.hpp>
 #include <thread>
 #include "EntityManager.hpp"
 #include "component/hotkey/HotkeysManager.hpp"
+#include "menu/Menu.hpp"
 
 Client::Client() {}
 
@@ -40,13 +42,26 @@ void Client::manageBackground(GameEngine::System system, sf::Clock clock,
     shape.setTextureRect(
         sf::IntRect(textureOffset.x, textureOffset.y, 800, 600));
 }
+Client& Client::get() {
+    static Client instance;
+    return instance;
+}
+
+void Client::setIsPlayed() {
+    _isPlay = !_isPlay;
+}
+
+bool Client::getIsPlayed() {
+    return _isPlay;
+}
 
 void Client::manageClient() {
 
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Client Game");
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "RTYPE");
     HotkeysManager input;
     GameEngine::System system;
     sf::Texture background = EntityManager::get().manageBackground();
+    Menu menu;
 
     sf::Clock clock;
     while (window.isOpen()) {
@@ -61,8 +76,12 @@ void Client::manageClient() {
                 input.checkKey(event);
         }
         window.clear();
-        if (entitiesList.size() > 0) {
-            system.render(window, entitiesList);
+        if (!Client::get().getIsPlayed()) {
+            menu.displayMenu(window, system);
+        } else {
+            if (entitiesList.size() > 0) {
+                system.render(window, entitiesList);
+            }
         }
         window.display();
     }

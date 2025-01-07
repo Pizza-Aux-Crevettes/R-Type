@@ -12,6 +12,7 @@
 
 #include "components/Text.hpp"
 #include <iostream>
+#include <utility>
 
 /**
  * @brief Constructor for the Text component.
@@ -19,9 +20,12 @@
  * This constructor initializes the text component with the given text value.
  *
  * @param text The initial text for the component.
+ * @param fontFile
+ * @param characterSize
  */
-Text::Text(std::string text, std::string filename, unsigned int characterSize)
-    : _initText(text), _fontFile(filename), _charSize(characterSize) {}
+Text::Text(const std::string& text, const std::string& fontFile,
+           const unsigned int characterSize)
+    : _initText(text), _fontFile(fontFile), _charSize(characterSize) {}
 
 /**
  * @brief Destructor for the Text component.
@@ -48,7 +52,7 @@ std::string Text::getString() const {
  *
  * @param text The new text to be set.
  */
-void Text::setString(std::string text) {
+void Text::setString(const std::string& text) {
     this->_initText = text;
 }
 
@@ -68,7 +72,7 @@ std::string Text::getFontFile() const {
     return this->_fontFile;
 }
 
-void Text::setIsLoaded(bool isLoaded) {
+void Text::setIsLoaded(const bool isLoaded) {
     this->_isLoad = isLoaded;
 }
 

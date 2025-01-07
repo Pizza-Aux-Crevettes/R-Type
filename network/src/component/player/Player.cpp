@@ -58,6 +58,14 @@ const Health& Player::getHealth() const {
     return _health;
 }
 
+const sockaddr_in& Player::getClientAddress() const {
+    return _clientAddr;
+}
+
+void Player::setClientAddress(const sockaddr_in& clientAddr) {
+    _clientAddr = clientAddr;
+}
+
 void Player::move(const double deltaX, const double deltaY) {
     Logger::info("[Player] Moving player: " + std::to_string(_userId) +
                  " by (" + std::to_string(deltaX) + ", " +

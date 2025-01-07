@@ -14,13 +14,13 @@
 #include "components/Link.hpp"
 #include <iostream>
 
-Link::Link(int id) : _id(id) {}
+Link::Link(const int id) : _id(id) {}
 
 int Link::getId() const {
     return this->_id;
 }
 
-void Link::setId(int id) {
+void Link::setId(const int id) {
     this->_id = id;
 }
 

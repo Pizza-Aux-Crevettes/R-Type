@@ -5,13 +5,21 @@
 ** main.cpp
 */
 
+#include <SFML/Audio.hpp>
+#include <components/Button.hpp>
 #include <thread>
+#include "System.hpp"
+#include "components/Position.hpp"
+#include "components/Sprite.hpp"
+#include "components/Text.hpp"
+#include "components/Texture.hpp"
 #include "protocol/NetworkClient.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
 void runNetworkClient(NetworkClient& networkClient, Client* client) {
     try {
+        while (!Client::get().getIsPlayed());
         networkClient.run();
     } catch (const std::exception& e) {
         Logger::error("[Server Thread] Error: " + std::string(e.what()));

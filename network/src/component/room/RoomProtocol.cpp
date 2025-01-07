@@ -6,6 +6,7 @@
 */
 
 #include "component/room/RoomProtocol.hpp"
+#include "component/map/MapManager.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "component/room/RoomManager.hpp"
 #include "protocol/Protocol.hpp"
@@ -14,7 +15,8 @@
 
 /**
  * Protocol structure:
- * - Input: int32_t userId >> int16_t capacity >> int16_t isPublic
+ * - Input: int32_t userId >> int16_t capacity >> int16_t isPublic >> int16_t
+ * mapId
  * - Output: int16_t opCode (CREATE_ROOM_CALLBACK) << int16_t status
  *
  * Status codes:
@@ -26,15 +28,17 @@ void RoomProtocol::createRoom(const int clientSocket,
     int32_t userId;
     int16_t capacity;
     int16_t isPublic;
+    int16_t mapId;
 
-    smartBuffer >> userId >> capacity >> isPublic;
+    smartBuffer >> userId >> capacity >> isPublic >> mapId;
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::CREATE_ROOM_CALLBACK);
 
     Logger::trace("[RoomProtocol] Processing CREATE_ROOM. userId = " +
                   std::to_string(userId) +
                   ", capacity = " + std::to_string(capacity) +
-                  ", isPublic = " + std::to_string(isPublic));
+                  ", isPublic = " + std::to_string(isPublic) +
+                  ", mapId = " + std::to_string(mapId));
 
     const auto player = PlayerManager::get().findPlayerById(userId);
     const auto status = static_cast<int16_t>(!player);
@@ -42,12 +46,12 @@ void RoomProtocol::createRoom(const int clientSocket,
     smartBuffer << status;
 
     if (!status) {
-        const std::string roomCode = RoomManager::get()
-                                         .createRoom(player, capacity, isPublic)
-                                         ->getCode();
+        auto room = RoomManager::get().createRoom(player, capacity, isPublic);
+        auto selectedMap = MapManager::get().getMapById(mapId);
+        room->setMap(selectedMap);
 
-        Logger::success("[RoomProtocol] Room created successfully with code: " +
-                        roomCode);
+        Logger::success("[RoomProtocol] Room created with code: " +
+                        room->getCode() + ", Map ID: " + std::to_string(mapId));
     }
 
     TcpSocket::sendToOne(clientSocket, smartBuffer);

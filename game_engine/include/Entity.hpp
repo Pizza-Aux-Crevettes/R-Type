@@ -9,7 +9,7 @@
 
 #include <memory>
 #include <typeindex>
-#include "components/Button.hpp"
+#include <unordered_map>
 #include "components/Components.hpp"
 
 namespace GameEngine {
@@ -24,7 +24,7 @@ class Entity {
     ~Entity();
 
     template <typename ComponentType>
-    void addComponent(ComponentType component);
+    void addComponent(const ComponentType& component);
 
     template <typename ComponentType> void removeComponent();
 
@@ -37,7 +37,7 @@ class Entity {
 
   private:
     int _id;
-    std::map<std::type_index, std::shared_ptr<Component>> _components;
+    std::unordered_map<std::type_index, std::shared_ptr<Component>> _components;
 };
 
 /**
@@ -70,7 +70,7 @@ Entity::Entity(const int id, Args&&... args) : _id(id) {
  * @throws std::runtime_error If the component already exists.
  */
 template <typename ComponentType>
-void Entity::addComponent(ComponentType component) {
+void Entity::addComponent(const ComponentType& component) {
     const auto component_found =
         _components.find(std::type_index(typeid(ComponentType)));
     if (component_found == _components.end()) {

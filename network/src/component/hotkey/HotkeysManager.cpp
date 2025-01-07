@@ -10,13 +10,13 @@
 #include "component/player/PlayerManager.hpp"
 #include "util/Logger.hpp"
 
+HotkeysManager::HotkeysManager() {
+    initHotkeys();
+}
+
 HotkeysManager& HotkeysManager::get() {
     static HotkeysManager instance;
     return instance;
-}
-
-HotkeysManager::HotkeysManager() {
-    initHotkeys();
 }
 
 void HotkeysManager::initHotkeys() {
@@ -56,9 +56,9 @@ void HotkeysManager::handlePlayerPosition(const int32_t playerId,
         const auto player = PlayerManager::get().findPlayerById(playerId);
         const Point& currentPosition = player->getPosition();
         Point newPosition = currentPosition;
+
         newPosition.setPoint(currentPosition.getX() + deltaX,
                              currentPosition.getY() + deltaY);
-
         player->setPosition(newPosition);
 
         Logger::info("[HotkeysManager] Player " + std::to_string(playerId) +

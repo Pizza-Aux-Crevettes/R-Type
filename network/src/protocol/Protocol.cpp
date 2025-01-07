@@ -13,16 +13,15 @@
 
 Protocol& Protocol::get() {
     static Protocol instance;
+
     return instance;
 }
 
-Protocol::Protocol() = default;
-
-void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer) {
+void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer,
+                             const sockaddr_in& clientAddr) {
     int16_t opCode;
-    smartBuffer >> opCode;
 
-    Logger::debug(std::to_string(opCode));
+    smartBuffer >> opCode;
 
     switch (opCode) {
     case DEFAULT:
@@ -37,7 +36,7 @@ void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer) {
         RoomProtocol::deleteRoom(clientSocket, smartBuffer);
         break;
     case NEW_PLAYER:
-        PlayerProtocol::newPlayer(clientSocket, smartBuffer);
+        PlayerProtocol::newPlayer(clientSocket, smartBuffer, clientAddr);
         break;
     case HOTKEY_PRESSED:
         HotkeysProtocol::processHotkey(clientSocket, smartBuffer);

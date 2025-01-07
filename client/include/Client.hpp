@@ -25,11 +25,15 @@ class Client {
     std::map<int, std::map<std::string, std::any>> _items;
     std::map<int, std::map<std::string, std::any>> _updateItems;
     std::map<int, std::shared_ptr<GameEngine::Entity>> _entities;
+    bool _isPlay = false;
 
   public:
     Client();
     ~Client();
+    static Client& get();
     void manageClient();
     void manageBackground(GameEngine::System system, sf::Clock clock,
                           sf::Texture background);
+    void setIsPlayed();
+    bool getIsPlayed();
 };
