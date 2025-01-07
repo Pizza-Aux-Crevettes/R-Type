@@ -77,3 +77,17 @@ void EntityManager::setUpdateItems(
 std::map<int, std::map<std::string, std::any>> EntityManager::getUpdateItems() {
     return _updateItems;
 }
+
+sf::Texture EntityManager::manageBackground() {
+
+    int id = 0;
+    auto newEntity = GameEngine::Entity(id);
+    newEntity.addComponent(Shape(ShapeType::Rectangle, {800, 600}));
+    newEntity.addComponent(Texture("../assets/sprite/space.png"));
+    newEntity.addComponent(Position());
+    sf::Texture& newTexture = newEntity.getComponent<Texture>().getTexture();
+    newTexture.setRepeated(true);
+    _entities.emplace(id, std::move(newEntity));
+
+    return newTexture;
+}

@@ -388,7 +388,7 @@ void GameEngine::System::update(const int id, std::map<int, Entity>& entities,
     switch (type) {
     case UpdateType::Position: {
         auto pos = std::any_cast<std::pair<float, float>>(value);
-        linkSystem(id, entities, pos, posId);
+        // linkSystem(id, entities, pos, posId);
         if (entity.hasComponent<Sprite>()) {
             updatePos(entity, entity.getComponent<Sprite>().getSprite(), pos,
                       posId);

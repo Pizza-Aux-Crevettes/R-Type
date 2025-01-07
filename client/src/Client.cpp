@@ -11,7 +11,6 @@
 
 #include "Client.hpp"
 #include <Entity.hpp>
-#include <System.hpp>
 #include <components/Position.hpp>
 #include <components/Sprite.hpp>
 #include <components/Texture.hpp>
@@ -25,6 +24,24 @@ Client::Client() {}
 
 Client::~Client() {}
 
+void Client::manageBackground(GameEngine::System system, sf::Clock clock,
+                              sf::Texture background) {
+
+    sf::Vector2f textureOffset(0.f, 0.f);
+    const float scrollSpeed = 100.f;
+    std::map<int, GameEngine::Entity> entityList =
+        EntityManager::get().getEntityList();
+
+    sf::Time elapsed = clock.restart();
+    textureOffset.x += scrollSpeed * elapsed.asSeconds();
+    if (textureOffset.x > background.getSize().x) {
+        textureOffset.x -= background.getSize().x;
+    }
+    sf::RectangleShape& shape =
+        entityList.at(0).getComponent<Shape>().getRect();
+    shape.setTextureRect(
+        sf::IntRect(textureOffset.x, textureOffset.y, 800, 600));
+}
 Client& Client::get() {
     static Client instance;
     return instance;
@@ -43,9 +60,12 @@ void Client::manageClient() {
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "RTYPE");
     HotkeysManager input;
     GameEngine::System system;
+    sf::Texture background = EntityManager::get().manageBackground();
     Menu menu;
 
+    sf::Clock clock;
     while (window.isOpen()) {
+        manageBackground(system, clock, background);
         std::map<int, GameEngine::Entity> entitiesList =
             EntityManager::get().getEntityList();
         sf::Event event;
