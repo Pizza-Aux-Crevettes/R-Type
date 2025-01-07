@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "component/room/Room.hpp"
 #include <string>
 #include <vector>
+#include "component/room/Room.hpp"
 
 class RoomManager {
   public:
@@ -17,6 +17,7 @@ class RoomManager {
     RoomManager& operator=(const RoomManager&) = delete;
 
     static RoomManager& get();
+
     std::shared_ptr<Room> createRoom(const std::shared_ptr<Player>& owner,
                                      size_t capacity, bool isPublic);
     bool deleteRoom(const std::string& roomCode,
@@ -26,8 +27,8 @@ class RoomManager {
     [[nodiscard]] const std::vector<std::shared_ptr<Room>>& getRooms() const;
 
   private:
-    RoomManager();
-    ~RoomManager();
+    RoomManager() = default;
+    ~RoomManager() = default;
 
     [[nodiscard]] std::string generateUniqueCode() const;
 

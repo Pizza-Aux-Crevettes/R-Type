@@ -7,8 +7,9 @@
 
 #pragma once
 
-#include "component/player/Player.hpp"
+#include <memory>
 #include <unordered_map>
+#include "component/player/Player.hpp"
 
 class PlayerManager {
   public:
@@ -16,16 +17,18 @@ class PlayerManager {
     PlayerManager& operator=(const PlayerManager&) = delete;
 
     static PlayerManager& get();
+
     [[nodiscard]] int32_t getNextUserId() const;
-    std::shared_ptr<Player> createPlayer(const std::string& name);
+    std::shared_ptr<Player> createPlayer(const std::string& name,
+                                         const sockaddr_in& clientAddr);
     bool removePlayer(int32_t userId);
     [[nodiscard]] std::shared_ptr<Player> findPlayerById(int32_t userId) const;
     [[nodiscard]] const std::unordered_map<int32_t, std::shared_ptr<Player>>&
     getPlayers() const;
 
   private:
-    PlayerManager();
-    ~PlayerManager();
+    PlayerManager() = default;
+    ~PlayerManager() = default;
 
     std::unordered_map<int32_t, std::shared_ptr<Player>> _players;
 };

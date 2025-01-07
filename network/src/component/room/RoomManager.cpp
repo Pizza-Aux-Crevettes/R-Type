@@ -6,21 +6,19 @@
 */
 
 #include "component/room/RoomManager.hpp"
-#include "util/Logger.hpp"
 #include <algorithm>
+#include <memory>
 #include <random>
+#include "util/Logger.hpp"
 
 static constexpr char charset[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                   "0123456789";
 
 RoomManager& RoomManager::get() {
     static RoomManager instance;
+
     return instance;
 }
-
-RoomManager::RoomManager() = default;
-
-RoomManager::~RoomManager() = default;
 
 std::string RoomManager::generateUniqueCode() const {
     static std::mt19937 rng(std::random_device{}());

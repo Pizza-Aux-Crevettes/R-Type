@@ -8,6 +8,7 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
+#include <memory>
 #include <netinet/in.h>
 
 class UdpSocket {
@@ -30,6 +31,6 @@ class UdpSocket {
     std::vector<sockaddr_in> _clients;
     std::mutex _clientsMutex;
 
-    void handleRead();
-    void handleSend();
+    void handleRead(SmartBuffer& smartBuffer);
+    void handleSend(SmartBuffer& smartBuffer);
 };

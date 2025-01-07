@@ -6,13 +6,14 @@
 */
 
 #include "socket/TcpSocket.hpp"
+#include <SmartBuffer.hpp>
+#include <arpa/inet.h>
+#include <thread>
+#include <unistd.h>
 #include "protocol/Protocol.hpp"
 #include "socket/Server.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
-#include <SmartBuffer.hpp>
-#include <arpa/inet.h>
-#include <unistd.h>
 
 std::vector<int> TcpSocket::_clients;
 std::mutex TcpSocket::_clientsMutex;
@@ -23,7 +24,8 @@ TcpSocket::~TcpSocket() {
     close();
 }
 
-void TcpSocket::sendToOne(const int clientSocket, const SmartBuffer& smartBuffer) {
+void TcpSocket::sendToOne(const int clientSocket,
+                          const SmartBuffer& smartBuffer) {
     send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0);
 }
 
@@ -73,12 +75,16 @@ void TcpSocket::init() {
         Logger::socket("[TCP Socket] Client connected: " +
                        std::to_string(clientSocket));
 
-        handleRead(clientSocket);
+        std::thread([this, clientSocket, clientAddr]() {
+            SmartBuffer smartBuffer;
+
+            this->handleRead(clientSocket, smartBuffer, clientAddr);
+        }).detach();
     }
 }
 
-void TcpSocket::handleRead(const int clientSocket) {
-    SmartBuffer smartBuffer;
+void TcpSocket::handleRead(const int clientSocket, SmartBuffer& smartBuffer,
+                           const sockaddr_in& clientAddr) {
 
     while (true) {
         char buffer[1024] = {};
@@ -93,20 +99,22 @@ void TcpSocket::handleRead(const int clientSocket) {
             break;
         }
 
+        smartBuffer.reset();
         smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer), bytesRead);
-        smartBuffer.resetRead();
 
-        Protocol::handleMessage(clientSocket, smartBuffer);
+        Protocol::handleMessage(clientSocket, smartBuffer, clientAddr);
     }
 }
 
 void TcpSocket::addClient(const int clientSocket) {
     std::lock_guard lock(_clientsMutex);
+
     _clients.push_back(clientSocket);
 }
 
 void TcpSocket::removeClient(const int clientSocket) {
     std::lock_guard lock(_clientsMutex);
+
     std::erase(_clients, clientSocket);
 }
 

@@ -7,15 +7,15 @@
 
 #pragma once
 
-#include "Components.hpp"
 #include <vector>
+#include "Components.hpp"
 
 class Color : public Component {
   public:
-    Color(std::vector<double> color = {});
+    Color(const std::vector<double>& color = {});
     ~Color();
     std::vector<double> getColor() const;
-    void setColor(std::vector<double> color);
+    void setColor(const std::vector<double>& color);
     void display() const override;
 
   private:

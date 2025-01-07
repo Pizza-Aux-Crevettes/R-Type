@@ -14,27 +14,36 @@ class Protocol {
   public:
     enum OpCode {
         DEFAULT,
+
+        // Client -> Server
         CREATE_ROOM,
-        CREATE_ROOM_CALLBACK,
-        CREATE_ROOM_BROADCAST,
         JOIN_ROOM,
-        JOIN_ROOM_CALLBACK,
-        JOIN_ROOM_BROADCAST,
         DELETE_ROOM,
-        DELETE_ROOM_CALLBACK,
-        DELETE_ROOM_BROADCAST,
         NEW_PLAYER,
+        HOTKEY_PRESSED,
+
+        // Server -> Client
+        CREATE_ROOM_CALLBACK,
+        JOIN_ROOM_CALLBACK,
+        DELETE_ROOM_CALLBACK,
         NEW_PLAYER_CALLBACK,
+
+        // Server -> All clients
+        CREATE_ROOM_BROADCAST,
+        JOIN_ROOM_BROADCAST,
+        DELETE_ROOM_BROADCAST,
         NEW_PLAYER_BROADCAST,
         PLAYER_UPDATE_POSITION,
-        HOTKEY_PRESSED
+        PLAYER_UPDATE_LIFE,
+        VIEWPORT_UPDATE,
+        BLOCKS_UPDATE,
     };
 
     Protocol(const Protocol&) = delete;
     Protocol& operator=(const Protocol&) = delete;
 
     static Protocol& get();
-    static void handleMessage(SmartBuffer& smartBuffer, Client *client);
+    static void handleMessage(SmartBuffer& smartBuffer);
 
   private:
     Protocol();
@@ -47,7 +56,7 @@ class Protocol {
     static void handleJoinRoomBroadcast(SmartBuffer& smartBuffer);
     static void handleDeleteRoomCallback(SmartBuffer& smartBuffer);
     static void handleDeleteRoomBroadcast(SmartBuffer& smartBuffer);
-    static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer, Client *client);
-    static void handlePlayerCallback(SmartBuffer& smartBuffer, Client *client);
-    static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer, Client *client);
+    static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer);
+    static void handlePlayerCallback(SmartBuffer& smartBuffer);
+    static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer);
 };

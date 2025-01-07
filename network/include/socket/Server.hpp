@@ -7,10 +7,11 @@
 
 #pragma once
 
-#include "socket/TcpSocket.hpp"
-#include "socket/UdpSocket.hpp"
+#include <memory>
 #include <thread>
 #include <vector>
+#include "socket/TcpSocket.hpp"
+#include "socket/UdpSocket.hpp"
 
 class Server {
   public:
@@ -18,6 +19,7 @@ class Server {
     Server& operator=(const Server&) = delete;
 
     static Server& get();
+
     int start();
 
   private:

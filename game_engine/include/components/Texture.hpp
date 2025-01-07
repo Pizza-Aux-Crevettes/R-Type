@@ -7,15 +7,16 @@
 
 #pragma once
 
-#include "Components.hpp"
 #include <string>
+#include "Components.hpp"
 
 class Texture : public Component {
   public:
-    Texture(std::string texturePath = "", std::vector<int> textureRect = {});
+    Texture(const std::string& texturePath = "",
+            const std::vector<int>& textureRect = {});
     ~Texture();
     std::string getTexturePath() const;
-    void setTexturePath(std::string texturePath);
+    void setTexturePath(const std::string& texturePath);
     bool getIsLoaded() const;
     void setIsLoaded(bool isLoaded);
     sf::Texture& getTexture();

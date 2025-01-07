@@ -6,12 +6,13 @@
 */
 
 #include "socket/Server.hpp"
+#include <stdexcept>
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
-#include <stdexcept>
 
 Server& Server::get() {
     static Server instance;
+
     return instance;
 }
 

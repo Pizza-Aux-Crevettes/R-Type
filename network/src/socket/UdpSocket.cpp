@@ -6,17 +6,19 @@
 */
 
 #include "socket/UdpSocket.hpp"
-
-#include "component/player/PlayerManager.hpp"
-#include "protocol/Protocol.hpp"
-#include "socket/Server.hpp"
-#include "util/Config.hpp"
-#include "util/Logger.hpp"
 #include <SmartBuffer.hpp>
 #include <arpa/inet.h>
 #include <chrono>
 #include <thread>
 #include <unistd.h>
+#include "component/map/MapProtocol.hpp"
+#include "component/player/PlayerManager.hpp"
+#include "component/player/PlayerProtocol.hpp"
+#include "component/room/RoomManager.hpp"
+#include "protocol/Protocol.hpp"
+#include "socket/Server.hpp"
+#include "util/Config.hpp"
+#include "util/Logger.hpp"
 
 UdpSocket::UdpSocket() : _udpSocket(FAILURE) {}
 
@@ -49,19 +51,23 @@ void UdpSocket::init() {
 }
 
 [[noreturn]] void UdpSocket::readLoop() {
+    SmartBuffer smartBuffer;
+
     while (true) {
-        handleRead();
+        handleRead(smartBuffer);
     }
 }
 
 [[noreturn]] void UdpSocket::sendLoop() {
+    SmartBuffer smartBuffer;
+
     while (true) {
-        handleSend();
+        handleSend(smartBuffer);
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
-void UdpSocket::handleRead() {
+void UdpSocket::handleRead(SmartBuffer& smartBuffer) {
     char buffer[1024] = {};
     sockaddr_in clientAddr{};
     socklen_t addrLen = sizeof(clientAddr);
@@ -72,29 +78,46 @@ void UdpSocket::handleRead() {
     if (bytesRead > 0) {
         addClient(clientAddr);
 
-        SmartBuffer smartBuffer;
+        smartBuffer.reset();
         smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer), bytesRead);
-        smartBuffer.resetRead();
 
-        Protocol::handleMessage(_udpSocket, smartBuffer);
+        Protocol::handleMessage(_udpSocket, smartBuffer, clientAddr);
     }
 }
 
-void UdpSocket::handleSend() {
-    const auto clients = getClients();
-    const auto& players = PlayerManager::get().getPlayers();
+void UdpSocket::handleSend(SmartBuffer& smartBuffer) {
+    const auto& rooms = RoomManager::get().getRooms();
 
-    if (clients.empty() || players.empty()) {
+    if (rooms.empty()) {
         return;
     }
 
-    for (const auto& client : clients) {
-        for (const auto& [playerId, player] : players) {
-            SmartBuffer smartBuffer;
-            smartBuffer << static_cast<int16_t>(Protocol::OpCode::PLAYER_UPDATE_POSITION)
-                        << playerId << player->getPosition().getX() << player->getPosition().getY();
+    for (const auto& room : rooms) {
+        if (!room->isGameStarted()) {
+            continue;
+        }
 
-            send(_udpSocket, client, smartBuffer);
+        auto map = room->getMap();
+
+        if (!map) {
+            Logger::warning("[UdpSocket] Room " + room->getCode() +
+                            " has no map assigned.");
+
+            continue;
+        }
+
+        map->incrementViewport();
+
+        const auto& players = room->getPlayers();
+        for (const auto& player : players) {
+            PlayerProtocol::sendPlayerPositionUpdate(_udpSocket, players,
+                                                     player, smartBuffer);
+            MapProtocol::sendViewportUpdate(_udpSocket,
+                                            player->getClientAddress(),
+                                            map->getViewport(), smartBuffer);
+            MapProtocol::sendObstaclesUpdate(_udpSocket,
+                                             player->getClientAddress(),
+                                             map->getObstacles(), smartBuffer);
         }
     }
 }

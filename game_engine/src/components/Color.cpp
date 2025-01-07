@@ -21,7 +21,7 @@
  *
  * @param color A vector of doubles representing the color (e.g., [R, G, B, A]).
  */
-Color::Color(std::vector<double> color) : _initColor(color) {}
+Color::Color(const std::vector<double>& color) : _initColor(color) {}
 
 /**
  * @brief Destructor for the Color component.
@@ -49,7 +49,7 @@ std::vector<double> Color::getColor() const {
  * @param color A vector of doubles representing the new color (e.g., [R, G, B,
  * A]).
  */
-void Color::setColor(std::vector<double> color) {
+void Color::setColor(const std::vector<double>& color) {
     this->_initColor = color;
 }
 
