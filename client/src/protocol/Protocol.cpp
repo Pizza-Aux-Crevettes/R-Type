@@ -313,9 +313,6 @@ void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
 
     smartBuffer >> playerId >> x >> y;
 
-    std::cout << "[Protocol] PLAYER_UPDATE_POSITION - Player ID: " << playerId
-              << ", X: " << x << ", Y: " << y << std::endl;
-
     // Cette fonction renvoi la position du joueur
     // On met à jour la position du joueur
 

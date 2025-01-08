@@ -58,7 +58,6 @@ void NetworkClient::run() {
 void NetworkClient::handleTcpMessages() const {
     try {
         while (true) {
-            Logger::error("O");
             SmartBuffer buffer = tcpSocket.receive();
             Protocol::get().handleMessage(buffer);
         }
@@ -70,7 +69,6 @@ void NetworkClient::handleTcpMessages() const {
 void NetworkClient::handleUdpMessages() {
     try {
         while (true) {
-            Logger::error("X");
             SmartBuffer buffer = udpSocket.receive();
             Protocol::get().handleMessage(buffer);
         }
