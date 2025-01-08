@@ -36,12 +36,13 @@ void NetworkClient::connectTCP() {
 
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::CREATE_ROOM)
-                << static_cast<int32_t>(1) << static_cast<int16_t>(99)
-                << static_cast<int16_t>(1) << static_cast<int16_t>(1);
+                << static_cast<int16_t>(99) << static_cast<int16_t>(1)
+                << static_cast<int16_t>(1);
     TcpSocket::send(smartBuffer);
 
     smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::START_GAME);
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::START_GAME)
+                << static_cast<int16_t>(99);
     TcpSocket::send(smartBuffer);
 }
 
