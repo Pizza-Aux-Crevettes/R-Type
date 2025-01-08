@@ -7,7 +7,8 @@
 
 #pragma once
 
-#include <memory>
+#include <chrono>
+#include <stdexcept>
 #include <thread>
 #include <vector>
 #include "socket/TcpSocket.hpp"
@@ -19,16 +20,14 @@ class Server {
     Server& operator=(const Server&) = delete;
 
     static Server& get();
-
     int start();
+    void closeThreads();
 
   private:
-    Server();
-    ~Server();
-
     TcpSocket _tcpSocket;
     UdpSocket _udpSocket;
     std::vector<std::thread> _threads;
 
-    void closeThreads();
+    Server();
+    ~Server();
 };

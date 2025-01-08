@@ -9,16 +9,16 @@
 
 #include <SmartBuffer.hpp>
 #include <memory>
-#include <netinet/in.h>
 #include <vector>
 #include "component/player/Player.hpp"
+#include "socket/Client.hpp"
 
 class PlayerProtocol {
   public:
-    static void newPlayer(int clientSocket, SmartBuffer& smartBuffer,
-                          const sockaddr_in& clientAddr);
+    static void newPlayer(std::shared_ptr<Client> client,
+                          SmartBuffer& smartBuffer);
+
     static void sendPlayerPositionUpdate(
-        const int udpSocket,
-        const std::vector<std::shared_ptr<Player>>& players,
+        int udpSocket, const std::vector<std::shared_ptr<Player>>& players,
         const std::shared_ptr<Player>& player, SmartBuffer& smartBuffer);
 };

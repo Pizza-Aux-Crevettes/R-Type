@@ -7,7 +7,11 @@
 
 #pragma once
 
+#include <filesystem>
+#include <fstream>
 #include <memory>
+#include <sstream>
+#include <stdexcept>
 #include <unordered_map>
 #include "component/map/Map.hpp"
 
