@@ -29,20 +29,24 @@ void NetworkClient::connectTCP() {
 
     SmartBuffer smartBuffer;
 
+    // pour create un player
     smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER)
-                << std::string{"Benjamin"};
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER);
+    smartBuffer << std::string{"Benjamin"};
     TcpSocket::send(smartBuffer);
 
+    // pour create une room
     smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::CREATE_ROOM)
-                << static_cast<int16_t>(99) << static_cast<int16_t>(1)
-                << static_cast<int16_t>(1);
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::CREATE_ROOM);
+    smartBuffer << static_cast<int16_t>(10);
+    smartBuffer << static_cast<int16_t>(1);
+    smartBuffer << static_cast<int16_t>(1);
     TcpSocket::send(smartBuffer);
 
+    // pour start la game
     smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::START_GAME)
-                << static_cast<int16_t>(99);
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::START_GAME);
+    smartBuffer << static_cast<int16_t>(10);
     TcpSocket::send(smartBuffer);
 }
 

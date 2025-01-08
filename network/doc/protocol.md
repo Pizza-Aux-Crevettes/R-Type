@@ -71,7 +71,6 @@ Each message contains the following fields:
 ### **CREATE_ROOM**
 - **Description**: Creates a new room for players to join.
 - **Payload**:
-  - `playerId` (int32_t): ID of the player creating the room.
   - `capacity` (int16_t): Maximum number of players allowed in the room.
   - `isPublic` (int16_t): Boolean flag (1 for public, 0 for private room).
   - `mapId` (int16_t): ID of the map assigned to the room.
@@ -82,7 +81,6 @@ Each message contains the following fields:
 - **Description**: Allows a player to join an existing room.
 - **Payload**:
   - `roomCode` (string): Code of the room the player wants to join.
-  - `playerId` (int32_t): ID of the player trying to join.
 
 ---
 
@@ -90,7 +88,6 @@ Each message contains the following fields:
 - **Description**: Allows a player to leave an existing room.
 - **Payload**:
   - `roomCode` (string): Code of the room the player is leaving.
-  - `playerId` (int32_t): ID of the player leaving the room.
 
 ---
 
@@ -98,7 +95,6 @@ Each message contains the following fields:
 - **Description**: Deletes a room created by the requesting player.
 - **Payload**:
   - `roomCode` (string): Code of the room to delete.
-  - `playerId` (int32_t): ID of the player requesting the deletion.
 
 ---
 
@@ -112,7 +108,6 @@ Each message contains the following fields:
 ### **HOTKEY_PRESSED**
 - **Description**: Processes a key press from a player.
 - **Payload**:
-  - `playerId` (int32_t): ID of the player who pressed the key.
   - `hotkey` (int16_t): Code of the key pressed.
 
 ---
@@ -121,7 +116,6 @@ Each message contains the following fields:
 - **Description**: Starts a game within a room.
 - **Payload**:
   - `roomCode` (string): Code of the room where the game will start.
-  - `playerId` (int32_t): ID of the player starting the game.
 
 ---
 
@@ -129,7 +123,6 @@ Each message contains the following fields:
 - **Description**: Stops an ongoing game within a room.
 - **Payload**:
   - `roomCode` (string): Code of the room where the game will stop.
-  - `playerId` (int32_t): ID of the player stopping the game.
 
 ---
 
