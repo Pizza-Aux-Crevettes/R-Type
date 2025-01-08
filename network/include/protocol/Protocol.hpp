@@ -10,7 +10,6 @@
 #include <SmartBuffer.hpp>
 #include <memory>
 #include <netinet/in.h>
-#include "socket/Client.hpp"
 
 class Protocol {
   public:
@@ -51,8 +50,8 @@ class Protocol {
     Protocol& operator=(const Protocol&) = delete;
 
     static Protocol& get();
-    static void handleMessage(std::shared_ptr<Client> client,
-                              SmartBuffer& smartBuffer);
+     static void handleMessage(int clientSocket, SmartBuffer& smartBuffer,
+                              const sockaddr_in& clientAddr);
 
   private:
     Protocol() = default;

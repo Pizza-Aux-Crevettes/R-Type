@@ -16,7 +16,7 @@
 
 class Player {
   public:
-    Player(int32_t userId, std::string name, const Point& position = Point(),
+    Player(int32_t playerId, std::string name, const Point& position = Point(),
            const Point& size = Point(), double speed = 0);
 
     [[nodiscard]] int32_t getId() const;

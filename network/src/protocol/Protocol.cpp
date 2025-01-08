@@ -8,7 +8,6 @@
 #include "protocol/Protocol.hpp"
 #include "component/hotkey/HotkeysProtocol.hpp"
 #include "component/player/PlayerProtocol.hpp"
-#include "component/room/RoomProtocol.hpp"
 #include "util/Logger.hpp"
 
 Protocol& Protocol::get() {
@@ -16,39 +15,35 @@ Protocol& Protocol::get() {
     return instance;
 }
 
-void Protocol::handleMessage(std::shared_ptr<Client> client,
-                             SmartBuffer& smartBuffer) {
+void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer,
+                             const sockaddr_in& clientAddr) {
     if (smartBuffer.getSize() < sizeof(int16_t)) {
+        Logger::warning(
+            "[Protocol] Received invalid message with insufficient size.");
         return;
     }
 
     int16_t opCode;
     smartBuffer >> opCode;
 
+    Logger::info("[Protocol] Handling message with OpCode: " +
+                 std::to_string(opCode));
+
     switch (static_cast<OpCode>(opCode)) {
     case DEFAULT:
+        Logger::warning("[Protocol] DEFAULT OpCode received. No action taken.");
         break;
-    case CREATE_ROOM:
-        RoomProtocol::createRoom(client, smartBuffer);
-        break;
-    case JOIN_ROOM:
-        RoomProtocol::joinRoom(client, smartBuffer);
-        break;
-    case DELETE_ROOM:
-        RoomProtocol::deleteRoom(client, smartBuffer);
-        break;
+
     case NEW_PLAYER:
-        PlayerProtocol::newPlayer(client, smartBuffer);
+        Logger::info("[Protocol] NEW_PLAYER operation.");
+        PlayerProtocol::newPlayer(clientSocket, smartBuffer, clientAddr);
         break;
+
     case HOTKEY_PRESSED:
-        HotkeysProtocol::processHotkey(client, smartBuffer);
+        Logger::info("[Protocol] HOTKEY_PRESSED operation.");
+        HotkeysProtocol::processHotkey(clientSocket, smartBuffer);
         break;
-    case START_GAME:
-        RoomProtocol::startGame(client, smartBuffer);
-        break;
-    case STOP_GAME:
-        RoomProtocol::stopGame(client, smartBuffer);
-        break;
+
     default:
         Logger::error("[Protocol] Received unknown OpCode: " +
                       std::to_string(opCode));

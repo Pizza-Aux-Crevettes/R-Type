@@ -29,16 +29,13 @@ void NetworkClient::connectTCP() {
 
     SmartBuffer smartBuffer;
 
+    // pour create un player
     smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER)
-                << std::string{"Benjamin"};
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER);
+    smartBuffer << std::string{"Benjamin"};
     TcpSocket::send(smartBuffer);
 
-    smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::CREATE_ROOM)
-                << static_cast<int32_t>(1) << static_cast<int16_t>(99)
-                << static_cast<int16_t>(1) << static_cast<int16_t>(1);
-    TcpSocket::send(smartBuffer);
+    Logger::info("[NetworkClient] New player sent.");
 }
 
 void NetworkClient::connectUDP() {
@@ -61,6 +58,7 @@ void NetworkClient::run() {
 void NetworkClient::handleTcpMessages() const {
     try {
         while (true) {
+            Logger::error("O");
             SmartBuffer buffer = tcpSocket.receive();
             Protocol::get().handleMessage(buffer);
         }
@@ -72,6 +70,7 @@ void NetworkClient::handleTcpMessages() const {
 void NetworkClient::handleUdpMessages() {
     try {
         while (true) {
+            Logger::error("X");
             SmartBuffer buffer = udpSocket.receive();
             Protocol::get().handleMessage(buffer);
         }

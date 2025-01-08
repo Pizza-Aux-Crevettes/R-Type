@@ -5,13 +5,6 @@
 ** PlayerProtocol.cpp
 */
 
-/*
-** EPITECH PROJECT, 2024
-** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
-** File description:
-** PlayerProtocol.cpp
-*/
-
 #include "component/player/PlayerProtocol.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "protocol/Protocol.hpp"
@@ -19,36 +12,44 @@
 #include "socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
 
-void PlayerProtocol::newPlayer(std::shared_ptr<Client> client,
-                               SmartBuffer& smartBuffer) {
+/**
+ * Protocol Details:
+ * - Input: std:string name
+ * - Output: int16_t opCode (NEW_PLAYER_CALLBACK) << int32_t userId
+ */
+void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
+                               const sockaddr_in& clientAddr) {
     std::string name;
 
     smartBuffer >> name;
+    smartBuffer.reset();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_CALLBACK);
 
-    auto player = PlayerManager::get().createPlayer(name);
-    client->setPlayer(player);
+    const auto player = PlayerManager::get().createPlayer(name);
+
+    Logger::info("[PlayerProtocol] Assigned player ID " +
+                 std::to_string(player->getId()) + " to client.");
+
+    smartBuffer << player->getId();
+    TcpSocket::sendToOne(clientSocket, smartBuffer);
 
     smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_CALLBACK)
-                << player->getId();
-    TcpSocket::sendToOne(client->getTcpSocket(), smartBuffer);
-
-    smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_BROADCAST)
-                << player->getId() << name;
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_BROADCAST);
+    smartBuffer << player->getId() << std::string{player->getName()};
     TcpSocket::sendToAll(smartBuffer);
 }
 
 void PlayerProtocol::sendPlayerPositionUpdate(
-    int udpSocket, const std::vector<std::shared_ptr<Player>>& players,
+    const int udpSocket, const std::vector<std::shared_ptr<Player>>& players,
     const std::shared_ptr<Player>& player, SmartBuffer& smartBuffer) {
-    smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(
-                       Protocol::OpCode::PLAYER_UPDATE_POSITION)
-                << player->getId() << player->getPosition().getX()
-                << player->getPosition().getY();
+        Protocol::OpCode::PLAYER_UPDATE_POSITION);
+    smartBuffer << player->getId();
+    smartBuffer << player->getPosition().getX();
+    smartBuffer << player->getPosition().getY();
 
-    for (auto& p : players) {
-        UdpSocket::send(udpSocket, p->getClientAddress(), smartBuffer);
+    for (const auto& targetPlayer : players) {
+        UdpSocket::send(udpSocket, targetPlayer->getClientAddress(),
+                        smartBuffer);
     }
 }

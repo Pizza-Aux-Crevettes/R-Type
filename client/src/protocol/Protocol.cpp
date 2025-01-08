@@ -9,6 +9,8 @@
 #include <iostream>
 #include "EntityManager.hpp"
 
+int32_t Protocol::_playerId = -1;
+
 Protocol& Protocol::get() {
     static Protocol instance;
     return instance;
@@ -17,6 +19,14 @@ Protocol& Protocol::get() {
 Protocol::Protocol() {}
 
 Protocol::~Protocol() {}
+
+int32_t Protocol::getPlayerId() {
+    return _playerId;
+}
+
+void Protocol::setPlayerId(int32_t playerId) {
+    _playerId = playerId;
+}
 
 void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     int16_t opCode;
@@ -155,13 +165,13 @@ void Protocol::handleNewPlayerCallback(SmartBuffer& smartBuffer) {
     int32_t playerId;
 
     smartBuffer >> playerId;
+    Protocol::setPlayerId(playerId);
 
     std::cout << "[Protocol] NEW_PLAYER_CALLBACK - Player ID: " << playerId
               << std::endl;
 
     // Cette fonction renvoi l'id du joueur créé. (Toujours son propre ID)
     // Important pour savoir quel joueur est le notre.
-
     std::map<std::string, std::any> newItems = {
         {{"Texture", std::string("assets/sprite/spaceship.png")}, {"TextureRect", std::vector<int>{0, 0, 34, 15}},
          {"Position", std::pair<float, float>(0.0f, 0.0f)}}};
@@ -271,11 +281,11 @@ void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
     // On ajoute le joueur à la liste des joueurs connectés
     // La donnée est envoyée à tous les joueurs connectés
 
-    // std::map<std::string, std::any> newItems = {
-    //     {{"Texture", std::string("assets/sprite/spaceship.png")}, {"TextureRect", std::vector<int>{0, 0, 34, 15}},
-    //      {"Position", std::pair<float, float>(0.0f, 0.0f)}}};
+    std::map<std::string, std::any> newItems = {
+         {{"Texture", std::string("assets/sprite/spaceship.png")}, {"TextureRect", std::vector<int>{0, 0, 34, 15}},
+          {"Position", std::pair<float, float>(0.0f, 0.0f)}}};
 
-    // EntityManager::get().CompareEntities(playerId, newItems, {0.0f, 0.0f});
+    EntityManager::get().CompareEntities(playerId, newItems, {0.0f, 0.0f});
 }
 
 void Protocol::handleStartGameBroadcast(SmartBuffer& smartBuffer) {

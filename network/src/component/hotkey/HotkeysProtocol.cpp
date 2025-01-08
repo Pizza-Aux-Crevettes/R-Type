@@ -7,25 +7,18 @@
 
 #include "component/hotkey/HotkeysProtocol.hpp"
 #include "component/hotkey/HotkeysManager.hpp"
-#include "socket/TcpSocket.hpp"
 #include "util/Logger.hpp"
 
-void HotkeysProtocol::processHotkey(std::shared_ptr<Client> client,
+void HotkeysProtocol::processHotkey(int clientSocket,
                                     SmartBuffer& smartBuffer) {
+    int32_t playerId;
     int16_t hotkey;
-    smartBuffer >> hotkey;
 
-    auto player = client->getPlayer();
-    if (!player) {
-        Logger::warning(
-            "[HotkeysProtocol] No player associated with this client.");
-        return;
-    }
+    smartBuffer >> playerId >> hotkey;
 
-    int32_t playerId = player->getId();
-
-    Logger::info("[HotkeysProtocol] Hotkey=" + std::to_string(hotkey) +
-                 ", playerId=" + std::to_string(playerId));
+    Logger::info("[HotkeysProtocol] Processing hotkey " +
+                 std::to_string(hotkey) + " for player " +
+                 std::to_string(playerId));
 
     HotkeysManager::get().handleHotkey(playerId, hotkey);
 }

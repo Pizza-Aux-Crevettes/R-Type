@@ -3,6 +3,6 @@
 git submodule update --init --recursive
 cmake -B build .
 cd build/
-#make
+make
 #make GameEngine
-make Network
+#make Network

@@ -51,9 +51,14 @@ class Protocol {
     static Protocol& get();
     static void handleMessage(SmartBuffer& smartBuffer);
 
+    static int32_t getPlayerId();
+    static void setPlayerId(int32_t playerId);
+
   private:
     Protocol();
     ~Protocol();
+
+    static int32_t _playerId;
 
     static void handleDefault(SmartBuffer& smartBuffer);
 
