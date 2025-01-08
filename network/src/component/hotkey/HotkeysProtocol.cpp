@@ -10,13 +10,15 @@
 #include "socket/TcpSocket.hpp"
 #include "util/Logger.hpp"
 
-void HotkeysProtocol::processHotkey(std::shared_ptr<Client> client, SmartBuffer &smartBuffer) {
+void HotkeysProtocol::processHotkey(std::shared_ptr<Client> client,
+                                    SmartBuffer& smartBuffer) {
     int16_t hotkey;
     smartBuffer >> hotkey;
 
     auto player = client->getPlayer();
     if (!player) {
-        Logger::warning("[HotkeysProtocol] No player associated with this client.");
+        Logger::warning(
+            "[HotkeysProtocol] No player associated with this client.");
         return;
     }
 
