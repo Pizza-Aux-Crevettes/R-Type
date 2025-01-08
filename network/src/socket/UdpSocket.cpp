@@ -86,27 +86,24 @@ void UdpSocket::handleRead(SmartBuffer& smartBuffer) {
 
 void UdpSocket::handleSend(SmartBuffer& smartBuffer) {
 
-    const auto& playersMap = PlayerManager::get().getPlayers();
+    const auto clients = getClients();
+    const auto& players = PlayerManager::get().getPlayers();
 
-    if (playersMap.empty()) {
+    if (clients.empty() || players.empty()) {
         return;
     }
 
-    std::vector<std::shared_ptr<Player>> players;
-    players.reserve(playersMap.size());
-    for (const auto& [playerId, player] : playersMap) {
-        players.push_back(player);
-    }
+    for (const auto& client : clients) {
+        for (const auto& [playerId, player] : players) {
+            SmartBuffer smartBuffer;
+            smartBuffer << static_cast<int16_t>(
+                               Protocol::OpCode::PLAYER_UPDATE_POSITION)
+                        << playerId << player->getPosition().getX()
+                        << player->getPosition().getY();
 
-    for (const auto& player : players) {
-        if (!player) {
-            Logger::warning("[UDP Socket] Encountered a null player in the list. Skipping.");
-            continue;
+            send(_udpSocket, client, smartBuffer);
         }
-
-        PlayerProtocol::sendPlayerPositionUpdate(_udpSocket, players, player, smartBuffer);
     }
-
 }
 
 void UdpSocket::addClient(const sockaddr_in& clientAddr) {

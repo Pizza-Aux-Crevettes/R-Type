@@ -8,6 +8,7 @@
 #include "component/hotkey/HotkeysManager.hpp"
 #include "component/hotkey/HotkeysCodes.hpp"
 #include "component/player/PlayerManager.hpp"
+#include "component/player/PlayerProtocol.hpp"
 #include "util/Logger.hpp"
 
 HotkeysManager::HotkeysManager() {
