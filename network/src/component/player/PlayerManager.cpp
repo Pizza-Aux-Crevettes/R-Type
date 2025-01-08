@@ -88,7 +88,5 @@ bool PlayerManager::removePlayer(int32_t playerId) {
 
 const std::unordered_map<int32_t, std::shared_ptr<Player>>&
 PlayerManager::getPlayers() const {
-    Logger::info("[PlayerManager] Retrieving all players. Total count: " +
-                 std::to_string(_players.size()));
     return _players;
 }
