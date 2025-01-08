@@ -39,6 +39,10 @@ void NetworkClient::connectTCP() {
                 << static_cast<int32_t>(1) << static_cast<int16_t>(99)
                 << static_cast<int16_t>(1) << static_cast<int16_t>(1);
     TcpSocket::send(smartBuffer);
+
+    smartBuffer.reset();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::START_GAME);
+    TcpSocket::send(smartBuffer);
 }
 
 void NetworkClient::connectUDP() {

@@ -49,7 +49,7 @@ Each message contains the following fields:
 - **Input Payload**:
   | Field       | Type       | Size (bytes) | Description                  |
   |-------------|------------|--------------|------------------------------|
-  | `userId`    | `int32_t`  | 4            | ID of the player creating the room. |
+  | `playerId`    | `int32_t`  | 4            | ID of the player creating the room. |
   | `capacity`  | `int16_t`  | 2            | Maximum number of players.   |
   | `isPublic`  | `int16_t`  | 2            | 1 for public, 0 for private. |
   | `mapId`     | `int16_t`  | 2            | ID of the map to assign.     |
@@ -68,7 +68,7 @@ Each message contains the following fields:
   | Field       | Type       | Size (bytes) | Description                  |
   |-------------|------------|--------------|------------------------------|
   | `roomCode`  | `string`   | Variable     | Code of the room to join.    |
-  | `userId`    | `int32_t`  | 4            | ID of the joining player.    |
+  | `playerId`    | `int32_t`  | 4            | ID of the joining player.    |
 - **Output Payload**:
   | Field       | Type       | Size (bytes) | Description                  |
   |-------------|------------|--------------|------------------------------|
@@ -84,7 +84,7 @@ Each message contains the following fields:
   | Field       | Type       | Size (bytes) | Description                  |
   |-------------|------------|--------------|------------------------------|
   | `roomCode`  | `string`   | Variable     | Code of the room to delete.  |
-  | `userId`    | `int32_t`  | 4            | ID of the player requesting deletion. |
+  | `playerId`    | `int32_t`  | 4            | ID of the player requesting deletion. |
 - **Output Payload**:
   | Field       | Type       | Size (bytes) | Description                  |
   |-------------|------------|--------------|------------------------------|
@@ -99,7 +99,7 @@ Each message contains the following fields:
 - **Payload**:
   | Field       | Type       | Size (bytes) | Description                  |
   |-------------|------------|--------------|------------------------------|
-  | `userId`    | `int32_t`  | 4            | ID of the player.            |
+  | `playerId`    | `int32_t`  | 4            | ID of the player.            |
   | `posX`      | `float`    | 4            | X-coordinate of the player.  |
   | `posY`      | `float`    | 4            | Y-coordinate of the player.  |
 

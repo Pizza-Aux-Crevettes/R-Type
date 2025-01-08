@@ -15,21 +15,27 @@
 
 void RoomProtocol::createRoom(std::shared_ptr<Client> client,
                               SmartBuffer& smartBuffer) {
-    int32_t userId;
+    auto player = client->getPlayer();
+    if (!player) {
+        Logger::warning(
+            "[HotkeysProtocol] No player associated with this client.");
+        return;
+    }
+
+    int32_t playerId = player->getId();
     int16_t capacity;
     int16_t isPublic;
     int16_t mapId;
-
-    smartBuffer >> userId >> capacity >> isPublic >> mapId;
-    smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::CREATE_ROOM_CALLBACK);
+    smartBuffer >> capacity >> isPublic >> mapId;
 
     Logger::trace(
-        "[RoomProtocol] CREATE_ROOM: userId=" + std::to_string(userId) +
+        "[RoomProtocol] CREATE_ROOM: playerId=" + std::to_string(playerId) +
         ", capacity=" + std::to_string(capacity) + ", isPublic=" +
         std::to_string(isPublic) + ", mapId=" + std::to_string(mapId));
 
-    auto player = PlayerManager::get().findPlayerById(userId);
+    smartBuffer.reset();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::CREATE_ROOM_CALLBACK);
+
     int16_t status = player ? 0 : 1;
 
     smartBuffer << status;
@@ -49,26 +55,30 @@ void RoomProtocol::createRoom(std::shared_ptr<Client> client,
 
 void RoomProtocol::joinRoom(std::shared_ptr<Client> client,
                             SmartBuffer& smartBuffer) {
-    std::string roomCode;
-    int32_t userId;
+    auto player = client->getPlayer();
+    if (!player) {
+        Logger::warning(
+            "[HotkeysProtocol] No player associated with this client.");
+        return;
+    }
 
-    smartBuffer >> roomCode >> userId;
+    int32_t playerId = player->getId();
+    std::string roomCode;
+    smartBuffer >> roomCode;
+
+    Logger::trace("[RoomProtocol] JOIN_ROOM: roomCode=" + roomCode +
+                  ", playerId=" + std::to_string(playerId));
+
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::JOIN_ROOM_CALLBACK);
 
-    Logger::trace("[RoomProtocol] JOIN_ROOM: roomCode=" + roomCode +
-                  ", userId=" + std::to_string(userId));
-
-    auto player = PlayerManager::get().findPlayerById(userId);
     auto room = RoomManager::get().findRoomByCode(roomCode);
     int16_t status = 0;
 
-    if (!player) {
+    if (!room) {
         status = 1;
-    } else if (!room) {
-        status = 2;
     } else if (!room->addPlayer(player)) {
-        status = 3;
+        status = 2;
     }
 
     smartBuffer << status;
@@ -83,26 +93,30 @@ void RoomProtocol::joinRoom(std::shared_ptr<Client> client,
 
 void RoomProtocol::deleteRoom(std::shared_ptr<Client> client,
                               SmartBuffer& smartBuffer) {
-    std::string roomCode;
-    int32_t userId;
+    auto player = client->getPlayer();
+    if (!player) {
+        Logger::warning(
+            "[HotkeysProtocol] No player associated with this client.");
+        return;
+    }
 
-    smartBuffer >> roomCode >> userId;
+    int32_t playerId = player->getId();
+    std::string roomCode;
+    smartBuffer >> roomCode;
+
+    Logger::trace("[RoomProtocol] DELETE_ROOM: roomCode=" + roomCode +
+                  ", playerId=" + std::to_string(playerId));
+
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::DELETE_ROOM_CALLBACK);
 
-    Logger::trace("[RoomProtocol] DELETE_ROOM: roomCode=" + roomCode +
-                  ", userId=" + std::to_string(userId));
-
-    auto player = PlayerManager::get().findPlayerById(userId);
     auto room = RoomManager::get().findRoomByCode(roomCode);
     int16_t status = 0;
 
-    if (!player) {
+    if (!room) {
         status = 1;
-    } else if (!room) {
-        status = 2;
     } else if (room->getOwner() != player) {
-        status = 3;
+        status = 2;
     }
 
     smartBuffer << status;
@@ -117,32 +131,37 @@ void RoomProtocol::deleteRoom(std::shared_ptr<Client> client,
 
 void RoomProtocol::startGame(std::shared_ptr<Client> client,
                              SmartBuffer& smartBuffer) {
-    std::string roomCode;
-    int32_t userId;
+    auto player = client->getPlayer();
+    if (!player) {
+        Logger::warning(
+            "[HotkeysProtocol] No player associated with this client.");
+        return;
+    }
 
-    smartBuffer >> roomCode >> userId;
+    int32_t playerId = player->getId();
+    std::string roomCode;
+    smartBuffer >> roomCode;
+
+    Logger::trace("[RoomProtocol] START_GAME: roomCode=" + roomCode +
+                  ", playerId=" + std::to_string(playerId));
+
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::START_GAME_CALLBACK);
 
-    Logger::trace("[RoomProtocol] START_GAME: roomCode=" + roomCode +
-                  ", userId=" + std::to_string(userId));
-
-    auto player = PlayerManager::get().findPlayerById(userId);
     auto room = RoomManager::get().findRoomByCode(roomCode);
     int16_t status = 0;
 
-    if (!player) {
+    if (!room) {
         status = 1;
-    } else if (!room) {
-        status = 2;
     } else if (room->getOwner() != player) {
-        status = 3;
+        status = 2;
     }
 
     smartBuffer << status;
 
     if (!status) {
         room->startGame();
+
         Logger::info("[RoomProtocol] Game started: " + roomCode);
     }
 
@@ -151,32 +170,37 @@ void RoomProtocol::startGame(std::shared_ptr<Client> client,
 
 void RoomProtocol::stopGame(std::shared_ptr<Client> client,
                             SmartBuffer& smartBuffer) {
-    std::string roomCode;
-    int32_t userId;
+    auto player = client->getPlayer();
+    if (!player) {
+        Logger::warning(
+            "[HotkeysProtocol] No player associated with this client.");
+        return;
+    }
 
-    smartBuffer >> roomCode >> userId;
+    int32_t playerId = player->getId();
+    std::string roomCode;
+    smartBuffer >> roomCode;
+
+    Logger::trace("[RoomProtocol] STOP_GAME: roomCode=" + roomCode +
+                  ", playerId=" + std::to_string(playerId));
+
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::STOP_GAME_CALLBACK);
 
-    Logger::trace("[RoomProtocol] STOP_GAME: roomCode=" + roomCode +
-                  ", userId=" + std::to_string(userId));
-
-    auto player = PlayerManager::get().findPlayerById(userId);
     auto room = RoomManager::get().findRoomByCode(roomCode);
     int16_t status = 0;
 
-    if (!player) {
+    if (!room) {
         status = 1;
-    } else if (!room) {
-        status = 2;
     } else if (room->getOwner() != player) {
-        status = 3;
+        status = 2;
     }
 
     smartBuffer << status;
 
     if (!status) {
         room->stopGame();
+
         Logger::info("[RoomProtocol] Game stopped: " + roomCode);
     }
 
