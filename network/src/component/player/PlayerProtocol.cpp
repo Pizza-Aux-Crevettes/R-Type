@@ -12,8 +12,8 @@
 #include "socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
 
-void PlayerProtocol::newPlayer(std::shared_ptr<Client> client, SmartBuffer& smartBuffer)
-{
+void PlayerProtocol::newPlayer(std::shared_ptr<Client> client,
+                               SmartBuffer& smartBuffer) {
     Logger::info("[PlayerProtocol] Handling new player creation.");
 
     std::string name;
@@ -23,7 +23,8 @@ void PlayerProtocol::newPlayer(std::shared_ptr<Client> client, SmartBuffer& smar
 
     auto player = PlayerManager::get().createPlayer(name);
     if (!player) {
-        Logger::error("[PlayerProtocol] Failed to create player with name: " + name);
+        Logger::error("[PlayerProtocol] Failed to create player with name: " +
+                      name);
         return;
     }
 
@@ -51,10 +52,10 @@ void PlayerProtocol::newPlayer(std::shared_ptr<Client> client, SmartBuffer& smar
 
 void PlayerProtocol::sendPlayerPositionUpdate(
     int udpSocket, const std::vector<std::shared_ptr<Player>>& players,
-    const std::shared_ptr<Player>& player, SmartBuffer& smartBuffer)
-{
+    const std::shared_ptr<Player>& player, SmartBuffer& smartBuffer) {
     if (!player) {
-        Logger::warning("[PlayerProtocol] Attempted to update position for a null player.");
+        Logger::warning(
+            "[PlayerProtocol] Attempted to update position for a null player.");
         return;
     }
 
@@ -62,14 +63,15 @@ void PlayerProtocol::sendPlayerPositionUpdate(
                  std::to_string(player->getId()));
 
     smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::PLAYER_UPDATE_POSITION)
-                << player->getId()
-                << player->getPosition().getX()
+    smartBuffer << static_cast<int16_t>(
+                       Protocol::OpCode::PLAYER_UPDATE_POSITION)
+                << player->getId() << player->getPosition().getX()
                 << player->getPosition().getY();
 
     for (auto& p : players) {
         if (!p) {
-            Logger::warning("[PlayerProtocol] Encountered a null player in the players list. Skipping.");
+            Logger::warning("[PlayerProtocol] Encountered a null player in the "
+                            "players list. Skipping.");
             continue;
         }
 

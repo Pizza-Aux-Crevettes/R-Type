@@ -10,8 +10,7 @@
 
 Room::Room(const std::string& code, const std::shared_ptr<Player>& owner,
            const size_t capacity, const bool isPublic)
-    : _code(code), _owner(owner), _capacity(capacity), _isPublic(isPublic) {
-}
+    : _code(code), _owner(owner), _capacity(capacity), _isPublic(isPublic) {}
 
 void Room::startGame() {
     _gameStarted = true;
@@ -73,7 +72,7 @@ bool Room::removePlayer(const std::string& playerName) {
 
     if (it != _players.end()) {
         _players.erase(it, _players.end());
-        
+
         return true;
     }
 
