@@ -17,7 +17,7 @@ int main() {
         Logger::success("[Main] Server successfully initialized on port " +
                         std::to_string(PORT) + ".");
 
-        MapManager::get().preloadMapsFromFolder("./network/maps");
+        MapManager::get().preloadMapsFromFolder("./server/maps");
         Server::get().start();
     } catch (const std::exception& e) {
         Logger::error("[Main] Critical server error: " + std::string(e.what()));

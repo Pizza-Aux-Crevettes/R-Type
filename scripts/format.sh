@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Please select a project to format:"
-echo "1) Network"
+echo "1) Server"
 echo "2) GameEngine"
 echo "3) Client"
 echo "4) Exit"
@@ -10,7 +10,7 @@ read -p "Enter your choice [1-4]: " choice
 
 case $choice in
     1)
-        DIR="network"
+        DIR="server"
         ;;
     2)
         DIR="game_engine"
