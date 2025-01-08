@@ -103,7 +103,8 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
     }
 }
 
-void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system, OptionMenu& optionMenu) {
+void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system,
+                       OptionMenu& optionMenu) {
     std::map<int, GameEngine::Entity> entities;
     sf::SoundBuffer ambienBuffer;
     sf::SoundBuffer clickBuffer;
@@ -125,12 +126,12 @@ void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system, Opti
     ambienSound.play();
 
     switch (_currentMenuState) {
-        case MenuState::MainMenu:
-            initMainMenu(window, system);
-            break;
-        case MenuState::OptionMenu: {
-            optionMenu.displayOptionMenu(window, system);
-            break;
-        };
+    case MenuState::MainMenu:
+        initMainMenu(window, system);
+        break;
+    case MenuState::OptionMenu: {
+        optionMenu.displayOptionMenu(window, system);
+        break;
+    };
     }
 }

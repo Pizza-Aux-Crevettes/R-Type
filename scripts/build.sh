@@ -5,4 +5,4 @@ cmake -B build .
 cd build/
 make
 #make GameEngine
-#make Network
+#make Server
