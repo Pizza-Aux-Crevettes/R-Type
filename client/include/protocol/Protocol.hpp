@@ -14,8 +14,6 @@ class Protocol {
   public:
     enum OpCode {
         DEFAULT,
-
-        // Client -> Server
         CREATE_ROOM,
         JOIN_ROOM,
         LEAVE_ROOM,
@@ -25,7 +23,6 @@ class Protocol {
         START_GAME,
         STOP_GAME,
 
-        // Server -> Client
         CREATE_ROOM_CALLBACK,
         LEAVE_ROOM_CALLBACK,
         JOIN_ROOM_CALLBACK,
@@ -34,7 +31,6 @@ class Protocol {
         START_GAME_CALLBACK,
         STOP_GAME_CALLBACK,
 
-        // Server -> All clients
         CREATE_ROOM_BROADCAST,
         LEAEVE_ROOM_BROADCAST,
         JOIN_ROOM_BROADCAST,
@@ -42,6 +38,7 @@ class Protocol {
         NEW_PLAYER_BROADCAST,
         START_GAME_BROADCAST,
         STOP_GAME_BROADCAST,
+
         PLAYER_UPDATE_POSITION,
         PLAYER_UPDATE_LIFE,
         VIEWPORT_UPDATE,

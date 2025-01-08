@@ -36,8 +36,9 @@ void RoomProtocol::createRoom(std::shared_ptr<Client> client,
 
     if (!status) {
         auto room = RoomManager::get().createRoom(player, capacity, isPublic);
-
         room->setMap(MapManager::get().getMapById(mapId));
+
+        smartBuffer << std::string({room->getCode()});
 
         Logger::success("[RoomProtocol] Room created: code=" + room->getCode() +
                         ", mapId=" + std::to_string(mapId));

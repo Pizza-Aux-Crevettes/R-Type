@@ -25,7 +25,9 @@ void MapProtocol::sendObstaclesUpdate(const int udpSocket,
     for (const auto& obstacle : obstacles) {
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(Protocol::OpCode::BLOCKS_UPDATE)
-                    << obstacle._x << obstacle._y << obstacle._type;
+                    << static_cast<int16_t>(obstacle._x)
+                    << static_cast<int16_t>(obstacle._y)
+                    << static_cast<int16_t>(obstacle._type);
 
         UdpSocket::send(udpSocket, clientAddr, smartBuffer);
     }
