@@ -7,6 +7,8 @@
 
 #include "menu/Menu.hpp"
 #include "Client.hpp"
+#include "protocol/Protocol.hpp"
+#include "socket/TcpSocket.hpp"
 
 Menu::Menu() {}
 
@@ -39,6 +41,13 @@ Menu::createEntitySprite(int id, const std::pair<float, float> size,
 
 void Menu::isClickedPlay() {
     std::cout << "Button play clicked!" << std::endl;
+    SmartBuffer smartBuffer;
+
+    smartBuffer.reset();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER);
+    smartBuffer << std::string{"Benjamin"};
+    TcpSocket::send(smartBuffer);
+
     Client::get().setIsPlayed();
 }
 

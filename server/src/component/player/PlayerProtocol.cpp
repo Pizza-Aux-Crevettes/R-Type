@@ -24,14 +24,9 @@
  */
 void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
                                const sockaddr_in& clientAddr) {
+    // Extract buffer data
     std::string name;
-
-    // Read the player's name
     smartBuffer >> name;
-
-    // Create the response buffer
-    smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_CALLBACK);
 
     // Create a new player
     const auto player = PlayerManager::get().createPlayer(name);
@@ -47,30 +42,28 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
                  std::string(inet_ntoa(clientAddr.sin_addr)) + ":" +
                  std::to_string(ntohs(clientAddr.sin_port)));
 
-    // Send the player ID to the client
+    // Create the response buffer for the new player and send it
+    smartBuffer.reset();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_CALLBACK);
     smartBuffer << player->getId();
     TcpSocket::sendToOne(clientSocket, smartBuffer);
 
-    // Broadcast the new player to all clients
-    smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_BROADCAST);
-    smartBuffer << player->getId() << std::string{player->getName()};
-    TcpSocket::sendToAll(smartBuffer);
-
     Logger::info("[PlayerProtocol] Sent player ID " +
-                 std::to_string(player->getId()) + " to client " +
-                 std::to_string(clientSocket) + " and broadcasted to others.");
+                 std::to_string(player->getId()) + " to client ");
 
-    // Send all existing players to the new player
+    // Parse all existing players
     for (const auto& [id, existingPlayer] : PlayerManager::get().getPlayers()) {
-        if (existingPlayer->getId() != player->getId()) {
-            smartBuffer.reset();
-            smartBuffer << static_cast<int16_t>(
-                Protocol::OpCode::NEW_PLAYER_BROADCAST);
-            smartBuffer << existingPlayer->getId()
-                        << std::string{existingPlayer->getName()};
-            TcpSocket::sendToOne(clientSocket, smartBuffer);
-        }
+        // Create the response buffer for the existing player and send it
+        smartBuffer.reset();
+        smartBuffer << static_cast<int16_t>(
+            Protocol::OpCode::NEW_PLAYER_BROADCAST);
+        smartBuffer << existingPlayer->getId()
+                    << std::string{existingPlayer->getName()};
+        TcpSocket::sendToAll(smartBuffer);
+
+        Logger::info("[PlayerProtocol] Sent existing player ID " +
+                     std::to_string(existingPlayer->getId()) +
+                     " to new player.");
     }
 }
 
