@@ -50,7 +50,7 @@ class Protocol {
     Protocol& operator=(const Protocol&) = delete;
 
     static Protocol& get();
-     static void handleMessage(int clientSocket, SmartBuffer& smartBuffer,
+    static void handleMessage(int clientSocket, SmartBuffer& smartBuffer,
                               const sockaddr_in& clientAddr);
 
   private:

@@ -43,7 +43,10 @@ void PlayerProtocol::sendPlayerPositionUpdate(
     const int udpSocket, const std::vector<std::shared_ptr<Player>>& players,
     const std::shared_ptr<Player>& player, SmartBuffer& smartBuffer) {
     smartBuffer << static_cast<int16_t>(
-        Protocol::OpCode::PLAYER_UPDATE_POSITION) << player->getId() << player->getPosition().getX() << player->getPosition().getY();
-    UdpSocket::send(udpSocket, player->getClientAddress(),smartBuffer);
-    std::cout << "UpdatePosition: " << player->getPosition().getX() << "," << player->getPosition().getY() << std::endl;
+                       Protocol::OpCode::PLAYER_UPDATE_POSITION)
+                << player->getId() << player->getPosition().getX()
+                << player->getPosition().getY();
+    UdpSocket::send(udpSocket, player->getClientAddress(), smartBuffer);
+    std::cout << "UpdatePosition: " << player->getPosition().getX() << ","
+              << player->getPosition().getY() << std::endl;
 }
