@@ -8,7 +8,6 @@
 #include "protocol/Protocol.hpp"
 #include "component/hotkey/HotkeysProtocol.hpp"
 #include "component/player/PlayerProtocol.hpp"
-#include "component/room/RoomProtocol.hpp"
 #include "util/Logger.hpp"
 
 Protocol& Protocol::get() {
@@ -16,8 +15,8 @@ Protocol& Protocol::get() {
     return instance;
 }
 
-void Protocol::handleMessage(std::shared_ptr<Client> client,
-                             SmartBuffer& smartBuffer) {
+void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer,
+                             const sockaddr_in& clientAddr) {
     if (smartBuffer.getSize() < sizeof(int16_t)) {
         Logger::warning(
             "[Protocol] Received invalid message with insufficient size.");
@@ -35,39 +34,14 @@ void Protocol::handleMessage(std::shared_ptr<Client> client,
         Logger::warning("[Protocol] DEFAULT OpCode received. No action taken.");
         break;
 
-    case CREATE_ROOM:
-        Logger::info("[Protocol] CREATE_ROOM operation.");
-        RoomProtocol::createRoom(client, smartBuffer);
-        break;
-
-    case JOIN_ROOM:
-        Logger::info("[Protocol] JOIN_ROOM operation.");
-        RoomProtocol::joinRoom(client, smartBuffer);
-        break;
-
-    case DELETE_ROOM:
-        Logger::info("[Protocol] DELETE_ROOM operation.");
-        RoomProtocol::deleteRoom(client, smartBuffer);
-        break;
-
     case NEW_PLAYER:
         Logger::info("[Protocol] NEW_PLAYER operation.");
-        PlayerProtocol::newPlayer(client, smartBuffer);
+        PlayerProtocol::newPlayer(clientSocket, smartBuffer, clientAddr);
         break;
 
     case HOTKEY_PRESSED:
         Logger::info("[Protocol] HOTKEY_PRESSED operation.");
-        HotkeysProtocol::processHotkey(client, smartBuffer);
-        break;
-
-    case START_GAME:
-        Logger::info("[Protocol] START_GAME operation.");
-        RoomProtocol::startGame(client, smartBuffer);
-        break;
-
-    case STOP_GAME:
-        Logger::info("[Protocol] STOP_GAME operation.");
-        RoomProtocol::stopGame(client, smartBuffer);
+        HotkeysProtocol::processHotkey(clientSocket, smartBuffer);
         break;
 
     default:

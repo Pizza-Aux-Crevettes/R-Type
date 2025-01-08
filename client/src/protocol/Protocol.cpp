@@ -9,6 +9,8 @@
 #include <iostream>
 #include "EntityManager.hpp"
 
+int32_t Protocol::_playerId = -1;
+
 Protocol& Protocol::get() {
     static Protocol instance;
     return instance;
@@ -17,6 +19,14 @@ Protocol& Protocol::get() {
 Protocol::Protocol() {}
 
 Protocol::~Protocol() {}
+
+int32_t Protocol::getPlayerId() {
+    return _playerId;
+}
+
+void Protocol::setPlayerId(int32_t playerId) {
+    _playerId = playerId;
+}
 
 void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     int16_t opCode;
@@ -155,6 +165,7 @@ void Protocol::handleNewPlayerCallback(SmartBuffer& smartBuffer) {
     int32_t playerId;
 
     smartBuffer >> playerId;
+    Protocol::setPlayerId(playerId);
 
     std::cout << "[Protocol] NEW_PLAYER_CALLBACK - Player ID: " << playerId
               << std::endl;

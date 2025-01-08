@@ -7,33 +7,30 @@
 
 #pragma once
 
-#include <algorithm>
-#include <arpa/inet.h>
-#include <chrono>
+#include <SmartBuffer.hpp>
 #include <memory>
-#include <mutex>
+#include <arpa/inet.h>
 #include <netinet/in.h>
-#include <thread>
-#include <unistd.h>
-#include <vector>
-#include "SmartBuffer.hpp"
-#include "socket/client/Client.hpp"
 
 class UdpSocket {
-public:
+  public:
     UdpSocket();
     ~UdpSocket();
 
-    void init();
     static void send(int udpSocket, const sockaddr_in& clientAddr,
                      const SmartBuffer& smartBuffer);
+    void init();
     [[noreturn]] void readLoop();
     [[noreturn]] void sendLoop();
     void close() const;
+    void addClient(const sockaddr_in& clientAddr);
+    std::vector<sockaddr_in> getClients();
 
-private:
+  private:
     int _udpSocket;
-    sockaddr_in _udpAddr;
+    sockaddr_in _udpAddr{};
+    std::vector<sockaddr_in> _clients;
+    std::mutex _clientsMutex;
 
     void handleRead(SmartBuffer& smartBuffer);
     void handleSend(SmartBuffer& smartBuffer);

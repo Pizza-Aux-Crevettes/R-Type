@@ -6,9 +6,17 @@
 */
 
 #include "socket/TcpSocket.hpp"
-#include "socket/client/ClientManager.hpp"
+#include <SmartBuffer.hpp>
+#include <arpa/inet.h>
+#include <thread>
+#include <unistd.h>
 #include "protocol/Protocol.hpp"
+#include "socket/Server.hpp"
+#include "util/Config.hpp"
 #include "util/Logger.hpp"
+
+std::vector<int> TcpSocket::_clients;
+std::mutex TcpSocket::_clientsMutex;
 
 TcpSocket::TcpSocket() : _tcpSocket(FAILURE) {}
 
@@ -16,11 +24,22 @@ TcpSocket::~TcpSocket() {
     close();
 }
 
-void TcpSocket::init() {
-    Logger::info("[TCP Socket] Initializing...");
+void TcpSocket::sendToOne(const int clientSocket,
+                          const SmartBuffer& smartBuffer) {
+    send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0);
+}
 
+void TcpSocket::sendToAll(const SmartBuffer& smartBuffer) {
+    std::lock_guard lock(_clientsMutex);
+
+    for (const int clientSocket : _clients) {
+        send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0);
+    }
+}
+
+void TcpSocket::init() {
     _tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (_tcpSocket < SUCCESS) {
+    if (_tcpSocket == FAILURE) {
         throw std::runtime_error("Failed to create TCP socket.");
     }
 
@@ -28,90 +47,87 @@ void TcpSocket::init() {
     _tcpAddr.sin_addr.s_addr = INADDR_ANY;
     _tcpAddr.sin_port = htons(PORT);
 
-    if (bind(_tcpSocket, reinterpret_cast<sockaddr*>(&_tcpAddr), sizeof(_tcpAddr)) < 0) {
+    if (bind(_tcpSocket, reinterpret_cast<sockaddr*>(&_tcpAddr),
+             sizeof(_tcpAddr)) < SUCCESS) {
         throw std::runtime_error("Bind failed for TCP socket.");
     }
-
     if (listen(_tcpSocket, 3) < SUCCESS) {
         throw std::runtime_error("Listen failed for TCP socket.");
     }
 
-    Logger::success("[TCP Socket] Successfully initialized on port " + std::to_string(PORT) + ".");
+    Logger::socket("[TCP Socket] Successfully initialized.");
 }
 
 [[noreturn]] void TcpSocket::readLoop() const {
-    Logger::info("[TCP Socket] Starting read loop...");
-
     while (true) {
         sockaddr_in clientAddr{};
         socklen_t addrLen = sizeof(clientAddr);
+        const int clientSocket = accept(
+            _tcpSocket, reinterpret_cast<sockaddr*>(&clientAddr), &addrLen);
 
-        int clientSocket = accept(_tcpSocket, reinterpret_cast<sockaddr*>(&clientAddr), &addrLen);
         if (clientSocket < SUCCESS) {
             Logger::warning("[TCP Socket] Accept failed.");
             continue;
         }
 
-        sockaddr_in udpAddr{};
-        
-        auto client = ClientManager::getInstance().findOrCreateClient(clientAddr);
-        client->setTcpSocket(clientSocket);
+        addClient(clientSocket);
 
-        Logger::info("[TCP Socket] Client connected. Socket: " +
-                     std::to_string(clientSocket) + ", Address: " +
-                     std::string(inet_ntoa(clientAddr.sin_addr)) + ":" +
-                     std::to_string(ntohs(clientAddr.sin_port)));
+        Logger::socket("[TCP Socket] Client connected: " +
+                       std::to_string(clientSocket));
 
-        std::thread([this, client]() {
+        std::thread([this, clientSocket, clientAddr]() {
             SmartBuffer smartBuffer;
-            this->handleRead(client, smartBuffer);
+
+            this->handleRead(clientSocket, smartBuffer, clientAddr);
         }).detach();
     }
 }
 
-void TcpSocket::handleRead(std::shared_ptr<Client> client, SmartBuffer& smartBuffer) const {
-    Logger::info("[TCP Socket] Listening to client: " + std::to_string(client->getTcpSocket()));
+void TcpSocket::handleRead(const int clientSocket, SmartBuffer& smartBuffer,
+                           const sockaddr_in& clientAddr) {
 
     while (true) {
         char buffer[1024] = {};
-        ssize_t bytesRead = read(client->getTcpSocket(), buffer, sizeof(buffer));
+        const ssize_t bytesRead = read(clientSocket, buffer, sizeof(buffer));
 
-        if (bytesRead <= 0) {
-            Logger::info("[TCP Socket] Client disconnected: " + std::to_string(client->getTcpSocket()));
+        if (bytesRead <= SUCCESS) {
+            Logger::socket("[TCP Socket] Client disconnected: " +
+                           std::to_string(clientSocket));
 
-            ::close(client->getTcpSocket());
-            ClientManager::getInstance().removeClient(client);
+            ::close(clientSocket);
+            removeClient(clientSocket);
             break;
         }
-
-        Logger::info("[TCP Socket] Received " + std::to_string(bytesRead) +
-                     " bytes from client: " + std::to_string(client->getTcpSocket()));
 
         smartBuffer.reset();
         smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer), bytesRead);
 
-        Protocol::handleMessage(client, smartBuffer);
+        Protocol::handleMessage(clientSocket, smartBuffer, clientAddr);
     }
 }
 
-void TcpSocket::sendToOne(int clientSocket, const SmartBuffer& smartBuffer) {
-    if (send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0) < 0) {
-        Logger::error("[TCP Socket] Failed to send data.");
-    }
+void TcpSocket::addClient(const int clientSocket) {
+    std::lock_guard lock(_clientsMutex);
+
+    _clients.push_back(clientSocket);
 }
 
-void TcpSocket::sendToAll(const SmartBuffer& smartBuffer) {
-    const auto& clients = ClientManager::getInstance().getAllClients();
-    for (const auto& client : clients) {
-        if (client->getTcpSocket() >= 0) {
-            sendToOne(client->getTcpSocket(), smartBuffer);
-        }
-    }
+void TcpSocket::removeClient(const int clientSocket) {
+    std::lock_guard lock(_clientsMutex);
+
+    std::erase(_clients, clientSocket);
+}
+
+std::vector<int> TcpSocket::getClients() {
+    std::lock_guard lock(_clientsMutex);
+
+    return _clients;
 }
 
 void TcpSocket::close() const {
-    if (_tcpSocket >= SUCCESS) {
+    if (_tcpSocket != FAILURE) {
         ::close(_tcpSocket);
-        Logger::info("[TCP Socket] Socket closed.");
+
+        Logger::socket("[TCP Socket] Closed.");
     }
 }
