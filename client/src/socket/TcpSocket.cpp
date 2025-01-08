@@ -9,7 +9,6 @@
 #include <stdexcept>
 #include <sys/socket.h>
 #include <unistd.h>
-#include "protocol/Protocol.hpp"
 #include "socket/Singleton.hpp"
 #include "util/Config.hpp"
 

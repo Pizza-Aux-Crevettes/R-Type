@@ -26,28 +26,10 @@ void NetworkClient::init() {
 void NetworkClient::connectTCP() {
     tcpSocket.connect();
     Logger::info("[NetworkClient] Connected to TCP server.");
-
-    SmartBuffer smartBuffer;
-
-    smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER)
-                << std::string{"Benjamin"};
-    TcpSocket::send(smartBuffer);
-
-    smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::CREATE_ROOM)
-                << static_cast<int32_t>(1) << static_cast<int16_t>(99)
-                << static_cast<int16_t>(1) << static_cast<int16_t>(1);
-    TcpSocket::send(smartBuffer);
 }
 
 void NetworkClient::connectUDP() {
     Logger::info("[NetworkClient] UDP initialized.");
-
-    SmartBuffer smartBuffer;
-
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::DEFAULT);
-    UdpSocket::send(smartBuffer);
 }
 
 void NetworkClient::run() {

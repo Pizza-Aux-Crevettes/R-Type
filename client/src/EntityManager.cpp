@@ -8,6 +8,8 @@
 */
 
 #include "EntityManager.hpp"
+#include "util/getResponsiveValue.hpp"
+
 
 EntityManager::EntityManager() {}
 
@@ -85,11 +87,12 @@ std::map<int, std::map<std::string, std::any>> EntityManager::getUpdateItems() {
     return _updateItems;
 }
 
-sf::Texture EntityManager::manageBackground() {
+sf::Texture EntityManager::manageBackground(sf::RenderWindow& window) {
+    GetResponsiveValue responsive;
 
     int id = 0;
     auto newEntity = GameEngine::Entity(id);
-    newEntity.addComponent(Shape(ShapeType::Rectangle, {800, 600}));
+    newEntity.addComponent(Shape(ShapeType::Rectangle, {responsive.getResponsiveSizeX(800, window.getSize().x, 800), responsive.getResponsiveSizeY(600, window.getSize().y, 600)}));
     newEntity.addComponent(Texture("assets/sprite/space.png"));
     newEntity.addComponent(Position());
     sf::Texture& newTexture = newEntity.getComponent<Texture>().getTexture();

@@ -153,6 +153,7 @@ static void buttonSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
         auto& buttonComp = entity.getComponent<Button>();
         auto& positionComp = entity.getComponent<Position>();
 
+
         if (!buttonComp.getIsLoaded()) {
 
             buttonComp.getFont().loadFromFile(buttonComp.getFontFile());
@@ -164,6 +165,8 @@ static void buttonSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
             buttonComp.getText().setFillColor(sf::Color::White);
 
             sf::FloatRect textBounds = buttonComp.getText().getGlobalBounds();
+
+
 
             buttonComp.getButton().setSize(
                 sf::Vector2f(textBounds.width, textBounds.height));
@@ -182,12 +185,15 @@ static void buttonSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
 
             buttonComp.setIsLoaded(true);
         }
+
         static std::map<GameEngine::Entity*, bool> wasPressedMap;
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::FloatRect buttonBounds = buttonComp.getButton().getGlobalBounds();
 
+
         if (buttonBounds.contains(static_cast<float>(mousePos.x),
                                   static_cast<float>(mousePos.y))) {
+            std::cout << "JE PASSSSSEEEEE" << std::endl;
             bool isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
             if (isPressed && !wasPressedMap[&entity]) {
                 buttonComp.executeCallback();

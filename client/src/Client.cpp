@@ -60,7 +60,7 @@ void Client::manageClient() {
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "RTYPE");
     HotkeysManager input;
     GameEngine::System system;
-    sf::Texture background = EntityManager::get().manageBackground();
+    sf::Texture background = EntityManager::get().manageBackground(window);
     Menu menu;
 
     sf::Clock clock;
