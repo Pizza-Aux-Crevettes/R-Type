@@ -10,11 +10,11 @@
 #include <SFML/Graphics.hpp>
 #include <iomanip>
 #include "Client.hpp"
+#include "components/Button.hpp"
+#include "components/Color.hpp"
 #include "components/OptionButton.hpp"
 #include "components/Position.hpp"
 #include "components/Slider.hpp"
-#include "components/Button.hpp"
-#include "components/Color.hpp"
 #include "components/Text.hpp"
 
 OptionMenu::OptionMenu() {}
@@ -44,11 +44,11 @@ GameEngine::Entity OptionMenu::createEntityOptionButton(
     return newEntity;
 }
 
-GameEngine::Entity OptionMenu::createEntityButton(
-    int id, std::string title, std::string font,
-    int fontSize,
-    std::vector<std::pair<float, float>> position,
-    std::function<void()> callback) {
+GameEngine::Entity
+OptionMenu::createEntityButton(int id, std::string title, std::string font,
+                               int fontSize,
+                               std::vector<std::pair<float, float>> position,
+                               std::function<void()> callback) {
     auto newEntity = GameEngine::Entity(id);
     auto button = Button(title, font, fontSize);
     button.setCallback(callback);
@@ -82,9 +82,8 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
         int entityId = 0;
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityButton( entityId++, "Exit", "assets/font/Inter_Bold.ttf",
-                              20, {{750, 50}},
-                              [this]() { printExit(); }));
+            createEntityButton(entityId++, "Exit", "assets/font/Inter_Bold.ttf",
+                               20, {{750, 50}}, [this]() { printExit(); }));
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, "OPTIONS", {{300, 10}}, 45));
         _entitiesMenuOption.emplace(

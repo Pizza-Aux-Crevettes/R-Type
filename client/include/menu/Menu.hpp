@@ -10,10 +10,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <System.hpp>
+#include <components/Button.hpp>
 #include <components/Color.hpp>
 #include <components/Link.hpp>
 #include <components/OptionButton.hpp>
-#include <components/Button.hpp>
 #include <components/Position.hpp>
 #include <components/Shape.hpp>
 #include <components/Slider.hpp>
@@ -28,7 +28,8 @@ class Menu {
     Menu();
     ~Menu();
     void initMainMenu(sf::RenderWindow& window, GameEngine::System system);
-    void displayMenu(sf::RenderWindow& window, GameEngine::System system, OptionMenu& optionMenu);
+    void displayMenu(sf::RenderWindow& window, GameEngine::System system,
+                     OptionMenu& optionMenu);
     GameEngine::Entity
     createEntityButton(int id, std::string title, std::string font,
                        int fontSize,

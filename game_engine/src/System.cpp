@@ -370,7 +370,7 @@ static void sliderSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
 
 void GameEngine::System::render(sf::RenderWindow& window,
                                 std::map<int, Entity>& entities) {
-    //std::cout << "Rendering..." << std::endl;
+    // std::cout << "Rendering..." << std::endl;
     for (auto& [id, entity] : entities) {
         spriteSystem(window, entity);
         textSystem(window, entity);

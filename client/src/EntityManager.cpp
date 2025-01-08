@@ -48,16 +48,20 @@ void EntityManager::CreateEntity(int id,
 
             auto nextIt = std::next(it);
             const auto& newComponent = nextIt->second;
-            if (key == "Texture" && nextIt != components.end() && nextIt->first == "TextureRect") {
+            if (key == "Texture" && nextIt != components.end() &&
+                nextIt->first == "TextureRect") {
                 newEntity.addComponent(Sprite());
-                newEntity.addComponent(Texture(std::any_cast<std::string>(component), std::any_cast<std::vector<int>>(newComponent)));
+                newEntity.addComponent(
+                    Texture(std::any_cast<std::string>(component),
+                            std::any_cast<std::vector<int>>(newComponent)));
             } else if (key == "Texture" && nextIt != components.end()) {
                 newEntity.addComponent(Sprite());
-                newEntity.addComponent(Texture(std::any_cast<std::string>(component)));
+                newEntity.addComponent(
+                    Texture(std::any_cast<std::string>(component)));
             }
             if (key == "Position") {
-                newEntity.addComponent(
-                    Position({std::any_cast<std::pair<float, float>>(component)}));
+                newEntity.addComponent(Position(
+                    {std::any_cast<std::pair<float, float>>(component)}));
             }
         }
         _entities.emplace(id, std::move(newEntity));

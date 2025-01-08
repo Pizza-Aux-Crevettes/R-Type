@@ -38,9 +38,9 @@ class OptionMenu {
                              std::function<void()>);
     GameEngine::Entity
     createEntityButton(int id, std::string title, std::string font,
-    int fontSize,
-    std::vector<std::pair<float, float>> position,
-    std::function<void()> callback);
+                       int fontSize,
+                       std::vector<std::pair<float, float>> position,
+                       std::function<void()> callback);
     GameEngine::Entity
     createEntitySlider(int, const std::pair<int, int>,
                        const std::vector<std::pair<float, float>>,
