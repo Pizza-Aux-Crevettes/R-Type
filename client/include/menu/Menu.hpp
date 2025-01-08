@@ -28,7 +28,7 @@ class Menu {
     Menu();
     ~Menu();
     void initMainMenu(sf::RenderWindow& window, GameEngine::System system);
-    void displayMenu(sf::RenderWindow& window, GameEngine::System system);
+    void displayMenu(sf::RenderWindow& window, GameEngine::System system, OptionMenu& optionMenu);
     GameEngine::Entity
     createEntityButton(int id, std::string title, std::string font,
                        int fontSize,

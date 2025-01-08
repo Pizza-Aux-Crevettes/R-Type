@@ -10,10 +10,11 @@
 #include <SFML/Graphics.hpp>
 #include <iomanip>
 #include "Client.hpp"
-#include "components/Color.hpp"
 #include "components/OptionButton.hpp"
 #include "components/Position.hpp"
 #include "components/Slider.hpp"
+#include "components/Button.hpp"
+#include "components/Color.hpp"
 #include "components/Text.hpp"
 
 OptionMenu::OptionMenu() {}
@@ -25,7 +26,7 @@ GameEngine::Entity OptionMenu::createEntityText(
     const std::vector<std::pair<float, float>> position,
     unsigned int fontSize) {
     auto newEntity = GameEngine::Entity(id);
-    newEntity.addComponent(Text(text, "assets/font/arial.ttf", fontSize));
+    newEntity.addComponent(Text(text, "assets/font/Inter_Bold.ttf", fontSize));
     newEntity.addComponent(Position(position));
     newEntity.addComponent(Color({255, 255, 255, 255}));
     return newEntity;
@@ -36,6 +37,20 @@ GameEngine::Entity OptionMenu::createEntityOptionButton(
     std::function<void()> callback) {
     auto newEntity = GameEngine::Entity(id);
     auto button = OptionButton({20, 20});
+    button.setCallback(callback);
+    newEntity.addComponent(button);
+    newEntity.addComponent(Position(position));
+    newEntity.addComponent(Color({255, 255, 255, 255}));
+    return newEntity;
+}
+
+GameEngine::Entity OptionMenu::createEntityButton(
+    int id, std::string title, std::string font,
+    int fontSize,
+    std::vector<std::pair<float, float>> position,
+    std::function<void()> callback) {
+    auto newEntity = GameEngine::Entity(id);
+    auto button = Button(title, font, fontSize);
     button.setCallback(callback);
     newEntity.addComponent(button);
     newEntity.addComponent(Position(position));
@@ -57,10 +72,19 @@ GameEngine::Entity OptionMenu::createEntitySlider(
     return newEntity;
 }
 
+void OptionMenu::printExit() {
+    std::cout << "Exit clicked" << std::endl;
+}
+
 void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                                    GameEngine::System system) {
     if (!_entitiesInitialized) {
         int entityId = 0;
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityButton( entityId++, "Exit", "assets/font/Inter_Bold.ttf",
+                              20, {{750, 50}},
+                              [this]() { printExit(); }));
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, "OPTIONS", {{300, 10}}, 45));
         _entitiesMenuOption.emplace(
