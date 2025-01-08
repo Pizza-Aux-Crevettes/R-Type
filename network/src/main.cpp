@@ -18,15 +18,12 @@ int main() {
                         std::to_string(PORT) + ".");
 
         MapManager::get().preloadMapsFromFolder("./network/maps");
-
         Server::get().start();
     } catch (const std::exception& e) {
         Logger::error("[Main] Critical server error: " + std::string(e.what()));
-
         return FAILURE;
     } catch (...) {
         Logger::error("[Main] An unknown error occurred.");
-
         return FAILURE;
     }
 
