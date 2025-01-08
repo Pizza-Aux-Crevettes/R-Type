@@ -62,6 +62,7 @@ void Client::manageClient() {
     GameEngine::System system;
     sf::Texture background = EntityManager::get().manageBackground();
     Menu menu;
+    OptionMenu optionMenu;
 
     sf::Clock clock;
     while (window.isOpen()) {
@@ -77,7 +78,7 @@ void Client::manageClient() {
         }
         window.clear();
         if (!Client::get().getIsPlayed()) {
-            menu.displayMenu(window, system);
+            menu.displayMenu(window, system, optionMenu);
         } else {
             if (entitiesList.size() > 0) {
                 system.render(window, entitiesList);
