@@ -15,7 +15,7 @@ PlayerManager& PlayerManager::get() {
 
 int32_t PlayerManager::getNextUserId() const {
     if (_players.empty()) {
-        return FAILURE;
+        return 1;
     }
 
     auto maxKeyIt = std::ranges::max_element(
