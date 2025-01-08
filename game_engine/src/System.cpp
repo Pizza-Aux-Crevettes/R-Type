@@ -61,10 +61,9 @@ static void setPosition(GameEngine::Entity& entity, Drawable& drawable) {
 static void linkSystem(int id, std::map<int, GameEngine::Entity>& entities,
                        std::pair<float, float> newLinkedEntityPos,
                        const int posId) {
-    for (int i = 0; i < entities.size(); i++) {
-        if (entities[i].hasComponent<Link>() &&
-            entities[i].getComponent<Link>().getId() == id) {
-            GameEngine::Entity entity = entities[i];
+    for (auto& [_, entity] : entities) {
+        if (entity.hasComponent<Link>() &&
+            entity.getComponent<Link>().getId() == id) {
             GameEngine::Entity entityLinked = entities[id];
             auto oldLinkedEntityPos = entityLinked.getComponent<Position>();
             const std::pair dist = {newLinkedEntityPos.first -
@@ -183,27 +182,22 @@ static void buttonSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
 
             buttonComp.setIsLoaded(true);
         }
+        static std::map<GameEngine::Entity*, bool> wasPressedMap;
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        sf::FloatRect buttonBounds = buttonComp.getButton().getGlobalBounds();
 
-        window.draw(buttonComp.getButton());
-        window.draw(buttonComp.getText());
-    }
-}
-
-void GameEngine::System::onClick(sf::RenderWindow& window,
-                                 std::map<int, Entity>& entities,
-                                 sf::Vector2i mousePos) {
-    for (auto& [id, entity] : entities) {
-        if (entity.hasComponent<Button>() && entity.hasComponent<Position>()) {
-            auto& buttonComp = entity.getComponent<Button>();
-            auto& positionComp = entity.getComponent<Position>();
-
-            if (buttonComp.isHovered(mousePos)) {
-                if (id == 4) {
-                    window.close();
-                }
-                std::cout << "Button " << id << " clicked!" << std::endl;
+        if (buttonBounds.contains(static_cast<float>(mousePos.x),
+                                  static_cast<float>(mousePos.y))) {
+            bool isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+            if (isPressed && !wasPressedMap[&entity]) {
+                buttonComp.executeCallback();
+                wasPressedMap[&entity] = true;
+            } else if (!isPressed) {
+                wasPressedMap[&entity] = false;
             }
         }
+        window.draw(buttonComp.getButton());
+        window.draw(buttonComp.getText());
     }
 }
 
@@ -377,6 +371,7 @@ static void sliderSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
 void GameEngine::System::render(sf::RenderWindow& window,
                                 std::map<int, Entity>& entities) {
     for (auto& [id, entity] : entities) {
+        std::cout << id << std::endl;
         spriteSystem(window, entity);
         textSystem(window, entity);
         buttonSystem(window, entity);
@@ -389,11 +384,14 @@ void GameEngine::System::render(sf::RenderWindow& window,
 void GameEngine::System::update(const int id, std::map<int, Entity>& entities,
                                 const UpdateType type, const std::any& value,
                                 const int posId) {
-    Entity entity = entities[id];
+    if (!entities.contains(id)) {
+        return;
+    }
+    Entity& entity = entities.at(id);
     switch (type) {
     case UpdateType::Position: {
         auto pos = std::any_cast<std::pair<float, float>>(value);
-        linkSystem(id, entities, pos, posId);
+        // linkSystem(id, entities, pos, posId);
         if (entity.hasComponent<Sprite>()) {
             updatePos(entity, entity.getComponent<Sprite>().getSprite(), pos,
                       posId);
