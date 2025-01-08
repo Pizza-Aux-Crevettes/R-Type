@@ -16,17 +16,20 @@ Server& Server::get() {
 
 Server::Server() {
     Logger::info("[Server] Starting initialization...");
+
     try {
         _tcpSocket.init();
-        Logger::socket("[Server] TCP socket initialized on port " +
+        Logger::socket("[Server] TCP socket initialized successfully on port " +
                        std::to_string(PORT) + ".");
 
         _udpSocket.init();
-        Logger::socket("[Server] UDP socket initialized on port " +
+        Logger::socket("[Server] UDP socket initialized successfully on port " +
                        std::to_string(PORT) + ".");
 
-        Logger::success("[Server] Initialization complete.");
+        Logger::success("[Server] Server initialization complete.");
     } catch (const std::exception& e) {
+        Logger::error("[Server] Initialization failed: " +
+                      std::string(e.what()));
         throw std::runtime_error(e.what());
     }
 }
@@ -46,19 +49,20 @@ int Server::start() {
 
     try {
         _threads.emplace_back(&UdpSocket::readLoop, &_udpSocket);
-        Logger::thread("[Server] UDP read loop started.");
+        Logger::thread("[Server] UDP read loop thread started.");
 
         _threads.emplace_back(&UdpSocket::sendLoop, &_udpSocket);
-        Logger::thread("[Server] UDP send loop started.");
+        Logger::thread("[Server] UDP send loop thread started.");
 
         _threads.emplace_back(&TcpSocket::readLoop, &_tcpSocket);
-        Logger::thread("[Server] TCP read loop started.");
+        Logger::thread("[Server] TCP read loop thread started.");
 
         while (true) {
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     } catch (const std::exception& ex) {
-        Logger::error("[Server] Runtime error: " + std::string(ex.what()));
+        Logger::error("[Server] Runtime error encountered: " +
+                      std::string(ex.what()));
         return ERROR;
     }
 }
@@ -68,11 +72,11 @@ void Server::closeThreads() {
 
     for (auto& t : _threads) {
         if (t.joinable()) {
+            Logger::info("[Server] Joining thread...");
             t.join();
         }
     }
 
     _threads.clear();
-
     Logger::info("[Server] All threads closed.");
 }
