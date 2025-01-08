@@ -53,6 +53,8 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
         Logger::info("[PlayerProtocol] Sent existing player ID " +
                      std::to_string(existingPlayer->getId()) +
                      " to new player.");
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 }
 
