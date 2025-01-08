@@ -64,7 +64,7 @@ class Protocol {
     static void handleNewPlayerCallback(SmartBuffer& smartBuffer);
     static void handleStartGameCallback(SmartBuffer& smartBuffer);
     static void handleStopGameCallback(SmartBuffer& smartBuffer);
-    
+
     static void handleCreateRoomBroadcast(SmartBuffer& smartBuffer);
     static void handleLeaveRoomBroadcast(SmartBuffer& smartBuffer);
     static void handleJoinRoomBroadcast(SmartBuffer& smartBuffer);
