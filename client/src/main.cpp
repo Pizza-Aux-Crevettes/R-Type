@@ -149,7 +149,7 @@ static void game() {
 int main() {
     try {
 
-        game();
+        //game();
 
         Client client;
         NetworkClient networkClient("127.0.0.1", SERVER_PORT);

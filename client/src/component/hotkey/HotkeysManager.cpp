@@ -37,8 +37,7 @@ void HotkeysManager::checkKey(const sf::Event& event) {
             SmartBuffer smartBuffer;
             Logger::debug(std::to_string(event.key.code));
             smartBuffer << static_cast<int16_t>(
-                               Protocol::OpCode::HOTKEY_PRESSED)
-                        << 1 << static_cast<int16_t>(hotkey);
+                               Protocol::OpCode::HOTKEY_PRESSED) << static_cast<int16_t>(hotkey);
             UdpSocket::send(smartBuffer);
         }
     }
