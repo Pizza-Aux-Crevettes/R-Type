@@ -6,10 +6,6 @@
 */
 
 #include "util/Logger.hpp"
-#include <chrono>
-#include <ctime>
-#include <iomanip>
-#include <iostream>
 
 const std::string RESET = "\033[0m";
 const std::string GREEN = "\033[32m";
@@ -72,7 +68,6 @@ std::string Logger::getTimestamp() {
                        1000;
 
     std::ostringstream timestamp;
-
     timestamp << std::put_time(std::localtime(&nowTime), "%Y-%m-%d %H:%M:%S")
               << "." << std::setfill('0') << std::setw(3) << nowMs.count();
 
