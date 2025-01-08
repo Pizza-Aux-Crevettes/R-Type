@@ -6,12 +6,9 @@
 */
 
 #include "socket/TcpSocket.hpp"
+#include "socket/client/ClientManager.hpp"
 #include "protocol/Protocol.hpp"
-#include "util/Config.hpp"
 #include "util/Logger.hpp"
-
-std::vector<std::shared_ptr<Client>> TcpSocket::_clients;
-std::mutex TcpSocket::_clientsMutex;
 
 TcpSocket::TcpSocket() : _tcpSocket(FAILURE) {}
 
@@ -31,8 +28,7 @@ void TcpSocket::init() {
     _tcpAddr.sin_addr.s_addr = INADDR_ANY;
     _tcpAddr.sin_port = htons(PORT);
 
-    if (bind(_tcpSocket, reinterpret_cast<sockaddr*>(&_tcpAddr),
-             sizeof(_tcpAddr)) < 0) {
+    if (bind(_tcpSocket, reinterpret_cast<sockaddr*>(&_tcpAddr), sizeof(_tcpAddr)) < 0) {
         throw std::runtime_error("Bind failed for TCP socket.");
     }
 
@@ -40,8 +36,7 @@ void TcpSocket::init() {
         throw std::runtime_error("Listen failed for TCP socket.");
     }
 
-    Logger::success("[TCP Socket] Successfully initialized on port " +
-                    std::to_string(PORT) + ".");
+    Logger::success("[TCP Socket] Successfully initialized on port " + std::to_string(PORT) + ".");
 }
 
 [[noreturn]] void TcpSocket::readLoop() const {
@@ -51,17 +46,16 @@ void TcpSocket::init() {
         sockaddr_in clientAddr{};
         socklen_t addrLen = sizeof(clientAddr);
 
-        int clientSocket = accept(
-            _tcpSocket, reinterpret_cast<sockaddr*>(&clientAddr), &addrLen);
+        int clientSocket = accept(_tcpSocket, reinterpret_cast<sockaddr*>(&clientAddr), &addrLen);
         if (clientSocket < SUCCESS) {
             Logger::warning("[TCP Socket] Accept failed.");
             continue;
         }
 
         sockaddr_in udpAddr{};
-        auto client = std::make_shared<Client>(clientSocket, udpAddr);
-
-        addClient(client);
+        
+        auto client = ClientManager::getInstance().findOrCreateClient(clientAddr);
+        client->setTcpSocket(clientSocket);
 
         Logger::info("[TCP Socket] Client connected. Socket: " +
                      std::to_string(clientSocket) + ", Address: " +
@@ -75,28 +69,23 @@ void TcpSocket::init() {
     }
 }
 
-void TcpSocket::handleRead(std::shared_ptr<Client> client,
-                           SmartBuffer& smartBuffer) const {
-    Logger::info("[TCP Socket] Listening to client: " +
-                 std::to_string(client->getTcpSocket()));
+void TcpSocket::handleRead(std::shared_ptr<Client> client, SmartBuffer& smartBuffer) const {
+    Logger::info("[TCP Socket] Listening to client: " + std::to_string(client->getTcpSocket()));
 
     while (true) {
         char buffer[1024] = {};
-        ssize_t bytesRead =
-            read(client->getTcpSocket(), buffer, sizeof(buffer));
+        ssize_t bytesRead = read(client->getTcpSocket(), buffer, sizeof(buffer));
 
         if (bytesRead <= 0) {
-            Logger::info("[TCP Socket] Client disconnected: " +
-                         std::to_string(client->getTcpSocket()));
+            Logger::info("[TCP Socket] Client disconnected: " + std::to_string(client->getTcpSocket()));
 
             ::close(client->getTcpSocket());
-            removeClient(client);
+            ClientManager::getInstance().removeClient(client);
             break;
         }
 
-        Logger::info(
-            "[TCP Socket] Received " + std::to_string(bytesRead) +
-            " bytes from client: " + std::to_string(client->getTcpSocket()));
+        Logger::info("[TCP Socket] Received " + std::to_string(bytesRead) +
+                     " bytes from client: " + std::to_string(client->getTcpSocket()));
 
         smartBuffer.reset();
         smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer), bytesRead);
@@ -105,49 +94,17 @@ void TcpSocket::handleRead(std::shared_ptr<Client> client,
     }
 }
 
-void TcpSocket::addClient(std::shared_ptr<Client> client) const {
-    std::lock_guard<std::mutex> lock(_clientsMutex);
-    _clients.push_back(client);
-
-    Logger::info("[TCP Socket] Client added. Total clients: " +
-                 std::to_string(_clients.size()));
-}
-
-void TcpSocket::removeClient(std::shared_ptr<Client> client) const {
-    std::lock_guard<std::mutex> lock(_clientsMutex);
-
-    _clients.erase(std::remove(_clients.begin(), _clients.end(), client),
-                   _clients.end());
-
-    Logger::info("[TCP Socket] Client removed. Total clients: " +
-                 std::to_string(_clients.size()));
-}
-
 void TcpSocket::sendToOne(int clientSocket, const SmartBuffer& smartBuffer) {
-    Logger::info("[TCP Socket] Sending data to client socket: " +
-                 std::to_string(clientSocket));
-
-    if (send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0) <
-        0) {
-        Logger::error("[TCP Socket] Failed to send data to client: " +
-                      std::to_string(clientSocket));
+    if (send(clientSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0) < 0) {
+        Logger::error("[TCP Socket] Failed to send data.");
     }
 }
 
 void TcpSocket::sendToAll(const SmartBuffer& smartBuffer) {
-    std::lock_guard<std::mutex> lock(_clientsMutex);
-
-    Logger::info("[TCP Socket] Broadcasting data to all clients. Total: " +
-                 std::to_string(_clients.size()));
-
-    for (auto& client : _clients) {
-        int sock = client->getTcpSocket();
-        if (sock >= SUCCESS) {
-            if (send(sock, smartBuffer.getBuffer(), smartBuffer.getSize(), 0) <
-                0) {
-                Logger::error("[TCP Socket] Failed to send data to client: " +
-                              std::to_string(sock));
-            }
+    const auto& clients = ClientManager::getInstance().getAllClients();
+    for (const auto& client : clients) {
+        if (client->getTcpSocket() >= 0) {
+            sendToOne(client->getTcpSocket(), smartBuffer);
         }
     }
 }

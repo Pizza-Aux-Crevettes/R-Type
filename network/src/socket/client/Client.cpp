@@ -5,7 +5,7 @@
 ** Client.cpp
 */
 
-#include "socket/Client.hpp"
+#include "socket/client/Client.hpp"
 #include "util/Logger.hpp"
 
 Client::Client(int tcpSocket, const sockaddr_in& udpAddr)

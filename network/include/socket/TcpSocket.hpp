@@ -16,30 +16,22 @@
 #include <unistd.h>
 #include <vector>
 #include "SmartBuffer.hpp"
-#include "socket/Client.hpp"
+#include "socket/client/Client.hpp"
 
 class TcpSocket {
-  public:
+public:
     TcpSocket();
     ~TcpSocket();
 
     void init();
-
-    [[noreturn]] void readLoop() const;
-
     static void sendToOne(int clientSocket, const SmartBuffer& smartBuffer);
     static void sendToAll(const SmartBuffer& smartBuffer);
-
+    [[noreturn]] void readLoop() const;
     void close() const;
 
-  private:
+private:
     int _tcpSocket;
     sockaddr_in _tcpAddr;
-    static std::vector<std::shared_ptr<Client>> _clients;
-    static std::mutex _clientsMutex;
 
-    void handleRead(std::shared_ptr<Client> client,
-                    SmartBuffer& smartBuffer) const;
-    void addClient(std::shared_ptr<Client> client) const;
-    void removeClient(std::shared_ptr<Client> client) const;
+    void handleRead(std::shared_ptr<Client> client, SmartBuffer& smartBuffer) const;
 };

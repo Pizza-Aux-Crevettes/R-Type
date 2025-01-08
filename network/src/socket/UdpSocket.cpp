@@ -6,14 +6,11 @@
 */
 
 #include "socket/UdpSocket.hpp"
-#include "component/map/MapProtocol.hpp"
+#include "component/player/PlayerManager.hpp"
 #include "component/player/PlayerProtocol.hpp"
-#include "component/room/RoomManager.hpp"
+#include "socket/client/ClientManager.hpp"
 #include "protocol/Protocol.hpp"
 #include "util/Logger.hpp"
-
-std::vector<std::shared_ptr<Client>> UdpSocket::_clients;
-std::mutex UdpSocket::_clientsMutex;
 
 UdpSocket::UdpSocket() : _udpSocket(FAILURE) {}
 
@@ -48,13 +45,11 @@ void UdpSocket::init() {
     _udpAddr.sin_addr.s_addr = INADDR_ANY;
     _udpAddr.sin_port = htons(PORT);
 
-    if (bind(_udpSocket, reinterpret_cast<sockaddr*>(&_udpAddr),
-             sizeof(_udpAddr)) < 0) {
+    if (bind(_udpSocket, reinterpret_cast<sockaddr*>(&_udpAddr), sizeof(_udpAddr)) < 0) {
         throw std::runtime_error("Bind failed for UDP socket.");
     }
 
-    Logger::success("[UDP Socket] Successfully initialized on port " +
-                    std::to_string(PORT) + ".");
+    Logger::success("[UDP Socket] Successfully initialized on port " + std::to_string(PORT) + ".");
 }
 
 [[noreturn]] void UdpSocket::readLoop() {
@@ -83,20 +78,18 @@ void UdpSocket::handleRead(SmartBuffer& smartBuffer) {
     sockaddr_in clientAddr{};
     socklen_t addrLen = sizeof(clientAddr);
 
-    ssize_t bytesRead =
-        recvfrom(_udpSocket, buffer, sizeof(buffer), 0,
-                 reinterpret_cast<sockaddr*>(&clientAddr), &addrLen);
+    ssize_t bytesRead = recvfrom(_udpSocket, buffer, sizeof(buffer), 0,
+                                 reinterpret_cast<sockaddr*>(&clientAddr), &addrLen);
 
     if (bytesRead > 0) {
-        Logger::info(
-            "[UDP Socket] Received " + std::to_string(bytesRead) +
-            " bytes from: " + std::string(inet_ntoa(clientAddr.sin_addr)) +
-            ":" + std::to_string(ntohs(clientAddr.sin_port)));
+        Logger::info("[UDP Socket] Received " + std::to_string(bytesRead) +
+                     " bytes from: " + std::string(inet_ntoa(clientAddr.sin_addr)) +
+                     ":" + std::to_string(ntohs(clientAddr.sin_port)));
 
         smartBuffer.reset();
         smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer), bytesRead);
 
-        auto client = findOrCreateClient(clientAddr);
+        auto client = ClientManager::getInstance().findOrCreateClient(clientAddr);
         Protocol::handleMessage(client, smartBuffer);
     } else {
         Logger::warning("[UDP Socket] Failed to receive data.");
@@ -104,58 +97,26 @@ void UdpSocket::handleRead(SmartBuffer& smartBuffer) {
 }
 
 void UdpSocket::handleSend(SmartBuffer& smartBuffer) {
-    const auto& rooms = RoomManager::get().getRooms();
+    const auto& playersMap = PlayerManager::get().getPlayers();
 
-    if (rooms.empty()) {
-        Logger::info("[UDP Socket] No active rooms to handle for sending.");
+    if (playersMap.empty()) {
         return;
     }
 
-    for (const auto& room : rooms) {
-        if (!room->isGameStarted()) {
+    std::vector<std::shared_ptr<Player>> players;
+    players.reserve(playersMap.size());
+    for (const auto& [playerId, player] : playersMap) {
+        players.push_back(player);
+    }
+
+    for (const auto& player : players) {
+        if (!player) {
+            Logger::warning("[UDP Socket] Encountered a null player in the list. Skipping.");
             continue;
         }
 
-        auto map = room->getMap();
-        if (!map) {
-            Logger::warning("[UDP Socket] Room " + room->getCode() +
-                            " has no map assigned.");
-            continue;
-        }
-
-        map->incrementViewport();
-
-        const auto& players = room->getPlayers();
-        for (const auto& player : players) {
-            PlayerProtocol::sendPlayerPositionUpdate(_udpSocket, players,
-                                                     player, smartBuffer);
-            MapProtocol::sendViewportUpdate(_udpSocket,
-                                            player->getClientAddress(),
-                                            map->getViewport(), smartBuffer);
-            MapProtocol::sendObstaclesUpdate(_udpSocket,
-                                             player->getClientAddress(),
-                                             map->getObstacles(), smartBuffer);
-        }
+        PlayerProtocol::sendPlayerPositionUpdate(_udpSocket, players, player, smartBuffer);
     }
-}
-
-std::shared_ptr<Client> UdpSocket::findOrCreateClient(const sockaddr_in& addr) {
-    std::lock_guard<std::mutex> lock(_clientsMutex);
-
-    for (auto& client : _clients) {
-        if (client->hasSameUdpEndpoint(addr)) {
-            return client;
-        }
-    }
-
-    auto newClient = std::make_shared<Client>(-1, addr);
-    _clients.push_back(newClient);
-
-    Logger::info("[UDP Socket] New client discovered via UDP: " +
-                 std::string(inet_ntoa(addr.sin_addr)) + ":" +
-                 std::to_string(ntohs(addr.sin_port)));
-
-    return newClient;
 }
 
 void UdpSocket::close() const {

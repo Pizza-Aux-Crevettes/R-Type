@@ -9,7 +9,7 @@
 
 #include <SmartBuffer.hpp>
 #include <memory>
-#include "socket/Client.hpp"
+#include "socket/client/Client.hpp"
 
 class RoomProtocol {
   public:

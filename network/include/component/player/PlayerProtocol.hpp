@@ -11,7 +11,7 @@
 #include <memory>
 #include <vector>
 #include "component/player/Player.hpp"
-#include "socket/Client.hpp"
+#include "socket/client/Client.hpp"
 
 class PlayerProtocol {
   public:

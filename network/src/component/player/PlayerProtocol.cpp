@@ -7,6 +7,7 @@
 
 #include "component/player/PlayerProtocol.hpp"
 #include "component/player/PlayerManager.hpp"
+#include "socket/client/ClientManager.hpp"
 #include "protocol/Protocol.hpp"
 #include "socket/TcpSocket.hpp"
 #include "socket/UdpSocket.hpp"
@@ -51,38 +52,38 @@ void PlayerProtocol::newPlayer(std::shared_ptr<Client> client,
 }
 
 void PlayerProtocol::sendPlayerPositionUpdate(
-    int udpSocket, const std::vector<std::shared_ptr<Player>>& players,
-    const std::shared_ptr<Player>& player, SmartBuffer& smartBuffer) {
+    int udpSocket,
+    const std::vector<std::shared_ptr<Player>> &players,
+    const std::shared_ptr<Player> &player,
+    SmartBuffer &smartBuffer)
+{
     if (!player) {
-        Logger::warning(
-            "[PlayerProtocol] Attempted to update position for a null player.");
         return;
     }
 
-    Logger::info("[PlayerProtocol] Sending position update for Player ID: " +
-                 std::to_string(player->getId()));
-
+    const auto &pos = player->getPosition();
     smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(
-                       Protocol::OpCode::PLAYER_UPDATE_POSITION)
-                << player->getId() << player->getPosition().getX()
-                << player->getPosition().getY();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::PLAYER_UPDATE_POSITION)
+                << player->getId()
+                << pos.getX()
+                << pos.getY();
 
-    for (auto& p : players) {
-        if (!p) {
-            Logger::warning("[PlayerProtocol] Encountered a null player in the "
-                            "players list. Skipping.");
+    auto allClients = ClientManager::getInstance().getAllClients();
+    for (auto &c : allClients) {
+        const sockaddr_in &udpAddr = c->getUdpAddr();
+        if (udpAddr.sin_addr.s_addr == 0 || udpAddr.sin_port == 0) {
+            Logger::warning("[PlayerProtocol] Client has invalid UDP address (0.0.0.0:0). Skipping.");
             continue;
         }
+        UdpSocket::send(udpSocket, udpAddr, smartBuffer);
 
-        UdpSocket::send(udpSocket, p->getClientAddress(), smartBuffer);
-
-        Logger::info("[PlayerProtocol] Sent position update to Player ID: " +
-                     std::to_string(p->getId()) + " at (" +
-                     std::to_string(player->getPosition().getX()) + ", " +
-                     std::to_string(player->getPosition().getY()) + ").");
+        if (c->getPlayer()) {
+            Logger::info("[PlayerProtocol] Sent position update to Player ID: " +
+                         std::to_string(c->getPlayer()->getId()) + " for Player ID: " +
+                         std::to_string(player->getId()) + "X: " + std::to_string(pos.getX()) + "Y: " + std::to_string(pos.getY()) + ".");
+        } else {
+            Logger::info("[PlayerProtocol] Sent position update to a client with no attached player, " 
+                         "for Player ID: " + std::to_string(player->getId()));
+        }
     }
-
-    Logger::info("[PlayerProtocol] Position updates sent for Player ID: " +
-                 std::to_string(player->getId()));
 }

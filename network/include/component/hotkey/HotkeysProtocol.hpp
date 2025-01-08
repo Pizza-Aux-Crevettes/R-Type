@@ -8,7 +8,7 @@
 #pragma once
 #include <memory>
 #include "SmartBuffer.hpp"
-#include "socket/Client.hpp"
+#include "socket/client/Client.hpp"
 
 class HotkeysProtocol {
   public:
