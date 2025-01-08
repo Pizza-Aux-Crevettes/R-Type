@@ -32,7 +32,7 @@ class Protocol {
         STOP_GAME_CALLBACK,
 
         CREATE_ROOM_BROADCAST,
-        LEAEVE_ROOM_BROADCAST,
+        LEAVE_ROOM_BROADCAST,
         JOIN_ROOM_BROADCAST,
         DELETE_ROOM_BROADCAST,
         NEW_PLAYER_BROADCAST,
@@ -56,13 +56,25 @@ class Protocol {
     ~Protocol();
 
     static void handleDefault(SmartBuffer& smartBuffer);
+
     static void handleCreateRoomCallback(SmartBuffer& smartBuffer);
-    static void handleCreateRoomBroadcast(SmartBuffer& smartBuffer);
+    static void handleLeaveRoomCallback(SmartBuffer& smartBuffer);
     static void handleJoinRoomCallback(SmartBuffer& smartBuffer);
-    static void handleJoinRoomBroadcast(SmartBuffer& smartBuffer);
     static void handleDeleteRoomCallback(SmartBuffer& smartBuffer);
+    static void handleNewPlayerCallback(SmartBuffer& smartBuffer);
+    static void handleStartGameCallback(SmartBuffer& smartBuffer);
+    static void handleStopGameCallback(SmartBuffer& smartBuffer);
+    
+    static void handleCreateRoomBroadcast(SmartBuffer& smartBuffer);
+    static void handleLeaveRoomBroadcast(SmartBuffer& smartBuffer);
+    static void handleJoinRoomBroadcast(SmartBuffer& smartBuffer);
     static void handleDeleteRoomBroadcast(SmartBuffer& smartBuffer);
     static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer);
-    static void handlePlayerCallback(SmartBuffer& smartBuffer);
+    static void handleStartGameBroadcast(SmartBuffer& smartBuffer);
+    static void handleStopGameBroadcast(SmartBuffer& smartBuffer);
+
     static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer);
+    static void handlePlayerUpdateLife(SmartBuffer& smartBuffer);
+    static void handleViewportUpdate(SmartBuffer& smartBuffer);
+    static void handleBlocksUpdate(SmartBuffer& smartBuffer);
 };
