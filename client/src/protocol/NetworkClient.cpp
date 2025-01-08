@@ -38,7 +38,7 @@ void NetworkClient::connectTCP() {
     // pour create une room
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::CREATE_ROOM);
-    smartBuffer << static_cast<int16_t>(10);
+    smartBuffer << static_cast<int32_t>(10);
     smartBuffer << static_cast<int16_t>(1);
     smartBuffer << static_cast<int16_t>(1);
     TcpSocket::send(smartBuffer);
@@ -46,7 +46,9 @@ void NetworkClient::connectTCP() {
     // pour start la game
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::START_GAME);
-    smartBuffer << static_cast<int16_t>(10);
+    // CODE DE LA ROOM RECU DANS LE CALLBACK DE ROOM_CREATED_CALLBACK dans
+    // Protocol.cpp
+    smartBuffer << std::string{"DDDDDD"};
     TcpSocket::send(smartBuffer);
 }
 

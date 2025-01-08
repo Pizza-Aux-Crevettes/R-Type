@@ -25,11 +25,11 @@ void RoomProtocol::createRoom(std::shared_ptr<Client> client,
     }
 
     int32_t playerId = player->getId();
-    int16_t capacity;
+    int32_t capacity;
     int16_t isPublic;
     int16_t mapId;
 
-    smartBuffer >> capacity >> isPublic >> mapId;
+    smartBuffer >> mapId >> isPublic >> capacity;
 
     Logger::trace("[RoomProtocol] CREATE_ROOM details: playerId=" +
                   std::to_string(playerId) +

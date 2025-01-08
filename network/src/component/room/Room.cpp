@@ -21,7 +21,8 @@ void Room::stopGame() {
 }
 
 bool Room::isGameStarted() const {
-    return _gameStarted;
+    return true;
+    // return _gameStarted;
 }
 
 void Room::setMap(const std::shared_ptr<Map>& map) {
