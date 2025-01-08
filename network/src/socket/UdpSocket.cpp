@@ -6,19 +6,14 @@
 */
 
 #include "socket/UdpSocket.hpp"
-#include <SmartBuffer.hpp>
-#include <arpa/inet.h>
-#include <chrono>
-#include <thread>
-#include <unistd.h>
 #include "component/map/MapProtocol.hpp"
-#include "component/player/PlayerManager.hpp"
 #include "component/player/PlayerProtocol.hpp"
 #include "component/room/RoomManager.hpp"
 #include "protocol/Protocol.hpp"
-#include "socket/Server.hpp"
-#include "util/Config.hpp"
 #include "util/Logger.hpp"
+
+std::vector<std::shared_ptr<Client>> UdpSocket::_clients;
+std::mutex UdpSocket::_clientsMutex;
 
 UdpSocket::UdpSocket() : _udpSocket(FAILURE) {}
 
@@ -26,7 +21,7 @@ UdpSocket::~UdpSocket() {
     close();
 }
 
-void UdpSocket::send(const int udpSocket, const sockaddr_in& clientAddr,
+void UdpSocket::send(int udpSocket, const sockaddr_in& clientAddr,
                      const SmartBuffer& smartBuffer) {
     sendto(udpSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0,
            reinterpret_cast<const sockaddr*>(&clientAddr), sizeof(clientAddr));
@@ -34,7 +29,7 @@ void UdpSocket::send(const int udpSocket, const sockaddr_in& clientAddr,
 
 void UdpSocket::init() {
     _udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
-    if (_udpSocket == FAILURE) {
+    if (_udpSocket < SUCCESS) {
         throw std::runtime_error("Failed to create UDP socket.");
     }
 
@@ -43,7 +38,7 @@ void UdpSocket::init() {
     _udpAddr.sin_port = htons(PORT);
 
     if (bind(_udpSocket, reinterpret_cast<sockaddr*>(&_udpAddr),
-             sizeof(_udpAddr)) < SUCCESS) {
+             sizeof(_udpAddr)) < 0) {
         throw std::runtime_error("Bind failed for UDP socket.");
     }
 
@@ -71,23 +66,22 @@ void UdpSocket::handleRead(SmartBuffer& smartBuffer) {
     char buffer[1024] = {};
     sockaddr_in clientAddr{};
     socklen_t addrLen = sizeof(clientAddr);
-    const ssize_t bytesRead =
+    ssize_t bytesRead =
         recvfrom(_udpSocket, buffer, sizeof(buffer), 0,
                  reinterpret_cast<sockaddr*>(&clientAddr), &addrLen);
 
     if (bytesRead > 0) {
-        addClient(clientAddr);
-
         smartBuffer.reset();
         smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer), bytesRead);
 
-        Protocol::handleMessage(_udpSocket, smartBuffer, clientAddr);
+        auto client = findOrCreateClient(clientAddr);
+
+        Protocol::handleMessage(client, smartBuffer);
     }
 }
 
 void UdpSocket::handleSend(SmartBuffer& smartBuffer) {
     const auto& rooms = RoomManager::get().getRooms();
-
     if (rooms.empty()) {
         return;
     }
@@ -98,11 +92,9 @@ void UdpSocket::handleSend(SmartBuffer& smartBuffer) {
         }
 
         auto map = room->getMap();
-
         if (!map) {
             Logger::warning("[UdpSocket] Room " + room->getCode() +
                             " has no map assigned.");
-
             continue;
         }
 
@@ -122,30 +114,28 @@ void UdpSocket::handleSend(SmartBuffer& smartBuffer) {
     }
 }
 
-void UdpSocket::addClient(const sockaddr_in& clientAddr) {
-    std::lock_guard lock(_clientsMutex);
+std::shared_ptr<Client> UdpSocket::findOrCreateClient(const sockaddr_in& addr) {
+    std::lock_guard<std::mutex> lock(_clientsMutex);
 
-    for (const auto& client : _clients) {
-        if (client.sin_addr.s_addr == clientAddr.sin_addr.s_addr &&
-            client.sin_port == clientAddr.sin_port) {
-            return;
+    for (auto& client : _clients) {
+        if (client->hasSameUdpEndpoint(addr)) {
+            return client;
         }
     }
 
-    _clients.push_back(clientAddr);
+    auto newClient = std::make_shared<Client>(-1, addr);
 
-    Logger::info("[UDP Socket] New client registered: " +
-                 std::string(inet_ntoa(clientAddr.sin_addr)) + ":" +
-                 std::to_string(ntohs(clientAddr.sin_port)));
-}
+    _clients.push_back(newClient);
 
-std::vector<sockaddr_in> UdpSocket::getClients() {
-    std::lock_guard lock(_clientsMutex);
-    return _clients;
+    Logger::info("[UDP Socket] New client discovered via UDP: " +
+                 std::string(inet_ntoa(addr.sin_addr)) + ":" +
+                 std::to_string(ntohs(addr.sin_port)));
+
+    return newClient;
 }
 
 void UdpSocket::close() const {
-    if (_udpSocket != FAILURE) {
+    if (_udpSocket >= SUCCESS) {
         ::close(_udpSocket);
 
         Logger::socket("[UDP Socket] Closed.");

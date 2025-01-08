@@ -13,17 +13,7 @@
 #include "socket/TcpSocket.hpp"
 #include "util/Logger.hpp"
 
-/**
- * Protocol structure:
- * - Input: int32_t userId >> int16_t capacity >> int16_t isPublic >> int16_t
- * mapId
- * - Output: int16_t opCode (CREATE_ROOM_CALLBACK) << int16_t status
- *
- * Status codes:
- * - 0 = Room created
- * - 1 = Player not found
- */
-void RoomProtocol::createRoom(const int clientSocket,
+void RoomProtocol::createRoom(std::shared_ptr<Client> client,
                               SmartBuffer& smartBuffer) {
     int32_t userId;
     int16_t capacity;
@@ -34,41 +24,31 @@ void RoomProtocol::createRoom(const int clientSocket,
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::CREATE_ROOM_CALLBACK);
 
-    Logger::trace("[RoomProtocol] Processing CREATE_ROOM. userId = " +
-                  std::to_string(userId) +
-                  ", capacity = " + std::to_string(capacity) +
-                  ", isPublic = " + std::to_string(isPublic) +
-                  ", mapId = " + std::to_string(mapId));
+    Logger::trace(
+        "[RoomProtocol] CREATE_ROOM: userId=" + std::to_string(userId) +
+        ", capacity=" + std::to_string(capacity) + ", isPublic=" +
+        std::to_string(isPublic) + ", mapId=" + std::to_string(mapId));
 
-    const auto player = PlayerManager::get().findPlayerById(userId);
-    const auto status = static_cast<int16_t>(!player);
+    auto player = PlayerManager::get().findPlayerById(userId);
+    int16_t status = player ? 0 : 1;
 
     smartBuffer << status;
 
     if (!status) {
         auto room = RoomManager::get().createRoom(player, capacity, isPublic);
-        auto selectedMap = MapManager::get().getMapById(mapId);
-        room->setMap(selectedMap);
+        room->setMap(MapManager::get().getMapById(mapId));
 
-        Logger::success("[RoomProtocol] Room created with code: " +
-                        room->getCode() + ", Map ID: " + std::to_string(mapId));
+        smartBuffer << std::string({room->getCode()});
+
+        Logger::success("[RoomProtocol] Room created: code=" + room->getCode() +
+                        ", mapId=" + std::to_string(mapId));
     }
 
-    TcpSocket::sendToOne(clientSocket, smartBuffer);
+    TcpSocket::sendToOne(client->getTcpSocket(), smartBuffer);
 }
 
-/**
- * Protocol structure:
- * - Input: std::string roomCode >> int32_t userId
- * - Output: int16_t opCode (JOIN_ROOM_CALLBACK) << int16_t status
- *
- * Status codes:
- * - 0 = Room joined
- * - 1 = Player not found
- * - 2 = Room not found
- * - 3 = Cannot add player to the room
- */
-void RoomProtocol::joinRoom(const int clientSocket, SmartBuffer& smartBuffer) {
+void RoomProtocol::joinRoom(std::shared_ptr<Client> client,
+                            SmartBuffer& smartBuffer) {
     std::string roomCode;
     int32_t userId;
 
@@ -76,13 +56,20 @@ void RoomProtocol::joinRoom(const int clientSocket, SmartBuffer& smartBuffer) {
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::JOIN_ROOM_CALLBACK);
 
-    Logger::trace("[RoomProtocol] Processing JOIN_ROOM. roomCode = " +
-                  roomCode + ", userId = " + std::to_string(userId));
+    Logger::trace("[RoomProtocol] JOIN_ROOM: roomCode=" + roomCode +
+                  ", userId=" + std::to_string(userId));
 
-    const auto player = PlayerManager::get().findPlayerById(userId);
-    const auto room = RoomManager::get().findRoomByCode(roomCode);
-    const auto status =
-        static_cast<int16_t>(!player + !room + !room->addPlayer(player));
+    auto player = PlayerManager::get().findPlayerById(userId);
+    auto room = RoomManager::get().findRoomByCode(roomCode);
+    int16_t status = 0;
+
+    if (!player) {
+        status = 1;
+    } else if (!room) {
+        status = 2;
+    } else if (!room->addPlayer(player)) {
+        status = 3;
+    }
 
     smartBuffer << status;
 
@@ -91,21 +78,10 @@ void RoomProtocol::joinRoom(const int clientSocket, SmartBuffer& smartBuffer) {
                      " joined room: " + roomCode);
     }
 
-    TcpSocket::sendToOne(clientSocket, smartBuffer);
+    TcpSocket::sendToOne(client->getTcpSocket(), smartBuffer);
 }
 
-/**
- * Protocol structure:
- * - Input: std::string roomCode >> int32_t userId
- * - Output: P
- *
- * Status codes:
- * - 0 = Room deleted
- * - 1 = Player not found
- * - 2 = Room not found
- * - 3 = Permission not granted
- */
-void RoomProtocol::deleteRoom(const int clientSocket,
+void RoomProtocol::deleteRoom(std::shared_ptr<Client> client,
                               SmartBuffer& smartBuffer) {
     std::string roomCode;
     int32_t userId;
@@ -114,22 +90,95 @@ void RoomProtocol::deleteRoom(const int clientSocket,
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::DELETE_ROOM_CALLBACK);
 
-    Logger::trace("[RoomProtocol] Processing DELETE_ROOM. roomCode = " +
-                  roomCode + ", userId = " + std::to_string(userId));
+    Logger::trace("[RoomProtocol] DELETE_ROOM: roomCode=" + roomCode +
+                  ", userId=" + std::to_string(userId));
 
-    const auto player = PlayerManager::get().findPlayerById(userId);
-    const auto room = RoomManager::get().findRoomByCode(roomCode);
-    const auto status =
-        static_cast<int16_t>(!player + !room + (room->getOwner() != player));
+    auto player = PlayerManager::get().findPlayerById(userId);
+    auto room = RoomManager::get().findRoomByCode(roomCode);
+    int16_t status = 0;
+
+    if (!player) {
+        status = 1;
+    } else if (!room) {
+        status = 2;
+    } else if (room->getOwner() != player) {
+        status = 3;
+    }
 
     smartBuffer << status;
 
     if (!status) {
         RoomManager::get().deleteRoom(roomCode, player);
-
-        Logger::info("[RoomProtocol] Room deleted successfully. Room code: " +
-                     roomCode);
+        Logger::info("[RoomProtocol] Room deleted: " + roomCode);
     }
 
-    TcpSocket::sendToOne(clientSocket, smartBuffer);
+    TcpSocket::sendToOne(client->getTcpSocket(), smartBuffer);
+}
+
+void RoomProtocol::startGame(std::shared_ptr<Client> client,
+                             SmartBuffer& smartBuffer) {
+    std::string roomCode;
+    int32_t userId;
+
+    smartBuffer >> roomCode >> userId;
+    smartBuffer.reset();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::START_GAME_CALLBACK);
+
+    Logger::trace("[RoomProtocol] START_GAME: roomCode=" + roomCode +
+                  ", userId=" + std::to_string(userId));
+
+    auto player = PlayerManager::get().findPlayerById(userId);
+    auto room = RoomManager::get().findRoomByCode(roomCode);
+    int16_t status = 0;
+
+    if (!player) {
+        status = 1;
+    } else if (!room) {
+        status = 2;
+    } else if (room->getOwner() != player) {
+        status = 3;
+    }
+
+    smartBuffer << status;
+
+    if (!status) {
+        room->startGame();
+        Logger::info("[RoomProtocol] Game started: " + roomCode);
+    }
+
+    TcpSocket::sendToOne(client->getTcpSocket(), smartBuffer);
+}
+
+void RoomProtocol::stopGame(std::shared_ptr<Client> client,
+                            SmartBuffer& smartBuffer) {
+    std::string roomCode;
+    int32_t userId;
+
+    smartBuffer >> roomCode >> userId;
+    smartBuffer.reset();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::STOP_GAME_CALLBACK);
+
+    Logger::trace("[RoomProtocol] STOP_GAME: roomCode=" + roomCode +
+                  ", userId=" + std::to_string(userId));
+
+    auto player = PlayerManager::get().findPlayerById(userId);
+    auto room = RoomManager::get().findRoomByCode(roomCode);
+    int16_t status = 0;
+
+    if (!player) {
+        status = 1;
+    } else if (!room) {
+        status = 2;
+    } else if (room->getOwner() != player) {
+        status = 3;
+    }
+
+    smartBuffer << status;
+
+    if (!status) {
+        room->stopGame();
+        Logger::info("[RoomProtocol] Game stopped: " + roomCode);
+    }
+
+    TcpSocket::sendToOne(client->getTcpSocket(), smartBuffer);
 }

@@ -12,8 +12,9 @@
 void MapProtocol::sendViewportUpdate(const int udpSocket,
                                      const sockaddr_in& clientAddr,
                                      int viewport, SmartBuffer& smartBuffer) {
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::VIEWPORT_UPDATE);
-    smartBuffer << static_cast<int32_t>(viewport);
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::VIEWPORT_UPDATE)
+                << static_cast<int32_t>(viewport);
+
     UdpSocket::send(udpSocket, clientAddr, smartBuffer);
 }
 
@@ -23,8 +24,11 @@ void MapProtocol::sendObstaclesUpdate(const int udpSocket,
                                       SmartBuffer& smartBuffer) {
     for (const auto& obstacle : obstacles) {
         smartBuffer.reset();
-        smartBuffer << static_cast<int16_t>(Protocol::OpCode::BLOCKS_UPDATE);
-        smartBuffer << obstacle._x << obstacle._y << obstacle._type;
+        smartBuffer << static_cast<int16_t>(Protocol::OpCode::BLOCKS_UPDATE)
+                    << static_cast<int16_t>(obstacle._x)
+                    << static_cast<int16_t>(obstacle._y)
+                    << static_cast<int16_t>(obstacle._type);
+
         UdpSocket::send(udpSocket, clientAddr, smartBuffer);
     }
 }

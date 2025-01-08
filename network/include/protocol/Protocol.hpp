@@ -10,30 +10,37 @@
 #include <SmartBuffer.hpp>
 #include <memory>
 #include <netinet/in.h>
+#include "socket/Client.hpp"
 
 class Protocol {
   public:
     enum OpCode {
         DEFAULT,
-
-        // Client -> Server
         CREATE_ROOM,
         JOIN_ROOM,
+        LEAVE_ROOM,
         DELETE_ROOM,
         NEW_PLAYER,
         HOTKEY_PRESSED,
+        START_GAME,
+        STOP_GAME,
 
-        // Server -> Client
         CREATE_ROOM_CALLBACK,
+        LEAVE_ROOM_CALLBACK,
         JOIN_ROOM_CALLBACK,
         DELETE_ROOM_CALLBACK,
         NEW_PLAYER_CALLBACK,
+        START_GAME_CALLBACK,
+        STOP_GAME_CALLBACK,
 
-        // Server -> All clients
         CREATE_ROOM_BROADCAST,
+        LEAVE_ROOM_BROADCAST,
         JOIN_ROOM_BROADCAST,
         DELETE_ROOM_BROADCAST,
         NEW_PLAYER_BROADCAST,
+        START_GAME_BROADCAST,
+        STOP_GAME_BROADCAST,
+
         PLAYER_UPDATE_POSITION,
         PLAYER_UPDATE_LIFE,
         VIEWPORT_UPDATE,
@@ -44,9 +51,8 @@ class Protocol {
     Protocol& operator=(const Protocol&) = delete;
 
     static Protocol& get();
-
-    static void handleMessage(int clientSocket, SmartBuffer& smartBuffer,
-                              const sockaddr_in& clientAddr);
+    static void handleMessage(std::shared_ptr<Client> client,
+                              SmartBuffer& smartBuffer);
 
   private:
     Protocol() = default;

@@ -13,33 +13,41 @@
 
 Protocol& Protocol::get() {
     static Protocol instance;
-
     return instance;
 }
 
-void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer,
-                             const sockaddr_in& clientAddr) {
-    int16_t opCode;
+void Protocol::handleMessage(std::shared_ptr<Client> client,
+                             SmartBuffer& smartBuffer) {
+    if (smartBuffer.getSize() < sizeof(int16_t)) {
+        return;
+    }
 
+    int16_t opCode;
     smartBuffer >> opCode;
 
-    switch (opCode) {
+    switch (static_cast<OpCode>(opCode)) {
     case DEFAULT:
         break;
     case CREATE_ROOM:
-        RoomProtocol::createRoom(clientSocket, smartBuffer);
+        RoomProtocol::createRoom(client, smartBuffer);
         break;
     case JOIN_ROOM:
-        RoomProtocol::joinRoom(clientSocket, smartBuffer);
+        RoomProtocol::joinRoom(client, smartBuffer);
         break;
     case DELETE_ROOM:
-        RoomProtocol::deleteRoom(clientSocket, smartBuffer);
+        RoomProtocol::deleteRoom(client, smartBuffer);
         break;
     case NEW_PLAYER:
-        PlayerProtocol::newPlayer(clientSocket, smartBuffer, clientAddr);
+        PlayerProtocol::newPlayer(client, smartBuffer);
         break;
     case HOTKEY_PRESSED:
-        HotkeysProtocol::processHotkey(clientSocket, smartBuffer);
+        HotkeysProtocol::processHotkey(client, smartBuffer);
+        break;
+    case START_GAME:
+        RoomProtocol::startGame(client, smartBuffer);
+        break;
+    case STOP_GAME:
+        RoomProtocol::stopGame(client, smartBuffer);
         break;
     default:
         Logger::error("[Protocol] Received unknown OpCode: " +

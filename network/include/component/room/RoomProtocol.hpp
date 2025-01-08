@@ -8,10 +8,19 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
+#include <memory>
+#include "socket/Client.hpp"
 
 class RoomProtocol {
   public:
-    static void createRoom(int clientSocket, SmartBuffer& smartBuffer);
-    static void joinRoom(int clientSocket, SmartBuffer& smartBuffer);
-    static void deleteRoom(int clientSocket, SmartBuffer& smartBuffer);
+    static void createRoom(std::shared_ptr<Client> client,
+                           SmartBuffer& smartBuffer);
+    static void joinRoom(std::shared_ptr<Client> client,
+                         SmartBuffer& smartBuffer);
+    static void deleteRoom(std::shared_ptr<Client> client,
+                           SmartBuffer& smartBuffer);
+    static void startGame(std::shared_ptr<Client> client,
+                          SmartBuffer& smartBuffer);
+    static void stopGame(std::shared_ptr<Client> client,
+                         SmartBuffer& smartBuffer);
 };

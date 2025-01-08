@@ -6,10 +6,12 @@
 */
 
 #pragma once
-
-#include <SmartBuffer.hpp>
+#include <memory>
+#include "SmartBuffer.hpp"
+#include "socket/Client.hpp"
 
 class HotkeysProtocol {
   public:
-    static void processHotkey(int clientSocket, SmartBuffer& smartBuffer);
+    static void processHotkey(std::shared_ptr<Client> client,
+                              SmartBuffer& smartBuffer);
 };
