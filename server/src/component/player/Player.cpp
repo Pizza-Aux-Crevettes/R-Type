@@ -10,48 +10,48 @@
 
 Player::Player(const int32_t playerId, std::string name, const Point& position,
                const Point& size, const double speed)
-    : _userId(playerId), _name(std::move(name)), _position(position),
+    : _playerId(playerId), _name(std::move(name)), _position(position),
       _size(size), _speed(speed), _health(Health()),
       _threadId(std::thread::id()) {}
 
-void Player::setPosition(const Point& position) {
-    _position = position;
-}
-
-const Point& Player::getPosition() const {
-    return _position;
-}
-
-std::thread::id Player::getThreadId() const {
-    return _threadId;
-}
-
-void Player::setThreadId(const std::thread::id& threadId) {
-    _threadId = threadId;
-}
-
 int32_t Player::getId() const {
-    return _userId;
+    return _playerId;
 }
 
 const std::string& Player::getName() const {
     return _name;
 }
 
-const Point& Player::getSize() const {
-    return _size;
+const Point& Player::getPosition() const {
+    return _position;
 }
 
-double Player::getSpeed() const {
-    return _speed;
+const Point& Player::getSize() const {
+    return _size;
 }
 
 const Health& Player::getHealth() const {
     return _health;
 }
 
+double Player::getSpeed() const {
+    return _speed;
+}
+
+std::thread::id Player::getThreadId() const {
+    return _threadId;
+}
+
 const sockaddr_in& Player::getClientAddress() const {
     return _clientAddr;
+}
+
+void Player::setPosition(const Point& position) {
+    _position = position;
+}
+
+void Player::setThreadId(const std::thread::id& threadId) {
+    _threadId = threadId;
 }
 
 void Player::setClientAddress(const sockaddr_in& clientAddr) {

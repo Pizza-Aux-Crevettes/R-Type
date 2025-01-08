@@ -31,17 +31,6 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
     // Create a new player
     const auto player = PlayerManager::get().createPlayer(name);
 
-    Logger::info("[PlayerProtocol] New player created:\n"
-                 "  - Name: " +
-                 player->getName() +
-                 "\n"
-                 "  - Player ID: " +
-                 std::to_string(player->getId()) +
-                 "\n"
-                 "  - Client: " +
-                 std::string(inet_ntoa(clientAddr.sin_addr)) + ":" +
-                 std::to_string(ntohs(clientAddr.sin_port)));
-
     // Create the response buffer for the new player and send it
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_CALLBACK);
