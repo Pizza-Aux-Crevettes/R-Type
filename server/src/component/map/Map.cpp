@@ -16,7 +16,6 @@
 Map::Map(const std::string& name, const std::vector<Obstacle>& obstacles)
     : _name(name), _obstacles(obstacles), _viewport(0) {}
 
-
 /**
  * @brief Increment the viewport of the map
  */

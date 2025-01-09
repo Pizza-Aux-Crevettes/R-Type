@@ -39,7 +39,7 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
     // Send the player ID to the client that requested it
     TcpSocket::sendToOne(clientSocket, smartBuffer);
 
-    Logger::info("[PlayerProtocol] Sent player ID " +
+    Logger::packet("[PlayerProtocol] Sent player ID " +
                  std::to_string(player->getId()) + " to client ");
 
     // Parse all existing players
@@ -50,11 +50,11 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
             Protocol::OpCode::NEW_PLAYER_BROADCAST);
         smartBuffer << existingPlayer->getId()
                     << std::string{existingPlayer->getName()};
-        
+
         // Send the existing player to the new player
         TcpSocket::sendToAll(smartBuffer);
 
-        Logger::info("[PlayerProtocol] Sent existing player ID " +
+        Logger::packet("[PlayerProtocol] Sent existing player ID " +
                      std::to_string(existingPlayer->getId()) +
                      " to new player.");
 
@@ -67,27 +67,27 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
  * @brief Update the player's position and broadcast the update to all clients
  *
  * @param udpSocket The UDP socket
- * @param players The list of all players
  * @param player The player to update
  * @param smartBuffer The SmartBuffer to use for the response
  *
  * Protocol: PLAYER_UPDATE_POSITION
  * Payload: playerId (int32_t), posX (int16_t), posY (int16_t)
  */
-void PlayerProtocol::broadcastPlayersPositions(
-    const int udpSocket, const std::vector<std::shared_ptr<Player>>& players,
-    const std::shared_ptr<Player>& player, SmartBuffer& smartBuffer) {
+void PlayerProtocol::sendPositionsUpdate(
+    const int udpSocket, const std::shared_ptr<Player>& player,
+    SmartBuffer& smartBuffer) {
     // Create the response buffer
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(
-                       Protocol::OpCode::PLAYER_UPDATE_POSITION)
-                << player->getId() << player->getPosition().getX()
-                << player->getPosition().getY();
+        Protocol::OpCode::PLAYER_UPDATE_POSITION);
+    smartBuffer << player->getId();
+    smartBuffer << player->getPosition().getX();
+    smartBuffer << player->getPosition().getY();
 
     // Broadcast the position update to all clients
     UdpSocket::send(udpSocket, player->getClientAddress(), smartBuffer);
 
-    Logger::info("[PlayerProtocol] Position update sent:\n"
+    Logger::packet("[PlayerProtocol] Position update sent:\n"
                  "  - Player ID: " +
                  std::to_string(player->getId()) +
                  "\n"

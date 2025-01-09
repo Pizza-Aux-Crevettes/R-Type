@@ -54,8 +54,8 @@ Each message contains the following fields:
 | STOP_GAME_BROADCAST      | 22    | Broadcast: Game stopped in a room.        |
 | PLAYER_UPDATE_POSITION   | 23    | Update: Player position (UDP).            |
 | PLAYER_UPDATE_LIFE       | 24    | Update: Player life (UDP).                |
-| VIEWPORT_UPDATE          | 25    | Update: Map viewport (UDP).               |
-| BLOCKS_UPDATE            | 26    | Update: Map obstacles (UDP).              |
+| MAP_VIEWPORT_UPDATE          | 25    | Update: Map viewport (UDP).               |
+| MAP_OBSTACLES_UPDATE            | 26    | Update: Map obstacles (UDP).              |
 
 ---
 
@@ -245,14 +245,14 @@ Each message contains the following fields:
 
 ---
 
-### **VIEWPORT_UPDATE**
+### **MAP_VIEWPORT_UPDATE**
 - **Description**: Updates the viewport of the map.
 - **Payload**:
   - `viewport` (int32_t): Current viewport value.
 
 ---
 
-### **BLOCKS_UPDATE**
+### **MAP_OBSTACLES_UPDATE**
 - **Description**: Updates the obstacle positions on the map.
 - **Payload**:
   - `obstacleX` (float): X-coordinate of the obstacle.

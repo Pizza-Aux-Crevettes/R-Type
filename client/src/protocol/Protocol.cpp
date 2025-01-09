@@ -340,7 +340,7 @@ void Protocol::handleViewportUpdate(SmartBuffer& smartBuffer) {
 
     smartBuffer >> viewport;
 
-    std::cout << "[Protocol] VIEWPORT_UPDATE - Viewport: " << viewport
+    std::cout << "[Protocol] MAP_VIEWPORT_UPDATE - Viewport: " << viewport
               << std::endl;
 
     // Cette fonction renvoi le viewport
@@ -354,7 +354,7 @@ void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
 
     smartBuffer >> x >> y >> type;
 
-    std::cout << "[Protocol] BLOCKS_UPDATE - X: " << x << ", Y: " << y
+    std::cout << "[Protocol] MAP_OBSTACLES_UPDATE - X: " << x << ", Y: " << y
               << ", Type: " << type << std::endl;
 
     // Cette fonction renvoi les blocks visibles à l'écran en boucle, les blocks

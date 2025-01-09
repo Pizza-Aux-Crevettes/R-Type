@@ -85,7 +85,6 @@ void UdpSocket::handleRead(SmartBuffer& smartBuffer) {
 }
 
 void UdpSocket::handleSend(SmartBuffer& smartBuffer) {
-
     const auto clients = getClients();
     const auto& players = PlayerManager::get().getPlayers();
 
@@ -95,13 +94,11 @@ void UdpSocket::handleSend(SmartBuffer& smartBuffer) {
 
     for (const auto& client : clients) {
         for (const auto& [playerId, player] : players) {
-            SmartBuffer smartBuffer;
-            smartBuffer << static_cast<int16_t>(
-                               Protocol::OpCode::PLAYER_UPDATE_POSITION)
-                        << playerId << player->getPosition().getX()
-                        << player->getPosition().getY();
-
-            send(_udpSocket, client, smartBuffer);
+            PlayerProtocol::sendPositionsUpdate(_udpSocket, player,
+                                                      smartBuffer);
+            MapProtocol::sendViewportUpdate(_udpSocket, client, 1, smartBuffer);
+            MapProtocol::sendObstaclesUpdate(_udpSocket, client, 1,
+                                             smartBuffer);
         }
     }
 }
