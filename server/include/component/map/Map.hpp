@@ -19,9 +19,12 @@ class Map {
     void incrementViewport();
     int getViewport() const;
     const std::vector<Obstacle>& getObstacles() const;
+    std::vector<Obstacle> getObstaclesByViewport() const;
 
   private:
     std::string _name;
     std::vector<Obstacle> _obstacles;
     int _viewport;
+
+    static constexpr int RENDER_DISTANCE = 10;
 };

@@ -40,3 +40,24 @@ int Map::getViewport() const {
 const std::vector<Obstacle>& Map::getObstacles() const {
     return _obstacles;
 }
+
+/**
+ * @brief Get the obstacles of the map by viewport
+ *
+ * @param authorizedBlock The number of blocks authorized
+ * @return std::vector<Obstacle>
+ */
+std::vector<Obstacle> Map::getObstaclesByViewport() const {
+    int startX = _viewport;
+    int endX = _viewport + RENDER_DISTANCE;
+
+    std::vector<Obstacle> visibleObstacles;
+
+    for (const auto& obstacle : _obstacles) {
+        if (obstacle._x >= startX && obstacle._x <= endX) {
+            visibleObstacles.push_back(obstacle);
+        }
+    }
+
+    return visibleObstacles;
+}

@@ -99,6 +99,8 @@ void UdpSocket::handleSend(SmartBuffer& smartBuffer) {
             MapProtocol::sendViewportUpdate(_udpSocket, client, 1, smartBuffer);
             MapProtocol::sendObstaclesUpdate(_udpSocket, client, 1,
                                              smartBuffer);
+
+            //MapManager::get().getMapById(1)->incrementViewport();
         }
     }
 }

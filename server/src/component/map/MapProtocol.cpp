@@ -57,7 +57,7 @@ void MapProtocol::sendObstaclesUpdate(const int udpSocket,
                                       int mapId,
                                       SmartBuffer& smartBuffer) {
     // Get the obstacles for the map
-    const auto& obstacles = MapManager::get().getMapById(mapId)->getObstacles();
+    const auto& obstacles = MapManager::get().getMapById(mapId)->getObstaclesByViewport();
 
     // Check if there are obstacles to send
     if (obstacles.empty()) {
