@@ -31,10 +31,12 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
     // Create a new player
     const auto player = PlayerManager::get().createPlayer(name);
 
-    // Create the response buffer for the new player and send it
+    // Create the response buffer for the new player
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_CALLBACK);
     smartBuffer << player->getId();
+
+    // Send the player ID to the client that requested it
     TcpSocket::sendToOne(clientSocket, smartBuffer);
 
     Logger::info("[PlayerProtocol] Sent player ID " +
@@ -42,18 +44,21 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
 
     // Parse all existing players
     for (const auto& [id, existingPlayer] : PlayerManager::get().getPlayers()) {
-        // Create the response buffer for the existing player and send it
+        // Create the response buffer for the existing player
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(
             Protocol::OpCode::NEW_PLAYER_BROADCAST);
         smartBuffer << existingPlayer->getId()
                     << std::string{existingPlayer->getName()};
+        
+        // Send the existing player to the new player
         TcpSocket::sendToAll(smartBuffer);
 
         Logger::info("[PlayerProtocol] Sent existing player ID " +
                      std::to_string(existingPlayer->getId()) +
                      " to new player.");
 
+        // Sleep for a short time to avoid packet loss
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 }
@@ -69,7 +74,7 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
  * Protocol: PLAYER_UPDATE_POSITION
  * Payload: playerId (int32_t), posX (int16_t), posY (int16_t)
  */
-void PlayerProtocol::updatePos(
+void PlayerProtocol::broadcastPlayersPositions(
     const int udpSocket, const std::vector<std::shared_ptr<Player>>& players,
     const std::shared_ptr<Player>& player, SmartBuffer& smartBuffer) {
     // Create the response buffer

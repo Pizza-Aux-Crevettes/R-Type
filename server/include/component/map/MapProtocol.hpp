@@ -9,6 +9,8 @@
 
 #include <SmartBuffer.hpp>
 #include <netinet/in.h>
+#include <memory>
+#include <thread>
 #include "component/map/MapManager.hpp"
 
 class MapProtocol {
