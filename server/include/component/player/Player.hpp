@@ -35,7 +35,7 @@ class Player {
     void move(double deltaX, double deltaY);
 
   private:
-    int32_t _userId;
+    int32_t _playerId;
     std::string _name;
     Point _position;
     Point _size;

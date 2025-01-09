@@ -26,16 +26,6 @@ void NetworkClient::init() {
 void NetworkClient::connectTCP() {
     tcpSocket.connect();
     Logger::info("[NetworkClient] Connected to TCP server.");
-
-    SmartBuffer smartBuffer;
-
-    // pour create un player
-    smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER);
-    smartBuffer << std::string{"Benjamin"};
-    TcpSocket::send(smartBuffer);
-
-    Logger::info("[NetworkClient] New player sent.");
 }
 
 void NetworkClient::connectUDP() {

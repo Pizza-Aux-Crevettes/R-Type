@@ -15,27 +15,20 @@ PlayerManager& PlayerManager::get() {
 
 int32_t PlayerManager::getNextUserId() const {
     if (_players.empty()) {
-        Logger::info(
-            "[PlayerManager] No players found. Starting with playerId 1.");
         return 1;
     }
 
     auto maxKeyIt = std::ranges::max_element(
         _players, {}, [](auto& pair) { return pair.first; });
 
-    Logger::info("[PlayerManager] Next playerId will be: " +
-                 std::to_string(maxKeyIt->first + 1));
-
     return maxKeyIt->first + 1;
 }
 
 std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
-    Logger::info("[PlayerManager] Attempting to create player with name: " +
-                 name);
-
     int32_t playerId = getNextUserId();
+
     if (_players.find(playerId) != _players.end()) {
-        Logger::warning("[PlayerManager] Player with playerId " +
+        Logger::warning("[PlayerManager] Failed to create player. Player ID " +
                         std::to_string(playerId) + " already exists.");
         return nullptr;
     }
@@ -44,44 +37,40 @@ std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
                                            Point(20, 10), 1.0);
     _players[playerId] = player;
 
-    Logger::success(
-        "[PlayerManager] Successfully created player with playerId " +
-        std::to_string(playerId) + ", name: " + name);
+    Logger::success("[PlayerManager] Player created:\n"
+                    "  - Player ID: " +
+                    std::to_string(playerId) +
+                    "\n"
+                    "  - Name: " +
+                    name +
+                    "\n"
+                    "  - Initial Position: (0, 0)");
 
     return player;
 }
 
 std::shared_ptr<Player> PlayerManager::findPlayerById(int32_t playerId) const {
-    Logger::info("[PlayerManager] Searching for player with playerId: " +
-                 std::to_string(playerId));
-
     auto it = _players.find(playerId);
     if (it != _players.end()) {
-        Logger::info("[PlayerManager] Found player with playerId: " +
-                     std::to_string(playerId));
         return it->second;
     }
 
-    Logger::warning("[PlayerManager] Player with playerId " +
-                    std::to_string(playerId) + " not found.");
+    Logger::warning("[PlayerManager] Player not found. Player ID: " +
+                    std::to_string(playerId));
     return nullptr;
 }
 
 bool PlayerManager::removePlayer(int32_t playerId) {
-    Logger::info("[PlayerManager] Attempting to remove player with playerId: " +
-                 std::to_string(playerId));
-
     auto it = _players.find(playerId);
     if (it != _players.end()) {
         _players.erase(it);
 
-        Logger::success(
-            "[PlayerManager] Successfully removed player with playerId " +
-            std::to_string(playerId));
+        Logger::success("[PlayerManager] Player removed. Player ID: " +
+                        std::to_string(playerId));
         return true;
     }
 
-    Logger::warning("[PlayerManager] Failed to remove player with playerId " +
+    Logger::warning("[PlayerManager] Failed to remove player. Player ID: " +
                     std::to_string(playerId));
     return false;
 }
