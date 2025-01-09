@@ -10,6 +10,11 @@
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
+/**
+ * @brief Main function
+ *
+ * @return int
+ */
 int main() {
     Logger::info("[Main] Starting application...");
 
@@ -17,7 +22,11 @@ int main() {
         Logger::success("[Main] Server successfully initialized on port " +
                         std::to_string(PORT) + ".");
 
+        // Preload maps
         MapManager::get().preloadMapsFromFolder("./server/maps");
+        MapManager::get().setCurrentMap(1);
+
+        // Start the server
         Server::get().start();
     } catch (const std::exception& e) {
         Logger::error("[Main] Critical server error: " + std::string(e.what()));

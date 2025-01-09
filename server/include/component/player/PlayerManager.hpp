@@ -26,6 +26,7 @@ class PlayerManager {
     bool removePlayer(int32_t playerId);
     const std::unordered_map<int32_t, std::shared_ptr<Player>>&
     getPlayers() const;
+    void movePlayer(int32_t playerId, int offsetX, int offsetY);
 
   private:
     PlayerManager() = default;

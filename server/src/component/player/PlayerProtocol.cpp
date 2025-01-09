@@ -40,7 +40,7 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
     TcpSocket::sendToOne(clientSocket, smartBuffer);
 
     Logger::packet("[PlayerProtocol] Sent player ID " +
-                 std::to_string(player->getId()) + " to client ");
+                   std::to_string(player->getId()) + " to client ");
 
     // Parse all existing players
     for (const auto& [id, existingPlayer] : PlayerManager::get().getPlayers()) {
@@ -55,8 +55,8 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
         TcpSocket::sendToAll(smartBuffer);
 
         Logger::packet("[PlayerProtocol] Sent existing player ID " +
-                     std::to_string(existingPlayer->getId()) +
-                     " to new player.");
+                       std::to_string(existingPlayer->getId()) +
+                       " to new player.");
 
         // Sleep for a short time to avoid packet loss
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -73,9 +73,10 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
  * Protocol: PLAYER_POSITION_UPDATE
  * Payload: playerId (int32_t), posX (int16_t), posY (int16_t)
  */
-void PlayerProtocol::sendPositionsUpdate(
-    const int udpSocket, const std::shared_ptr<Player>& player,
-    SmartBuffer& smartBuffer) {
+void PlayerProtocol::sendPositionsUpdate(const int udpSocket,
+                                         const auto& client,
+                                         const std::shared_ptr<Player>& player,
+                                         SmartBuffer& smartBuffer) {
     // Create the response buffer
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(
@@ -85,13 +86,13 @@ void PlayerProtocol::sendPositionsUpdate(
     smartBuffer << player->getPosition().getY();
 
     // Broadcast the position update to all clients
-    UdpSocket::send(udpSocket, player->getClientAddress(), smartBuffer);
+    UdpSocket::send(udpSocket, client, smartBuffer);
 
     Logger::packet("[PlayerProtocol] Position update sent:\n"
-                 "  - Player ID: " +
-                 std::to_string(player->getId()) +
-                 "\n"
-                 "  - Position: (" +
-                 std::to_string(player->getPosition().getX()) + ", " +
-                 std::to_string(player->getPosition().getY()) + ")");
+                   "  - Player ID: " +
+                   std::to_string(player->getId()) +
+                   "\n"
+                   "  - Position: (" +
+                   std::to_string(player->getPosition().getX()) + ", " +
+                   std::to_string(player->getPosition().getY()) + ")");
 }

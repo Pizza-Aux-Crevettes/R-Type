@@ -62,7 +62,7 @@ void UdpSocket::init() {
 
     while (true) {
         handleSend(smartBuffer);
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(FREQUENCY));
     }
 }
 
@@ -94,15 +94,15 @@ void UdpSocket::handleSend(SmartBuffer& smartBuffer) {
 
     for (const auto& client : clients) {
         for (const auto& [playerId, player] : players) {
-            PlayerProtocol::sendPositionsUpdate(_udpSocket, player,
-                                                      smartBuffer);
-            MapProtocol::sendViewportUpdate(_udpSocket, client, 1, smartBuffer);
-            MapProtocol::sendObstaclesUpdate(_udpSocket, client, 1,
-                                             smartBuffer);
-
-            //MapManager::get().getMapById(1)->incrementViewport();
+            PlayerProtocol::sendPositionsUpdate(_udpSocket, client, player,
+                                                smartBuffer);
         }
+
+        MapProtocol::sendViewportUpdate(_udpSocket, client, smartBuffer);
+        MapProtocol::sendObstaclesUpdate(_udpSocket, client, smartBuffer);
     }
+
+    MapManager::get().getCurrentMap()->incrementViewport();
 }
 
 void UdpSocket::addClient(const sockaddr_in& clientAddr) {

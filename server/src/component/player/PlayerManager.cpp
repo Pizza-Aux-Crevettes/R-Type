@@ -6,6 +6,7 @@
 */
 
 #include "component/player/PlayerManager.hpp"
+#include "component/map/MapManager.hpp"
 #include "util/Logger.hpp"
 
 PlayerManager& PlayerManager::get() {
@@ -75,19 +76,30 @@ bool PlayerManager::removePlayer(int32_t playerId) {
     return false;
 }
 
-bool PlayerManager::canMoveTo(const Point& newPosition) const {
-    auto& mapManager = MapManager::get();
-    auto currentMap = mapManager.getMapById(1); // Replace with actual map ID logic
+void PlayerManager::movePlayer(int32_t playerId, int offsetX, int offsetY) {
+    auto player = findPlayerById(playerId);
 
-    const auto& obstacles = currentMap->getObstacles();
-    for (const auto& obstacle : obstacles) {
-        if (obstacle._x == static_cast<int>(newPosition.getX()) &&
-            obstacle._y == static_cast<int>(newPosition.getY())) {
-            return false; // Blocked by an obstacle
-        }
+    if (!player) {
+        Logger::warning("[PlayerManager] Player not found. Player ID: " +
+                        std::to_string(playerId));
+        return;
     }
 
-    return true; // No obstacle at the target position
+    Point currentPos = player->getPosition();
+    Point newPos(currentPos.getX() + offsetX, currentPos.getY() + offsetY);
+
+    if (!Map::get().isVoidBlock(newPos)) {
+        Logger::info("[PlayerManager] Player " + std::to_string(playerId) +
+                     " cannot move to blocked position (" +
+                     std::to_string(newPos.getX()) + ", " +
+                     std::to_string(newPos.getY()) + ").");
+        return;
+    }
+
+    player->setPosition(newPos);
+    Logger::success("[PlayerManager] Player " + std::to_string(playerId) +
+                    " moved to position (" + std::to_string(newPos.getX()) +
+                    ", " + std::to_string(newPos.getY()) + ").");
 }
 
 const std::unordered_map<int32_t, std::shared_ptr<Player>>&

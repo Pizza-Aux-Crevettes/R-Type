@@ -8,79 +8,66 @@
 #include "component/hotkey/HotkeysManager.hpp"
 #include "component/hotkey/HotkeysCodes.hpp"
 #include "component/player/PlayerManager.hpp"
-#include "component/player/PlayerProtocol.hpp"
 #include "util/Logger.hpp"
 
+/**
+ * @brief Construct a new HotkeysManager:: HotkeysManager object
+ *
+ */
 HotkeysManager::HotkeysManager() {
-    Logger::info("[HotkeysManager] Initializing HotkeysManager.");
-
+    Logger::success("[HotkeysManager] HotkeysManager initialized.");
     initHotkeys();
-
-    Logger::info("[HotkeysManager] HotkeysManager successfully initialized.");
 }
 
+/**
+ * @brief Get the HotkeysManager instance
+ *
+ * @return HotkeysManager&
+ */
 HotkeysManager& HotkeysManager::get() {
     static HotkeysManager instance;
     return instance;
 }
 
+/**
+ * @brief Initialize the hotkeys
+ *
+ */
 void HotkeysManager::initHotkeys() {
-    Logger::info("[HotkeysManager] Initializing hotkey actions.");
+    _hotkeyActions = {{static_cast<int16_t>(HotkeysCodes::ARROW_LEFT),
+                       [](int32_t playerId) {
+                           PlayerManager::get().movePlayer(playerId, -1, 0);
+                       }},
+                      {static_cast<int16_t>(HotkeysCodes::ARROW_RIGHT),
+                       [](int32_t playerId) {
+                           PlayerManager::get().movePlayer(playerId, 1, 0);
+                       }},
+                      {static_cast<int16_t>(HotkeysCodes::ARROW_TOP),
+                       [](int32_t playerId) {
+                           PlayerManager::get().movePlayer(playerId, 0, -1);
+                       }},
+                      {static_cast<int16_t>(HotkeysCodes::ARROW_BOTTOM),
+                       [](int32_t playerId) {
+                           PlayerManager::get().movePlayer(playerId, 0, 1);
+                       }}};
 
-    _hotkeyActions = {
-        {static_cast<int16_t>(HotkeysCodes::ARROW_LEFT),
-         [this](int32_t playerId) { handlePlayerPosition(playerId, -1, 0); }},
-        {static_cast<int16_t>(HotkeysCodes::ARROW_RIGHT),
-         [this](int32_t playerId) { handlePlayerPosition(playerId, 1, 0); }},
-        {static_cast<int16_t>(HotkeysCodes::ARROW_TOP),
-         [this](int32_t playerId) { handlePlayerPosition(playerId, 0, -1); }},
-        {static_cast<int16_t>(HotkeysCodes::ARROW_BOTTOM),
-         [this](int32_t playerId) { handlePlayerPosition(playerId, 0, 1); }}};
-
-    Logger::info("[HotkeysManager] Hotkey actions initialized successfully.");
+    Logger::success("[HotkeysManager] Hotkey actions initialized.");
 }
 
+/**
+ * @brief Handle a hotkey
+ *
+ * @param playerId The player ID
+ * @param hotkey The hotkey
+ */
 void HotkeysManager::handleHotkey(int32_t playerId, int16_t hotkey) {
-    Logger::info("[HotkeysManager] Handling hotkey: " + std::to_string(hotkey) +
-                 " for Player ID: " + std::to_string(playerId));
-
     auto it = _hotkeyActions.find(hotkey);
 
     if (it != _hotkeyActions.end()) {
         it->second(playerId);
     } else {
-        Logger::warning("[HotkeysManager] Unknown hotkey: " +
-                        std::to_string(hotkey));
-    }
-}
-
-void HotkeysManager::handlePlayerPosition(int32_t playerId, int offsetX,
-                                          int offsetY) {
-    try {
-        Logger::info("[HotkeysManager] Updating position for Player ID: " +
-                     std::to_string(playerId) + " with offset (" +
-                     std::to_string(offsetX) + ", " + std::to_string(offsetY) +
-                     ").");
-
-        auto player = PlayerManager::get().findPlayerById(playerId);
-
-        if (!player) {
-            Logger::warning("[HotkeysManager] Player " +
-                            std::to_string(playerId) + " not found.");
-            return;
-        }
-
-        Point currentPos = player->getPosition();
-        Point newPos(currentPos.getX() + offsetX, currentPos.getY() + offsetY);
-
-        player->setPosition(newPos);
-
-        Logger::info("[HotkeysManager] Player " + std::to_string(playerId) +
-                     " moved to position (" + std::to_string(newPos.getX()) +
-                     ", " + std::to_string(newPos.getY()) + ").");
-    } catch (const std::exception& e) {
-        Logger::error(
-            "[HotkeysManager] Failed to update position for Player ID: " +
-            std::to_string(playerId) + ". Error: " + e.what());
+        Logger::warning(
+            "[HotkeysManager] Unknown hotkey: " + std::to_string(hotkey) +
+            " for Player ID: " + std::to_string(playerId));
     }
 }

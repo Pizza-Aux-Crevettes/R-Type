@@ -136,3 +136,31 @@ std::shared_ptr<Map> MapManager::getMapById(int mapId) const {
     throw std::runtime_error("Map with ID " + std::to_string(mapId) +
                              " not found.");
 }
+
+/**
+ * @brief Get the current map
+ *
+ * @return std::shared_ptr<Map> The current map
+ */
+std::shared_ptr<Map> MapManager::getCurrentMap() const {
+    if (!_currentMap) {
+        Logger::error("[MapManager] No current map is set.");
+        throw std::runtime_error("No current map is set.");
+    }
+
+    return _currentMap;
+}
+
+/**
+ * @brief Set the current map
+ *
+ * @param mapId The ID of the map
+ */
+void MapManager::setCurrentMap(int mapId) {
+    auto map = getMapById(mapId);
+
+    _currentMap = map;
+
+    Logger::success("[MapManager] Current map set to ID: " +
+                    std::to_string(mapId));
+}

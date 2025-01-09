@@ -8,17 +8,21 @@
 #pragma once
 
 enum Config {
+    // Socket
     DEFAULT_BYTES = 1024,
     PORT = 8080,
+    FREQUENCY = 100,
 
+    // Program
     SUCCESS = 0,
     ERROR = 84,
     FAILURE = -1,
     BAD = 1,
 
+    // String
     END_STR = '\0',
 
+    // Player
     DEFAULT_HEALTH = 100,
     DEFAULT_LIVES = 3,
-    DEFAULT_FREQUENCY = 60,
 };

@@ -9,16 +9,17 @@
 #include "component/hotkey/HotkeysManager.hpp"
 #include "util/Logger.hpp"
 
+/**
+ * @brief Process a hotkey
+ *
+ * @param clientSocket The client socket
+ * @param smartBuffer The smart buffer
+ */
 void HotkeysProtocol::processHotkey(int clientSocket,
                                     SmartBuffer& smartBuffer) {
     int32_t playerId;
     int16_t hotkey;
-
     smartBuffer >> playerId >> hotkey;
-
-    Logger::info("[HotkeysProtocol] Processing hotkey " +
-                 std::to_string(hotkey) + " for player " +
-                 std::to_string(playerId));
 
     HotkeysManager::get().handleHotkey(playerId, hotkey);
 }

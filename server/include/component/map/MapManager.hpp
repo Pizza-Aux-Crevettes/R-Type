@@ -26,16 +26,15 @@ class MapManager {
 
     void preloadMapsFromFolder(const std::string& folderPath);
     std::shared_ptr<Map> getMapById(int mapId) const;
+    std::shared_ptr<Map> getCurrentMap() const;
+    void setCurrentMap(int mapId);
 
   private:
-    MapManager() = default;
-    ~MapManager() = default;
-
-    std::shared_ptr<Map> loadMapFromFile(const std::string& filePath);
-    void parseMapLine(const std::string& line, int y,
-                      std::vector<Obstacle>& obstacles);
-
-    std::unordered_map<int, std::shared_ptr<Map>> _maps;
+    static constexpr char NAME_LABEL[] = "name=";
+    static constexpr char MAP_LABEL[] = "map=###";
+    static constexpr char END_LABEL[] = "###";
+    static constexpr int NAME_OFFSET = 5;
+    static constexpr int BLOCK_OFFSET = 4;
 
     static inline const std::unordered_map<std::string, ObstacleType>
         _obstacleMapping = {
@@ -45,9 +44,13 @@ class MapManager {
             {"0004", ObstacleType::BLOCK4},
     };
 
-    static constexpr char NAME_LABEL[] = "name=";
-    static constexpr char MAP_LABEL[] = "map=###";
-    static constexpr char END_LABEL[] = "###";
-    static constexpr int NAME_OFFSET = 5;
-    static constexpr int BLOCK_OFFSET = 4;
+    MapManager() = default;
+    ~MapManager() = default;
+
+    std::shared_ptr<Map> loadMapFromFile(const std::string& filePath);
+    void parseMapLine(const std::string& line, int y,
+                      std::vector<Obstacle>& obstacles);
+
+    std::unordered_map<int, std::shared_ptr<Map>> _maps;
+    std::shared_ptr<Map> _currentMap = nullptr;
 };
