@@ -13,36 +13,18 @@
 class Protocol {
   public:
     enum OpCode {
-        DEFAULT,
-        CREATE_ROOM,
-        JOIN_ROOM,
-        LEAVE_ROOM,
-        DELETE_ROOM,
-        NEW_PLAYER,
-        HOTKEY_PRESSED,
-        START_GAME,
-        STOP_GAME,
+        DEFAULT = 0,
 
-        CREATE_ROOM_CALLBACK,
-        LEAVE_ROOM_CALLBACK,
-        JOIN_ROOM_CALLBACK,
-        DELETE_ROOM_CALLBACK,
-        NEW_PLAYER_CALLBACK,
-        START_GAME_CALLBACK,
-        STOP_GAME_CALLBACK,
+        HOTKEY_PRESSED = 1,
 
-        CREATE_ROOM_BROADCAST,
-        LEAVE_ROOM_BROADCAST,
-        JOIN_ROOM_BROADCAST,
-        DELETE_ROOM_BROADCAST,
-        NEW_PLAYER_BROADCAST,
-        START_GAME_BROADCAST,
-        STOP_GAME_BROADCAST,
+        NEW_PLAYER = 10,
+        NEW_PLAYER_CALLBACK = 11,
+        NEW_PLAYER_BROADCAST = 12,
+        PLAYER_UPDATE_POSITION = 13,
+        PLAYER_UPDATE_LIFE = 14,
 
-        PLAYER_UPDATE_POSITION,
-        PLAYER_UPDATE_LIFE,
-        VIEWPORT_UPDATE,
-        BLOCKS_UPDATE,
+        MAP_VIEWPORT_UPDATE = 20,
+        MAP_OBSTACLES_UPDATE = 21,
     };
 
     Protocol(const Protocol&) = delete;
