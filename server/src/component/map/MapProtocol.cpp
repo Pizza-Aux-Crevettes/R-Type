@@ -31,7 +31,7 @@ void MapProtocol::sendViewportUpdate(const int udpSocket,
     smartBuffer << static_cast<int32_t>(viewport);
 
     // Send the viewport update
-    UdpSocket::send(udpSocket, clientAddr, smartBuffer);
+    UdpSocket::sendToOne(udpSocket, clientAddr, smartBuffer);
 
     Logger::packet("[MapProtocol] Viewport update sent to client: " +
                    std::string(inet_ntoa(clientAddr.sin_addr)) + ":" +
@@ -75,7 +75,7 @@ void MapProtocol::sendObstaclesUpdate(const int udpSocket,
         smartBuffer << static_cast<int16_t>(obstacle._type);
 
         // Send the obstacle
-        UdpSocket::send(udpSocket, clientAddr, smartBuffer);
+        UdpSocket::sendToOne(udpSocket, clientAddr, smartBuffer);
 
         // Sleep for a short time to avoid packet loss
         std::this_thread::sleep_for(std::chrono::milliseconds(1));

@@ -11,6 +11,7 @@
 #include <arpa/inet.h>
 #include <chrono>
 #include <memory>
+#include <mutex>
 #include <netinet/in.h>
 #include <thread>
 #include <unistd.h>
@@ -20,14 +21,13 @@ class UdpSocket {
     UdpSocket();
     ~UdpSocket();
 
-    static void send(int udpSocket, const sockaddr_in& clientAddr,
-                     const SmartBuffer& smartBuffer);
     void init();
     void readLoop();
     void sendLoop();
-    void close() const;
-    void addClient(const sockaddr_in& clientAddr);
+    static void sendToOne(int udpSocket, const sockaddr_in& clientAddr,
+                          const SmartBuffer& smartBuffer);
     std::vector<sockaddr_in> getClients();
+    void close() const;
 
   private:
     int _udpSocket;
@@ -35,6 +35,5 @@ class UdpSocket {
     std::vector<sockaddr_in> _clients;
     std::mutex _clientsMutex;
 
-    void handleRead(SmartBuffer& smartBuffer);
-    void handleSend(SmartBuffer& smartBuffer);
+    void addClient(const sockaddr_in& clientAddr);
 };

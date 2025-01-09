@@ -123,8 +123,8 @@ void UdpSocket::sendLoop() {
  * @param clientAddr The client's address
  * @param smartBuffer The SmartBuffer to send
  */
-void UdpSocket::send(const int udpSocket, const sockaddr_in& clientAddr,
-                     const SmartBuffer& smartBuffer) {
+void UdpSocket::sendToOne(const int udpSocket, const sockaddr_in& clientAddr,
+                          const SmartBuffer& smartBuffer) {
     sendto(udpSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0,
            reinterpret_cast<const sockaddr*>(&clientAddr), sizeof(clientAddr));
 }

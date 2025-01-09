@@ -86,7 +86,7 @@ void PlayerProtocol::sendPositionsUpdate(const int udpSocket,
     smartBuffer << player->getPosition().getY();
 
     // Broadcast the position update to all clients
-    UdpSocket::send(udpSocket, client, smartBuffer);
+    UdpSocket::sendToOne(udpSocket, client, smartBuffer);
 
     Logger::packet("[PlayerProtocol] Position update sent:\n"
                    "  - Player ID: " +
