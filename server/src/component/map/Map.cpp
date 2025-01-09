@@ -61,3 +61,19 @@ std::vector<Obstacle> Map::getObstaclesByViewport() const {
 
     return visibleObstacles;
 }
+
+/**
+ * @brief Check if a block is void
+ *
+ * @param x The x position of the block
+ * @param y The y position of the block
+ * @return bool
+ */
+bool Map::isVoidBlock(int x, int y) const {
+    for (const auto& obstacle : _obstacles) {
+        if (obstacle._x == x && obstacle._y == y) {
+            return obstacle._type == ObstacleType::NONE;
+        }
+    }
+    return true;
+}

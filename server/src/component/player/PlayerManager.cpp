@@ -75,6 +75,21 @@ bool PlayerManager::removePlayer(int32_t playerId) {
     return false;
 }
 
+bool PlayerManager::canMoveTo(const Point& newPosition) const {
+    auto& mapManager = MapManager::get();
+    auto currentMap = mapManager.getMapById(1); // Replace with actual map ID logic
+
+    const auto& obstacles = currentMap->getObstacles();
+    for (const auto& obstacle : obstacles) {
+        if (obstacle._x == static_cast<int>(newPosition.getX()) &&
+            obstacle._y == static_cast<int>(newPosition.getY())) {
+            return false; // Blocked by an obstacle
+        }
+    }
+
+    return true; // No obstacle at the target position
+}
+
 const std::unordered_map<int32_t, std::shared_ptr<Player>>&
 PlayerManager::getPlayers() const {
     return _players;

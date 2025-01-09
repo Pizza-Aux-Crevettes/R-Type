@@ -20,6 +20,7 @@ class Map {
     int getViewport() const;
     const std::vector<Obstacle>& getObstacles() const;
     std::vector<Obstacle> getObstaclesByViewport() const;
+    bool isVoidBlock(int x, int y) const;
 
   private:
     std::string _name;
