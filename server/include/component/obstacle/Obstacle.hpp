@@ -7,7 +7,13 @@
 
 #pragma once
 
-enum class ObstacleType { NONE = 0, BLOCK = 1 };
+enum class ObstacleType {
+    NONE,
+    BLOCK,
+    BLOCK2,
+    BLOCK3,
+    BLOCK4,
+};
 
 struct Obstacle {
     ObstacleType _type;
