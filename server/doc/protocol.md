@@ -52,8 +52,8 @@ Each message contains the following fields:
 | NEW_PLAYER_BROADCAST     | 20    | Broadcast: New player creation.           |
 | START_GAME_BROADCAST     | 21    | Broadcast: Game started in a room.        |
 | STOP_GAME_BROADCAST      | 22    | Broadcast: Game stopped in a room.        |
-| PLAYER_UPDATE_POSITION   | 23    | Update: Player position (UDP).            |
-| PLAYER_UPDATE_LIFE       | 24    | Update: Player life (UDP).                |
+| PLAYER_POSITION_UPDATE   | 23    | Update: Player position (UDP).            |
+| PLAYER_LIFE_UPDATE       | 24    | Update: Player life (UDP).                |
 | MAP_VIEWPORT_UPDATE          | 25    | Update: Map viewport (UDP).               |
 | MAP_OBSTACLES_UPDATE            | 26    | Update: Map obstacles (UDP).              |
 
@@ -228,7 +228,7 @@ Each message contains the following fields:
 
 ---
 
-### **PLAYER_UPDATE_POSITION**
+### **PLAYER_POSITION_UPDATE**
 - **Description**: Updates the position of a player in real-time.
 - **Payload**:
   - `playerId` (int32_t): ID of the player whose position is updated.
@@ -237,7 +237,7 @@ Each message contains the following fields:
 
 ---
 
-### **PLAYER_UPDATE_LIFE**
+### **PLAYER_LIFE_UPDATE**
 - **Description**: Updates the life status of a player.
 - **Payload**:
   - `playerId` (int32_t): ID of the player whose life is updated.

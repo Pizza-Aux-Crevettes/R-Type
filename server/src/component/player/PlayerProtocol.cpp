@@ -70,7 +70,7 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
  * @param player The player to update
  * @param smartBuffer The SmartBuffer to use for the response
  *
- * Protocol: PLAYER_UPDATE_POSITION
+ * Protocol: PLAYER_POSITION_UPDATE
  * Payload: playerId (int32_t), posX (int16_t), posY (int16_t)
  */
 void PlayerProtocol::sendPositionsUpdate(
@@ -79,7 +79,7 @@ void PlayerProtocol::sendPositionsUpdate(
     // Create the response buffer
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(
-        Protocol::OpCode::PLAYER_UPDATE_POSITION);
+        Protocol::OpCode::PLAYER_POSITION_UPDATE);
     smartBuffer << player->getId();
     smartBuffer << player->getPosition().getX();
     smartBuffer << player->getPosition().getY();

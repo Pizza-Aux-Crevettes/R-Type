@@ -36,50 +36,23 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     case DEFAULT:
         handleDefault(smartBuffer);
         break;
-    case CREATE_ROOM_CALLBACK:
-        handleCreateRoomCallback(smartBuffer);
-        break;
-    case LEAVE_ROOM_CALLBACK:
-        handleLeaveRoomCallback(smartBuffer);
-        break;
-    case JOIN_ROOM_CALLBACK:
-        handleJoinRoomCallback(smartBuffer);
-        break;
-    case DELETE_ROOM_CALLBACK:
-        handleDeleteRoomCallback(smartBuffer);
-        break;
     case NEW_PLAYER_CALLBACK:
         handleNewPlayerCallback(smartBuffer);
-        break;
-    case START_GAME_CALLBACK:
-        handleStartGameCallback(smartBuffer);
-        break;
-    case STOP_GAME_CALLBACK:
-        handleStopGameCallback(smartBuffer);
-        break;
-    case CREATE_ROOM_BROADCAST:
-        handleCreateRoomBroadcast(smartBuffer);
-        break;
-    case LEAVE_ROOM_BROADCAST:
-        handleLeaveRoomBroadcast(smartBuffer);
-        break;
-    case JOIN_ROOM_BROADCAST:
-        handleJoinRoomBroadcast(smartBuffer);
-        break;
-    case DELETE_ROOM_BROADCAST:
-        handleDeleteRoomBroadcast(smartBuffer);
         break;
     case NEW_PLAYER_BROADCAST:
         handleNewPlayerBroadcast(smartBuffer);
         break;
-    case START_GAME_BROADCAST:
-        handleStartGameBroadcast(smartBuffer);
-        break;
-    case STOP_GAME_BROADCAST:
-        handleStopGameBroadcast(smartBuffer);
-        break;
-    case PLAYER_UPDATE_POSITION:
+    case PLAYER_POSITION_UPDATE:
         handlePlayerUpdatePosition(smartBuffer);
+        break;
+    case PLAYER_LIFE_UPDATE:
+        handlePlayerUpdateLife(smartBuffer);
+        break;
+    case MAP_VIEWPORT_UPDATE:
+        handleViewportUpdate(smartBuffer);
+        break;
+    case MAP_OBSTACLES_UPDATE:
+        handleBlocksUpdate(smartBuffer);
         break;
     default:
         std::cerr << "[Protocol] Unknown OpCode received: " << opCode
@@ -88,11 +61,6 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     }
 }
 
-//
-//
-// DEFAULT
-//
-//
 void Protocol::handleDefault(SmartBuffer& smartBuffer) {
     std::string test;
 
@@ -103,62 +71,6 @@ void Protocol::handleDefault(SmartBuffer& smartBuffer) {
     // Debug
     // Init le UDP sur le serveur
     // Ne pas toucher
-}
-
-//
-//
-// CALLBACKS
-//
-//
-void Protocol::handleCreateRoomCallback(SmartBuffer& smartBuffer) {
-    int16_t statusCode;
-    std::string roomCode;
-
-    smartBuffer >> statusCode >> roomCode;
-
-    std::cout << "[Protocol] CREATE_ROOM_CALLBACK - Status Code: " << statusCode
-              << std::endl;
-
-    // Cette fonction renvoi un status code et le code de la room pour savoir si
-    // la room a bien été créée. Voir la doc du protocol pour comprendre les
-    // codes erreurs Important pour afficher le code à l'écran du joueur qui a
-    // créé la room
-}
-
-void Protocol::handleLeaveRoomCallback(SmartBuffer& smartBuffer) {
-    int16_t statusCode;
-
-    smartBuffer >> statusCode;
-
-    std::cout << "[Protocol] LEAVE_ROOM_CALLBACK - Status Code: " << statusCode
-              << std::endl;
-
-    // Cette fonction renvoi un status code pour savoir si la room a bien été
-    // quittée. Voir la doc du protocol pour comprendre les codes erreurs
-}
-
-void Protocol::handleJoinRoomCallback(SmartBuffer& smartBuffer) {
-    int16_t statusCode;
-
-    smartBuffer >> statusCode;
-
-    std::cout << "[Protocol] JOIN_ROOM_CALLBACK - Status Code: " << statusCode
-              << std::endl;
-
-    // Cette fonction renvoi un status code pour savoir si la room a bien été
-    // rejoins. Voir la doc du protocol pour comprendre les codes erreurs
-}
-
-void Protocol::handleDeleteRoomCallback(SmartBuffer& smartBuffer) {
-    int16_t statusCode;
-
-    smartBuffer >> statusCode;
-
-    std::cout << "[Protocol] DELETE_ROOM_CALLBACK - Status Code: " << statusCode
-              << std::endl;
-
-    // Cette fonction renvoi un status code pour savoir si la room a bien été
-    // supprimée. Voir la doc du protocol pour comprendre les codes erreurs
 }
 
 void Protocol::handleNewPlayerCallback(SmartBuffer& smartBuffer) {
@@ -178,95 +90,6 @@ void Protocol::handleNewPlayerCallback(SmartBuffer& smartBuffer) {
          {"Position", std::pair<float, float>(0.0f, 0.0f)}}};
 
     EntityManager::get().CompareEntities(playerId, newItems, {0.0f, 0.0f});
-}
-
-void Protocol::handleStartGameCallback(SmartBuffer& smartBuffer) {
-    int16_t statusCode;
-
-    smartBuffer >> statusCode;
-
-    std::cout << "[Protocol] START_GAME_CALLBACK - Status Code: " << statusCode
-              << std::endl;
-
-    // Cette fonction renvoi un status code pour savoir si la partie est bien
-    // lancée. Voir la doc du protocol pour comprendre les codes erreurs
-    // Afficher un petit popup à l'écran du joueur pour lui dire que la partie
-    // est BIEN lancée (ex: Vous avez lancée la partie)
-}
-
-void Protocol::handleStopGameCallback(SmartBuffer& smartBuffer) {
-    int16_t statusCode;
-
-    smartBuffer >> statusCode;
-
-    std::cout << "[Protocol] STOP_GAME_CALLBACK - Status Code: " << statusCode
-              << std::endl;
-
-    // Cette fonction renvoi un status code pour savoir si la partie a bien été
-    // stoppée. Voir la doc du protocol pour comprendre les codes erreurs
-    // Afficher un petit popup à l'écran du joueur pour lui dire que la partie
-    // est BIEN terminée (ex: Vous avez stoppée la partie)
-}
-
-//
-//
-// BROADCASTS
-//
-//
-void Protocol::handleCreateRoomBroadcast(SmartBuffer& smartBuffer) {
-    std::string roomCode;
-
-    smartBuffer >> roomCode;
-
-    std::cout << "[Protocol] CREATE_ROOM_BROADCAST - Room Code: " << roomCode
-              << std::endl;
-
-    // Une room a été créée.
-    // Permet d'afficher la nouvelle room dans la liste des rooms disponibles
-    // La donnée est envoyée à tous les joueurs connectés
-}
-
-void Protocol::handleLeaveRoomBroadcast(SmartBuffer& smartBuffer) {
-    std::string roomCode;
-    int32_t playerId;
-
-    smartBuffer >> roomCode >> playerId;
-
-    std::cout << "[Protocol] LEAVE_ROOM_BROADCAST - Room Code: " << roomCode
-              << ", Player ID: " << playerId << std::endl;
-
-    // Un joueur a quitté une room.
-    // On décrémente le nombre de joueurs dans la room (exemple: c'était marqué
-    // 5/10, maintenant c'est 4/10) La donnée est envoyée à tous les joueurs
-    // connectés
-}
-
-void Protocol::handleJoinRoomBroadcast(SmartBuffer& smartBuffer) {
-    std::string roomCode;
-    int32_t playerId;
-
-    smartBuffer >> roomCode >> playerId;
-
-    std::cout << "[Protocol] JOIN_ROOM_BROADCAST - Room Code: " << roomCode
-              << ", Player ID: " << playerId << std::endl;
-
-    // Un joueur a rejoint une room.
-    // On incrémente le nombre de joueurs dans la room (exemple: c'était marqué
-    // 5/10, maintenant c'est 6/10) La donnée est envoyée à tous les joueurs
-    // connectés
-}
-
-void Protocol::handleDeleteRoomBroadcast(SmartBuffer& smartBuffer) {
-    std::string roomCode;
-
-    smartBuffer >> roomCode;
-
-    std::cout << "[Protocol] DELETE_ROOM_BROADCAST - Room Code: " << roomCode
-              << std::endl;
-
-    // Un joueur a supprimé une room.
-    // On retire la room de la liste des rooms disponibles
-    // La donnée est envoyée à tous les joueurs connectés
 }
 
 void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
@@ -290,25 +113,6 @@ void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
     EntityManager::get().CompareEntities(playerId, newItems, {0.0f, 0.0f});
 }
 
-void Protocol::handleStartGameBroadcast(SmartBuffer& smartBuffer) {
-    std::cout << "[Protocol] START_GAME_BROADCAST - Triggered " << std::endl;
-    // Rien n'est envoyé au client, juste pour avertir.
-    // Utile pour afficher un popup sur l'écran de tout les joeurs pour dire que
-    // la partie est lancée La donnée est envoyée à tous les joueurs connectés
-}
-
-void Protocol::handleStopGameBroadcast(SmartBuffer& smartBuffer) {
-    std::cout << "[Protocol] STOP_GAME_BROADCAST - Triggered " << std::endl;
-    // Rien n'est envoyé au client, juste pour avertir.
-    // Utile pour afficher un popup sur l'écran de tout les joeurs pour dire que
-    // la partie est terminée La donnée est envoyée à tous les joueurs connectés
-}
-
-//
-//
-// REAL TIME UPDATES
-//
-//
 void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
     int32_t playerId;
     double x, y;
@@ -328,7 +132,7 @@ void Protocol::handlePlayerUpdateLife(SmartBuffer& smartBuffer) {
 
     smartBuffer >> playerId >> life;
 
-    std::cout << "[Protocol] PLAYER_UPDATE_LIFE - Player ID: " << playerId
+    std::cout << "[Protocol] PLAYER_LIFE_UPDATE - Player ID: " << playerId
               << ", Life: " << life << std::endl;
 
     // Cette fonction renvoi la vie du joueur

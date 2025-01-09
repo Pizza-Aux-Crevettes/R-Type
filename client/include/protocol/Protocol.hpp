@@ -20,8 +20,8 @@ class Protocol {
         NEW_PLAYER = 10,
         NEW_PLAYER_CALLBACK = 11,
         NEW_PLAYER_BROADCAST = 12,
-        PLAYER_UPDATE_POSITION = 13,
-        PLAYER_UPDATE_LIFE = 14,
+        PLAYER_POSITION_UPDATE = 13,
+        PLAYER_LIFE_UPDATE = 14,
 
         MAP_VIEWPORT_UPDATE = 20,
         MAP_OBSTACLES_UPDATE = 21,
@@ -43,23 +43,8 @@ class Protocol {
     static int32_t _playerId;
 
     static void handleDefault(SmartBuffer& smartBuffer);
-
-    static void handleCreateRoomCallback(SmartBuffer& smartBuffer);
-    static void handleLeaveRoomCallback(SmartBuffer& smartBuffer);
-    static void handleJoinRoomCallback(SmartBuffer& smartBuffer);
-    static void handleDeleteRoomCallback(SmartBuffer& smartBuffer);
     static void handleNewPlayerCallback(SmartBuffer& smartBuffer);
-    static void handleStartGameCallback(SmartBuffer& smartBuffer);
-    static void handleStopGameCallback(SmartBuffer& smartBuffer);
-
-    static void handleCreateRoomBroadcast(SmartBuffer& smartBuffer);
-    static void handleLeaveRoomBroadcast(SmartBuffer& smartBuffer);
-    static void handleJoinRoomBroadcast(SmartBuffer& smartBuffer);
-    static void handleDeleteRoomBroadcast(SmartBuffer& smartBuffer);
     static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer);
-    static void handleStartGameBroadcast(SmartBuffer& smartBuffer);
-    static void handleStopGameBroadcast(SmartBuffer& smartBuffer);
-
     static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer);
     static void handlePlayerUpdateLife(SmartBuffer& smartBuffer);
     static void handleViewportUpdate(SmartBuffer& smartBuffer);
