@@ -9,8 +9,11 @@
 
 #include <SmartBuffer.hpp>
 #include <arpa/inet.h>
+#include <chrono>
 #include <memory>
 #include <netinet/in.h>
+#include <thread>
+#include <unistd.h>
 
 class UdpSocket {
   public:
@@ -20,8 +23,8 @@ class UdpSocket {
     static void send(int udpSocket, const sockaddr_in& clientAddr,
                      const SmartBuffer& smartBuffer);
     void init();
-    [[noreturn]] void readLoop();
-    [[noreturn]] void sendLoop();
+    void readLoop();
+    void sendLoop();
     void close() const;
     void addClient(const sockaddr_in& clientAddr);
     std::vector<sockaddr_in> getClients();
