@@ -24,7 +24,7 @@ void MapProtocol::sendViewportUpdate(const int udpSocket,
                                      const sockaddr_in& clientAddr,
                                      SmartBuffer& smartBuffer) {
     // Get the viewport for the map
-    const auto& viewport = MapManager::get().getMapById(mapId)->getViewport();
+    const auto& viewport = MapManager::get().getCurrentMap()->getViewport();
 
     // Construct the buffer
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::MAP_VIEWPORT_UPDATE);

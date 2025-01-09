@@ -88,7 +88,8 @@ void PlayerManager::movePlayer(int32_t playerId, int offsetX, int offsetY) {
     Point currentPos = player->getPosition();
     Point newPos(currentPos.getX() + offsetX, currentPos.getY() + offsetY);
 
-    if (!Map::get().isVoidBlock(newPos)) {
+    if (!MapManager::get().getCurrentMap()->isVoidBlock(newPos.getX(),
+                                                        newPos.getY())) {
         Logger::info("[PlayerManager] Player " + std::to_string(playerId) +
                      " cannot move to blocked position (" +
                      std::to_string(newPos.getX()) + ", " +
