@@ -74,7 +74,7 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
  * Payload: playerId (int32_t), posX (int16_t), posY (int16_t)
  */
 void PlayerProtocol::sendPositionsUpdate(const int udpSocket,
-                                         const auto& client,
+                                         const sockaddr_in& client,
                                          const std::shared_ptr<Player>& player,
                                          SmartBuffer& smartBuffer) {
     // Create the response buffer

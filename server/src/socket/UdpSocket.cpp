@@ -92,7 +92,7 @@ void UdpSocket::handleSend(SmartBuffer& smartBuffer) {
         return;
     }
 
-    for (const auto& client : clients) {
+    for (const sockaddr_in& client : clients) {
         for (const auto& [playerId, player] : players) {
             PlayerProtocol::sendPositionsUpdate(_udpSocket, client, player,
                                                 smartBuffer);
