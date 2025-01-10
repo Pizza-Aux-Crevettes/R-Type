@@ -50,7 +50,7 @@ std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
  * @param playerId The player's ID
  * @return std::shared_ptr<Player> The player
  */
-std::shared_ptr<Player> PlayerManager::findPlayerById(int playerId) const {
+std::shared_ptr<Player> PlayerManager::findPlayerById(int32_t playerId) const {
     // Find the player by their ID
     auto it = _players.find(playerId);
     if (it != _players.end()) {
@@ -69,7 +69,7 @@ std::shared_ptr<Player> PlayerManager::findPlayerById(int playerId) const {
  * @return true If the player was removed
  * @return false If the player was not removed
  */
-bool PlayerManager::removePlayer(int playerId) {
+bool PlayerManager::removePlayer(int32_t playerId) {
     // Find the player by their ID
     auto it = _players.find(playerId);
     if (it != _players.end()) {
@@ -92,7 +92,7 @@ bool PlayerManager::removePlayer(int playerId) {
  * @param offsetX The X offset
  * @param offsetY The Y offset
  */
-void PlayerManager::movePlayer(int playerId, int offsetX, int offsetY) {
+void PlayerManager::movePlayer(int32_t playerId, int32_t offsetX, int32_t offsetY) {
     // Find the player by their ID
     auto player = findPlayerById(playerId);
     if (!player) {
@@ -125,10 +125,10 @@ void PlayerManager::movePlayer(int playerId, int offsetX, int offsetY) {
 /**
  * @brief Get the players
  *
- * @return const std::unordered_map<int, std::shared_ptr<Player>>& The
+ * @return const std::unordered_map<int32_t, std::shared_ptr<Player>>& The
  * players
  */
-const std::unordered_map<int, std::shared_ptr<Player>>&
+const std::unordered_map<int32_t, std::shared_ptr<Player>>&
 PlayerManager::getPlayers() const {
     return _players;
 }

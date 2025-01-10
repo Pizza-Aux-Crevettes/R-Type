@@ -28,7 +28,7 @@ Player::Player(const std::string& name, const Point& position,
  *
  * @return The player's ID
  */
-int Player::getId() const {
+int32_t Player::getId() const {
     return _id;
 }
 
