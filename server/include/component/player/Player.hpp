@@ -23,7 +23,6 @@ class Player {
     const Point& getSize() const;
     double getSpeed() const;
     const Health& getHealth() const;
-    void move(double deltaX, double deltaY);
 
   private:
     int32_t _id;

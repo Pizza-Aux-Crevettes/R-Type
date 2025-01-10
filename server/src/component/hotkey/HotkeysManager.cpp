@@ -36,19 +36,19 @@ HotkeysManager& HotkeysManager::get() {
 void HotkeysManager::initHotkeys() {
     _hotkeyActions = {{static_cast<int16_t>(HotkeysCodes::ARROW_LEFT),
                        [](int32_t playerId) {
-                           PlayerManager::get().movePlayer(playerId, -1, 0);
+                           PlayerManager::get().movePlayer(playerId, -PLAYER_SPEED, 0);
                        }},
                       {static_cast<int16_t>(HotkeysCodes::ARROW_RIGHT),
                        [](int32_t playerId) {
-                           PlayerManager::get().movePlayer(playerId, 1, 0);
+                           PlayerManager::get().movePlayer(playerId, PLAYER_SPEED, 0);
                        }},
                       {static_cast<int16_t>(HotkeysCodes::ARROW_TOP),
                        [](int32_t playerId) {
-                           PlayerManager::get().movePlayer(playerId, 0, -1);
+                           PlayerManager::get().movePlayer(playerId, 0, -PLAYER_SPEED);
                        }},
                       {static_cast<int16_t>(HotkeysCodes::ARROW_BOTTOM),
                        [](int32_t playerId) {
-                           PlayerManager::get().movePlayer(playerId, 0, 1);
+                           PlayerManager::get().movePlayer(playerId, 0, PLAYER_SPEED);
                        }}};
 
     Logger::success("[HotkeysManager] Hotkey actions initialized.");

@@ -85,14 +85,3 @@ const Health& Player::getHealth() const {
 double Player::getSpeed() const {
     return _speed;
 }
-
-/**
- * @brief Move the player
- *
- * @param deltaX The delta X
- * @param deltaY The delta Y
- */
-void Player::move(const double deltaX, const double deltaY) {
-    _position.setX(_position.getX() + deltaX);
-    _position.setY(_position.getY() + deltaY);
-}

@@ -11,7 +11,7 @@ enum Config {
     // Socket
     DEFAULT_BYTES = 1024,
     PORT = 8080,
-    FREQUENCY = 100,
+    FREQUENCY = 10,
 
     // Program
     SUCCESS = 0,
@@ -25,4 +25,5 @@ enum Config {
     // Player
     DEFAULT_HEALTH = 100,
     DEFAULT_LIVES = 3,
+    PLAYER_SPEED = 10,
 };
