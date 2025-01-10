@@ -16,7 +16,7 @@ class Player {
     Player(const std::string& name, const Point& position, const Point& size,
            double speed);
 
-    int32_t getId() const;
+    int getId() const;
     const std::string& getName() const;
     const Point& getPosition() const;
     void setPosition(const Point& position);
@@ -26,7 +26,7 @@ class Player {
     void move(double deltaX, double deltaY);
 
   private:
-    int32_t _playerId;
+    int _id;
     std::string _name;
     Point _position;
     Point _size;

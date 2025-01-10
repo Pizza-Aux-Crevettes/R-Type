@@ -19,46 +19,20 @@ PlayerManager& PlayerManager::get() {
 }
 
 /**
- * @brief Get the next available user ID
- *
- * @return int32_t The next available user ID
- */
-int32_t PlayerManager::getNextUserId() const {
-    if (_players.empty()) {
-        return 1;
-    }
-
-    // Get the maximum key in the map and increment it
-    auto maxKeyIt = std::ranges::max_element(
-        _players, {}, [](auto& pair) { return pair.first; });
-
-    return maxKeyIt->first + 1;
-}
-
-/**
  * @brief Create a new player
  *
  * @param name The player's name
  * @return std::shared_ptr<Player> The created player
  */
 std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
-    int32_t playerId = getNextUserId();
-
-    // Check if the player already exists
-    if (_players.find(playerId) != _players.end()) {
-        Logger::warning("[PlayerManager] Failed to create player. Player ID " +
-                        std::to_string(playerId) + " already exists.");
-        return nullptr;
-    }
-
     // Create the player
-    auto player = std::make_shared<Player>(playerId, name, Point(50, 50),
-                                           Point(20, 10), 1.0);
-    _players[playerId] = player;
+    auto player =
+        std::make_shared<Player>(name, Point(50, 50), Point(20, 10), 1.0);
+    _players[player->getId()] = player;
 
     Logger::success("[PlayerManager] Player created:\n"
                     "  - Player ID: " +
-                    std::to_string(playerId) +
+                    std::to_string(player->getId()) +
                     "\n"
                     "  - Name: " +
                     name +
@@ -76,7 +50,7 @@ std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
  * @param playerId The player's ID
  * @return std::shared_ptr<Player> The player
  */
-std::shared_ptr<Player> PlayerManager::findPlayerById(int32_t playerId) const {
+std::shared_ptr<Player> PlayerManager::findPlayerById(int playerId) const {
     // Find the player by their ID
     auto it = _players.find(playerId);
     if (it != _players.end()) {
@@ -95,7 +69,7 @@ std::shared_ptr<Player> PlayerManager::findPlayerById(int32_t playerId) const {
  * @return true If the player was removed
  * @return false If the player was not removed
  */
-bool PlayerManager::removePlayer(int32_t playerId) {
+bool PlayerManager::removePlayer(int playerId) {
     // Find the player by their ID
     auto it = _players.find(playerId);
     if (it != _players.end()) {
@@ -118,7 +92,7 @@ bool PlayerManager::removePlayer(int32_t playerId) {
  * @param offsetX The X offset
  * @param offsetY The Y offset
  */
-void PlayerManager::movePlayer(int32_t playerId, int offsetX, int offsetY) {
+void PlayerManager::movePlayer(int playerId, int offsetX, int offsetY) {
     // Find the player by their ID
     auto player = findPlayerById(playerId);
     if (!player) {
@@ -151,10 +125,10 @@ void PlayerManager::movePlayer(int32_t playerId, int offsetX, int offsetY) {
 /**
  * @brief Get the players
  *
- * @return const std::unordered_map<int32_t, std::shared_ptr<Player>>& The
+ * @return const std::unordered_map<int, std::shared_ptr<Player>>& The
  * players
  */
-const std::unordered_map<int32_t, std::shared_ptr<Player>>&
+const std::unordered_map<int, std::shared_ptr<Player>>&
 PlayerManager::getPlayers() const {
     return _players;
 }

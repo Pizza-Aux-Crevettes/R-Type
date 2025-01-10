@@ -21,16 +21,15 @@
 Player::Player(const std::string& name, const Point& position,
                const Point& size, double speed)
     : _id(IDManager::getNextId()), _name(name), _position(position),
-      _size(size), _speed(speed), _health(Health()),
-      _threadId(std::thread::id()) {}
+      _size(size), _speed(speed), _health(Health()) {}
 
 /**
  * @brief Get the player's ID
  *
  * @return The player's ID
  */
-int32_t Player::getId() const {
-    return _playerId;
+int Player::getId() const {
+    return _id;
 }
 
 /**
