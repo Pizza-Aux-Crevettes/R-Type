@@ -6,9 +6,9 @@
 */
 
 #include "network/protocol/Protocol.hpp"
-#include "util/Logger.hpp"
 #include <iostream>
 #include "EntityManager.hpp"
+#include "util/Logger.hpp"
 
 int32_t Protocol::_playerId = -1;
 

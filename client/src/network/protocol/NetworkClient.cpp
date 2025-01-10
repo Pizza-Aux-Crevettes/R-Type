@@ -37,7 +37,6 @@ void NetworkClient::connectUDP() {
     UdpSocket::send(smartBuffer);
 }
 
- 
 void NetworkClient::run() {
     std::thread tcpThread(&NetworkClient::handleTcpMessages, this);
     std::thread udpThread(&NetworkClient::handleUdpMessages, this);
@@ -45,7 +44,6 @@ void NetworkClient::run() {
     tcpThread.join();
     udpThread.join();
 }
-
 
 void NetworkClient::handleTcpMessages() const {
     try {

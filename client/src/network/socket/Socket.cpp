@@ -7,9 +7,9 @@
 
 #include "network/socket/Socket.hpp"
 #include <arpa/inet.h>
-#include "network/socket/Singleton.hpp"
 #include <stdexcept>
 #include <unistd.h>
+#include "network/socket/Singleton.hpp"
 #include "util/Config.hpp"
 
 Socket::Socket(const std::string& serverAddress, int port) : _socket(FAILURE) {
