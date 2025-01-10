@@ -92,7 +92,8 @@ bool PlayerManager::removePlayer(int32_t playerId) {
  * @param offsetX The X offset
  * @param offsetY The Y offset
  */
-void PlayerManager::movePlayer(int32_t playerId, int32_t offsetX, int32_t offsetY) {
+void PlayerManager::movePlayer(int32_t playerId, int32_t offsetX,
+                               int32_t offsetY) {
     // Find the player by their ID
     auto player = findPlayerById(playerId);
     if (!player) {

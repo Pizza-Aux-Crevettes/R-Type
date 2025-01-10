@@ -25,7 +25,8 @@ class HotkeysManager {
     ~HotkeysManager() = default;
 
     void initHotkeys();
-    static void handlePlayerPosition(int32_t playerId, int32_t deltaX, int32_t deltaY);
+    static void handlePlayerPosition(int32_t playerId, int32_t deltaX,
+                                     int32_t deltaY);
 
     std::unordered_map<int16_t, std::function<void(int32_t)>> _hotkeyActions;
 };
