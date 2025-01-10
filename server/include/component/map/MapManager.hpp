@@ -30,26 +30,12 @@ class MapManager {
     void setCurrentMap(int mapId);
 
   private:
-    static constexpr char NAME_LABEL[] = "name=";
-    static constexpr char MAP_LABEL[] = "map=###";
-    static constexpr char END_LABEL[] = "###";
-    static constexpr int NAME_OFFSET = 5;
-    static constexpr int BLOCK_OFFSET = 4;
-
-    static inline const std::unordered_map<std::string, ObstacleType>
-        _obstacleMapping = {
-            {"0001", ObstacleType::BLOCK},
-            {"0002", ObstacleType::BLOCK2},
-            {"0003", ObstacleType::BLOCK3},
-            {"0004", ObstacleType::BLOCK4},
-    };
-
     MapManager() = default;
     ~MapManager() = default;
 
     std::shared_ptr<Map> loadMapFromFile(const std::string& filePath);
     void parseMapLine(const std::string& line, int y,
-                      std::vector<Obstacle>& obstacles);
+                      std::vector<std::shared_ptr<Obstacle>>& obstacles);
 
     std::unordered_map<int, std::shared_ptr<Map>> _maps;
     std::shared_ptr<Map> _currentMap = nullptr;

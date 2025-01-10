@@ -55,8 +55,6 @@ void MapProtocol::sendObstaclesUpdate(const int udpSocket,
     // Get the obstacles for the map
     const auto& obstacles =
         MapManager::get().getCurrentMap()->getObstaclesByViewport();
-
-    // Check if there are obstacles to send
     if (obstacles.empty()) {
         Logger::warning("[MapProtocol] No obstacles to send to client: " +
                         std::string(inet_ntoa(clientAddr.sin_addr)) + ":" +
@@ -64,20 +62,19 @@ void MapProtocol::sendObstaclesUpdate(const int udpSocket,
         return;
     }
 
-    // Send each obstacle
+    // Send each obstacle to the client
     for (const auto& obstacle : obstacles) {
-        // Construct the buffer
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(
-            Protocol::OpCode::MAP_OBSTACLES_UPDATE);
-        smartBuffer << static_cast<int16_t>(obstacle._x);
-        smartBuffer << static_cast<int16_t>(obstacle._y);
-        smartBuffer << static_cast<int16_t>(obstacle._type);
+            Protocol::OpCode::MAP_OBSTACLES_UPDATE)
+                    << static_cast<int32_t>(obstacle->getId())
+                    << static_cast<int32_t>(obstacle->getPosition().getX())
+                    << static_cast<int32_t>(obstacle->getPosition().getY())
+                    << static_cast<int32_t>(static_cast<int>(obstacle->getType()));
 
-        // Send the obstacle
         UdpSocket::sendToOne(udpSocket, clientAddr, smartBuffer);
 
-        // Sleep for a short time to avoid packet loss
+        // Add a small delay to avoid packet loss in UDP
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 

@@ -13,7 +13,7 @@
  * @param name The name of the map
  * @param obstacles The obstacles of the map
  */
-Map::Map(const std::string& name, const std::vector<Obstacle>& obstacles)
+Map::Map(const std::string& name, const std::vector<std::shared_ptr<Obstacle>>& obstacles)
     : _name(name), _obstacles(obstacles), _viewport(0) {}
 
 /**
@@ -33,28 +33,20 @@ int Map::getViewport() const {
 }
 
 /**
- * @brief Get the obstacles of the map
- *
- * @return const std::vector<Obstacle>&
- */
-const std::vector<Obstacle>& Map::getObstacles() const {
-    return _obstacles;
-}
-
-/**
  * @brief Get the obstacles of the map by viewport
  *
  * @param authorizedBlock The number of blocks authorized
  * @return std::vector<Obstacle>
  */
-std::vector<Obstacle> Map::getObstaclesByViewport() const {
+std::vector<std::shared_ptr<Obstacle>> Map::getObstaclesByViewport() const {
     int startX = _viewport;
     int endX = _viewport + RENDER_DISTANCE;
 
-    std::vector<Obstacle> visibleObstacles;
+    std::vector<std::shared_ptr<Obstacle>> visibleObstacles;
 
     for (const auto& obstacle : _obstacles) {
-        if (obstacle._x >= startX && obstacle._x <= endX) {
+        if (obstacle->getPosition().getX() >= startX &&
+            obstacle->getPosition().getX() <= endX) {
             visibleObstacles.push_back(obstacle);
         }
     }
@@ -71,8 +63,9 @@ std::vector<Obstacle> Map::getObstaclesByViewport() const {
  */
 bool Map::isVoidBlock(int x, int y) const {
     for (const auto& obstacle : _obstacles) {
-        if (obstacle._x == x && obstacle._y == y) {
-            return obstacle._type == ObstacleType::NONE;
+        if (obstacle->getPosition().getX() == x &&
+            obstacle->getPosition().getY() == y) {
+            return obstacle->getType() == ObstacleType::NONE;
         }
     }
     return true;

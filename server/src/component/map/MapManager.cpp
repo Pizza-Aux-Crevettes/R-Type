@@ -6,14 +6,12 @@
 */
 
 #include "component/map/MapManager.hpp"
+#include "component/map/MapFileLoader.hpp"
 #include "util/Logger.hpp"
 
-namespace fs = std::filesystem;
-
 /**
- * @brief Get the MapManager instance
+ * @brief Construct a new MapManager:: Map Manager object
  *
- * @return MapManager&
  */
 MapManager& MapManager::get() {
     static MapManager instance;
@@ -21,102 +19,23 @@ MapManager& MapManager::get() {
 }
 
 /**
- * @brief Preload all maps from a folder
+ * @brief Preload maps from a folder
  *
  * @param folderPath The path to the folder containing the maps
  */
 void MapManager::preloadMapsFromFolder(const std::string& folderPath) {
     Logger::info("[MapManager] Preloading maps from folder: " + folderPath);
 
+    MapFileLoader fileLoader;
+    auto maps = fileLoader.loadMapsFromFolder(folderPath);
+
     int mapId = 1;
-    int loadedCount = 0;
-
-    for (const auto& entry : fs::directory_iterator(folderPath)) {
-        if (entry.is_regular_file() && entry.path().extension() == ".map") {
-            try {
-                auto map = loadMapFromFile(entry.path().string());
-
-                _maps[mapId++] = map;
-                loadedCount++;
-            } catch (const std::exception& e) {
-                Logger::error("[MapManager] Failed to load map: " +
-                              entry.path().filename().string() +
-                              ". Error: " + e.what());
-            }
-        }
+    for (const auto& map : maps) {
+        _maps[mapId++] = map;
     }
 
-    Logger::success("[MapManager] Preloaded " + std::to_string(loadedCount) +
+    Logger::success("[MapManager] Preloaded " + std::to_string(_maps.size()) +
                     " map(s).");
-}
-
-/**
- * @brief Load a map from a file
- *
- * @param filePath The path to the map file
- * @return std::shared_ptr<Map> The loaded map
- */
-std::shared_ptr<Map> MapManager::loadMapFromFile(const std::string& filePath) {
-    std::ifstream file(filePath);
-    if (!file.is_open()) {
-        Logger::error("[MapManager] Unable to open map file: " +
-                      fs::path(filePath).filename().string());
-        throw std::runtime_error("Failed to open map file: " + filePath);
-    }
-
-    std::string name;
-    std::vector<Obstacle> obstacles;
-    std::string line;
-    bool parsingMap = false;
-    int y = 0;
-
-    while (std::getline(file, line)) {
-        if (line.find(NAME_LABEL) == 0) {
-            name = line.substr(NAME_OFFSET);
-        } else if (line == MAP_LABEL) {
-            parsingMap = true;
-            continue;
-        } else if (parsingMap) {
-            if (line == END_LABEL) {
-                parsingMap = false;
-                continue;
-            }
-
-            parseMapLine(line, y++, obstacles);
-        }
-    }
-
-    file.close();
-
-    if (name.empty()) {
-        Logger::error("[MapManager] Missing map name in file: " +
-                      fs::path(filePath).filename().string());
-        throw std::runtime_error("Map file is missing a name: " + filePath);
-    }
-
-    Logger::success("[MapManager] Successfully loaded map: " + name + " with " +
-                    std::to_string(obstacles.size()) + " obstacles.");
-
-    return std::make_shared<Map>(name, obstacles);
-}
-
-/**
- * @brief Parse a line of the map file
- *
- * @param line The line to parse
- * @param y The y position of the line
- * @param obstacles The vector to store the obstacles
- */
-void MapManager::parseMapLine(const std::string& line, int y,
-                              std::vector<Obstacle>& obstacles) {
-    for (size_t x = 0; x < line.size(); x += BLOCK_OFFSET) {
-        std::string blockCode = line.substr(x, BLOCK_OFFSET);
-
-        if (_obstacleMapping.find(blockCode) != _obstacleMapping.end()) {
-            obstacles.emplace_back(_obstacleMapping.at(blockCode),
-                                   static_cast<int>(x / BLOCK_OFFSET), y);
-        }
-    }
 }
 
 /**
@@ -130,25 +49,8 @@ std::shared_ptr<Map> MapManager::getMapById(int mapId) const {
     if (it != _maps.end()) {
         return it->second;
     }
-
-    Logger::error("[MapManager] Map with ID " + std::to_string(mapId) +
-                  " not found.");
     throw std::runtime_error("Map with ID " + std::to_string(mapId) +
                              " not found.");
-}
-
-/**
- * @brief Get the current map
- *
- * @return std::shared_ptr<Map> The current map
- */
-std::shared_ptr<Map> MapManager::getCurrentMap() const {
-    if (!_currentMap) {
-        Logger::error("[MapManager] No current map is set.");
-        throw std::runtime_error("No current map is set.");
-    }
-
-    return _currentMap;
 }
 
 /**
@@ -158,9 +60,20 @@ std::shared_ptr<Map> MapManager::getCurrentMap() const {
  */
 void MapManager::setCurrentMap(int mapId) {
     auto map = getMapById(mapId);
-
     _currentMap = map;
 
     Logger::success("[MapManager] Current map set to ID: " +
                     std::to_string(mapId));
+}
+
+/**
+ * @brief Get the current map
+ *
+ * @return std::shared_ptr<Map> The current map
+ */
+std::shared_ptr<Map> MapManager::getCurrentMap() const {
+    if (!_currentMap) {
+        throw std::runtime_error("No current map is set.");
+    }
+    return _currentMap;
 }
