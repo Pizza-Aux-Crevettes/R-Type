@@ -52,7 +52,7 @@ std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
     }
 
     // Create the player
-    auto player = std::make_shared<Player>(playerId, name, Point(0, 0),
+    auto player = std::make_shared<Player>(playerId, name, Point(50, 50),
                                            Point(20, 10), 1.0);
     _players[playerId] = player;
 
@@ -63,7 +63,9 @@ std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
                     "  - Name: " +
                     name +
                     "\n"
-                    "  - Initial Position: (0, 0)");
+                    "  - Initial Position: X:" +
+                    std::to_string(player->getPosition().getX()) +
+                    ", Y:" + std::to_string(player->getPosition().getY()));
 
     return player;
 }

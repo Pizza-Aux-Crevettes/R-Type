@@ -87,16 +87,24 @@ void UdpSocket::readLoop() {
 void UdpSocket::sendLoop() {
     SmartBuffer smartBuffer;
 
-    while (true) {
-        // Get all clients and players
-        const auto clients = getClients();
-        const auto& players = PlayerManager::get().getPlayers();
-        if (clients.empty() || players.empty()) {
-            return;
+    while (true) {  
+        // Get all clients  
+        const auto clients = getClients();    
+        if (clients.empty()) {
+            continue;
         }
 
+        // Get all players
+        const auto& players = PlayerManager::get().getPlayers();
+        if (players.empty()) {
+            continue;
+        }
+
+        Logger::info("[UDP Socket] Sending updates to " +
+                     std::to_string(clients.size()) + " clients.");
+
         // Real-time updates to all clients
-        for (const sockaddr_in& client : clients) {
+        for (const auto& client : clients) {
             // Send the player updates
             for (const auto& [playerId, player] : players) {
                 PlayerProtocol::sendPositionsUpdate(_udpSocket, client, player,
@@ -109,7 +117,7 @@ void UdpSocket::sendLoop() {
         }
 
         // Increment the viewport
-        MapManager::get().getCurrentMap()->incrementViewport();
+        //MapManager::get().getCurrentMap()->incrementViewport();
 
         // Sleep for a short time
         std::this_thread::sleep_for(std::chrono::milliseconds(FREQUENCY));

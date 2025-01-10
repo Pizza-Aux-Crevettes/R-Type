@@ -39,6 +39,12 @@ void TcpSocket::init() {
         throw std::runtime_error("Failed to create TCP socket.");
     }
 
+    // Set socket options
+    int opt = 1;
+    if (setsockopt(_tcpSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
+        throw std::runtime_error("[TCP Socket] Failed to set socket options (SO_REUSEADDR).");
+    }
+
     // Bind the socket
     _tcpAddr.sin_family = AF_INET;
     _tcpAddr.sin_addr.s_addr = INADDR_ANY;
@@ -147,8 +153,7 @@ void TcpSocket::addClient(const int clientSocket) {
  */
 void TcpSocket::removeClient(const int clientSocket) {
     std::lock_guard lock(_clientsMutex);
-    _clients.erase(std::remove(_clients.begin(), _clients.end(), clientSocket),
-                   _clients.end());
+    std::erase(_clients, clientSocket);
 }
 
 /**
