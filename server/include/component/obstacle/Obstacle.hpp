@@ -7,6 +7,9 @@
 
 #pragma once
 
+#include "util/Point.hpp"
+#include <string>
+
 enum class ObstacleType {
     NONE,
     BLOCK,
@@ -15,10 +18,18 @@ enum class ObstacleType {
     BLOCK4,
 };
 
-struct Obstacle {
-    ObstacleType _type;
-    int _x;
-    int _y;
+class Obstacle {
+  public:
+    Obstacle(ObstacleType type, const Point& position);
 
-    Obstacle(ObstacleType type, int x, int y) : _type(type), _x(x), _y(y) {}
+    int getId() const;
+    ObstacleType getType() const;
+    void setType(ObstacleType type);
+    const Point& getPosition() const;
+    void setPosition(const Point& position);
+
+  private:
+    int _id;
+    ObstacleType _type;
+    Point _position;
 };
