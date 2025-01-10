@@ -90,7 +90,7 @@ Each message contains the following fields:
 ### **MAP_VIEWPORT_UPDATE**
 - **Description**: Updates the viewport of the map.
 - **Payload**:
-  - `viewport` (int16_t): Current viewport value.
+  - `viewport` (int32_t): Current viewport value.
 
 ---
 
