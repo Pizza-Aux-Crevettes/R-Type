@@ -20,9 +20,9 @@ Obstacle::Obstacle(ObstacleType type, const Point& position)
 /**
  * @brief Get the ID of the obstacle
  *
- * @return int The ID of the obstacle
+ * @return int32_t The ID of the obstacle
  */
-int Obstacle::getId() const {
+int32_t Obstacle::getId() const {
     return _id;
 }
 

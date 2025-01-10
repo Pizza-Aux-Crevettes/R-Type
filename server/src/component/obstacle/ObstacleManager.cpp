@@ -45,7 +45,7 @@ void ObstacleManager::addObstacle(const std::shared_ptr<Obstacle>& obstacle) {
     Logger::success(
         "[ObstacleManager] Added obstacle. ID: " +
         std::to_string(obstacle->getId()) +
-        ", Type: " + std::to_string(static_cast<int>(obstacle->getType())) +
+        ", Type: " + std::to_string(static_cast<int16_t>(obstacle->getType())) +
         ", Position: (" + std::to_string(obstacle->getPosition().getX()) +
         ", " + std::to_string(obstacle->getPosition().getY()) + ")");
 }
