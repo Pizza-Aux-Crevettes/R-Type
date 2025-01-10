@@ -6,11 +6,11 @@
 */
 
 #include "component/hotkey/HotkeysManager.hpp"
+#include <SmartBuffer.hpp>
+#include <iostream>
 #include "network/protocol/Protocol.hpp"
 #include "network/socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
-#include <SmartBuffer.hpp>
-#include <iostream>
 
 HotkeysManager::HotkeysManager() {
     _keys = {{HotkeysCodes::ARROW_TOP, sf::Keyboard::Up},
