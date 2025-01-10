@@ -20,8 +20,9 @@
  */
 Player::Player(const std::string& name, const Point& position,
                const Point& size, double speed)
-    : _id(IDManager::getNextId()), _name(name), _position(position), _size(size),
-      _speed(speed), _health(Health()), _threadId(std::thread::id()) {}
+    : _id(IDManager::getNextId()), _name(name), _position(position),
+      _size(size), _speed(speed), _health(Health()),
+      _threadId(std::thread::id()) {}
 
 /**
  * @brief Get the player's ID

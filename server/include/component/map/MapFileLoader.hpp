@@ -7,15 +7,16 @@
 
 #pragma once
 
-#include "component/map/Map.hpp"
 #include <filesystem>
 #include <memory>
 #include <string>
 #include <vector>
+#include "component/map/Map.hpp"
 
 class MapFileLoader {
   public:
-    std::vector<std::shared_ptr<Map>> loadMapsFromFolder(const std::string& folderPath);
+    std::vector<std::shared_ptr<Map>>
+    loadMapsFromFolder(const std::string& folderPath);
     std::shared_ptr<Map> loadMapFromFile(const std::string& filePath);
 
   private:
@@ -25,5 +26,6 @@ class MapFileLoader {
     static constexpr int NAME_OFFSET = 5;
     static constexpr int BLOCK_OFFSET = 4;
 
-    void parseMapLine(const std::string& line, int y, std::vector<std::shared_ptr<Obstacle>>& obstacles);
+    void parseMapLine(const std::string& line, int y,
+                      std::vector<std::shared_ptr<Obstacle>>& obstacles);
 };

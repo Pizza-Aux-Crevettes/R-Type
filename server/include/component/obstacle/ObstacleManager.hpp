@@ -7,11 +7,11 @@
 
 #pragma once
 
-#include "component/obstacle/Obstacle.hpp"
 #include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include "component/obstacle/Obstacle.hpp"
 
 class ObstacleManager {
   public:

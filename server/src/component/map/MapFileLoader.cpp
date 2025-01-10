@@ -18,7 +18,8 @@ namespace fs = std::filesystem;
  * @param folderPath The path to the folder containing the maps
  * @return std::vector<std::shared_ptr<Map>> The loaded maps
  */
-std::vector<std::shared_ptr<Map>> MapFileLoader::loadMapsFromFolder(const std::string& folderPath) {
+std::vector<std::shared_ptr<Map>>
+MapFileLoader::loadMapsFromFolder(const std::string& folderPath) {
     std::vector<std::shared_ptr<Map>> maps;
 
     for (const auto& entry : fs::directory_iterator(folderPath)) {
@@ -28,8 +29,8 @@ std::vector<std::shared_ptr<Map>> MapFileLoader::loadMapsFromFolder(const std::s
                 maps.push_back(map);
             } catch (const std::exception& e) {
                 Logger::error("[MapFileLoader] Failed to load map: " +
-                              entry.path().filename().string() + ". Error: " +
-                              e.what());
+                              entry.path().filename().string() +
+                              ". Error: " + e.what());
             }
         }
     }
@@ -43,7 +44,8 @@ std::vector<std::shared_ptr<Map>> MapFileLoader::loadMapsFromFolder(const std::s
  * @param filePath The path to the map file
  * @return std::shared_ptr<Map> The loaded map
  */
-std::shared_ptr<Map> MapFileLoader::loadMapFromFile(const std::string& filePath) {
+std::shared_ptr<Map>
+MapFileLoader::loadMapFromFile(const std::string& filePath) {
     FileReader reader(filePath);
     auto lines = reader.readAllLines();
 
@@ -71,8 +73,9 @@ std::shared_ptr<Map> MapFileLoader::loadMapFromFile(const std::string& filePath)
         throw std::runtime_error("Map file is missing a name: " + filePath);
     }
 
-    Logger::success("[MapFileLoader] Successfully loaded map: " + name + " with " +
-                    std::to_string(obstacles.size()) + " obstacles.");
+    Logger::success("[MapFileLoader] Successfully loaded map: " + name +
+                    " with " + std::to_string(obstacles.size()) +
+                    " obstacles.");
 
     return std::make_shared<Map>(name, obstacles);
 }
@@ -84,8 +87,9 @@ std::shared_ptr<Map> MapFileLoader::loadMapFromFile(const std::string& filePath)
  * @param y The y position of the line
  * @param obstacles The vector to store the obstacles
  */
-void MapFileLoader::parseMapLine(const std::string& line, int y,
-                                 std::vector<std::shared_ptr<Obstacle>>& obstacles) {
+void MapFileLoader::parseMapLine(
+    const std::string& line, int y,
+    std::vector<std::shared_ptr<Obstacle>>& obstacles) {
     for (size_t x = 0; x < line.size(); x += BLOCK_OFFSET) {
         std::string blockCode = line.substr(x, BLOCK_OFFSET);
 

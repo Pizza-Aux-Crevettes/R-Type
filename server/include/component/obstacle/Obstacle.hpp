@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "util/Point.hpp"
 #include <string>
+#include "util/Point.hpp"
 
 enum class ObstacleType {
     NONE,

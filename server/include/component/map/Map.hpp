@@ -14,7 +14,8 @@
 
 class Map {
   public:
-    Map(const std::string& name, const std::vector<std::shared_ptr<Obstacle>>& obstacles);
+    Map(const std::string& name,
+        const std::vector<std::shared_ptr<Obstacle>>& obstacles);
 
     void incrementViewport();
     int getViewport() const;

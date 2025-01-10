@@ -17,7 +17,6 @@
 Obstacle::Obstacle(ObstacleType type, const Point& position)
     : _id(IDManager::getNextId()), _type(type), _position(position) {}
 
-
 /**
  * @brief Get the ID of the obstacle
  *

@@ -13,7 +13,8 @@
  * @param name The name of the map
  * @param obstacles The obstacles of the map
  */
-Map::Map(const std::string& name, const std::vector<std::shared_ptr<Obstacle>>& obstacles)
+Map::Map(const std::string& name,
+         const std::vector<std::shared_ptr<Obstacle>>& obstacles)
     : _name(name), _obstacles(obstacles), _viewport(0) {}
 
 /**
