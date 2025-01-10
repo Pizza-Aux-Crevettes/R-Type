@@ -85,42 +85,91 @@ void UdpSocket::readLoop() {
  *
  */
 void UdpSocket::sendLoop() {
-    SmartBuffer smartBuffer;
+    // Create the threads
+    std::thread playerUpdatesThread(&UdpSocket::sendPlayerUpdates, this);
+    std::thread viewportUpdatesThread(&UdpSocket::sendViewportUpdates, this);
+    std::thread obstaclesUpdatesThread(&UdpSocket::sendObstaclesUpdates, this);
+
+    // Detach the threads
+    playerUpdatesThread.detach();
+    viewportUpdatesThread.detach();
+    obstaclesUpdatesThread.detach();
 
     while (true) {
-        // Get all clients
-        const auto clients = getClients();
-        if (clients.empty()) {
-            continue;
-        }
-
-        // Get all players
-        const auto& players = PlayerManager::get().getPlayers();
-        if (players.empty()) {
-            continue;
-        }
+        auto frameStart = std::chrono::high_resolution_clock::now();
 
         Logger::info("[UDP Socket] Sending updates to " +
-                     std::to_string(clients.size()) + " clients.");
+                     std::to_string(_clients.size()) + " clients.");
 
-        // Real-time updates to all clients
-        for (const auto& client : clients) {
-            // Send the player updates
-            for (const auto& [playerId, player] : players) {
-                PlayerProtocol::sendPositionsUpdate(_udpSocket, client, player,
-                                                    smartBuffer);
-            }
+        auto frameEnd = std::chrono::high_resolution_clock::now();
+        auto frameDuration =
+            std::chrono::duration_cast<std::chrono::milliseconds>(frameEnd - frameStart);
 
-            // Send the map updates
-            MapProtocol::sendViewportUpdate(_udpSocket, client, smartBuffer);
-            MapProtocol::sendObstaclesUpdate(_udpSocket, client, smartBuffer);
+        int sleepTime = FRAME_DURATION_MS - frameDuration.count();
+        if (sleepTime > 0) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
+        }
+    }
+}
+
+/**
+ * @brief Send player updates
+ *
+ */
+void UdpSocket::sendPlayerUpdates() {
+    SmartBuffer smartBuffer;
+    while (true) {
+        const auto clients = getClients();
+        const auto& players = PlayerManager::get().getPlayers();
+
+        if (clients.empty() || players.empty()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            continue;
         }
 
-        // Increment the viewport
-        // MapManager::get().getCurrentMap()->incrementViewport();
+        for (const auto& client : clients) {
+            for (const auto& [playerId, player] : players) {
+                PlayerProtocol::sendPositionsUpdate(_udpSocket, client, player, smartBuffer);
+            }
+        }
+    }
+}
 
-        // Sleep for a short time
-        std::this_thread::sleep_for(std::chrono::milliseconds(FREQUENCY));
+/**
+ * @brief Send viewport updates
+ *
+ */
+void UdpSocket::sendViewportUpdates() {
+    SmartBuffer smartBuffer;
+    while (true) {
+        const auto clients = getClients();
+        if (clients.empty()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            continue;
+        }
+
+        for (const auto& client : clients) {
+            MapProtocol::sendViewportUpdate(_udpSocket, client, smartBuffer);
+        }
+    }
+}
+
+/**
+ * @brief Send obstacles updates
+ *
+ */
+void UdpSocket::sendObstaclesUpdates() {
+    SmartBuffer smartBuffer;
+    while (true) {
+        const auto clients = getClients();
+        if (clients.empty()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            continue;
+        }
+
+        for (const auto& client : clients) {
+            MapProtocol::sendObstaclesUpdate(_udpSocket, client, smartBuffer);
+        }
     }
 }
 

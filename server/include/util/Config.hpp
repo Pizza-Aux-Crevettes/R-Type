@@ -11,7 +11,8 @@ enum Config {
     // Socket
     DEFAULT_BYTES = 1024,
     PORT = 8080,
-    FREQUENCY = 10,
+    TARGET_FPS = 60,
+    FRAME_DURATION_MS = 1000,
 
     // Program
     SUCCESS = 0,

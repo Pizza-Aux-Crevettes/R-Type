@@ -73,9 +73,6 @@ void MapProtocol::sendObstaclesUpdate(const int udpSocket,
                     << static_cast<int16_t>(obstacle->getType());
 
         UdpSocket::sendToOne(udpSocket, clientAddr, smartBuffer);
-
-        // Add a small delay to avoid packet loss in UDP
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
     Logger::packet("[MapProtocol] Obstacle updates sent to client: " +

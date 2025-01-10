@@ -35,5 +35,8 @@ class UdpSocket {
     std::vector<sockaddr_in> _clients;
     std::mutex _clientsMutex;
 
+    void sendPlayerUpdates();
+    void sendViewportUpdates();
+    void sendObstaclesUpdates();
     void addClient(const sockaddr_in& clientAddr);
 };
