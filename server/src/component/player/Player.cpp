@@ -6,6 +6,7 @@
 */
 
 #include "component/player/Player.hpp"
+#include "component/attr/IDManager.hpp"
 #include "util/Logger.hpp"
 
 /**
@@ -17,10 +18,10 @@
  * @param size The player's size
  * @param speed The player's speed
  */
-Player::Player(const int32_t playerId, std::string name, const Point& position,
-               const Point& size, const double speed)
-    : _playerId(playerId), _name(std::move(name)), _position(position),
-      _size(size), _speed(speed), _health(Health()) {}
+Player::Player(const std::string& name, const Point& position,
+               const Point& size, double speed)
+    : _id(IDManager::getNextId()), _name(name), _position(position), _size(size),
+      _speed(speed), _health(Health()), _threadId(std::thread::id()) {}
 
 /**
  * @brief Get the player's ID
