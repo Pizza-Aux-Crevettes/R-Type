@@ -51,7 +51,7 @@ Each message contains the following fields:
 ### **HOTKEY_PRESSED**
 - **Description**: Processes a key press from a player.
 - **Payload**:
-  - `playerId` (int16_t): ID of the player pressing the key.
+  - `playerId` (int32_t): ID of the player pressing the key.
   - `hotkey` (int16_t): Code of the key pressed.
 
 ---
@@ -66,14 +66,14 @@ Each message contains the following fields:
 ### **NEW_PLAYER_CALLBACK**
 - **Description**: Confirms the initialization of a new player.
 - **Payload**:
-  - `playerId` (int16_t): ID of the newly created player.
+  - `playerId` (int32_t): ID of the newly created player.
 
 ---
 
 ### **NEW_PLAYER_BROADCAST**
 - **Description**: Announces the creation of a new player.
 - **Payload**:
-  - `playerId` (int16_t): ID of the newly created player.
+  - `playerId` (int32_t): ID of the newly created player.
   - `playerName` (string): Name of the newly created player.
 
 ---
@@ -81,7 +81,7 @@ Each message contains the following fields:
 ### **PLAYER_POSITION_UPDATE**
 - **Description**: Updates the position of a player in real-time.
 - **Payload**:
-  - `playerId` (int16_t): ID of the player whose position is updated.
+  - `playerId` (int32_t): ID of the player whose position is updated.
   - `posX` (int32_t): X-coordinate of the player.
   - `posY` (int32_t): Y-coordinate of the player.
 
@@ -97,7 +97,7 @@ Each message contains the following fields:
 ### **MAP_OBSTACLES_UPDATE**
 - **Description**: Updates the obstacle positions on the map.
 - **Payload**:
-  - `obstacleId` (int16_t): ID of the obstacle.
+  - `obstacleId` (int32_t): ID of the obstacle.
   - `obstacleX` (int32_t): X-coordinate of the obstacle.
   - `obstacleY` (int32_t): Y-coordinate of the obstacle.
   - `type` (int16_t): Type identifier for the obstacle.

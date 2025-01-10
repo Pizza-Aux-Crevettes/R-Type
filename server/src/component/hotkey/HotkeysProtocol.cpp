@@ -17,7 +17,7 @@
  */
 void HotkeysProtocol::processHotkey(int clientSocket,
                                     SmartBuffer& smartBuffer) {
-    int32_t playerId;
+    int16_t playerId;
     int16_t hotkey;
     smartBuffer >> playerId >> hotkey;
 

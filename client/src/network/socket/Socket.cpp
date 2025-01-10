@@ -5,9 +5,9 @@
 ** Socket.cpp
 */
 
-#include "socket/Socket.hpp"
+#include "network/socket/Socket.hpp"
 #include <arpa/inet.h>
-#include <socket/Singleton.hpp>
+#include "network/socket/Singleton.hpp"
 #include <stdexcept>
 #include <unistd.h>
 #include "util/Config.hpp"

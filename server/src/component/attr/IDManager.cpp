@@ -8,13 +8,13 @@
 #include "component/attr/IDManager.hpp"
 
 // Initialize the static atomic ID counter
-std::atomic<int> IDManager::_currentId = 1;
+std::atomic<int32_t> IDManager::_currentId = 1;
 
 /**
  * @brief Get the next available ID
  *
- * @return int The next available ID
+ * @return int32_t The next available ID
  */
-int IDManager::getNextId() {
+int32_t IDManager::getNextId() {
     return _currentId++;
 }

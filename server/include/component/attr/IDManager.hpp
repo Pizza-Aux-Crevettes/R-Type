@@ -10,8 +10,8 @@
 
 class IDManager {
   public:
-    static int getNextId();
+    static int32_t getNextId();
 
   private:
-    static std::atomic<int> _currentId;
+    static std::atomic<int32_t> _currentId;
 };

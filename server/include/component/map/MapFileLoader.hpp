@@ -26,6 +26,6 @@ class MapFileLoader {
     static constexpr int NAME_OFFSET = 5;
     static constexpr int BLOCK_OFFSET = 4;
 
-    void parseMapLine(const std::string& line, int y,
+    void parseMapLine(const std::string& line, int32_t y,
                       std::vector<std::shared_ptr<Obstacle>>& obstacles);
 };

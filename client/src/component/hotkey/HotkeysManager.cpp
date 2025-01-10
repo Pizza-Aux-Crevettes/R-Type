@@ -6,8 +6,8 @@
 */
 
 #include "component/hotkey/HotkeysManager.hpp"
-#include "protocol/Protocol.hpp"
-#include "socket/UdpSocket.hpp"
+#include "network/protocol/Protocol.hpp"
+#include "network/socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
 
 #include <SmartBuffer.hpp>

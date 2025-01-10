@@ -34,7 +34,7 @@ class MapManager {
     ~MapManager() = default;
 
     std::shared_ptr<Map> loadMapFromFile(const std::string& filePath);
-    void parseMapLine(const std::string& line, int y,
+    void parseMapLine(const std::string& line, int32_t y,
                       std::vector<std::shared_ptr<Obstacle>>& obstacles);
 
     std::unordered_map<int, std::shared_ptr<Map>> _maps;

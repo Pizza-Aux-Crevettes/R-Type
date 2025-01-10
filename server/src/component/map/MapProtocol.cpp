@@ -18,7 +18,7 @@
  * @param smartBuffer The SmartBuffer to use for the response
  *
  * Protocol: MAP_VIEWPORT_UPDATE
- * Payload: viewport (int)
+ * Payload: viewport (int32_t)
  */
 void MapProtocol::sendViewportUpdate(const int udpSocket,
                                      const sockaddr_in& clientAddr,
@@ -47,7 +47,7 @@ void MapProtocol::sendViewportUpdate(const int udpSocket,
  * @param smartBuffer The SmartBuffer to use for the response
  *
  * Protocol: MAP_OBSTACLES_UPDATE
- * Payload: x (int), y (int), type (int)
+ * Payload: id (int32_t), x (int32_t), y (int32_t), type (int16_t)
  */
 void MapProtocol::sendObstaclesUpdate(const int udpSocket,
                                       const sockaddr_in& clientAddr,
@@ -67,10 +67,10 @@ void MapProtocol::sendObstaclesUpdate(const int udpSocket,
         smartBuffer.reset();
         smartBuffer
             << static_cast<int16_t>(Protocol::OpCode::MAP_OBSTACLES_UPDATE)
-            << static_cast<int16_t>(obstacle->getId())
+            << static_cast<int32_t>(obstacle->getId())
             << static_cast<int32_t>(obstacle->getPosition().getX())
             << static_cast<int32_t>(obstacle->getPosition().getY())
-            << static_cast<int16_t>(static_cast<int>(obstacle->getType()));
+            << static_cast<int16_t>(obstacle->getType());
 
         UdpSocket::sendToOne(udpSocket, clientAddr, smartBuffer);
 

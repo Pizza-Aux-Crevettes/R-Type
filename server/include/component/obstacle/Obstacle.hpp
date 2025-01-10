@@ -22,14 +22,14 @@ class Obstacle {
   public:
     Obstacle(ObstacleType type, const Point& position);
 
-    int getId() const;
+    int32_t getId() const;
     ObstacleType getType() const;
     void setType(ObstacleType type);
     const Point& getPosition() const;
     void setPosition(const Point& position);
 
   private:
-    int _id;
+    int32_t _id;
     ObstacleType _type;
     Point _position;
 };

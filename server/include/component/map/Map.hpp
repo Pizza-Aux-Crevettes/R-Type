@@ -18,13 +18,13 @@ class Map {
         const std::vector<std::shared_ptr<Obstacle>>& obstacles);
 
     void incrementViewport();
-    int getViewport() const;
+    int32_t getViewport() const;
     std::vector<std::shared_ptr<Obstacle>> getObstaclesByViewport() const;
-    bool isVoidBlock(int x, int y) const;
+    bool isVoidBlock(int32_t x, int32_t y) const;
 
   private:
     std::string _name;
-    int _viewport;
+    int32_t _viewport;
     std::vector<std::shared_ptr<Obstacle>> _obstacles;
 
     static constexpr int RENDER_DISTANCE = 10;

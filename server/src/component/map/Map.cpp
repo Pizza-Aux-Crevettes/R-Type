@@ -27,9 +27,9 @@ void Map::incrementViewport() {
 /**
  * @brief Get the viewport of the map
  *
- * @return int
+ * @return int32_t
  */
-int Map::getViewport() const {
+int32_t Map::getViewport() const {
     return _viewport;
 }
 
@@ -40,8 +40,8 @@ int Map::getViewport() const {
  * @return std::vector<Obstacle>
  */
 std::vector<std::shared_ptr<Obstacle>> Map::getObstaclesByViewport() const {
-    int startX = _viewport;
-    int endX = _viewport + RENDER_DISTANCE;
+    int32_t startX = _viewport;
+    int32_t endX = _viewport + RENDER_DISTANCE;
 
     std::vector<std::shared_ptr<Obstacle>> visibleObstacles;
 
@@ -62,7 +62,7 @@ std::vector<std::shared_ptr<Obstacle>> Map::getObstaclesByViewport() const {
  * @param y The y position of the block
  * @return bool
  */
-bool Map::isVoidBlock(int x, int y) const {
+bool Map::isVoidBlock(int32_t x, int32_t y) const {
     for (const auto& obstacle : _obstacles) {
         if (obstacle->getPosition().getX() == x &&
             obstacle->getPosition().getY() == y) {

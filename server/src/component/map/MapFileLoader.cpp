@@ -52,7 +52,7 @@ MapFileLoader::loadMapFromFile(const std::string& filePath) {
     std::string name;
     std::vector<std::shared_ptr<Obstacle>> obstacles;
     bool parsingMap = false;
-    int y = 0;
+    int32_t y = 0;
 
     for (const auto& line : lines) {
         if (line.find(NAME_LABEL) == 0) {
@@ -88,7 +88,7 @@ MapFileLoader::loadMapFromFile(const std::string& filePath) {
  * @param obstacles The vector to store the obstacles
  */
 void MapFileLoader::parseMapLine(
-    const std::string& line, int y,
+    const std::string& line, int32_t y,
     std::vector<std::shared_ptr<Obstacle>>& obstacles) {
     for (size_t x = 0; x < line.size(); x += BLOCK_OFFSET) {
         std::string blockCode = line.substr(x, BLOCK_OFFSET);
@@ -96,7 +96,7 @@ void MapFileLoader::parseMapLine(
         if (ObstacleManager::get().isObstacleCodeValid(blockCode)) {
             auto obstacle = std::make_shared<Obstacle>(
                 ObstacleManager::get().getObstacleType(blockCode),
-                Point(static_cast<int>(x / BLOCK_OFFSET), y));
+                Point(static_cast<int32_t>(x / BLOCK_OFFSET), y));
             obstacles.push_back(obstacle);
             ObstacleManager::get().addObstacle(obstacle);
         }

@@ -5,10 +5,10 @@
 ** NetworkClient.cpp
 */
 
-#include "protocol/NetworkClient.hpp"
+#include "network/protocol/NetworkClient.hpp"
 #include <iostream>
 #include <thread>
-#include "protocol/Protocol.hpp"
+#include "network/protocol/Protocol.hpp"
 #include "util/Logger.hpp"
 
 NetworkClient::NetworkClient(const std::string& serverAddress,
@@ -37,6 +37,7 @@ void NetworkClient::connectUDP() {
     UdpSocket::send(smartBuffer);
 }
 
+ 
 void NetworkClient::run() {
     std::thread tcpThread(&NetworkClient::handleTcpMessages, this);
     std::thread udpThread(&NetworkClient::handleUdpMessages, this);
@@ -44,6 +45,7 @@ void NetworkClient::run() {
     tcpThread.join();
     udpThread.join();
 }
+
 
 void NetworkClient::handleTcpMessages() const {
     try {
