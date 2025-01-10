@@ -41,8 +41,10 @@ void TcpSocket::init() {
 
     // Set socket options
     int opt = 1;
-    if (setsockopt(_tcpSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
-        throw std::runtime_error("[TCP Socket] Failed to set socket options (SO_REUSEADDR).");
+    if (setsockopt(_tcpSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) <
+        0) {
+        throw std::runtime_error(
+            "[TCP Socket] Failed to set socket options (SO_REUSEADDR).");
     }
 
     // Bind the socket

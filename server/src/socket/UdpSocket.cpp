@@ -87,9 +87,9 @@ void UdpSocket::readLoop() {
 void UdpSocket::sendLoop() {
     SmartBuffer smartBuffer;
 
-    while (true) {  
-        // Get all clients  
-        const auto clients = getClients();    
+    while (true) {
+        // Get all clients
+        const auto clients = getClients();
         if (clients.empty()) {
             continue;
         }
@@ -117,7 +117,7 @@ void UdpSocket::sendLoop() {
         }
 
         // Increment the viewport
-        //MapManager::get().getCurrentMap()->incrementViewport();
+        // MapManager::get().getCurrentMap()->incrementViewport();
 
         // Sleep for a short time
         std::this_thread::sleep_for(std::chrono::milliseconds(FREQUENCY));
