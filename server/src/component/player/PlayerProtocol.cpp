@@ -34,7 +34,7 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
     // Create the response buffer for the new player
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_CALLBACK);
-    smartBuffer << player->getId();
+    smartBuffer << static_cast<int16_t>(player->getId());
 
     // Send the player ID to the client that requested it
     TcpSocket::sendToOne(clientSocket, smartBuffer);
@@ -48,7 +48,7 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(
             Protocol::OpCode::NEW_PLAYER_BROADCAST);
-        smartBuffer << existingPlayer->getId()
+        smartBuffer << static_cast<int16_t>(existingPlayer->getId())
                     << std::string{existingPlayer->getName()};
 
         // Send the existing player to the new player
@@ -81,9 +81,9 @@ void PlayerProtocol::sendPositionsUpdate(const int udpSocket,
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(
         Protocol::OpCode::PLAYER_POSITION_UPDATE);
-    smartBuffer << player->getId();
-    smartBuffer << player->getPosition().getX();
-    smartBuffer << player->getPosition().getY();
+    smartBuffer << static_cast<int16_t>(player->getId());
+    smartBuffer << static_cast<int32_t>(player->getPosition().getX());
+    smartBuffer << static_cast<int32_t>(player->getPosition().getY());
 
     // Broadcast the position update to all clients
     UdpSocket::sendToOne(udpSocket, client, smartBuffer);

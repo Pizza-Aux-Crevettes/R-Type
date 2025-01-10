@@ -67,10 +67,10 @@ void MapProtocol::sendObstaclesUpdate(const int udpSocket,
         smartBuffer.reset();
         smartBuffer
             << static_cast<int16_t>(Protocol::OpCode::MAP_OBSTACLES_UPDATE)
-            << static_cast<int32_t>(obstacle->getId())
+            << static_cast<int16_t>(obstacle->getId())
             << static_cast<int32_t>(obstacle->getPosition().getX())
             << static_cast<int32_t>(obstacle->getPosition().getY())
-            << static_cast<int32_t>(static_cast<int>(obstacle->getType()));
+            << static_cast<int16_t>(static_cast<int>(obstacle->getType()));
 
         UdpSocket::sendToOne(udpSocket, clientAddr, smartBuffer);
 
