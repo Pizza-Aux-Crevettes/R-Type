@@ -72,7 +72,7 @@ void Protocol::handleDefault(SmartBuffer& smartBuffer) {
 }
 
 void Protocol::handleNewPlayerCallback(SmartBuffer& smartBuffer) {
-    int16_t playerId;
+    int32_t playerId;
     smartBuffer >> playerId;
 
     Protocol::setPlayerId(playerId);
@@ -89,7 +89,7 @@ void Protocol::handleNewPlayerCallback(SmartBuffer& smartBuffer) {
 }
 
 void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
-    int16_t playerId;
+    int32_t playerId;
     std::string playerName;
 
     smartBuffer >> playerId >> playerName;
@@ -106,8 +106,7 @@ void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
 }
 
 void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
-    int16_t playerId;
-    int32_t x, y;
+    int32_t playerId, x, y;
 
     smartBuffer >> playerId >> x >> y;
 
@@ -128,9 +127,7 @@ void Protocol::handleViewportUpdate(SmartBuffer& smartBuffer) {
 }
 
 void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
-    int16_t obstacleId;
-    int32_t x;
-    int32_t y;
+    int32_t obstacleId, x, y;
     int16_t type;
     smartBuffer >> obstacleId >> x >> y >> type;
 

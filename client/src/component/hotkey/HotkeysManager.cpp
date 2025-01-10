@@ -9,7 +9,6 @@
 #include "network/protocol/Protocol.hpp"
 #include "network/socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
-
 #include <SmartBuffer.hpp>
 #include <iostream>
 
