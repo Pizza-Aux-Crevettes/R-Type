@@ -16,6 +16,7 @@
 #include <components/Sprite.hpp>
 #include <components/Text.hpp>
 #include <components/Texture.hpp>
+#include <components/ButtonRect.hpp>
 #include <iostream>
 
 GameEngine::System::System() {}
@@ -135,6 +136,8 @@ static void textSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
             setPosition(entity, textComp.getText());
             setColor(entity, textComp.getText());
             textComp.setIsLoaded(true);
+        } else {
+            textComp.getText().setString(textComp.getString());
         }
         if (entity.getComponent<Position>().getPositions().size() > 1) {
             auto& positionComp = entity.getComponent<Position>();
@@ -368,13 +371,41 @@ static void sliderSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
     }
 }
 
+
+static void buttonRectSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
+    if (entity.hasComponent<ButtonRect>() && entity.hasComponent<Position>()) {
+        auto& buttonRectComp = entity.getComponent<ButtonRect>();
+        auto& positionComp = entity.getComponent<Position>();
+
+        if (!buttonRectComp.getIsLoaded()) {
+            buttonRectComp.getButtonRect().setSize(sf::Vector2f(buttonRectComp.getSize().first, buttonRectComp.getSize().second));
+            buttonRectComp.getButtonRect().setPosition(positionComp.getPositionX(0), positionComp.getPositionY(0));
+            buttonRectComp.getButtonRect().setFillColor(buttonRectComp.getColor());
+            buttonRectComp.setIsLoaded(true);
+        }
+        static std::map<GameEngine::Entity*, bool> wasPressedMap;
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        sf::FloatRect buttonRectBounds = buttonRectComp.getButtonRect().getGlobalBounds();
+        if (buttonRectBounds.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+            bool isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+            if (isPressed && !wasPressedMap[&entity]) {
+                buttonRectComp.executeCallback();
+                wasPressedMap[&entity] = true;
+            } else if (!isPressed) {
+                wasPressedMap[&entity] = false;
+            }
+        }
+        window.draw(buttonRectComp.getButtonRect());
+    }
+}
+
 void GameEngine::System::render(sf::RenderWindow& window,
                                 std::map<int, Entity>& entities) {
-    // std::cout << "Rendering..." << std::endl;
     for (auto& [id, entity] : entities) {
         spriteSystem(window, entity);
         textSystem(window, entity);
         buttonSystem(window, entity);
+        buttonRectSystem(window, entity);
         optionButtonSystem(window, entity);
         sliderSystem(window, entity);
         shapeSystem(window, entity);
@@ -407,3 +438,4 @@ void GameEngine::System::update(const int id, std::map<int, Entity>& entities,
 }
 
 GameEngine::System::~System() {}
+
