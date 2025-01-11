@@ -97,7 +97,7 @@ void Menu::setupInput(const sf::Event& event) {
                 if (!port.empty()) {
                     port.pop_back();
                 }
-                Client::get().setIp(port);
+                Client::get().setPort(port);
             } else if (event.text.unicode < 128 && port.size() < 10) {
                 port += static_cast<char>(event.text.unicode);
             }
@@ -109,7 +109,7 @@ void Menu::setupInput(const sf::Event& event) {
                 if (!username.empty()) {
                     username.pop_back();
                 }
-                Client::get().setIp(username);
+                Client::get().setPort(username);
             } else if (event.text.unicode < 128 && username.size() < 10) {
                 username += static_cast<char>(event.text.unicode);
             }
