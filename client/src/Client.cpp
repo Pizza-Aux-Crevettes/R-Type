@@ -71,10 +71,15 @@ void Client::manageClient() {
             EntityManager::get().getEntityList();
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+
+            if (event.type == sf::Event::Closed) {
                 window.close();
+                return;
+            }
             if (event.type == sf::Event::KeyPressed)
                 input.checkKey(event);
+            menu.setupInput(event);
+
         }
         window.clear();
         if (!Client::get().getIsPlayed()) {
@@ -86,4 +91,27 @@ void Client::manageClient() {
         }
         window.display();
     }
+}
+
+void Client::setUsername(std::string username) {
+    _username = username;
+}
+void Client::setPort(std::string port) {
+    _port = port;
+}
+void Client::setIp(std::string Ip) {
+    _ip = Ip;
+}
+std::string Client::getUsername() {
+    return _username;
+}
+std::string Client::getPort() {
+    return _port;
+}
+std::string Client::getIp() {
+    return _ip;
+}
+
+sf::Event Client::getEvent() {
+    return _event;
 }

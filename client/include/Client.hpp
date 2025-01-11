@@ -26,6 +26,10 @@ class Client {
     std::map<int, std::map<std::string, std::any>> _updateItems;
     std::map<int, std::shared_ptr<GameEngine::Entity>> _entities;
     bool _isPlay = false;
+    std::string _username = "";
+    std::string _port;
+    std::string _ip;
+    sf::Event _event;
 
   public:
     Client();
@@ -36,4 +40,13 @@ class Client {
                           sf::Texture background);
     void setIsPlayed();
     bool getIsPlayed();
+    void setUsername(std::string username);
+    void setPort(std::string port);
+    void setIp(std::string Ip);
+    std::string getUsername();
+    std::string getPort();
+    std::string getIp();
+    sf::Event getEvent();
+
+
 };
