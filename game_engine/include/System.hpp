@@ -34,12 +34,11 @@ class System {
     void setPosition(Entity& entity, Drawable& drawable);
     template <typename Drawable>
     void updatePos(Entity& entity, Drawable& drawable,
-                      const std::pair<float, float>& pos, const int& posId);
+                   const std::pair<float, float>& pos, const int& posId);
     void loadSprite(Entity& entity, auto& spriteComp, auto& textureComp);
     void spriteSystem(sf::RenderWindow& window, Entity& entity);
     void linkSystem(int id, std::map<int, Entity>& entities,
-                       std::pair<float, float> newLinkedEntityPos,
-                       int posId);
+                    std::pair<float, float> newLinkedEntityPos, int posId);
     void loadText(Entity& entity, auto& textComp);
     void textSystem(sf::RenderWindow& window, Entity& entity);
     void loadRectangle(Entity& entity, auto& shapeComp);
@@ -80,7 +79,7 @@ void System::setPosition(Entity& entity, Drawable& drawable) {
 
 template <typename Drawable>
 void System::updatePos(Entity& entity, Drawable& drawable,
-                      const std::pair<float, float>& pos, const int& posId) {
+                       const std::pair<float, float>& pos, const int& posId) {
     if (entity.hasComponent<Position>()) {
         auto& positionComp = entity.getComponent<Position>();
         positionComp.setPositionX(posId, pos.first);

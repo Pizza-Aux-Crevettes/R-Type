@@ -5,11 +5,12 @@
 ** ShapeSystem.cpp
 */
 
-#include "System.hpp"
 #include <components/Shape.hpp>
 #include <components/Texture.hpp>
+#include "System.hpp"
 
-void GameEngine::System::loadRectangle(GameEngine::Entity& entity, auto& shapeComp) {
+void GameEngine::System::loadRectangle(GameEngine::Entity& entity,
+                                       auto& shapeComp) {
     if (!shapeComp.getIsLoaded()) {
         sf::RectangleShape rectangle;
         rectangle.setSize(sf::Vector2f(shapeComp.getSize().first,
@@ -20,16 +21,16 @@ void GameEngine::System::loadRectangle(GameEngine::Entity& entity, auto& shapeCo
         if (entity.hasComponent<Texture>() &&
             !entity.getComponent<Texture>().getIsLoaded()) {
             auto& textureComp = entity.getComponent<Texture>();
-            textureComp.getTexture().loadFromFile(
-                textureComp.getTexturePath());
+            textureComp.getTexture().loadFromFile(textureComp.getTexturePath());
             textureComp.setIsLoaded(true);
             shapeComp.getRect().setTexture(&textureComp.getTexture());
-            }
+        }
         shapeComp.setIsLoaded(true);
     }
 }
 
-void GameEngine::System::loadCircle(GameEngine::Entity& entity, auto& shapeComp) {
+void GameEngine::System::loadCircle(GameEngine::Entity& entity,
+                                    auto& shapeComp) {
     if (!shapeComp.getIsLoaded()) {
         sf::CircleShape circle;
         circle.setRadius(shapeComp.getRadius());
@@ -39,16 +40,16 @@ void GameEngine::System::loadCircle(GameEngine::Entity& entity, auto& shapeComp)
         if (entity.hasComponent<Texture>() &&
             !entity.getComponent<Texture>().getIsLoaded()) {
             auto& textureComp = entity.getComponent<Texture>();
-            textureComp.getTexture().loadFromFile(
-                textureComp.getTexturePath());
+            textureComp.getTexture().loadFromFile(textureComp.getTexturePath());
             textureComp.setIsLoaded(true);
             shapeComp.getCircle().setTexture(&textureComp.getTexture());
-            }
+        }
         shapeComp.setIsLoaded(true);
     }
 }
 
-void GameEngine::System::shapeSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
+void GameEngine::System::shapeSystem(sf::RenderWindow& window,
+                                     GameEngine::Entity& entity) {
     if (entity.hasComponent<Shape>() && entity.hasComponent<Position>()) {
         auto& shapeComp = entity.getComponent<Shape>();
         if (shapeComp.getShapeType() == Rectangle) {

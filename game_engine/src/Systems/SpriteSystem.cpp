@@ -8,7 +8,8 @@
 #include <components/Sprite.hpp>
 #include "System.hpp"
 
-void GameEngine::System::loadSprite(GameEngine::Entity& entity, auto& spriteComp, auto& textureComp) {
+void GameEngine::System::loadSprite(GameEngine::Entity& entity,
+                                    auto& spriteComp, auto& textureComp) {
     if (!spriteComp.getIsLoaded()) {
         if (textureComp.getTextureRect().size() == 4) {
             const auto& textureRect = textureComp.getTextureRect();
@@ -22,7 +23,7 @@ void GameEngine::System::loadSprite(GameEngine::Entity& entity, auto& spriteComp
             spriteComp.getSize().second != -1) {
             spriteComp.getSprite().setScale(spriteComp.getSize().first,
                                             spriteComp.getSize().second);
-            }
+        }
         setColor(entity, spriteComp.getSprite());
         spriteComp.setIsLoaded(true);
     }

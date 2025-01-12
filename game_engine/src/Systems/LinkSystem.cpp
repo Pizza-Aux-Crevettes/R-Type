@@ -5,14 +5,15 @@
 ** LinkSystem.cpp
 */
 
-#include "System.hpp"
 #include <components/Link.hpp>
 #include <components/Sprite.hpp>
 #include <components/Text.hpp>
+#include "System.hpp"
 
-void GameEngine::System::linkSystem(int id, std::map<int, GameEngine::Entity>& entities,
-                       std::pair<float, float> newLinkedEntityPos,
-                       const int posId) {
+void GameEngine::System::linkSystem(int id,
+                                    std::map<int, GameEngine::Entity>& entities,
+                                    std::pair<float, float> newLinkedEntityPos,
+                                    const int posId) {
     for (auto& [_, entity] : entities) {
         if (entity.hasComponent<Link>() &&
             entity.getComponent<Link>().getId() == id) {

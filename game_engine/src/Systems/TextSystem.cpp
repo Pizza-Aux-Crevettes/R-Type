@@ -5,8 +5,8 @@
 ** TextSystem.cpp
 */
 
-#include "System.hpp"
 #include <components/Text.hpp>
+#include "System.hpp"
 
 void GameEngine::System::loadText(GameEngine::Entity& entity, auto& textComp) {
     if (!textComp.getIsLoaded()) {
@@ -22,7 +22,8 @@ void GameEngine::System::loadText(GameEngine::Entity& entity, auto& textComp) {
     }
 }
 
-void GameEngine::System::textSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
+void GameEngine::System::textSystem(sf::RenderWindow& window,
+                                    GameEngine::Entity& entity) {
     if (entity.hasComponent<Text>() && entity.hasComponent<Position>()) {
         auto& textComp = entity.getComponent<Text>();
         loadText(entity, textComp);

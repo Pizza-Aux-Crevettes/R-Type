@@ -5,13 +5,14 @@
 ** ButtonSystem.cpp
 */
 
-#include "System.hpp"
 #include <components/Button.hpp>
+#include <components/ButtonRect.hpp>
 #include <components/OptionButton.hpp>
 #include <components/Slider.hpp>
-#include <components/ButtonRect.hpp>
+#include "System.hpp"
 
-void GameEngine::System::buttonSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
+void GameEngine::System::buttonSystem(sf::RenderWindow& window,
+                                      GameEngine::Entity& entity) {
     if (entity.hasComponent<Button>() && entity.hasComponent<Position>()) {
         auto& buttonComp = entity.getComponent<Button>();
         auto& positionComp = entity.getComponent<Position>();
@@ -65,7 +66,7 @@ void GameEngine::System::buttonSystem(sf::RenderWindow& window, GameEngine::Enti
 }
 
 void GameEngine::System::optionButtonSystem(sf::RenderWindow& window,
-                               GameEngine::Entity& entity) {
+                                            GameEngine::Entity& entity) {
     if (entity.hasComponent<OptionButton>() &&
         entity.hasComponent<Position>()) {
         auto& buttonComp = entity.getComponent<OptionButton>();
@@ -116,7 +117,8 @@ void GameEngine::System::optionButtonSystem(sf::RenderWindow& window,
     }
 }
 
-void GameEngine::System::sliderSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
+void GameEngine::System::sliderSystem(sf::RenderWindow& window,
+                                      GameEngine::Entity& entity) {
     if (entity.hasComponent<Slider>() && entity.hasComponent<Position>()) {
         auto& sliderComp = entity.getComponent<Slider>();
         auto& positionComp = entity.getComponent<Position>();
@@ -185,7 +187,7 @@ void GameEngine::System::sliderSystem(sf::RenderWindow& window, GameEngine::Enti
 }
 
 void GameEngine::System::buttonRectSystem(sf::RenderWindow& window,
-                             GameEngine::Entity& entity) {
+                                          GameEngine::Entity& entity) {
     if (entity.hasComponent<ButtonRect>() && entity.hasComponent<Position>()) {
         auto& buttonRectComp = entity.getComponent<ButtonRect>();
         auto& positionComp = entity.getComponent<Position>();
