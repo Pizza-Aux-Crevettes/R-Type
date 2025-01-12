@@ -7,6 +7,7 @@
 
 #include "component/map/MapFileLoader.hpp"
 #include "component/obstacle/ObstacleManager.hpp"
+#include "util/Config.hpp"
 #include "util/FileReader.hpp"
 #include "util/Logger.hpp"
 
@@ -90,13 +91,19 @@ MapFileLoader::loadMapFromFile(const std::string& filePath) {
 void MapFileLoader::parseMapLine(
     const std::string& line, int32_t y,
     std::vector<std::shared_ptr<Obstacle>>& obstacles) {
+    int32_t blockY = y * BLOCK_SIZE;
+
     for (size_t x = 0; x < line.size(); x += BLOCK_OFFSET) {
         std::string blockCode = line.substr(x, BLOCK_OFFSET);
 
         if (ObstacleManager::get().isObstacleCodeValid(blockCode)) {
+            int32_t blockX =
+                static_cast<int32_t>(x / BLOCK_OFFSET) * BLOCK_SIZE;
+
             auto obstacle = std::make_shared<Obstacle>(
                 ObstacleManager::get().getObstacleType(blockCode),
-                Point(static_cast<int32_t>(x / BLOCK_OFFSET), y));
+                Point(blockX, blockY));
+
             obstacles.push_back(obstacle);
             ObstacleManager::get().addObstacle(obstacle);
         }

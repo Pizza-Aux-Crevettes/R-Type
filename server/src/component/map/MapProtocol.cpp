@@ -8,6 +8,7 @@
 #include "component/map/MapProtocol.hpp"
 #include "protocol/Protocol.hpp"
 #include "socket/UdpSocket.hpp"
+#include "util/Config.hpp"
 #include "util/Logger.hpp"
 
 /**
@@ -70,6 +71,7 @@ void MapProtocol::sendObstaclesUpdate(const int udpSocket,
                     << static_cast<int32_t>(obstacle->getId())
                     << static_cast<int32_t>(obstacle->getPosition().getX())
                     << static_cast<int32_t>(obstacle->getPosition().getY())
+                    << static_cast<int16_t>(BLOCK_SIZE)
                     << static_cast<int16_t>(obstacle->getType());
 
         UdpSocket::sendToOne(udpSocket, clientAddr, smartBuffer);

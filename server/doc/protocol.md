@@ -100,6 +100,7 @@ Each message contains the following fields:
   - `obstacleId` (int32_t): ID of the obstacle.
   - `obstacleX` (int32_t): X-coordinate of the obstacle.
   - `obstacleY` (int32_t): Y-coordinate of the obstacle.
+  - `size` (int16_t): Size of the block.
   - `type` (int16_t): Type identifier for the obstacle.
 
 ---

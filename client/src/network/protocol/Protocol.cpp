@@ -128,8 +128,8 @@ void Protocol::handleViewportUpdate(SmartBuffer& smartBuffer) {
 
 void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
     int32_t obstacleId, x, y;
-    int16_t type;
-    smartBuffer >> obstacleId >> x >> y >> type;
+    int16_t type, size;
+    smartBuffer >> obstacleId >> x >> y >> size >> type;
 
     Logger::info("[Protocol] MAP_OBSTACLES_UPDATE - Obstacle ID: " +
                  std::to_string(obstacleId) + ", Position: (" +

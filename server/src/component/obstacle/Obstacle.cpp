@@ -7,6 +7,7 @@
 
 #include "component/obstacle/Obstacle.hpp"
 #include "component/attr/IDManager.hpp"
+#include "util/Config.hpp"
 
 /**
  * @brief Construct a new Obstacle:: Obstacle object
@@ -60,4 +61,17 @@ const Point& Obstacle::getPosition() const {
  */
 void Obstacle::setPosition(const Point& position) {
     _position = position;
+}
+
+/**
+ * @brief Check if the obstacle contains a point
+ *
+ * @param x The x coordinate
+ * @param y The y coordinate
+ * @return true If the point is within the obstacle bounds
+ * @return false Otherwise
+ */
+bool Obstacle::contains(int32_t x, int32_t y) const {
+    return x >= _position.getX() && x < _position.getX() + BLOCK_SIZE &&
+           y >= _position.getY() && y < _position.getY() + BLOCK_SIZE;
 }

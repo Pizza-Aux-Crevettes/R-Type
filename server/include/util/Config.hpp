@@ -26,4 +26,7 @@ enum Config {
     DEFAULT_HEALTH = 100,
     DEFAULT_LIVES = 3,
     PLAYER_SPEED = 10,
+
+    // Map
+    BLOCK_SIZE = 32,
 };

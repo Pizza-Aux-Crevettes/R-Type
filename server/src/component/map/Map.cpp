@@ -6,6 +6,7 @@
 */
 
 #include "component/map/Map.hpp"
+#include "util/Config.hpp"
 
 /**
  * @brief Construct a new Map:: Map object
@@ -40,14 +41,14 @@ int32_t Map::getViewport() const {
  * @return std::vector<Obstacle>
  */
 std::vector<std::shared_ptr<Obstacle>> Map::getObstaclesByViewport() const {
-    int32_t startX = _viewport;
-    int32_t endX = _viewport + RENDER_DISTANCE;
+    int32_t startX = _viewport * BLOCK_SIZE;
+    int32_t endX = startX + RENDER_DISTANCE * BLOCK_SIZE;
 
     std::vector<std::shared_ptr<Obstacle>> visibleObstacles;
 
     for (const auto& obstacle : _obstacles) {
-        if (obstacle->getPosition().getX() >= startX &&
-            obstacle->getPosition().getX() <= endX) {
+        int obstacleEndX = obstacle->getPosition().getX() + BLOCK_SIZE;
+        if (obstacleEndX >= startX && obstacle->getPosition().getX() <= endX) {
             visibleObstacles.push_back(obstacle);
         }
     }
@@ -64,8 +65,7 @@ std::vector<std::shared_ptr<Obstacle>> Map::getObstaclesByViewport() const {
  */
 bool Map::isVoidBlock(int32_t x, int32_t y) const {
     for (const auto& obstacle : _obstacles) {
-        if (obstacle->getPosition().getX() == x &&
-            obstacle->getPosition().getY() == y) {
+        if (obstacle->contains(x, y)) {
             return obstacle->getType() == ObstacleType::NONE;
         }
     }
