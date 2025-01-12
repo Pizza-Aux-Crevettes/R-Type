@@ -22,8 +22,14 @@ void GameEngine::System::loadRectangle(GameEngine::Entity& entity,
             !entity.getComponent<Texture>().getIsLoaded()) {
             auto& textureComp = entity.getComponent<Texture>();
             textureComp.getTexture().loadFromFile(textureComp.getTexturePath());
-            textureComp.setIsLoaded(true);
+            if (textureComp.getTextureRect().size() == 4) {
+                const auto& textureRect = textureComp.getTextureRect();
+                shapeComp.getRect().setTextureRect(
+                    sf::IntRect(textureRect[0], textureRect[1], textureRect[2],
+                            textureRect[3]));
+            }
             shapeComp.getRect().setTexture(&textureComp.getTexture());
+            textureComp.setIsLoaded(true);
         }
         shapeComp.setIsLoaded(true);
     }
@@ -41,8 +47,14 @@ void GameEngine::System::loadCircle(GameEngine::Entity& entity,
             !entity.getComponent<Texture>().getIsLoaded()) {
             auto& textureComp = entity.getComponent<Texture>();
             textureComp.getTexture().loadFromFile(textureComp.getTexturePath());
-            textureComp.setIsLoaded(true);
+            if (textureComp.getTextureRect().size() == 4) {
+                const auto& textureRect = textureComp.getTextureRect();
+                shapeComp.getCircle().setTextureRect(
+                    sf::IntRect(textureRect[0], textureRect[1], textureRect[2],
+                            textureRect[3]));
+            }
             shapeComp.getCircle().setTexture(&textureComp.getTexture());
+            textureComp.setIsLoaded(true);
         }
         shapeComp.setIsLoaded(true);
     }
