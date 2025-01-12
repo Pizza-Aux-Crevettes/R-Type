@@ -93,8 +93,8 @@ void UdpSocket::sendLoop() {
         auto frameStart = std::chrono::high_resolution_clock::now();
 
         if (!_clients.empty() && !PlayerManager::get().getPlayers().empty()) {
-             Logger::info("[UDP Socket] Sending updates to " +
-                     std::to_string(_clients.size()) + " clients.");
+            Logger::info("[UDP Socket] Sending updates to " +
+                         std::to_string(_clients.size()) + " clients.");
 
             for (const auto& client : _clients) {
                 // Send player updates
