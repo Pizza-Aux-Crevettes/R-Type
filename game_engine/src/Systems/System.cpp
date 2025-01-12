@@ -9,11 +9,6 @@
 
 GameEngine::System::System() {}
 
-GameEngine::System& GameEngine::System::get() {
-    static System instance;
-    return instance;
-}
-
 void GameEngine::System::render(sf::RenderWindow& window,
                                 std::map<int, Entity>& entities) {
     for (auto& [id, entity] : entities) {

@@ -26,7 +26,6 @@ class System {
     void render(sf::RenderWindow& window, std::map<int, Entity>& entities);
     void update(int id, std::map<int, Entity>& entities, UpdateType type,
                 const std::any& value, int posId = 0);
-    System& get();
 
   private:
     template <typename Drawable>
