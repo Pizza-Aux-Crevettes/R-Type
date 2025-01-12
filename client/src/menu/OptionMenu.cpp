@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 #include <iomanip>
 #include "Client.hpp"
+#include "../../include/component/hotkey/HotkeysManager.hpp"
 #include "components/Button.hpp"
 #include "components/Color.hpp"
 #include "components/OptionButton.hpp"
@@ -72,6 +73,20 @@ GameEngine::Entity OptionMenu::createEntitySlider(
     return newEntity;
 }
 
+void OptionMenu::setNewKey(const sf::Event& event) {
+    if (_waitingForKey && event.type == sf::Event::KeyPressed) {
+        sf::Keyboard::Key newKey = event.key.code;
+
+        if (HotkeysManager::get().isKeyUsed(newKey)) {
+            std::cout << "Already use" << std::endl;
+            return;
+        }
+
+        HotkeysManager::get().setKey(_hotkeyPressed, newKey);
+        std::cout << "New : " << HotkeysManager::get().keyToString(HotkeysManager::get().getKey(_hotkeyPressed)) << std::endl;
+        _waitingForKey = false;
+    }
+}
 void OptionMenu::printExit() {
     std::cout << "Exit clicked" << std::endl;
 }
@@ -108,6 +123,48 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
         _entitiesMenuOption.emplace(
             entityId,
             createEntityText(entityId++, "Controller  mode", {{40, 520}}, 20));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityButton( entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_TOP)), "assets/font/Inter_Bold.ttf",
+                              20, {{200, 185}},
+                              [this]() {
+                                _waitingForKey = true;
+                                _hotkeyPressed = HotkeysCodes::ARROW_TOP; }));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityButton( entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_BOTTOM)), "assets/font/Inter_Bold.ttf",
+                              20, {{300, 185}},
+                              [this]() {
+                                _waitingForKey = true;
+                                _hotkeyPressed = HotkeysCodes::ARROW_BOTTOM; }));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityButton( entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_LEFT)), "assets/font/Inter_Bold.ttf",
+                              20, {{400, 185}},
+                              [this]() {
+                                _waitingForKey = true;
+                                _hotkeyPressed = HotkeysCodes::ARROW_LEFT; }));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityButton( entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_RIGHT)), "assets/font/Inter_Bold.ttf",
+                              20, {{500, 185}},
+                              [this]() {
+                                _waitingForKey = true;
+                                _hotkeyPressed = HotkeysCodes::ARROW_RIGHT; }));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityButton( entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::AUTO_FIRE)), "assets/font/Inter_Bold.ttf",
+                              20, {{600, 185}},
+                              [this]() {
+                                _waitingForKey = true;
+                                _hotkeyPressed = HotkeysCodes::AUTO_FIRE; }));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityButton( entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::SHOOT)), "assets/font/Inter_Bold.ttf",
+                              20, {{700, 185}},
+                              [this]() {
+                                _waitingForKey = true;
+                                _hotkeyPressed = HotkeysCodes::SHOOT; }));
         _entitiesMenuOption.emplace(
             entityId,
             createEntityOptionButton(entityId++, {{720, 240}},

@@ -14,4 +14,6 @@ enum class HotkeysCodes : int16_t {
     ARROW_RIGHT,
     ARROW_TOP,
     ARROW_BOTTOM,
+    AUTO_FIRE,
+    SHOOT,
 };

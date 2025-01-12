@@ -12,6 +12,7 @@
 #include <System.hpp>
 #include <functional>
 #include <memory>
+#include "component/hotkey/HotkeysCodes.hpp"
 
 class OptionMenu {
   private:
@@ -25,6 +26,8 @@ class OptionMenu {
     bool _difficulty = false;
     bool _control = false;
     bool _constrast = false;
+    bool _waitingForKey = false;
+    HotkeysCodes _hotkeyPressed;
 
   public:
     OptionMenu();
@@ -45,8 +48,8 @@ class OptionMenu {
     createEntitySlider(int, const std::pair<int, int>,
                        const std::vector<std::pair<float, float>>,
                        std::function<float()>, std::function<void(float)>);
-
     void displayOptionMenu(sf::RenderWindow&, GameEngine::System);
+    void setNewKey(const sf::Event& event);
     int getVolumnMusic();
     void setVolumnMusic(int);
     int getVolumnGame();
