@@ -132,14 +132,15 @@ void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
     int16_t type, size;
     smartBuffer >> obstacleId >> x >> y >> size >> type;
 
-    Logger::info("[Protocol] MAP_OBSTACLES_UPDATE - Obstacle ID: " +
-                 std::to_string(obstacleId) + ", Position: (" +
-                 std::to_string(x) + ", " + std::to_string(y) +
-                 "), Type: " + std::to_string(type));
+    // Logger::info("[Protocol] MAP_OBSTACLES_UPDATE - Obstacle ID: " +
+    //              std::to_string(obstacleId) + ", Position: (" +
+    //              std::to_string(x) + ", " + std::to_string(y) +
+    //              "), Type: " + std::to_string(type));
 
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/obstacle.png")},
-        {"TextureRect", std::vector<int>{0, 0, 200, 30}},
+        {"TextureRect", std::vector<int>{0, 0, 150, 30}},
+        {"Size", std::pair<float, float>(size, size)},
         {"Position", std::pair<float, float>(x, y)}};
     EntityManager::get().CompareEntities(obstacleId, newItems, {x, y});
 
