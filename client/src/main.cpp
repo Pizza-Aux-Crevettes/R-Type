@@ -38,7 +38,7 @@ void initializeNetwork(NetworkClient& networkClient) {
 int main() {
     try {
         Client client;
-        NetworkClient networkClient("127.0.0.1", SERVER_PORT);
+        NetworkClient networkClient(Client::get().getIp(), std::any_cast<int>(Client::get().getPort()));
 
         initializeNetwork(networkClient);
         std::thread serverThread(runNetworkClient, std::ref(networkClient),
