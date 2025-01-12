@@ -14,7 +14,8 @@
 
 class ButtonRect : public Component {
   public:
-    ButtonRect(const std::pair<int, int> &sizeRect = {150, 50}, sf::Color color = sf::Color::Red);
+    ButtonRect(const std::pair<int, int>& sizeRect = {150, 50},
+               sf::Color color = sf::Color::Red);
     ~ButtonRect();
 
     sf::RectangleShape& getButtonRect();

@@ -16,15 +16,15 @@ the ButtonRect's
 /**
  * @brief Constructor for the ButtonRect component.
  *
- * This constructor initializes the ButtonRect component with the specified text and
- * size.
+ * This constructor initializes the ButtonRect component with the specified text
+ * and size.
  *
  * @param text A string representing the text on the ButtonRect.
  * @param size A pair of doubles representing the size of the ButtonRect (width,
  * height).
  */
 
-ButtonRect::ButtonRect(const std::pair<int, int> &sizeRect, sf::Color color)
+ButtonRect::ButtonRect(const std::pair<int, int>& sizeRect, sf::Color color)
     : _size(sizeRect), _color(color) {}
 
 /**
@@ -57,7 +57,6 @@ sf::RectangleShape& ButtonRect::getButtonRect() {
 sf::Color ButtonRect::getColor() {
     return _color;
 }
-
 
 /**
  * @brief Get the size of the ButtonRect component.
