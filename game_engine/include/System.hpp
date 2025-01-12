@@ -26,6 +26,7 @@ class System {
     void render(sf::RenderWindow& window, std::map<int, Entity>& entities);
     void update(int id, std::map<int, Entity>& entities, UpdateType type,
                 const std::any& value, int posId = 0);
+    System& get();
 
   private:
     template <typename Drawable>
@@ -35,11 +36,15 @@ class System {
     template <typename Drawable>
     void updatePos(Entity& entity, Drawable& drawable,
                       const std::pair<float, float>& pos, const int& posId);
+    void loadSprite(Entity& entity, auto& spriteComp, auto& textureComp);
     void spriteSystem(sf::RenderWindow& window, Entity& entity);
     void linkSystem(int id, std::map<int, Entity>& entities,
                        std::pair<float, float> newLinkedEntityPos,
                        int posId);
+    void loadText(Entity& entity, auto& textComp);
     void textSystem(sf::RenderWindow& window, Entity& entity);
+    void loadRectangle(Entity& entity, auto& shapeComp);
+    void loadCircle(Entity& entity, auto& shapeComp);
     void shapeSystem(sf::RenderWindow& window, Entity& entity);
     void buttonSystem(sf::RenderWindow& window, Entity& entity);
     void optionButtonSystem(sf::RenderWindow& window, Entity& entity);
