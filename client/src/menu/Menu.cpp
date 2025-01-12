@@ -7,8 +7,8 @@
 
 #include "menu/Menu.hpp"
 #include "Client.hpp"
-#include "protocol/Protocol.hpp"
-#include "socket/TcpSocket.hpp"
+#include "network/protocol/Protocol.hpp"
+#include "network/socket/TcpSocket.hpp"
 
 Menu::Menu() {}
 

@@ -10,20 +10,30 @@
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
+/**
+ * @brief Get the Server instance
+ *
+ * @return Server&
+ */
 Server& Server::get() {
     static Server instance;
-
     return instance;
 }
 
+/**
+ * @brief Construct a new Server:: Server object
+ *
+ */
 Server::Server() {
     Logger::info("[Server] Starting initialization...");
 
     try {
+        // Initialize the TCP socket
         _tcpSocket.init();
         Logger::socket("[Server] TCP socket initialized successfully on port " +
                        std::to_string(PORT) + ".");
 
+        // Initialize the UDP socket
         _udpSocket.init();
         Logger::socket("[Server] UDP socket initialized successfully on port " +
                        std::to_string(PORT) + ".");
@@ -34,11 +44,15 @@ Server::Server() {
     }
 }
 
+/**
+ * @brief Destroy the Server:: Server object
+ *
+ */
 Server::~Server() {
     Logger::info("[Server] Shutting down...");
 
+    // Close all threads
     closeThreads();
-
     _tcpSocket.close();
     _udpSocket.close();
 
@@ -69,6 +83,10 @@ int Server::start() {
     }
 }
 
+/**
+ * @brief Close all threads
+ *
+ */
 void Server::closeThreads() {
     Logger::info("[Server] Closing threads...");
 

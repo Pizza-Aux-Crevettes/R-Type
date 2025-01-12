@@ -8,48 +8,77 @@
 #include "component/map/MapProtocol.hpp"
 #include "protocol/Protocol.hpp"
 #include "socket/UdpSocket.hpp"
+#include "util/Config.hpp"
 #include "util/Logger.hpp"
 
+/**
+ * @brief Send a viewport update to a client
+ *
+ * @param udpSocket The UDP socket to use
+ * @param clientAddr The client's address
+ * @param smartBuffer The SmartBuffer to use for the response
+ *
+ * Protocol: MAP_VIEWPORT_UPDATE
+ * Payload: viewport (int32_t)
+ */
 void MapProtocol::sendViewportUpdate(const int udpSocket,
                                      const sockaddr_in& clientAddr,
-                                     int viewport, SmartBuffer& smartBuffer) {
-    Logger::info("[MapProtocol] Sending viewport update. Viewport: " +
-                 std::to_string(viewport) +
-                 " to client: " + inet_ntoa(clientAddr.sin_addr) + ":" +
-                 std::to_string(ntohs(clientAddr.sin_port)));
+                                     SmartBuffer& smartBuffer) {
+    // Get the viewport for the map
+    const auto& viewport = MapManager::get().getCurrentMap()->getViewport();
 
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::VIEWPORT_UPDATE)
+    // Construct the buffer
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::MAP_VIEWPORT_UPDATE)
                 << static_cast<int32_t>(viewport);
 
-    UdpSocket::send(udpSocket, clientAddr, smartBuffer);
+    // Send the viewport update
+    UdpSocket::sendToOne(udpSocket, clientAddr, smartBuffer);
 
-    Logger::info("[MapProtocol] Viewport update sent successfully.");
+    Logger::packet("[MapProtocol] Viewport update sent to client: " +
+                   std::string(inet_ntoa(clientAddr.sin_addr)) + ":" +
+                   std::to_string(ntohs(clientAddr.sin_port)) +
+                   ", Viewport: " + std::to_string(viewport));
 }
 
+/**
+ * @brief Send an obstacles update to a client
+ *
+ * @param udpSocket The UDP socket to use
+ * @param clientAddr The client's address
+ * @param smartBuffer The SmartBuffer to use for the response
+ *
+ * Protocol: MAP_OBSTACLES_UPDATE
+ * Payload: id (int32_t), x (int32_t), y (int32_t), type (int16_t)
+ */
 void MapProtocol::sendObstaclesUpdate(const int udpSocket,
                                       const sockaddr_in& clientAddr,
-                                      const std::vector<Obstacle>& obstacles,
                                       SmartBuffer& smartBuffer) {
-    Logger::info("[MapProtocol] Sending obstacles update. Total obstacles: " +
-                 std::to_string(obstacles.size()) +
-                 " to client: " + inet_ntoa(clientAddr.sin_addr) + ":" +
-                 std::to_string(ntohs(clientAddr.sin_port)));
-
-    for (const auto& obstacle : obstacles) {
-        smartBuffer.reset();
-
-        smartBuffer << static_cast<int16_t>(Protocol::OpCode::BLOCKS_UPDATE)
-                    << static_cast<int16_t>(obstacle._x)
-                    << static_cast<int16_t>(obstacle._y)
-                    << static_cast<int16_t>(obstacle._type);
-
-        UdpSocket::send(udpSocket, clientAddr, smartBuffer);
-
-        Logger::info(
-            "[MapProtocol] Obstacle update sent. Position: (" +
-            std::to_string(obstacle._x) + ", " + std::to_string(obstacle._y) +
-            "), Type: " + std::to_string(static_cast<int>(obstacle._type)));
+    // Get the obstacles for the map
+    const auto& obstacles =
+        MapManager::get().getCurrentMap()->getObstaclesByViewport();
+    if (obstacles.empty()) {
+        Logger::warning("[MapProtocol] No obstacles to send to client: " +
+                        std::string(inet_ntoa(clientAddr.sin_addr)) + ":" +
+                        std::to_string(ntohs(clientAddr.sin_port)));
+        return;
     }
 
-    Logger::info("[MapProtocol] All obstacles updates sent successfully.");
+    // Send each obstacle to the client
+    for (const auto& obstacle : obstacles) {
+        smartBuffer.reset();
+        smartBuffer << static_cast<int16_t>(
+                           Protocol::OpCode::MAP_OBSTACLES_UPDATE)
+                    << static_cast<int32_t>(obstacle->getId())
+                    << static_cast<int32_t>(obstacle->getPosition().getX())
+                    << static_cast<int32_t>(obstacle->getPosition().getY())
+                    << static_cast<int16_t>(BLOCK_SIZE)
+                    << static_cast<int16_t>(obstacle->getType());
+
+        UdpSocket::sendToOne(udpSocket, clientAddr, smartBuffer);
+    }
+
+    Logger::packet("[MapProtocol] Obstacle updates sent to client: " +
+                   std::string(inet_ntoa(clientAddr.sin_addr)) + ":" +
+                   std::to_string(ntohs(clientAddr.sin_port)) +
+                   ", Total obstacles: " + std::to_string(obstacles.size()));
 }

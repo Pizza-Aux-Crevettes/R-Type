@@ -20,12 +20,12 @@ class PlayerManager {
 
     static PlayerManager& get();
 
-    int32_t getNextUserId() const;
     std::shared_ptr<Player> createPlayer(const std::string& name);
     std::shared_ptr<Player> findPlayerById(int32_t playerId) const;
     bool removePlayer(int32_t playerId);
     const std::unordered_map<int32_t, std::shared_ptr<Player>>&
     getPlayers() const;
+    void movePlayer(int32_t playerId, int32_t offsetX, int32_t offsetY);
 
   private:
     PlayerManager() = default;

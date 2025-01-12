@@ -8,8 +8,8 @@
 #pragma once
 
 #include "Client.hpp"
-#include "socket/TcpSocket.hpp"
-#include "socket/UdpSocket.hpp"
+#include "network/socket/TcpSocket.hpp"
+#include "network/socket/UdpSocket.hpp"
 
 class NetworkClient {
   public:
@@ -24,6 +24,7 @@ class NetworkClient {
   private:
     TcpSocket tcpSocket;
     UdpSocket udpSocket;
+
     void handleTcpMessages() const;
     void handleUdpMessages();
 };

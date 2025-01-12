@@ -7,18 +7,18 @@
 
 #pragma once
 
-#include "../../util/Config.hpp"
+#include "util/Config.hpp"
 
 class Health {
   public:
     explicit Health(double health = DEFAULT_HEALTH, int lives = DEFAULT_LIVES);
     ~Health() = default;
 
-    [[nodiscard]] double getHealth() const;
-    [[nodiscard]] int getLives() const;
+    double getHealth() const;
+    int getLives() const;
     void takeDamage(double damage);
     void loseLife();
-    [[nodiscard]] bool isAlive() const;
+    bool isAlive() const;
 
   private:
     double _health;

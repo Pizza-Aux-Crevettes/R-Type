@@ -8,8 +8,7 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
-#include <memory>
-#include <netinet/in.h>
+#include "Client.hpp"
 
 class Protocol {
   public:
@@ -32,10 +31,21 @@ class Protocol {
     Protocol& operator=(const Protocol&) = delete;
 
     static Protocol& get();
-    static void handleMessage(int clientSocket, SmartBuffer& smartBuffer,
-                              const sockaddr_in& clientAddr);
+    static void handleMessage(SmartBuffer& smartBuffer);
+    static int32_t getPlayerId();
+    static void setPlayerId(int32_t playerId);
 
   private:
     Protocol() = default;
     ~Protocol() = default;
+
+    static int32_t _playerId;
+
+    static void handleDefault(SmartBuffer& smartBuffer);
+    static void handleNewPlayerCallback(SmartBuffer& smartBuffer);
+    static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer);
+    static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer);
+    static void handlePlayerUpdateLife(SmartBuffer& smartBuffer);
+    static void handleViewportUpdate(SmartBuffer& smartBuffer);
+    static void handleBlocksUpdate(SmartBuffer& smartBuffer);
 };

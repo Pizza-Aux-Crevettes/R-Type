@@ -31,29 +31,34 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
     // Create a new player
     const auto player = PlayerManager::get().createPlayer(name);
 
-    // Create the response buffer for the new player and send it
+    // Create the response buffer for the new player
     smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_CALLBACK);
-    smartBuffer << player->getId();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_CALLBACK)
+                << static_cast<int32_t>(player->getId());
+
+    // Send the player ID to the client that requested it
     TcpSocket::sendToOne(clientSocket, smartBuffer);
 
-    Logger::info("[PlayerProtocol] Sent player ID " +
-                 std::to_string(player->getId()) + " to client ");
+    Logger::packet("[PlayerProtocol] Sent player ID " +
+                   std::to_string(player->getId()) + " to client ");
 
     // Parse all existing players
     for (const auto& [id, existingPlayer] : PlayerManager::get().getPlayers()) {
-        // Create the response buffer for the existing player and send it
+        // Create the response buffer for the existing player
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(
-            Protocol::OpCode::NEW_PLAYER_BROADCAST);
-        smartBuffer << existingPlayer->getId()
+                           Protocol::OpCode::NEW_PLAYER_BROADCAST)
+                    << static_cast<int32_t>(existingPlayer->getId())
                     << std::string{existingPlayer->getName()};
+
+        // Send the existing player to the new player
         TcpSocket::sendToAll(smartBuffer);
 
-        Logger::info("[PlayerProtocol] Sent existing player ID " +
-                     std::to_string(existingPlayer->getId()) +
-                     " to new player.");
+        Logger::packet("[PlayerProtocol] Sent existing player ID " +
+                       std::to_string(existingPlayer->getId()) +
+                       " to new player.");
 
+        // Sleep for a short time to avoid packet loss
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 }
@@ -62,31 +67,32 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
  * @brief Update the player's position and broadcast the update to all clients
  *
  * @param udpSocket The UDP socket
- * @param players The list of all players
  * @param player The player to update
  * @param smartBuffer The SmartBuffer to use for the response
  *
- * Protocol: PLAYER_UPDATE_POSITION
- * Payload: playerId (int32_t), posX (int16_t), posY (int16_t)
+ * Protocol: PLAYER_POSITION_UPDATE
+ * Payload: playerId (int32_t), posX (int32_t), posY (int32_t)
  */
-void PlayerProtocol::updatePos(
-    const int udpSocket, const std::vector<std::shared_ptr<Player>>& players,
-    const std::shared_ptr<Player>& player, SmartBuffer& smartBuffer) {
+void PlayerProtocol::sendPositionsUpdate(const int udpSocket,
+                                         const sockaddr_in& client,
+                                         const std::shared_ptr<Player>& player,
+                                         SmartBuffer& smartBuffer) {
     // Create the response buffer
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(
-                       Protocol::OpCode::PLAYER_UPDATE_POSITION)
-                << player->getId() << player->getPosition().getX()
-                << player->getPosition().getY();
+                       Protocol::OpCode::PLAYER_POSITION_UPDATE)
+                << static_cast<int32_t>(player->getId())
+                << static_cast<int32_t>(player->getPosition().getX())
+                << static_cast<int32_t>(player->getPosition().getY());
 
     // Broadcast the position update to all clients
-    UdpSocket::send(udpSocket, player->getClientAddress(), smartBuffer);
+    UdpSocket::sendToOne(udpSocket, client, smartBuffer);
 
-    Logger::info("[PlayerProtocol] Position update sent:\n"
-                 "  - Player ID: " +
-                 std::to_string(player->getId()) +
-                 "\n"
-                 "  - Position: (" +
-                 std::to_string(player->getPosition().getX()) + ", " +
-                 std::to_string(player->getPosition().getY()) + ")");
+    Logger::packet("[PlayerProtocol] Position update sent:\n"
+                   "  - Player ID: " +
+                   std::to_string(player->getId()) +
+                   "\n"
+                   "  - Position: (" +
+                   std::to_string(player->getPosition().getX()) + ", " +
+                   std::to_string(player->getPosition().getY()) + ")");
 }

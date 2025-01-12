@@ -5,12 +5,12 @@
 ** UdpSocket.cpp
 */
 
-#include "socket/UdpSocket.hpp"
+#include "network/socket/UdpSocket.hpp"
 #include <stdexcept>
 #include <sys/socket.h>
 #include <unistd.h>
-#include "protocol/Protocol.hpp"
-#include "socket/Singleton.hpp"
+#include "network/protocol/Protocol.hpp"
+#include "network/socket/Singleton.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 

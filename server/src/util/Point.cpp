@@ -7,28 +7,65 @@
 
 #include "util/Point.hpp"
 
+/**
+ * @brief Construct a new Point:: Point object
+ *
+ * @param x The x position
+ * @param y The y position
+ */
 Point::Point(const double x, const double y) : _x(x), _y(y) {}
 
+/**
+ * @brief Get the x position
+ *
+ * @return double The x position
+ */
 double Point::getX() const {
     return _x;
 }
 
-double Point::getY() const {
-    return _y;
-}
-
-Point Point::getPoint() const {
-    return Point(_x, _y);
-}
-
+/**
+ * @brief Set the x position
+ *
+ * @param x The x position
+ */
 void Point::setX(const double x) {
     _x = x;
 }
 
+/**
+ * @brief Get the y position
+ *
+ * @return double The y position
+ */
+double Point::getY() const {
+    return _y;
+}
+
+/**
+ * @brief Set the y position
+ *
+ * @param y The y position
+ */
 void Point::setY(const double y) {
     _y = y;
 }
 
+/**
+ * @brief Get the point
+ *
+ * @return Point
+ */
+Point Point::getPoint() const {
+    return Point(_x, _y);
+}
+
+/**
+ * @brief Set the point
+ *
+ * @param x The x position
+ * @param y The y position
+ */
 void Point::setPoint(const double x, const double y) {
     _x = x;
     _y = y;

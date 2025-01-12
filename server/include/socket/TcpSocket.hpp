@@ -8,9 +8,12 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
+#include <arpa/inet.h>
 #include <memory>
 #include <mutex>
 #include <netinet/in.h>
+#include <thread>
+#include <unistd.h>
 #include <vector>
 
 class TcpSocket {
@@ -18,12 +21,12 @@ class TcpSocket {
     TcpSocket();
     ~TcpSocket();
 
+    void init();
+    void readLoop() const;
     static void sendToOne(int clientSocket, const SmartBuffer& smartBuffer);
     static void sendToAll(const SmartBuffer& smartBuffer);
-    void init();
-    [[noreturn]] void readLoop() const;
-    void close() const;
     static std::vector<int> getClients();
+    void close() const;
 
   private:
     int _tcpSocket;

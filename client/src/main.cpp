@@ -13,7 +13,7 @@
 #include "components/Sprite.hpp"
 #include "components/Text.hpp"
 #include "components/Texture.hpp"
-#include "protocol/NetworkClient.hpp"
+#include "network/protocol/NetworkClient.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
