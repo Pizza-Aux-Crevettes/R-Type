@@ -30,6 +30,7 @@ class Client {
     std::string _port;
     std::string _ip;
     sf::Event _event;
+    int32_t _viewportX;
 
   public:
     Client();
@@ -43,6 +44,8 @@ class Client {
     void setUsername(std::string username);
     void setPort(std::string port);
     void setIp(std::string Ip);
+    void setViewport(int32_t viewport);
+    int32_t getViewport();
     std::string getUsername();
     std::string getPort();
     std::string getIp();
