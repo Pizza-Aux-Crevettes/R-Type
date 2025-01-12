@@ -65,9 +65,14 @@ std::vector<std::shared_ptr<Obstacle>> Map::getObstaclesByViewport() const {
  */
 bool Map::isVoidBlock(int32_t x, int32_t y) const {
     for (const auto& obstacle : _obstacles) {
-        if (obstacle->contains(x, y)) {
+        int32_t blockX = obstacle->getPosition().getX();
+        int32_t blockY = obstacle->getPosition().getY();
+
+        if (x >= blockX && x < blockX + BLOCK_SIZE && y >= blockY &&
+            y < blockY + BLOCK_SIZE) {
             return obstacle->getType() == ObstacleType::NONE;
         }
     }
+
     return true;
 }
