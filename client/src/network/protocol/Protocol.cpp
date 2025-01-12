@@ -29,8 +29,8 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     int16_t opCode;
     smartBuffer >> opCode;
 
-    Logger::info("[Protocol] Handling message with OpCode: " +
-                 std::to_string(opCode));
+    // Logger::info("[Protocol] Handling message with OpCode: " +
+    //              std::to_string(opCode));
 
     switch (opCode) {
     case DEFAULT:
@@ -124,6 +124,7 @@ void Protocol::handleViewportUpdate(SmartBuffer& smartBuffer) {
 
     Logger::info("[Protocol] MAP_VIEWPORT_UPDATE - Updated Viewport: " +
                  std::to_string(viewport));
+    Client::get().setViewport(viewport);
 }
 
 void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
@@ -135,4 +136,11 @@ void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
                  std::to_string(obstacleId) + ", Position: (" +
                  std::to_string(x) + ", " + std::to_string(y) +
                  "), Type: " + std::to_string(type));
+
+    std::map<std::string, std::any> newItems = {
+        {"Texture", std::string("assets/sprite/obstacle.png")},
+        {"TextureRect", std::vector<int>{0, 0, 200, 30}},
+        {"Position", std::pair<float, float>(x, y)}};
+    EntityManager::get().CompareEntities(obstacleId, newItems, {x, y});
+
 }

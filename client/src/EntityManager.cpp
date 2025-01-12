@@ -45,16 +45,15 @@ void EntityManager::CreateEntity(int id,
         for (auto it = components.begin(); it != components.end(); it++) {
             const auto& key = it->first;
             const auto& component = it->second;
-
             auto nextIt = std::next(it);
             const auto& newComponent = nextIt->second;
-            if (key == "Texture" && nextIt != components.end() &&
+            if (key == "Texture" /*&& nextIt != components.end()*/ &&
                 nextIt->first == "TextureRect") {
                 newEntity.addComponent(Sprite());
                 newEntity.addComponent(
                     Texture(std::any_cast<std::string>(component),
                             std::any_cast<std::vector<int>>(newComponent)));
-            } else if (key == "Texture" && nextIt != components.end()) {
+            } else if (key == "Texture" /*&& nextIt != components.end()*/) {
                 newEntity.addComponent(Sprite());
                 newEntity.addComponent(
                     Texture(std::any_cast<std::string>(component)));
