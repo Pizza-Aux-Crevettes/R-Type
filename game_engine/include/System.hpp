@@ -15,7 +15,7 @@
 
 namespace GameEngine {
 
-enum class UpdateType { Position, Health, Velocity };
+enum class UpdateType {Position, Text, TextSize, Texture};
 
 class System {
   public:
@@ -35,6 +35,12 @@ class System {
     template <typename Drawable>
     void updatePos(Entity& entity, Drawable& drawable,
                    const std::pair<float, float>& pos, const int& posId);
+    void updateEntityPosition(int id, std::map<int, Entity>& entities,
+                                              const std::pair<float, float>& pos,
+                                              int posId);
+    void updateText(int id, std::map<int, Entity>& entities, const std::string& text);
+    void updateTextSize(int id, std::map<int, Entity>& entities, unsigned int textSize);
+    void updateTexture(int id, std::map<int, Entity>& entities, std::string& texture);
     void loadSprite(Entity& entity, auto& spriteComp, auto& textureComp);
     void spriteSystem(sf::RenderWindow& window, Entity& entity);
     void linkSystem(int id, std::map<int, Entity>& entities,
