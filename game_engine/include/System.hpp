@@ -37,11 +37,11 @@ class System {
                    const std::pair<float, float>& pos, const int& posId);
     void updateEntityPosition(int id, std::map<int, Entity>& entities,
                               const std::pair<float, float>& pos, int posId);
-    void updateText(int id, std::map<int, Entity>& entities,
+    void updateText(Entity& entity,
                     const std::string& text);
     void updateTextSize(int id, std::map<int, Entity>& entities,
                         unsigned int textSize);
-    void updateTexture(int id, std::map<int, Entity>& entities,
+    void updateTexture(Entity& entity,
                        std::string& texture);
     void loadSprite(Entity& entity, auto& spriteComp, auto& textureComp);
     void spriteSystem(sf::RenderWindow& window, Entity& entity);
