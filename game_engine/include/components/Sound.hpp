@@ -15,6 +15,8 @@ class Sound : public Component {
   public:
     Sound(std::string soundFile = "", int volume = 100);
     ~Sound();
+    sf::Sound& getSound();
+    sf::SoundBuffer& getSoundBuffer();
     std::string getSoundFile() const;
     void setSoundFile(std::string soundFile);
     int getVolume() const;
@@ -24,7 +26,7 @@ class Sound : public Component {
   private:
     std::string _soundFile;
     int _volume;
-    sf::SoundBuffer buffer;
-    sf::Sound sound;
+    sf::SoundBuffer _buffer;
+    sf::Sound _sound;
     bool _isLoad = false;
 };

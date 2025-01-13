@@ -319,24 +319,7 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
 void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system,
                        OptionMenu& optionMenu) {
     std::map<int, GameEngine::Entity> entities;
-    sf::SoundBuffer ambienBuffer;
-    sf::SoundBuffer clickBuffer;
 
-    if (!ambienBuffer.loadFromFile("assets/sounds/ambien-song.wav")) {
-        std::cerr << "Error: unable to load the audio file." << std::endl;
-    }
-
-    if (!clickBuffer.loadFromFile("assets/sounds/click-menu.wav")) {
-        std::cerr << "Error: unable to load the audio file." << std::endl;
-    }
-
-    sf::Sound ambienSound;
-    sf::Sound clickMenuSound;
-
-    ambienSound.setBuffer(ambienBuffer);
-    clickMenuSound.setBuffer(clickBuffer);
-
-    ambienSound.play();
 
     switch (_currentMenuState) {
     case MenuState::MainMenu:
