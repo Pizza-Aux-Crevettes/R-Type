@@ -8,8 +8,8 @@
 #pragma once
 
 #include "Client.hpp"
-#include "network/socket/TcpSocket.hpp"
-#include "network/socket/UdpSocket.hpp"
+#include "socket/TcpSocket.hpp"
+#include "socket/UdpSocket.hpp"
 
 class NetworkClient {
   public:

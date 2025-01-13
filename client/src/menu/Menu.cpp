@@ -6,9 +6,11 @@
 */
 
 #include "menu/Menu.hpp"
+#include "SmartBuffer.hpp"
 #include "Client.hpp"
-#include "network/protocol/Protocol.hpp"
-#include "network/socket/TcpSocket.hpp"
+#include "protocol/Protocol.hpp"
+#include "socket/TcpSocket.hpp"
+#include "util/getResponsiveValue.hpp"
 
 Menu::Menu() {}
 
@@ -52,7 +54,7 @@ Menu::createEntityRect(int id, const std::pair<int, int> size, const std::vector
 GameEngine::Entity
 Menu::createEntityInput(int id, std::string font, int fontSize,  const std::vector<std::pair<float, float>> position, std::string inputVar) {
     auto inputEntity = GameEngine::Entity(id);
-    inputEntity.addComponent(Text(inputVar,font, fontSize));
+    inputEntity.addComponent(Text(inputVar, font, fontSize));
     inputEntity.addComponent(Position(position));
     inputEntity.addComponent(Color({255, 255, 255, 255}));
     return inputEntity;
@@ -127,66 +129,71 @@ void Menu::isClickedExit() {
 void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
     if (_currentMenuState == MenuState::MainMenu) {
         if (!_entitiesInitialized) {
+            GetResponsiveValue responsive;
+            int currentWidth = window.getSize().x;
+            int currentHeight = window.getSize().y;
+            std::cout << currentWidth << std::endl;
+
             int entityId = 0;
 
-            float totalButtonHeight = 3;
-            float verticalSpacing = (1080 - totalButtonHeight) / (3 + 2);
-
+            float verticalSpacing = (1080 - 3) / (3 + 2);
+ 
             _entitiesMenu.emplace(
                 entityId,
-                createEntitySprite(entityId++, {8, 8}, "assets/sprite/map.png",
-                                   {0, 0, 200, 200}, {{-1300, -300}}));
+                createEntitySprite(entityId++, {responsive.getResponsiveSizeX(1920, currentWidth, 8), responsive.getResponsiveSizeY(1080, currentHeight, 8)}, "assets/sprite/map.png",
+                                   {0, 0, 200, 200}, {{responsive.getResponsivePosX(1920, currentWidth, -1300), responsive.getResponsivePosY(1080, currentHeight, -300)}}));
             _entitiesMenu.emplace(
                 entityId, createEntityButton(
                               entityId++, "PLAY", "assets/font/Inter_Bold.ttf",
-                              50, {{1920 / 2 - 60, (verticalSpacing + 130)}},
+                              50, {{responsive.getResponsivePosX(1920, currentWidth, 900), responsive.getResponsivePosY(1080, currentHeight, 345)}},
                               [this]() { isClickedPlay(); }));
             _entitiesMenu.emplace(
                 entityId,
                 createEntityButton(
                     entityId++, "OPTION", "assets/font/Inter_Bold.ttf", 50,
-                    {{1920 / 2 - 100, verticalSpacing * 2 + 50}},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 860), responsive.getResponsivePosY(1080, currentHeight, 480)}},
                     [this]() { _currentMenuState = MenuState::OptionMenu; }));
             _entitiesMenu.emplace(
                 entityId, createEntityButton(
                               entityId++, "EXIT", "assets/font/Inter_Bold.ttf",
-                              50, {{1920 / 2 - 50, verticalSpacing * 3 - 20}},
+                              50, {{responsive.getResponsivePosX(1920, currentWidth, 910), responsive.getResponsivePosY(1080, currentHeight, 626)}},
                               [this]() { isClickedExit(); }));
             _entitiesMenu.emplace(
-                entityId, createEntitySprite(entityId++, {6, 6},
+                entityId, createEntitySprite(entityId++, {responsive.getResponsiveSizeX(1920, currentWidth, 6), responsive.getResponsiveSizeY(1080, currentHeight, 6)},
                                              "assets/sprite/spaceship.png",
-                                             {0, 18, 34, 15}, {{30, 100}}));
+                                             {0, 18, 34, 15}, {{responsive.getResponsivePosX(1920, currentWidth, 30), responsive.getResponsivePosY(1080, currentHeight, 100)}}));
             _entitiesMenu.emplace(
-                entityId, createEntitySprite(entityId++, {5, 5},
+                entityId, createEntitySprite(entityId++, {responsive.getResponsiveSizeX(1920, currentWidth, 5), responsive.getResponsiveSizeY(1080, currentHeight, 5)},
                                              "assets/sprite/shoot_blue.png",
-                                             {165, 0, 65, 15}, {{350, 100}}));
+                                             {165, 0, 65, 15}, {{responsive.getResponsivePosX(1920, currentWidth, 350), responsive.getResponsivePosY(1080, currentHeight, 100)}}));
             _entitiesMenu.emplace(
-                entityId, createEntitySprite(entityId++, {5, 5},
+                entityId, createEntitySprite(entityId++, {responsive.getResponsiveSizeX(1920, currentWidth, 5), responsive.getResponsiveSizeY(1080, currentHeight, 5)},
                                              "assets/sprite/enemy.png",
-                                             {0, 0, 50, 80}, {{280, 820}}));
+                                             {0, 0, 50, 80}, {{responsive.getResponsivePosX(1920, currentWidth, 280), responsive.getResponsivePosY(1080, currentHeight, 820)}}));
             _entitiesMenu.emplace(
-                entityId, createEntitySprite(entityId++, {5, 5},
+                entityId, createEntitySprite(entityId++, {responsive.getResponsiveSizeX(1920, currentWidth, 5), responsive.getResponsiveSizeY(1080, currentHeight, 5)},
                                              "assets/sprite/canon.png",
-                                             {165, 0, 33, 30}, {{1600, -50}}));
+                                             {165, 0, 33, 30}, {{responsive.getResponsivePosX(1920, currentWidth, 1600), responsive.getResponsivePosY(1080, currentHeight, -50)}}));
             _entitiesMenu.emplace(
-                entityId, createEntitySprite(entityId++, {5, 5},
+                entityId, createEntitySprite(entityId++, {responsive.getResponsiveSizeX(1920, currentWidth, 5), responsive.getResponsiveSizeY(1080, currentHeight, 5)},
                                              "assets/sprite/canon.png",
-                                             {33, 33, 33, 30}, {{1600, 970}}));
+                                             {33, 33, 33, 30}, {{responsive.getResponsivePosX(1920, currentWidth, 1600), responsive.getResponsivePosY(1080, currentHeight, 970)}}));
             _entitiesMenu.emplace(
-                entityId, createEntitySprite(entityId++, {5, 5},
+                entityId, createEntitySprite(entityId++, {responsive.getResponsiveSizeX(1920, currentWidth, 5), responsive.getResponsiveSizeY(1080, currentHeight, 5)},
                                              "assets/sprite/intact-boss.png",
-                                             {0, 0, 200, 200}, {{1400, 200}}));
-            _entitiesMenu.emplace(entityId, createEntityRect(entityId++, {150, 50}, {{1300, 80}}, sf::Color::Red, [this]() {isClickedInput(false, false, true);})); //username inputRect
-            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{1050, 78}}, "Username"));
-            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{1305, 78}}, "")); //username input text
+                                             {0, 0, 200, 200}, {{responsive.getResponsivePosX(1920, currentWidth, 1400), responsive.getResponsivePosY(1080, currentHeight, 200)}}));
+
+            _entitiesMenu.emplace(entityId, createEntityRect(entityId++, {responsive.getResponsiveSizeX(1920, currentWidth, 150), responsive.getResponsiveSizeY(1080, currentHeight, 50)}, {{responsive.getResponsivePosX(1920, currentWidth, 1300), responsive.getResponsivePosY(1080, currentHeight, 80)}}, sf::Color::Red, [this]() {isClickedInput(false, false, true);})); //username inputRect
+            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{responsive.getResponsivePosX(1920, currentWidth, 1050), responsive.getResponsivePosY(1080, currentHeight, 78)}}, "Username"));
+            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{responsive.getResponsivePosX(1920, currentWidth, 1305), responsive.getResponsivePosY(1080, currentHeight, 78)}}, "")); //username input text
             _usernameId = entityId;
-            _entitiesMenu.emplace(entityId, createEntityRect(entityId++, {150, 50}, {{1300, 150}}, sf::Color::Red, [this]() {isClickedInput(true, false, false);})); //ip inputRect
-            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{1050, 148}}, "IP"));
-            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{1305, 148}}, "")); //ip input text
+            _entitiesMenu.emplace(entityId, createEntityRect(entityId++, {responsive.getResponsiveSizeX(1920, currentWidth, 150), responsive.getResponsiveSizeY(1080, currentHeight, 50)}, {{responsive.getResponsivePosX(1920, currentWidth, 1300), responsive.getResponsivePosY(1080, currentHeight, 150)}}, sf::Color::Red, [this]() {isClickedInput(true, false, false);})); //ip inputRect
+            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{responsive.getResponsivePosX(1920, currentWidth, 1050), responsive.getResponsivePosY(1080, currentHeight, 148)}}, "IP"));
+            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{responsive.getResponsivePosX(1920, currentWidth, 1305), responsive.getResponsivePosY(1080, currentHeight, 148)}}, "")); //ip input text
             _ipId = entityId;
-            _entitiesMenu.emplace(entityId, createEntityRect(entityId++, {150, 50}, {{1300, 220}}, sf::Color::Red, [this]() {isClickedInput(false, true, false);})); //port inputRect
-            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{1050, 218}}, "Port"));
-            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{1305, 218}}, "")); //port input tex
+            _entitiesMenu.emplace(entityId, createEntityRect(entityId++, {responsive.getResponsiveSizeX(1920, currentWidth, 150), responsive.getResponsiveSizeY(1080, currentHeight, 50)}, {{responsive.getResponsivePosX(1920, currentWidth, 1300), responsive.getResponsivePosY(1080, currentHeight, 220)}}, sf::Color::Red, [this]() {isClickedInput(false, true, false);})); //port inputRect
+            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{responsive.getResponsivePosX(1920, currentWidth, 1050), responsive.getResponsivePosY(1080, currentHeight, 218)}}, "Port"));
+            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{responsive.getResponsivePosX(1920, currentWidth, 1305), responsive.getResponsivePosY(1080, currentHeight, 218)}}, "")); //port input tex
             _portId = entityId;
             _entitiesInitialized = true;
         } else {

@@ -5,7 +5,7 @@
 ** Protocol.cpp
 */
 
-#include "network/protocol/Protocol.hpp"
+#include "protocol/Protocol.hpp"
 #include <iostream>
 #include "EntityManager.hpp"
 #include "util/Logger.hpp"
