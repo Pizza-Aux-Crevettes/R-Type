@@ -5,7 +5,7 @@
 ** Protocol.cpp
 */
 
-#include "protocol/Protocol.hpp"
+#include "network/protocol/Protocol.hpp"
 #include <iostream>
 #include "EntityManager.hpp"
 #include "util/Logger.hpp"
@@ -55,6 +55,10 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
 
     case MAP_OBSTACLES_UPDATE:
         handleBlocksUpdate(smartBuffer);
+        break;
+
+    case BULLET_POSITION_UPDATE:
+        handleBulletsUpdate(smartBuffer);
         break;
 
     default:
@@ -143,4 +147,19 @@ void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
         {"Size", std::pair<float, float>(size, size)},
         {"Position", std::pair<float, float>(x, y)}};
     EntityManager::get().CompareEntities(obstacleId, newItems, {x, y});
+}
+
+void Protocol::handleBulletsUpdate(SmartBuffer& smartBuffer) {
+    int32_t bulletId, x, y;
+    smartBuffer >> bulletId >> x >> y;
+
+    Logger::info("[Protocol] BULLET_POSITION_UPDATE - Bullet ID: " +
+                 std::to_string(bulletId) + ", New Position: (" +
+                 std::to_string(x) + ", " + std::to_string(y) + ")");
+
+    std::map<std::string, std::any> newItems = {
+        {"Texture", std::string("assets/sprite/shoot_blue.png")},
+        {"Position", std::pair<float, float>(x, y)}};
+
+    EntityManager::get().CompareEntities(bulletId, newItems, {x, y});
 }

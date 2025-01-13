@@ -8,15 +8,16 @@
 #include "component/hotkey/HotkeysManager.hpp"
 #include <SmartBuffer.hpp>
 #include <iostream>
-#include "protocol/Protocol.hpp"
-#include "socket/UdpSocket.hpp"
+#include "network/protocol/Protocol.hpp"
+#include "network/socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
 
 HotkeysManager::HotkeysManager() {
     _keys = {{HotkeysCodes::ARROW_TOP, sf::Keyboard::Up},
              {HotkeysCodes::ARROW_BOTTOM, sf::Keyboard::Down},
              {HotkeysCodes::ARROW_LEFT, sf::Keyboard::Left},
-             {HotkeysCodes::ARROW_RIGHT, sf::Keyboard::Right}};
+             {HotkeysCodes::ARROW_RIGHT, sf::Keyboard::Right},
+             {HotkeysCodes::SPACE, sf::Keyboard::Space}};
 }
 
 HotkeysManager::~HotkeysManager() = default;

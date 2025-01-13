@@ -6,6 +6,8 @@
 */
 
 #include "socket/UdpSocket.hpp"
+#include "component/bullet/BulletManager.hpp"
+#include "component/bullet/BulletProtocol.hpp"
 #include "component/map/MapProtocol.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "component/player/PlayerProtocol.hpp"
@@ -96,6 +98,8 @@ void UdpSocket::sendLoop() {
             Logger::info("[UDP Socket] Sending updates to " +
                          std::to_string(_clients.size()) + " clients.");
 
+            BulletManager::get().updateBullets();
+
             for (const auto& client : _clients) {
                 // Send player updates
                 const auto& players = PlayerManager::get().getPlayers();
@@ -109,6 +113,10 @@ void UdpSocket::sendLoop() {
                                                 smartBuffer);
                 MapProtocol::sendObstaclesUpdate(_udpSocket, client,
                                                  smartBuffer);
+
+                // Send bullet updates
+                BulletProtocol::sendBulletsUpdate(_udpSocket, client,
+                                                  smartBuffer);
             }
         }
 
