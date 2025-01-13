@@ -5,12 +5,12 @@
 ** UdpSocket.cpp
 */
 
-#include "socket/UdpSocket.hpp"
+#include "network/socket/UdpSocket.hpp"
 #include <stdexcept>
 #include <sys/socket.h>
 #include <unistd.h>
-#include "protocol/Protocol.hpp"
-#include "socket/Singleton.hpp"
+#include "network/protocol/Protocol.hpp"
+#include "network/socket/Singleton.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
@@ -27,13 +27,6 @@ void UdpSocket::init() {
         throw std::runtime_error("Failed to create UDP socket");
     }
     Singleton::get().setSavedUdpSocket(_socket);
-    SmartBuffer smartBuffer;
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::DEFAULT);
-    send(smartBuffer);
-    smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER)
-                << std::string{"Benjamin"};
-    send(smartBuffer);
 }
 
 void UdpSocket::send(const SmartBuffer& smartBuffer) {

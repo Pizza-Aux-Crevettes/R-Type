@@ -5,7 +5,7 @@
 ** Singleton.hpp
 */
 
-#include "socket/Singleton.hpp"
+#include "network/socket/Singleton.hpp"
 #include <mutex>
 
 std::mutex Singleton::_mutex;

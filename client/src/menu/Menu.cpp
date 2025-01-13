@@ -7,9 +7,9 @@
 
 #include "menu/Menu.hpp"
 #include "Client.hpp"
-#include "SmartBuffer.hpp"
-#include "protocol/Protocol.hpp"
-#include "socket/TcpSocket.hpp"
+#include <SmartBuffer.hpp>
+#include "network/protocol/Protocol.hpp"
+#include "network/socket/TcpSocket.hpp"
 #include "util/getResponsiveValue.hpp"
 
 Menu::Menu() {}

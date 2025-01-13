@@ -8,8 +8,8 @@
 #include "component/hotkey/HotkeysManager.hpp"
 #include <SmartBuffer.hpp>
 #include <iostream>
-#include "protocol/Protocol.hpp"
-#include "socket/UdpSocket.hpp"
+#include "network/protocol/Protocol.hpp"
+#include "network/socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
 
 HotkeysManager::HotkeysManager() {

@@ -5,10 +5,10 @@
 ** NetworkClient.cpp
 */
 
-#include "protocol/NetworkClient.hpp"
+#include "network/protocol/NetworkClient.hpp"
 #include <iostream>
 #include <thread>
-#include "protocol/Protocol.hpp"
+#include "network/protocol/Protocol.hpp"
 #include "util/Logger.hpp"
 
 NetworkClient::NetworkClient(const std::string& serverAddress,
@@ -30,6 +30,11 @@ void NetworkClient::connectTCP() {
 
 void NetworkClient::connectUDP() {
     Logger::info("[NetworkClient] UDP initialized.");
+
+    SmartBuffer smartBuffer;
+
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::DEFAULT);
+    UdpSocket::send(smartBuffer);
 }
 
 void NetworkClient::run() {

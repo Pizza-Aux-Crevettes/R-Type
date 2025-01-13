@@ -113,7 +113,7 @@ void Client::manageClient() {
         } else {
             if (!serverInitialized) {
                 try {
-                    networkClient = std::make_unique<NetworkClient>(Client::get().getIp(), SERVER_PORT);
+                    networkClient = std::make_unique<NetworkClient>(/*Client::get().getIp()*/"127.0.0.1", SERVER_PORT);
                     initializeNetwork(*networkClient);
                     serverThread = std::thread(runNetworkClient, std::ref(*networkClient));
                     serverThread.detach();
