@@ -6,6 +6,7 @@
 */
 
 #include "menu/OptionMenu.hpp"
+#include "menu/Menu.hpp"
 #include <Entity.hpp>
 #include <SFML/Graphics.hpp>
 #include <iomanip>
@@ -87,8 +88,9 @@ void OptionMenu::setNewKey(const sf::Event& event) {
         _waitingForKey = false;
     }
 }
-void OptionMenu::printExit() {
-    std::cout << "Exit clicked" << std::endl;
+
+void isClickedExit() {
+    std::cout << "Button Exit clicked!" << std::endl;
 }
 
 void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
@@ -98,7 +100,9 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
         _entitiesMenuOption.emplace(
             entityId,
             createEntityButton(entityId++, "Exit", "assets/font/Inter_Bold.ttf",
-                               20, {{750, 50}}, [this]() { printExit(); }));
+                               20, {{750, 50}}, [this]() { isClickedExit();
+                               Menu::get().setMenuState(Menu::MenuState::MainMenu); }));
+                            //    20, {{750, 50}}, [this]() { Menu::get().setMenuState(Menu::MenuState::MainMenu); }));
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, "OPTIONS", {{300, 10}}, 45));
         _entitiesMenuOption.emplace(

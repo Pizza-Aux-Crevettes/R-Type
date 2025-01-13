@@ -42,6 +42,7 @@ void Client::manageBackground(GameEngine::System system, sf::Clock clock,
     shape.setTextureRect(
         sf::IntRect(textureOffset.x, textureOffset.y, 800, 600));
 }
+
 Client& Client::get() {
     static Client instance;
     return instance;

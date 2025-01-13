@@ -32,7 +32,7 @@ class OptionMenu {
   public:
     OptionMenu();
     ~OptionMenu();
-    void printExit();
+
     GameEngine::Entity
     createEntityText(int, const std::string,
                      const std::vector<std::pair<float, float>>, unsigned int);

@@ -14,6 +14,11 @@ Menu::Menu() {}
 
 Menu::~Menu() {}
 
+Menu& Menu::get() {
+    static Menu instance;
+    return instance;
+}
+
 GameEngine::Entity
 Menu::createEntityButton(int id, std::string title, std::string font,
                          int fontSize,
@@ -118,8 +123,6 @@ void Menu::setupInput(const sf::Event& event) {
     }
 }
 
-
-
 void Menu::isClickedExit() {
     std::cout << "Button Exit clicked!" << std::endl;
 }
@@ -221,12 +224,16 @@ void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system,
     ambienSound.play();
 
     switch (_currentMenuState) {
-    case MenuState::MainMenu:
-        initMainMenu(window, system);
-        break;
-    case MenuState::OptionMenu: {
-        optionMenu.displayOptionMenu(window, system);
-        break;
-    };
+        case MenuState::MainMenu:
+            initMainMenu(window, system);
+            break;
+        case MenuState::OptionMenu: {
+            optionMenu.displayOptionMenu(window, system);
+            break;
+        };
     }
+}
+
+void Menu::setMenuState(MenuState state) {
+    _currentMenuState = state;
 }
