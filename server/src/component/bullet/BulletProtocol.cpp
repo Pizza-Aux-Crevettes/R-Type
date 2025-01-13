@@ -16,12 +16,11 @@
  *
  * @param udpSocket The UDP socket
  * @param client The client address
- * @param player The player
  * @param smartBuffer The smart buffer
  */
-void sendBulletsUpdate(const int udpSocket, const sockaddr_in& client,
-                       const std::shared_ptr<Player>& player,
-                       SmartBuffer& smartBuffer) {
+void BulletProtocol::sendBulletsUpdate(const int udpSocket,
+                                       const sockaddr_in& client,
+                                       SmartBuffer& smartBuffer) {
     // Get all bullets
     auto& bullets = BulletManager::get().getBullets();
 

@@ -25,6 +25,8 @@ class Protocol {
 
         MAP_VIEWPORT_UPDATE = 20,
         MAP_OBSTACLES_UPDATE = 21,
+
+        BULLET_POSITION_UPDATE = 30,
     };
 
     Protocol(const Protocol&) = delete;
@@ -48,4 +50,5 @@ class Protocol {
     static void handlePlayerUpdateLife(SmartBuffer& smartBuffer);
     static void handleViewportUpdate(SmartBuffer& smartBuffer);
     static void handleBlocksUpdate(SmartBuffer& smartBuffer);
+    static void handleBulletsUpdate(SmartBuffer& smartBuffer);
 };

@@ -14,7 +14,7 @@
 
 class BulletProtocol {
   public:
-    static void sendBulletUpdate(const int udpSocket, const sockaddr_in& client,
-                                 const std::shared_ptr<Player>& player,
-                                 SmartBuffer& smartBuffer);
+    static void sendBulletsUpdate(const int udpSocket,
+                                  const sockaddr_in& client,
+                                  SmartBuffer& smartBuffer);
 };
