@@ -13,30 +13,18 @@
 class Protocol {
   public:
     enum OpCode {
-        DEFAULT,
+        DEFAULT = 0,
 
-        // Client -> Server
-        CREATE_ROOM,
-        JOIN_ROOM,
-        DELETE_ROOM,
-        NEW_PLAYER,
-        HOTKEY_PRESSED,
+        HOTKEY_PRESSED = 1,
 
-        // Server -> Client
-        CREATE_ROOM_CALLBACK,
-        JOIN_ROOM_CALLBACK,
-        DELETE_ROOM_CALLBACK,
-        NEW_PLAYER_CALLBACK,
+        NEW_PLAYER = 10,
+        NEW_PLAYER_CALLBACK = 11,
+        NEW_PLAYER_BROADCAST = 12,
+        PLAYER_POSITION_UPDATE = 13,
+        PLAYER_LIFE_UPDATE = 14,
 
-        // Server -> All clients
-        CREATE_ROOM_BROADCAST,
-        JOIN_ROOM_BROADCAST,
-        DELETE_ROOM_BROADCAST,
-        NEW_PLAYER_BROADCAST,
-        PLAYER_UPDATE_POSITION,
-        PLAYER_UPDATE_LIFE,
-        VIEWPORT_UPDATE,
-        BLOCKS_UPDATE,
+        MAP_VIEWPORT_UPDATE = 20,
+        MAP_OBSTACLES_UPDATE = 21,
     };
 
     Protocol(const Protocol&) = delete;
@@ -44,19 +32,20 @@ class Protocol {
 
     static Protocol& get();
     static void handleMessage(SmartBuffer& smartBuffer);
+    static int32_t getPlayerId();
+    static void setPlayerId(int32_t playerId);
 
   private:
-    Protocol();
-    ~Protocol();
+    Protocol() = default;
+    ~Protocol() = default;
+
+    static int32_t _playerId;
 
     static void handleDefault(SmartBuffer& smartBuffer);
-    static void handleCreateRoomCallback(SmartBuffer& smartBuffer);
-    static void handleCreateRoomBroadcast(SmartBuffer& smartBuffer);
-    static void handleJoinRoomCallback(SmartBuffer& smartBuffer);
-    static void handleJoinRoomBroadcast(SmartBuffer& smartBuffer);
-    static void handleDeleteRoomCallback(SmartBuffer& smartBuffer);
-    static void handleDeleteRoomBroadcast(SmartBuffer& smartBuffer);
+    static void handleNewPlayerCallback(SmartBuffer& smartBuffer);
     static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer);
-    static void handlePlayerCallback(SmartBuffer& smartBuffer);
     static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer);
+    static void handlePlayerUpdateLife(SmartBuffer& smartBuffer);
+    static void handleViewportUpdate(SmartBuffer& smartBuffer);
+    static void handleBlocksUpdate(SmartBuffer& smartBuffer);
 };

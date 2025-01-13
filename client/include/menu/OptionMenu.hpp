@@ -29,12 +29,18 @@ class OptionMenu {
   public:
     OptionMenu();
     ~OptionMenu();
+    void printExit();
     GameEngine::Entity
     createEntityText(int, const std::string,
                      const std::vector<std::pair<float, float>>, unsigned int);
     GameEngine::Entity
     createEntityOptionButton(int, std::vector<std::pair<float, float>>,
                              std::function<void()>);
+    GameEngine::Entity
+    createEntityButton(int id, std::string title, std::string font,
+                       int fontSize,
+                       std::vector<std::pair<float, float>> position,
+                       std::function<void()> callback);
     GameEngine::Entity
     createEntitySlider(int, const std::pair<int, int>,
                        const std::vector<std::pair<float, float>>,

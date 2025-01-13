@@ -8,51 +8,58 @@
 #include "protocol/Protocol.hpp"
 #include <iostream>
 #include "EntityManager.hpp"
+#include "util/Logger.hpp"
+
+int32_t Protocol::_playerId = -1;
 
 Protocol& Protocol::get() {
     static Protocol instance;
     return instance;
 }
 
-Protocol::Protocol() {}
+int32_t Protocol::getPlayerId() {
+    return _playerId;
+}
 
-Protocol::~Protocol() {}
+void Protocol::setPlayerId(int32_t playerId) {
+    _playerId = playerId;
+}
 
 void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     int16_t opCode;
     smartBuffer >> opCode;
 
+    // Logger::info("[Protocol] Handling message with OpCode: " +
+    //              std::to_string(opCode));
+
     switch (opCode) {
     case DEFAULT:
         handleDefault(smartBuffer);
         break;
-    case CREATE_ROOM_CALLBACK:
-        handleCreateRoomCallback(smartBuffer);
+
+    case NEW_PLAYER_CALLBACK:
+        handleNewPlayerCallback(smartBuffer);
         break;
-    case CREATE_ROOM_BROADCAST:
-        handleCreateRoomBroadcast(smartBuffer);
-        break;
-    case JOIN_ROOM_CALLBACK:
-        handleJoinRoomCallback(smartBuffer);
-        break;
-    case JOIN_ROOM_BROADCAST:
-        handleJoinRoomBroadcast(smartBuffer);
-        break;
-    case DELETE_ROOM_CALLBACK:
-        handleDeleteRoomCallback(smartBuffer);
-        break;
-    case DELETE_ROOM_BROADCAST:
-        handleDeleteRoomBroadcast(smartBuffer);
-        break;
+
     case NEW_PLAYER_BROADCAST:
         handleNewPlayerBroadcast(smartBuffer);
         break;
-    case PLAYER_UPDATE_POSITION:
+
+    case PLAYER_POSITION_UPDATE:
         handlePlayerUpdatePosition(smartBuffer);
         break;
+
+    case MAP_VIEWPORT_UPDATE:
+        handleViewportUpdate(smartBuffer);
+        break;
+
+    case MAP_OBSTACLES_UPDATE:
+        handleBlocksUpdate(smartBuffer);
+        break;
+
     default:
-        std::cerr << "[Protocol] Unknown OpCode received: " << opCode
-                  << std::endl;
+        Logger::error("[Protocol] Unknown OpCode received: " +
+                      std::to_string(opCode));
         break;
     }
 }
@@ -60,68 +67,81 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
 void Protocol::handleDefault(SmartBuffer& smartBuffer) {
     std::string test;
     smartBuffer >> test;
-    std::cout << "[Protocol] DEFAULT - Test: " << test << std::endl;
+
+    Logger::info("[Protocol] DEFAULT - Test Payload: " + test);
 }
 
-void Protocol::handleCreateRoomCallback(SmartBuffer& smartBuffer) {
-    int16_t statusCode;
-    smartBuffer >> statusCode;
-    std::cout << "[Protocol] CREATE_ROOM_CALLBACK - Status Code: " << statusCode
-              << std::endl;
-}
-
-void Protocol::handleCreateRoomBroadcast(SmartBuffer& smartBuffer) {
-    std::string roomCode;
-    smartBuffer >> roomCode;
-    std::cout << "[Protocol] CREATE_ROOM_BROADCAST - Room Code: " << roomCode
-              << std::endl;
-}
-
-void Protocol::handleJoinRoomCallback(SmartBuffer& smartBuffer) {
-    int16_t statusCode;
-    smartBuffer >> statusCode;
-    std::cout << "[Protocol] JOIN_ROOM_CALLBACK - Status Code: " << statusCode
-              << std::endl;
-}
-
-void Protocol::handleJoinRoomBroadcast(SmartBuffer& smartBuffer) {
-    std::string roomCode;
+void Protocol::handleNewPlayerCallback(SmartBuffer& smartBuffer) {
     int32_t playerId;
-    smartBuffer >> roomCode >> playerId;
-    std::cout << "[Protocol] JOIN_ROOM_BROADCAST - Room Code: " << roomCode
-              << ", Player ID: " << playerId << std::endl;
-}
+    smartBuffer >> playerId;
 
-void Protocol::handleDeleteRoomCallback(SmartBuffer& smartBuffer) {
-    int16_t statusCode;
-    smartBuffer >> statusCode;
-    std::cout << "[Protocol] DELETE_ROOM_CALLBACK - Status Code: " << statusCode
-              << std::endl;
-}
+    Protocol::setPlayerId(playerId);
 
-void Protocol::handleDeleteRoomBroadcast(SmartBuffer& smartBuffer) {
-    std::string roomCode;
-    smartBuffer >> roomCode;
-    std::cout << "[Protocol] DELETE_ROOM_BROADCAST - Room Code: " << roomCode
-              << std::endl;
+    Logger::success("[Protocol] NEW_PLAYER_CALLBACK - Assigned Player ID: " +
+                    std::to_string(playerId));
+
+    std::map<std::string, std::any> newItems = {
+        {"Texture", std::string("assets/sprite/spaceship.png")},
+        {"TextureRect", std::vector<int>{0, 0, 34, 15}},
+        {"Position", std::pair<float, float>(0.0f, 0.0f)}};
+
+    EntityManager::get().CompareEntities(playerId, newItems, {0.0f, 0.0f});
 }
 
 void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
     int32_t playerId;
     std::string playerName;
+
     smartBuffer >> playerId >> playerName;
-    std::cout << "[Protocol] NEW_PLAYER_BROADCAST - Player ID: " << playerId
-              << ", Player Name: " << playerName << std::endl;
+
+    Logger::info("[Protocol] NEW_PLAYER_BROADCAST - Player ID: " +
+                 std::to_string(playerId) + ", Player Name: " + playerName);
+
     std::map<std::string, std::any> newItems = {
-        {{"Texture", std::string("assets/sprite/spaceship.png")}, {"TextureRect", std::vector<int>{0, 0, 34, 15}},
-         {"Position", std::pair<float, float>(0.0f, 0.0f)}}};
+        {"Texture", std::string("assets/sprite/spaceship.png")},
+        {"TextureRect", std::vector<int>{0, 0, 34, 15}},
+        {"Position", std::pair<float, float>(0.0f, 0.0f)}};
+
     EntityManager::get().CompareEntities(playerId, newItems, {0.0f, 0.0f});
 }
 
 void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
-    int32_t playerId;
-    double x, y;
+    int32_t playerId, x, y;
+
     smartBuffer >> playerId >> x >> y;
+
+    Logger::info("[Protocol] PLAYER_POSITION_UPDATE - Player ID: " +
+                 std::to_string(playerId) + ", New Position: (" +
+                 std::to_string(x) + ", " + std::to_string(y) + ")");
+
     std::map<std::string, std::any> emptyMap;
     EntityManager::get().CompareEntities(playerId, emptyMap, {x, y});
+}
+
+void Protocol::handleViewportUpdate(SmartBuffer& smartBuffer) {
+    int32_t viewport;
+    smartBuffer >> viewport;
+
+    Logger::info("[Protocol] MAP_VIEWPORT_UPDATE - Updated Viewport: " +
+                 std::to_string(viewport));
+    Client::get().setViewport(viewport);
+}
+
+void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
+    int32_t obstacleId, x, y;
+    int16_t type, size;
+    smartBuffer >> obstacleId >> x >> y >> size >> type;
+
+    // Logger::info("[Protocol] MAP_OBSTACLES_UPDATE - Obstacle ID: " +
+    //              std::to_string(obstacleId) + ", Position: (" +
+    //              std::to_string(x) + ", " + std::to_string(y) +
+    //              "), Type: " + std::to_string(type));
+
+    std::map<std::string, std::any> newItems = {
+        {"Texture", std::string("assets/sprite/obstacle.png")},
+        {"TextureRect", std::vector<int>{0, 0, 150, 30}},
+        {"Size", std::pair<float, float>(size, size)},
+        {"Position", std::pair<float, float>(x, y)}};
+    EntityManager::get().CompareEntities(obstacleId, newItems, {x, y});
+
 }

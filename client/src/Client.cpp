@@ -34,9 +34,10 @@ void Client::manageBackground(GameEngine::System system, sf::Clock clock,
 
     sf::Time elapsed = clock.restart();
     textureOffset.x += scrollSpeed * elapsed.asSeconds();
-    if (textureOffset.x > background.getSize().x) {
-        textureOffset.x -= background.getSize().x;
-    }
+    // if (textureOffset.x > background.getSize().x) {
+    //     textureOffset.x -= background.getSize().x;
+    // }
+    textureOffset.x = Client::get().getViewport();
     sf::RectangleShape& shape =
         entityList.at(0).getComponent<Shape>().getRect();
     shape.setTextureRect(
@@ -62,6 +63,7 @@ void Client::manageClient() {
     GameEngine::System system;
     sf::Texture background = EntityManager::get().manageBackground(window);
     Menu menu;
+    OptionMenu optionMenu;
 
     sf::Clock clock;
     while (window.isOpen()) {
@@ -70,14 +72,19 @@ void Client::manageClient() {
             EntityManager::get().getEntityList();
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+
+            if (event.type == sf::Event::Closed) {
                 window.close();
+                return;
+            }
             if (event.type == sf::Event::KeyPressed)
                 input.checkKey(event);
+            menu.setupInput(event);
+
         }
         window.clear();
         if (!Client::get().getIsPlayed()) {
-            menu.displayMenu(window, system);
+            menu.displayMenu(window, system, optionMenu);
         } else {
             if (entitiesList.size() > 0) {
                 system.render(window, entitiesList);
@@ -85,4 +92,35 @@ void Client::manageClient() {
         }
         window.display();
     }
+}
+
+void Client::setUsername(std::string username) {
+    _username = username;
+}
+void Client::setPort(std::string port) {
+    _port = port;
+}
+void Client::setIp(std::string Ip) {
+    _ip = Ip;
+}
+std::string Client::getUsername() {
+    return _username;
+}
+std::string Client::getPort() {
+    return _port;
+}
+std::string Client::getIp() {
+    return _ip;
+}
+
+sf::Event Client::getEvent() {
+    return _event;
+}
+
+void Client::setViewport(int32_t viewport) {
+    _viewportX = viewport;
+}
+
+int32_t Client::getViewport() {
+    return _viewportX;
 }

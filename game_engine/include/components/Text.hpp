@@ -24,6 +24,7 @@ class Text : public Component {
     sf::Text& getText();
     void setIsLoaded(bool isLoaded);
     void setString(const std::string& text);
+    void setCharacterSize(unsigned int characterSize);
     void display() const override;
 
   private:

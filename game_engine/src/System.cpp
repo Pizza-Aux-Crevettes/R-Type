@@ -193,7 +193,6 @@ static void buttonSystem(sf::RenderWindow& window, GameEngine::Entity& entity) {
 
         if (buttonBounds.contains(static_cast<float>(mousePos.x),
                                   static_cast<float>(mousePos.y))) {
-            std::cout << "JE PASSSSSEEEEE" << std::endl;
             bool isPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
             if (isPressed && !wasPressedMap[&entity]) {
                 buttonComp.executeCallback();

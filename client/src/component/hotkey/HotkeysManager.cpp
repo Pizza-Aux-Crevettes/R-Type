@@ -6,12 +6,11 @@
 */
 
 #include "component/hotkey/HotkeysManager.hpp"
+#include <SmartBuffer.hpp>
+#include <iostream>
 #include "protocol/Protocol.hpp"
 #include "socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
-
-#include <SmartBuffer.hpp>
-#include <iostream>
 
 HotkeysManager::HotkeysManager() {
     _keys = {{HotkeysCodes::ARROW_TOP, sf::Keyboard::Up},
@@ -38,7 +37,8 @@ void HotkeysManager::checkKey(const sf::Event& event) {
             Logger::debug(std::to_string(event.key.code));
             smartBuffer << static_cast<int16_t>(
                                Protocol::OpCode::HOTKEY_PRESSED)
-                        << 1 << static_cast<int16_t>(hotkey);
+                        << static_cast<int32_t>(Protocol::get().getPlayerId())
+                        << static_cast<int16_t>(hotkey);
             UdpSocket::send(smartBuffer);
         }
     }

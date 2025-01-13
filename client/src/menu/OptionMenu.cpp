@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 #include <iomanip>
 #include "Client.hpp"
+#include "components/Button.hpp"
 #include "components/Color.hpp"
 #include "components/OptionButton.hpp"
 #include "components/Position.hpp"
@@ -44,6 +45,20 @@ GameEngine::Entity OptionMenu::createEntityOptionButton(
     return newEntity;
 }
 
+GameEngine::Entity
+OptionMenu::createEntityButton(int id, std::string title, std::string font,
+                               int fontSize,
+                               std::vector<std::pair<float, float>> position,
+                               std::function<void()> callback) {
+    auto newEntity = GameEngine::Entity(id);
+    auto button = Button(title, font, fontSize);
+    button.setCallback(callback);
+    newEntity.addComponent(button);
+    newEntity.addComponent(Position(position));
+    newEntity.addComponent(Color({255, 255, 255, 255}));
+    return newEntity;
+}
+
 GameEngine::Entity OptionMenu::createEntitySlider(
     int id, const std::pair<int, int> values,
     const std::vector<std::pair<float, float>> position,
@@ -58,6 +73,10 @@ GameEngine::Entity OptionMenu::createEntitySlider(
     return newEntity;
 }
 
+void OptionMenu::printExit() {
+    std::cout << "Exit clicked" << std::endl;
+}
+
 void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                                    GameEngine::System system) {
     GetResponsiveValue responsive;
@@ -67,6 +86,8 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
         int entityId = 0;
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, "OPTIONS", {{responsive.getResponsivePosX(800, currentWidth, 300), responsive.getResponsivePosY(600, currentHeight, 10)}}, 45));
+            entityId,
+            createEntityButton(entityId++, "Exit", "assets/font/Inter_Bold.ttf", 20, {{responsive.getResponsivePosX(1920, currentWidth, 900), responsive.getResponsivePosY(10780, currentWidth, 500)}}, [this]() { printExit(); });
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, "Sound", {{responsive.getResponsivePosX(800, currentWidth, 40), responsive.getResponsivePosY(600, currentHeight, 100)}}, 20));
         _entitiesMenuOption.emplace(

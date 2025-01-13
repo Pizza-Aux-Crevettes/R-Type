@@ -37,13 +37,13 @@ Before getting started, make sure you have the following installed on your machi
 
 ## Run the game
 
-1. Start the Network Server:
+1. Start the Server:
 
     Make sure to be in **B-CCP-500-TLS-5-2-rtype-anastasia.bouby/build/**
 
     ```bash
-    cd network/
-    ./Network
+    cd server/
+    ./Server
     ```
 
 2. Start the Client:

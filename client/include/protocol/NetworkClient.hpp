@@ -24,6 +24,7 @@ class NetworkClient {
   private:
     TcpSocket tcpSocket;
     UdpSocket udpSocket;
+
     void handleTcpMessages() const;
     void handleUdpMessages();
 };

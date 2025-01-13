@@ -19,7 +19,8 @@
 
 void runNetworkClient(NetworkClient& networkClient, Client* client) {
     try {
-        while (!Client::get().getIsPlayed());
+        while (!Client::get().getIsPlayed())
+            ;
         networkClient.run();
     } catch (const std::exception& e) {
         Logger::error("[Server Thread] Error: " + std::string(e.what()));
