@@ -34,9 +34,10 @@ void Client::manageBackground(GameEngine::System system, sf::Clock clock,
 
     sf::Time elapsed = clock.restart();
     textureOffset.x += scrollSpeed * elapsed.asSeconds();
-    if (textureOffset.x > background.getSize().x) {
-        textureOffset.x -= background.getSize().x;
-    }
+    // if (textureOffset.x > background.getSize().x) {
+    //     textureOffset.x -= background.getSize().x;
+    // }
+    textureOffset.x = Client::get().getViewport();
     sf::RectangleShape& shape =
         entityList.at(0).getComponent<Shape>().getRect();
     shape.setTextureRect(
@@ -116,4 +117,12 @@ std::string Client::getIp() {
 
 sf::Event Client::getEvent() {
     return _event;
+}
+
+void Client::setViewport(int32_t viewport) {
+    _viewportX = viewport;
+}
+
+int32_t Client::getViewport() {
+    return _viewportX;
 }

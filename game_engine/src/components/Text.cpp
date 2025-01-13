@@ -64,6 +64,10 @@ unsigned int Text::getCharacterSize() const {
     return this->_charSize;
 }
 
+void Text::setCharacterSize(unsigned int characterSize) {
+    this->_charSize = characterSize;
+}
+
 bool Text::getIsLoaded() const {
     return this->_isLoad;
 }

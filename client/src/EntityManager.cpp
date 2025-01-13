@@ -42,28 +42,46 @@ void EntityManager::CreateEntity(int id,
                                  std::map<std::string, std::any> components) {
     if (components.size() > 0) {
         auto newEntity = GameEngine::Entity(id);
-        for (auto it = components.begin(); it != components.end(); it++) {
-            const auto& key = it->first;
-            const auto& component = it->second;
 
-            auto nextIt = std::next(it);
-            const auto& newComponent = nextIt->second;
-            if (key == "Texture" && nextIt != components.end() &&
-                nextIt->first == "TextureRect") {
+        auto textureIt = components.find("Texture");
+        auto textureRectIt = components.find("TextureRect");
+        auto sizeIt = components.find("Size");
+        auto positionIt = components.find("Position");
+
+        if (textureIt != components.end()) {
+            const auto& texture = textureIt->second;
+
+            if (textureRectIt != components.end()) {
+                const auto& textureRect = textureRectIt->second;
+
+                if (sizeIt != components.end()) {
+                    const auto& size = sizeIt->second;
+
+                    newEntity.addComponent(Shape(Rectangle, std::any_cast<std::pair<float, float>>(size)));
+                    newEntity.addComponent(Texture(
+                        std::any_cast<std::string>(texture),
+                        std::any_cast<std::vector<int>>(textureRect)));
+                } else {
+                    newEntity.addComponent(Sprite());
+                    newEntity.addComponent(Texture(
+                        std::any_cast<std::string>(texture),
+                        std::any_cast<std::vector<int>>(textureRect)));
+                }
+            } else {
                 newEntity.addComponent(Sprite());
-                newEntity.addComponent(
-                    Texture(std::any_cast<std::string>(component),
-                            std::any_cast<std::vector<int>>(newComponent)));
-            } else if (key == "Texture" && nextIt != components.end()) {
-                newEntity.addComponent(Sprite());
-                newEntity.addComponent(
-                    Texture(std::any_cast<std::string>(component)));
-            }
-            if (key == "Position") {
-                newEntity.addComponent(Position(
-                    {std::any_cast<std::pair<float, float>>(component)}));
+                newEntity.addComponent(Texture(std::any_cast<std::string>(texture)));
             }
         }
+
+        if (positionIt != components.end()) {
+            const auto& position = positionIt->second;
+            try {
+                newEntity.addComponent(Position({std::any_cast<std::pair<float, float>>(position)}));
+            } catch (const std::bad_any_cast& e) {
+                std::cerr << "Error casting Position component: " << e.what() << std::endl;
+            }
+        }
+
         _entities.emplace(id, std::move(newEntity));
     }
 }
