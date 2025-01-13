@@ -142,8 +142,8 @@ void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
     //              "), Type: " + std::to_string(type));
 
     std::map<std::string, std::any> newItems = {
-        {"Texture", std::string("assets/sprite/obstacle.png")},
-        {"TextureRect", std::vector<int>{0, 0, 150, 30}},
+        {"Texture", std::string("assets/sprite/asteroids_8.png")},
+        {"TextureRect", std::vector<int>{0, 0, 50, 60}},
         {"Size", std::pair<float, float>(size, size)},
         {"Position", std::pair<float, float>(x, y)}};
     EntityManager::get().CompareEntities(obstacleId, newItems, {x, y});
@@ -159,6 +159,7 @@ void Protocol::handleBulletsUpdate(SmartBuffer& smartBuffer) {
 
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/shoot_blue.png")},
+        {"TextureRect", std::vector<int>{180, 0, 50, 20}},
         {"Position", std::pair<float, float>(x, y)}};
 
     EntityManager::get().CompareEntities(bulletId, newItems, {x, y});
