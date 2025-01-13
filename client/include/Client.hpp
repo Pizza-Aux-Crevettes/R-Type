@@ -19,6 +19,7 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include "components/Sound.hpp"
 
 class Client {
   private:
@@ -31,6 +32,7 @@ class Client {
     std::string _ip;
     sf::Event _event;
     int32_t _viewportX;
+    Sound _bulletSound;
 
   public:
     Client();
@@ -50,4 +52,6 @@ class Client {
     std::string getPort();
     std::string getIp();
     sf::Event getEvent();
+    Sound getBulletSound();
+    void setBulletSound(Sound);
 };

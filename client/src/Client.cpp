@@ -14,6 +14,7 @@
 #include <components/Position.hpp>
 #include <components/Sprite.hpp>
 #include <components/Texture.hpp>
+#include "components/Sound.hpp"
 #include <menu/OptionMenu.hpp>
 #include <thread>
 #include "EntityManager.hpp"
@@ -24,7 +25,6 @@
 #include "network/protocol/Protocol.hpp"
 #include "network/socket/TcpSocket.hpp"
 #include "util/Config.hpp"
-
 
 
 void runNetworkClient(NetworkClient& networkClient) {
@@ -80,14 +80,53 @@ bool Client::getIsPlayed() {
     return _isPlay;
 }
 
+void Client::setBulletSound(Sound bulletSound) {
+    this->_bulletSound = bulletSound;
+}
+
+Sound Client::getBulletSound() {
+    return this->_bulletSound;
+}
+
 void Client::manageClient() {
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "RTYPE");
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "RTYPE");
     HotkeysManager input;
     GameEngine::System system;
     sf::Texture background = EntityManager::get().manageBackground(window);
     Menu menu;
     OptionMenu optionMenu;
+    Sound menuSound;
+    Sound gameSound;
+    Sound bulletSound;
+    Sound clickSound;
+    
+    if (!menuSound.getSoundBuffer().loadFromFile("assets/sounds/ambien-song.wav")) {
+        std::cerr << "Error: unable to load the audio file." << std::endl;
+    }
 
+    if (!gameSound.getSoundBuffer().loadFromFile("assets/sounds/boss-song.wav")) {
+        std::cerr << "Error: unable to load the audio file." << std::endl;
+    }
+
+    if (!bulletSound.getSoundBuffer().loadFromFile("assets/sounds/shoot-sound.wav")) {
+        std::cerr << "Error: unable to load the audio file." << std::endl;
+    }
+
+    if (!clickSound.getSoundBuffer().loadFromFile("assets/sounds/click-menu.wav")) {
+        std::cerr << "Error: unable to load the audio file." << std::endl;
+    }
+
+    menuSound.getSound().setBuffer(menuSound.getSoundBuffer());
+    gameSound.getSound().setBuffer(gameSound.getSoundBuffer());
+    bulletSound.getSound().setBuffer(bulletSound.getSoundBuffer());
+    clickSound.getSound().setBuffer(clickSound.getSoundBuffer());
+
+    menuSound.getSound().setLoop(true);
+    gameSound.getSound().setLoop(true);
+
+    //menuSound.getSound().play();
+
+    Client::get().setBulletSound(bulletSound);
     sf::Clock clock;
     bool serverInitialized = false;
     std::unique_ptr<NetworkClient> networkClient = nullptr;
@@ -102,6 +141,14 @@ void Client::manageClient() {
             if (event.type == sf::Event::Closed) {
                 window.close();
                 return;
+            }
+            if (event.type == sf::Event::MouseButtonPressed) {
+                clickSound.getSound().play();
+            }
+            if (serverInitialized) {
+                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+                    bulletSound.getSound().play();
+                }
             }
             if (event.type == sf::Event::KeyPressed)
                 input.checkKey(event);
@@ -123,6 +170,8 @@ void Client::manageClient() {
                     smartBuffer << Client::get().getUsername();
                     TcpSocket::send(smartBuffer);
 
+                    menuSound.getSound().stop();
+                    //gameSound.getSound().play();
                     serverInitialized = true;
                 } catch (const std::exception& e) {
                     Logger::error("[Main] Failed to initialize network: " + std::string(e.what()));

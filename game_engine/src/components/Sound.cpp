@@ -31,6 +31,15 @@ Sound::Sound(std::string soundFile, int volume)
  */
 Sound::~Sound() {}
 
+
+sf::Sound& Sound::getSound() {
+    return this->_sound;
+}
+
+sf::SoundBuffer& Sound::getSoundBuffer() {
+    return this->_buffer;
+}
+
 /**
  * @brief Get the sound file path.
  *

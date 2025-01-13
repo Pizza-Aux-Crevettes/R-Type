@@ -9,6 +9,7 @@
 #include <iostream>
 #include "EntityManager.hpp"
 #include "util/Logger.hpp"
+#include "components/Sound.hpp"
 
 int32_t Protocol::_playerId = -1;
 
@@ -154,12 +155,15 @@ void Protocol::handleBulletsUpdate(SmartBuffer& smartBuffer) {
     smartBuffer >> bulletId >> x >> y;
 
     Logger::info("[Protocol] BULLET_POSITION_UPDATE - Bullet ID: " +
-                 std::to_string(bulletId) + ", New Position: (" +
-                 std::to_string(x) + ", " + std::to_string(y) + ")");
+            std::to_string(bulletId) + ", New Position: (" +
+            std::to_string(x) + ", " + std::to_string(y) + ")");
 
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/shoot_blue.png")},
         {"Position", std::pair<float, float>(x, y)}};
+
+    //Sound bulletSound = Client::get().getBulletSound();
+    //bulletSound.getSound().play();
 
     EntityManager::get().CompareEntities(bulletId, newItems, {x, y});
 }
