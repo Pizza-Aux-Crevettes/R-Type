@@ -100,10 +100,7 @@ void OptionMenu::setNewKey(const sf::Event& event, GameEngine::System& system) {
 
         if (_hotkeyEntityMap.find(_hotkeyPressed) != _hotkeyEntityMap.end()) {
             int entityId = _hotkeyEntityMap[_hotkeyPressed];
-            std::cout << "entity id " << entityId << std::endl;
-            system.update(entityId, _entitiesMenuOption, GameEngine::UpdateType::Text, HotkeysManager::get().keyToString(newKey));
-            std::cout << "system update text" << std::endl;
-
+            system.update(entityId, _entitiesMenuOption, GameEngine::UpdateType::Text, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(_hotkeyPressed)));
         } else {
             std::cerr << "Error: Hotkey entity not found!" << std::endl;
         }
@@ -126,6 +123,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                             //    20, {{750, 50}}, [this]() { Menu::get().setMenuState(Menu::MenuState::MainMenu); }));
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, "OPTIONS", {{300, 10}}, 45));
+
 // Sound
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, "Sound", {{40, 100}}, 20));
@@ -145,36 +143,41 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
 // Key control
         _entitiesMenuOption.emplace( entityId,
             createEntityText(entityId++, "Key control", {{40, 170}}, 20));
-        _entitiesMenuOption.emplace( entityId,
-            createEntityRect( entityId++, {150, 50}, {{200, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_TOP; }));
-        _hotkeyEntityMap[HotkeysCodes::ARROW_TOP] = entityId - 1;
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_TOP)), {{200, 170}}, 20));
+        _hotkeyEntityMap[HotkeysCodes::ARROW_TOP] = entityId;
         _entitiesMenuOption.emplace( entityId,
-            createEntityRect( entityId++, {150, 50}, {{300, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_BOTTOM; }));
+            createEntityRect( entityId++, {150, 50}, {{200, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_TOP; }));
+        
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_BOTTOM)), {{300, 170}}, 20));
-        _hotkeyEntityMap[HotkeysCodes::ARROW_BOTTOM] = entityId - 1;
+        _hotkeyEntityMap[HotkeysCodes::ARROW_BOTTOM] = entityId;
         _entitiesMenuOption.emplace( entityId,
-            createEntityRect( entityId++, {150, 50}, {{400, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_LEFT; }));
+            createEntityRect( entityId++, {150, 50}, {{300, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_BOTTOM; }));
+        
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_LEFT)), {{400, 170}}, 20));
-        _hotkeyEntityMap[HotkeysCodes::ARROW_LEFT] = entityId - 1;
+        _hotkeyEntityMap[HotkeysCodes::ARROW_LEFT] = entityId;
         _entitiesMenuOption.emplace( entityId,
-            createEntityRect( entityId++, {150, 50}, {{500, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_RIGHT; }));
+            createEntityRect( entityId++, {150, 50}, {{400, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_LEFT; }));
+        
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_RIGHT)), {{500, 170}}, 20));
-        _hotkeyEntityMap[HotkeysCodes::ARROW_RIGHT] = entityId - 1;
+        _hotkeyEntityMap[HotkeysCodes::ARROW_RIGHT] = entityId;
         _entitiesMenuOption.emplace( entityId,
-            createEntityRect( entityId++, {150, 50}, {{600, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::AUTO_FIRE; }));
+            createEntityRect( entityId++, {150, 50}, {{500, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_RIGHT; }));
+        
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::AUTO_FIRE)), {{600, 170}}, 20));
-        _hotkeyEntityMap[HotkeysCodes::AUTO_FIRE] = entityId - 1;
+        _hotkeyEntityMap[HotkeysCodes::AUTO_FIRE] = entityId;
         _entitiesMenuOption.emplace( entityId,
-            createEntityRect( entityId++, {150, 50}, {{700, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::SHOOT; }));
+            createEntityRect( entityId++, {150, 50}, {{600, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::AUTO_FIRE; }));
+        
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::SHOOT)), {{700, 170}}, 20));
-        _hotkeyEntityMap[HotkeysCodes::SHOOT] = entityId - 1;
+        _hotkeyEntityMap[HotkeysCodes::SHOOT] = entityId;
+        _entitiesMenuOption.emplace( entityId,
+            createEntityRect( entityId++, {150, 50}, {{700, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::SHOOT; }));
 
 // Adaptability
         _entitiesMenuOption.emplace( entityId,

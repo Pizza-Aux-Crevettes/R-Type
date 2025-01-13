@@ -32,7 +32,6 @@ void GameEngine::System::updateText(const int id, std::map<int, Entity>& entitie
         auto& textComp = entity.getComponent<Text>();
         textComp.setString(text);
         textComp.getText().setString(text);
-        std::cout << "system update text in update" << std::endl;
     }
 }
 
