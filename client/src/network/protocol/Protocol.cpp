@@ -57,6 +57,10 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
         handleBlocksUpdate(smartBuffer);
         break;
 
+    case BULLET_POSITION_UPDATE:
+        handleBulletsUpdate(smartBuffer);
+        break;
+
     default:
         Logger::error("[Protocol] Unknown OpCode received: " +
                       std::to_string(opCode));
@@ -138,10 +142,25 @@ void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
     //              "), Type: " + std::to_string(type));
 
     std::map<std::string, std::any> newItems = {
-        {"Texture", std::string("assets/sprite/obstacle.png")},
-        {"TextureRect", std::vector<int>{0, 0, 150, 30}},
+        {"Texture", std::string("assets/sprite/asteroids_8.png")},
+        {"TextureRect", std::vector<int>{0, 0, 50, 60}},
         {"Size", std::pair<float, float>(size, size)},
         {"Position", std::pair<float, float>(x, y)}};
     EntityManager::get().CompareEntities(obstacleId, newItems, {x, y});
+}
 
+void Protocol::handleBulletsUpdate(SmartBuffer& smartBuffer) {
+    int32_t bulletId, x, y;
+    smartBuffer >> bulletId >> x >> y;
+
+    Logger::info("[Protocol] BULLET_POSITION_UPDATE - Bullet ID: " +
+                 std::to_string(bulletId) + ", New Position: (" +
+                 std::to_string(x) + ", " + std::to_string(y) + ")");
+
+    std::map<std::string, std::any> newItems = {
+        {"Texture", std::string("assets/sprite/shoot_blue.png")},
+        {"TextureRect", std::vector<int>{180, 0, 50, 20}},
+        {"Position", std::pair<float, float>(x, y)}};
+
+    EntityManager::get().CompareEntities(bulletId, newItems, {x, y});
 }

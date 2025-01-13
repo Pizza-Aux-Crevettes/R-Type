@@ -17,6 +17,8 @@ void GameEngine::System::loadText(GameEngine::Entity& entity, auto& textComp) {
         setPosition(entity, textComp.getText());
         setColor(entity, textComp.getText());
         textComp.setIsLoaded(true);
+    } else {
+        updateText(entity, textComp.getString());
     }
 }
 

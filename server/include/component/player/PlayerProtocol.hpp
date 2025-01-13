@@ -10,8 +10,6 @@
 #include <SmartBuffer.hpp>
 #include <memory>
 #include <netinet/in.h>
-#include <thread>
-#include <vector>
 #include "component/player/Player.hpp"
 
 class PlayerProtocol {

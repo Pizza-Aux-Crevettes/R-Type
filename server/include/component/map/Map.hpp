@@ -26,6 +26,4 @@ class Map {
     std::string _name;
     int32_t _viewport;
     std::vector<std::shared_ptr<Obstacle>> _obstacles;
-
-    static constexpr int RENDER_DISTANCE = 10;
 };
