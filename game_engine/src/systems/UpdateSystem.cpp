@@ -25,10 +25,8 @@ void GameEngine::System::updateEntityPosition(
     }
 }
 
-void GameEngine::System::updateText(const int id,
-                                    std::map<int, Entity>& entities,
+void GameEngine::System::updateText(Entity& entity,
                                     const std::string& text) {
-    Entity& entity = entities.at(id);
     if (entity.hasComponent<Text>()) {
         auto& textComp = entity.getComponent<Text>();
         textComp.setString(text);
@@ -47,10 +45,8 @@ void GameEngine::System::updateTextSize(const int id,
     }
 }
 
-void GameEngine::System::updateTexture(const int id,
-                                       std::map<int, Entity>& entities,
+void GameEngine::System::updateTexture(Entity& entity,
                                        std::string& texture) {
-    Entity& entity = entities.at(id);
     if (entity.hasComponent<Texture>()) {
         auto& textureComp = entity.getComponent<Texture>();
         textureComp.setTexturePath(texture);
@@ -86,7 +82,7 @@ void GameEngine::System::update(const int id, std::map<int, Entity>& entities,
     }
     case UpdateType::Text: {
         auto text = std::any_cast<std::string>(value);
-        updateText(id, entities, text);
+        updateText(entity, text);
         break;
     }
     case UpdateType::TextSize: {
@@ -96,7 +92,7 @@ void GameEngine::System::update(const int id, std::map<int, Entity>& entities,
     }
     case UpdateType::Texture: {
         auto texture = std::any_cast<std::string>(value);
-        updateTexture(id, entities, texture);
+        updateTexture(entity, texture);
         break;
     }
     default:
