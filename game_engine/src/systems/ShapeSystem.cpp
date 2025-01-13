@@ -26,7 +26,7 @@ void GameEngine::System::loadRectangle(GameEngine::Entity& entity,
                 const auto& textureRect = textureComp.getTextureRect();
                 shapeComp.getRect().setTextureRect(
                     sf::IntRect(textureRect[0], textureRect[1], textureRect[2],
-                            textureRect[3]));
+                                textureRect[3]));
             }
             shapeComp.getRect().setTexture(&textureComp.getTexture());
             textureComp.setIsLoaded(true);
@@ -51,7 +51,7 @@ void GameEngine::System::loadCircle(GameEngine::Entity& entity,
                 const auto& textureRect = textureComp.getTextureRect();
                 shapeComp.getCircle().setTextureRect(
                     sf::IntRect(textureRect[0], textureRect[1], textureRect[2],
-                            textureRect[3]));
+                                textureRect[3]));
             }
             shapeComp.getCircle().setTexture(&textureComp.getTexture());
             textureComp.setIsLoaded(true);

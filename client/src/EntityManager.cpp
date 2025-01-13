@@ -10,7 +10,6 @@
 #include "EntityManager.hpp"
 #include "util/getResponsiveValue.hpp"
 
-
 EntityManager::EntityManager() {}
 
 EntityManager::~EntityManager() {}
@@ -59,28 +58,33 @@ void EntityManager::CreateEntity(int id,
                 if (sizeIt != components.end()) {
                     const auto& size = sizeIt->second;
 
-                    newEntity.addComponent(Shape(Rectangle, std::any_cast<std::pair<float, float>>(size)));
-                    newEntity.addComponent(Texture(
-                        std::any_cast<std::string>(texture),
-                        std::any_cast<std::vector<int>>(textureRect)));
+                    newEntity.addComponent(
+                        Shape(Rectangle,
+                              std::any_cast<std::pair<float, float>>(size)));
+                    newEntity.addComponent(
+                        Texture(std::any_cast<std::string>(texture),
+                                std::any_cast<std::vector<int>>(textureRect)));
                 } else {
                     newEntity.addComponent(Sprite());
-                    newEntity.addComponent(Texture(
-                        std::any_cast<std::string>(texture),
-                        std::any_cast<std::vector<int>>(textureRect)));
+                    newEntity.addComponent(
+                        Texture(std::any_cast<std::string>(texture),
+                                std::any_cast<std::vector<int>>(textureRect)));
                 }
             } else {
                 newEntity.addComponent(Sprite());
-                newEntity.addComponent(Texture(std::any_cast<std::string>(texture)));
+                newEntity.addComponent(
+                    Texture(std::any_cast<std::string>(texture)));
             }
         }
 
         if (positionIt != components.end()) {
             const auto& position = positionIt->second;
             try {
-                newEntity.addComponent(Position({std::any_cast<std::pair<float, float>>(position)}));
+                newEntity.addComponent(Position(
+                    {std::any_cast<std::pair<float, float>>(position)}));
             } catch (const std::bad_any_cast& e) {
-                std::cerr << "Error casting Position component: " << e.what() << std::endl;
+                std::cerr << "Error casting Position component: " << e.what()
+                          << std::endl;
             }
         }
 
@@ -116,7 +120,10 @@ sf::Texture EntityManager::manageBackground(sf::RenderWindow& window) {
 
     int id = 0;
     auto newEntity = GameEngine::Entity(id);
-    newEntity.addComponent(Shape(ShapeType::Rectangle, {responsive.getResponsiveSizeX(800, window.getSize().x, 800), responsive.getResponsiveSizeY(600, window.getSize().y, 600)}));
+    newEntity.addComponent(
+        Shape(ShapeType::Rectangle,
+              {responsive.getResponsiveSizeX(800, window.getSize().x, 800),
+               responsive.getResponsiveSizeY(600, window.getSize().y, 600)}));
     newEntity.addComponent(Texture("assets/sprite/space.png"));
     newEntity.addComponent(Position());
     sf::Texture& newTexture = newEntity.getComponent<Texture>().getTexture();

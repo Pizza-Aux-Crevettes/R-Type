@@ -85,84 +85,163 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
     if (!_entitiesInitialized) {
         int entityId = 0;
         _entitiesMenuOption.emplace(
-            entityId, createEntityText(entityId++, "OPTIONS", {{responsive.getResponsivePosX(800, currentWidth, 300), responsive.getResponsivePosY(600, currentHeight, 10)}}, 45));
             entityId,
-            createEntityButton(entityId++, "Exit", "assets/font/Inter_Bold.ttf", 20, {{responsive.getResponsivePosX(1920, currentWidth, 900), responsive.getResponsivePosY(10780, currentWidth, 500)}}, [this]() { printExit(); });
-        _entitiesMenuOption.emplace(
-            entityId, createEntityText(entityId++, "Sound", {{responsive.getResponsivePosX(800, currentWidth, 40), responsive.getResponsivePosY(600, currentHeight, 100)}}, 20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(entityId++, "Key control", {{responsive.getResponsivePosX(800, currentWidth, 40), responsive.getResponsivePosY(600, currentHeight, 170)}}, 20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(entityId++,
-                             "Font for people with reading difficulties",
-                             {{responsive.getResponsivePosX(800, currentWidth, 40), responsive.getResponsivePosY(600, currentHeight, 240)}}, 20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(entityId++, "Size of elements", {{responsive.getResponsivePosX(800, currentWidth, 40), responsive.getResponsivePosY(600, currentHeight, 310)}}, 20));
+            createEntityText(
+                entityId++, "OPTIONS",
+                {{responsive.getResponsivePosX(800, currentWidth, 300),
+                  responsive.getResponsivePosY(600, currentHeight, 10)}},
+                45));
+        entityId,
+            createEntityButton(
+                entityId++, "Exit", "assets/font/Inter_Bold.ttf", 20,
+                {{responsive.getResponsivePosX(1920, currentWidth, 900),
+                  responsive.getResponsivePosY(10780, currentWidth, 500)}},
+                [this]() { printExit(); });
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityText(entityId++, "High contrast", {{responsive.getResponsivePosX(800, currentWidth, 40), responsive.getResponsivePosY(600, currentHeight, 380)}}, 20));
+            createEntityText(
+                entityId++, "Sound",
+                {{responsive.getResponsivePosX(800, currentWidth, 40),
+                  responsive.getResponsivePosY(600, currentHeight, 100)}},
+                20));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityText(entityId++, "High difficulty", {{responsive.getResponsivePosX(800, currentWidth, 40), responsive.getResponsivePosY(600, currentHeight, 450)}}, 20));
+            createEntityText(
+                entityId++, "Key control",
+                {{responsive.getResponsivePosX(800, currentWidth, 40),
+                  responsive.getResponsivePosY(600, currentHeight, 170)}},
+                20));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityText(entityId++, "Controller  mode", {{responsive.getResponsivePosX(800, currentWidth, 40), responsive.getResponsivePosY(600, currentHeight, 520)}}, 20));
+            createEntityText(
+                entityId++, "Font for people with reading difficulties",
+                {{responsive.getResponsivePosX(800, currentWidth, 40),
+                  responsive.getResponsivePosY(600, currentHeight, 240)}},
+                20));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityOptionButton(entityId++, {{responsive.getResponsivePosX(800, currentWidth, 720), responsive.getResponsivePosY(600, currentHeight, 240)}},
-                                     [this]() { setAdaptabilityText(); }));
-        _entitiesMenuOption.emplace(
-            entityId, createEntityOptionButton(entityId++, {{responsive.getResponsivePosX(800, currentWidth, 720), responsive.getResponsivePosY(600, currentHeight, 380)}},
-                                               [this]() { setContrast(); }));
-        _entitiesMenuOption.emplace(
-            entityId, createEntityOptionButton(entityId++, {{responsive.getResponsivePosX(800, currentWidth, 720), responsive.getResponsivePosY(600, currentHeight, 450)}},
-                                               [this]() { setDifficulty(); }));
-        _entitiesMenuOption.emplace(
-            entityId, createEntityOptionButton(entityId++, {{responsive.getResponsivePosX(800, currentWidth, 720), responsive.getResponsivePosY(600, currentHeight, 170)}},
-                                               [this]() { setControl(); }));
+            createEntityText(
+                entityId++, "Size of elements",
+                {{responsive.getResponsivePosX(800, currentWidth, 40),
+                  responsive.getResponsivePosY(600, currentHeight, 310)}},
+                20));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityText(entityId++, "Game effects", {{responsive.getResponsivePosX(800, currentWidth, 160), responsive.getResponsivePosY(600, currentHeight, 105)}}, 15));
+            createEntityText(
+                entityId++, "High contrast",
+                {{responsive.getResponsivePosX(800, currentWidth, 40),
+                  responsive.getResponsivePosY(600, currentHeight, 380)}},
+                20));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityText(entityId++, std::to_string(getVolumnGame()),
-                             {{responsive.getResponsivePosX(800, currentWidth, 140), responsive.getResponsivePosY(600, currentHeight, 105)}}, 15));
+            createEntityText(
+                entityId++, "High difficulty",
+                {{responsive.getResponsivePosX(800, currentWidth, 40),
+                  responsive.getResponsivePosY(600, currentHeight, 450)}},
+                20));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityText(
+                entityId++, "Controller  mode",
+                {{responsive.getResponsivePosX(800, currentWidth, 40),
+                  responsive.getResponsivePosY(600, currentHeight, 520)}},
+                20));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityOptionButton(
+                entityId++,
+                {{responsive.getResponsivePosX(800, currentWidth, 720),
+                  responsive.getResponsivePosY(600, currentHeight, 240)}},
+                [this]() { setAdaptabilityText(); }));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityOptionButton(
+                entityId++,
+                {{responsive.getResponsivePosX(800, currentWidth, 720),
+                  responsive.getResponsivePosY(600, currentHeight, 380)}},
+                [this]() { setContrast(); }));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityOptionButton(
+                entityId++,
+                {{responsive.getResponsivePosX(800, currentWidth, 720),
+                  responsive.getResponsivePosY(600, currentHeight, 450)}},
+                [this]() { setDifficulty(); }));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityOptionButton(
+                entityId++,
+                {{responsive.getResponsivePosX(800, currentWidth, 720),
+                  responsive.getResponsivePosY(600, currentHeight, 170)}},
+                [this]() { setControl(); }));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityText(
+                entityId++, "Game effects",
+                {{responsive.getResponsivePosX(800, currentWidth, 160),
+                  responsive.getResponsivePosY(600, currentHeight, 105)}},
+                15));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityText(
+                entityId++, std::to_string(getVolumnGame()),
+                {{responsive.getResponsivePosX(800, currentWidth, 140),
+                  responsive.getResponsivePosY(600, currentHeight, 105)}},
+                15));
         _entitiesMenuOption.emplace(
             entityId,
             createEntitySlider(
-                entityId++, {0, 100}, {{responsive.getResponsivePosX(800, currentWidth, 160), responsive.getResponsivePosY(600, currentHeight, 115)}},
+                entityId++, {0, 100},
+                {{responsive.getResponsivePosX(800, currentWidth, 160),
+                  responsive.getResponsivePosY(600, currentHeight, 115)}},
                 [this]() { return static_cast<float>(getVolumnMusic()); },
                 [this](float newValue) {
                     setVolumnMusic(static_cast<int>(newValue));
                 }));
         _entitiesMenuOption.emplace(
-            entityId, createEntityText(entityId++, "Music", {{responsive.getResponsivePosX(800, currentWidth, 545), responsive.getResponsivePosY(600, currentHeight, 105)}}, 15));
+            entityId,
+            createEntityText(
+                entityId++, "Music",
+                {{responsive.getResponsivePosX(800, currentWidth, 545),
+                  responsive.getResponsivePosY(600, currentHeight, 105)}},
+                15));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityText(entityId++, std::to_string(getVolumnMusic()),
-                             {{responsive.getResponsivePosX(800, currentWidth, 525), responsive.getResponsivePosY(600, currentHeight, 105)}}, 15));
+            createEntityText(
+                entityId++, std::to_string(getVolumnMusic()),
+                {{responsive.getResponsivePosX(800, currentWidth, 525),
+                  responsive.getResponsivePosY(600, currentHeight, 105)}},
+                15));
         _entitiesMenuOption.emplace(
             entityId,
             createEntitySlider(
-                entityId++, {0, 100}, {{responsive.getResponsivePosX(800, currentWidth, 545), responsive.getResponsivePosY(600, currentHeight, 115)}},
+                entityId++, {0, 100},
+                {{responsive.getResponsivePosX(800, currentWidth, 545),
+                  responsive.getResponsivePosY(600, currentHeight, 115)}},
                 [this]() { return static_cast<float>(getVolumnGame()); },
                 [this](float newValue) {
                     setVolumnGame(static_cast<int>(newValue));
                 }));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityText(entityId++, "Enlarge", {{responsive.getResponsivePosX(800, currentWidth, 545), responsive.getResponsivePosY(600, currentHeight, 280)}}, 15));
+            createEntityText(
+                entityId++, "Enlarge",
+                {{responsive.getResponsivePosX(800, currentWidth, 545),
+                  responsive.getResponsivePosY(600, currentHeight, 280)}},
+                15));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityText(entityId++, std::to_string(getElementSize()),
-                             {{responsive.getResponsivePosX(800, currentWidth, 525), responsive.getResponsivePosY(600, currentHeight, 300)}}, 15));
+            createEntityText(
+                entityId++, std::to_string(getElementSize()),
+                {{responsive.getResponsivePosX(800, currentWidth, 525),
+                  responsive.getResponsivePosY(600, currentHeight, 300)}},
+                15));
         _entitiesMenuOption.emplace(
             entityId,
             createEntitySlider(
-                entityId++, {0, 2}, {{responsive.getResponsivePosX(800, currentWidth, 545), responsive.getResponsivePosY(600, currentHeight, 310)}},
+                entityId++, {0, 2},
+                {{responsive.getResponsivePosX(800, currentWidth, 545),
+                  responsive.getResponsivePosY(600, currentHeight, 310)}},
                 [this]() { return static_cast<float>(getElementSize()); },
                 [this](float newValue) { setElementSize(newValue); }));
         _entitiesInitialized = true;

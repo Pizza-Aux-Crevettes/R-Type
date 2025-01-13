@@ -80,7 +80,6 @@ void Client::manageClient() {
             if (event.type == sf::Event::KeyPressed)
                 input.checkKey(event);
             menu.setupInput(event);
-
         }
         window.clear();
         if (!Client::get().getIsPlayed()) {

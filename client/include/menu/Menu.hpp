@@ -41,14 +41,20 @@ class Menu {
                        std::string texture, std::vector<int> textureRect,
                        const std::vector<std::pair<float, float>> position);
     GameEngine::Entity
-    createEntityRect(int id, const std::pair<int, int> size, const std::vector<std::pair<float, float>> position, sf::Color color, std::function<void()> callback);
+    createEntityRect(int id, const std::pair<int, int> size,
+                     const std::vector<std::pair<float, float>> position,
+                     sf::Color color, std::function<void()> callback);
     GameEngine::Entity
-    createEntityInput(int id, std::string font, int fontSize,  const std::vector<std::pair<float, float>> position, std::string inputVar) ;
+    createEntityInput(int id, std::string font, int fontSize,
+                      const std::vector<std::pair<float, float>> position,
+                      std::string inputVar);
 
     void isClickedPlay();
     void isClickedExit();
-    void isClickedInput(bool isIpClicked, bool isPortClicked, bool isUsernameClicked);
+    void isClickedInput(bool isIpClicked, bool isPortClicked,
+                        bool isUsernameClicked);
     void setupInput(const sf::Event& event);
+
   private:
     std::map<int, GameEngine::Entity> _entitiesMenu;
     bool _entitiesInitialized = false;
