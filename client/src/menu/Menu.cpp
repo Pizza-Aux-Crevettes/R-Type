@@ -66,13 +66,6 @@ Menu::createEntityInput(int id, std::string font, int fontSize,
 
 void Menu::isClickedPlay() {
     std::cout << "Button play clicked!" << std::endl;
-    SmartBuffer smartBuffer;
-
-    smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER);
-    smartBuffer << std::string{Client::get().getUsername()};
-    TcpSocket::send(smartBuffer);
-
     Client::get().setIsPlayed();
 }
 
