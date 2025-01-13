@@ -6,25 +6,27 @@
 */
 
 #include <components/Position.hpp>
+#include <components/Shape.hpp>
 #include <components/Sprite.hpp>
 #include <components/Text.hpp>
-#include <components/Shape.hpp>
 #include "System.hpp"
 
-void GameEngine::System::updateEntityPosition(const int id, std::map<int, Entity>& entities,
-                                              const std::pair<float, float>& pos,
-                                              const int posId) {
+void GameEngine::System::updateEntityPosition(
+    const int id, std::map<int, Entity>& entities,
+    const std::pair<float, float>& pos, const int posId) {
     linkSystem(id, entities, pos, posId);
     Entity& entity = entities.at(id);
     if (entity.hasComponent<Sprite>()) {
-        updatePos(entity, entity.getComponent<Sprite>().getSprite(), pos, posId);
+        updatePos(entity, entity.getComponent<Sprite>().getSprite(), pos,
+                  posId);
     }
     if (entity.hasComponent<Text>()) {
         updatePos(entity, entity.getComponent<Text>().getText(), pos, posId);
     }
 }
 
-void GameEngine::System::updateText(const int id, std::map<int, Entity>& entities,
+void GameEngine::System::updateText(const int id,
+                                    std::map<int, Entity>& entities,
                                     const std::string& text) {
     Entity& entity = entities.at(id);
     if (entity.hasComponent<Text>()) {
@@ -34,7 +36,9 @@ void GameEngine::System::updateText(const int id, std::map<int, Entity>& entitie
     }
 }
 
-void GameEngine::System::updateTextSize(const int id, std::map<int, Entity>& entities, const unsigned int textSize) {
+void GameEngine::System::updateTextSize(const int id,
+                                        std::map<int, Entity>& entities,
+                                        const unsigned int textSize) {
     Entity& entity = entities.at(id);
     if (entity.hasComponent<Text>()) {
         auto& textComp = entity.getComponent<Text>();
@@ -43,7 +47,9 @@ void GameEngine::System::updateTextSize(const int id, std::map<int, Entity>& ent
     }
 }
 
-void GameEngine::System::updateTexture(const int id, std::map<int, Entity>& entities, std::string& texture) {
+void GameEngine::System::updateTexture(const int id,
+                                       std::map<int, Entity>& entities,
+                                       std::string& texture) {
     Entity& entity = entities.at(id);
     if (entity.hasComponent<Texture>()) {
         auto& textureComp = entity.getComponent<Texture>();
