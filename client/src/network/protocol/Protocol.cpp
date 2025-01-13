@@ -143,5 +143,4 @@ void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
         {"Size", std::pair<float, float>(size, size)},
         {"Position", std::pair<float, float>(x, y)}};
     EntityManager::get().CompareEntities(obstacleId, newItems, {x, y});
-
 }

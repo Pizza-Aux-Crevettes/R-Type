@@ -40,7 +40,9 @@ Menu::createEntitySprite(int id, const std::pair<float, float> size,
 }
 
 GameEngine::Entity
-Menu::createEntityRect(int id, const std::pair<int, int> size, const std::vector<std::pair<float, float>> position, sf::Color color, std::function<void()> callback) {
+Menu::createEntityRect(int id, const std::pair<int, int> size,
+                       const std::vector<std::pair<float, float>> position,
+                       sf::Color color, std::function<void()> callback) {
     auto rectEntity = GameEngine::Entity(id);
     auto buttonRect = ButtonRect(size, color);
     buttonRect.setCallback(callback);
@@ -50,9 +52,11 @@ Menu::createEntityRect(int id, const std::pair<int, int> size, const std::vector
 }
 
 GameEngine::Entity
-Menu::createEntityInput(int id, std::string font, int fontSize,  const std::vector<std::pair<float, float>> position, std::string inputVar) {
+Menu::createEntityInput(int id, std::string font, int fontSize,
+                        const std::vector<std::pair<float, float>> position,
+                        std::string inputVar) {
     auto inputEntity = GameEngine::Entity(id);
-    inputEntity.addComponent(Text(inputVar,font, fontSize));
+    inputEntity.addComponent(Text(inputVar, font, fontSize));
     inputEntity.addComponent(Position(position));
     inputEntity.addComponent(Color({255, 255, 255, 255}));
     return inputEntity;
@@ -70,7 +74,8 @@ void Menu::isClickedPlay() {
     Client::get().setIsPlayed();
 }
 
-void Menu::isClickedInput(bool isIpClicked, bool isPortClicked, bool isUsernameClicked) {
+void Menu::isClickedInput(bool isIpClicked, bool isPortClicked,
+                          bool isUsernameClicked) {
 
     _isIpClicked = isIpClicked;
     _isPortClicked = isPortClicked;
@@ -90,8 +95,7 @@ void Menu::setupInput(const sf::Event& event) {
                 ip += static_cast<char>(event.text.unicode);
             }
             Client::get().setIp(ip);
-        }
-        else if(_isPortClicked) {
+        } else if (_isPortClicked) {
             std::string port = Client::get().getPort();
             if (event.text.unicode == '\b') {
                 if (!port.empty()) {
@@ -102,8 +106,7 @@ void Menu::setupInput(const sf::Event& event) {
                 port += static_cast<char>(event.text.unicode);
             }
             Client::get().setPort(port);
-        }
-        else if (_isUsernameClicked) {
+        } else if (_isUsernameClicked) {
             std::string username = Client::get().getUsername();
             if (event.text.unicode == '\b') {
                 if (!username.empty()) {
@@ -117,8 +120,6 @@ void Menu::setupInput(const sf::Event& event) {
         }
     }
 }
-
-
 
 void Menu::isClickedExit() {
     std::cout << "Button Exit clicked!" << std::endl;
@@ -176,25 +177,62 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
                 entityId, createEntitySprite(entityId++, {5, 5},
                                              "assets/sprite/intact-boss.png",
                                              {0, 0, 200, 200}, {{1400, 200}}));
-            _entitiesMenu.emplace(entityId, createEntityRect(entityId++, {150, 50}, {{1300, 80}}, sf::Color::Red, [this]() {isClickedInput(false, false, true);})); //username inputRect
-            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{1050, 78}}, "Username"));
-            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{1305, 78}}, "")); //username input text
+            _entitiesMenu.emplace(
+                entityId, createEntityRect(entityId++, {150, 50}, {{1300, 80}},
+                                           sf::Color::Red, [this]() {
+                                               isClickedInput(false, false,
+                                                              true);
+                                           })); // username inputRect
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40,
+                                  {{1050, 78}}, "Username"));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40,
+                                  {{1305, 78}}, "")); // username input text
             _usernameId = entityId;
-            _entitiesMenu.emplace(entityId, createEntityRect(entityId++, {150, 50}, {{1300, 150}}, sf::Color::Red, [this]() {isClickedInput(true, false, false);})); //ip inputRect
-            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{1050, 148}}, "IP"));
-            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{1305, 148}}, "")); //ip input text
+            _entitiesMenu.emplace(
+                entityId, createEntityRect(entityId++, {150, 50}, {{1300, 150}},
+                                           sf::Color::Red, [this]() {
+                                               isClickedInput(true, false,
+                                                              false);
+                                           })); // ip inputRect
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40,
+                                  {{1050, 148}}, "IP"));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40,
+                                  {{1305, 148}}, "")); // ip input text
             _ipId = entityId;
-            _entitiesMenu.emplace(entityId, createEntityRect(entityId++, {150, 50}, {{1300, 220}}, sf::Color::Red, [this]() {isClickedInput(false, true, false);})); //port inputRect
-            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{1050, 218}}, "Port"));
-            _entitiesMenu.emplace(entityId, createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40, {{1305, 218}}, "")); //port input tex
+            _entitiesMenu.emplace(
+                entityId, createEntityRect(entityId++, {150, 50}, {{1300, 220}},
+                                           sf::Color::Red, [this]() {
+                                               isClickedInput(false, true,
+                                                              false);
+                                           })); // port inputRect
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40,
+                                  {{1050, 218}}, "Port"));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityInput(entityId++, "assets/font/Inter_Bold.ttf", 40,
+                                  {{1305, 218}}, "")); // port input tex
             _portId = entityId;
             _entitiesInitialized = true;
         } else {
-            _entitiesMenu.at(_usernameId).getComponent<Text>().setString(Client::get().getUsername());
-            _entitiesMenu.at(_ipId).getComponent<Text>().setString(Client::get().getIp());
-            _entitiesMenu.at(_portId).getComponent<Text>().setString(Client::get().getPort());
+            _entitiesMenu.at(_usernameId)
+                .getComponent<Text>()
+                .setString(Client::get().getUsername());
+            _entitiesMenu.at(_ipId).getComponent<Text>().setString(
+                Client::get().getIp());
+            _entitiesMenu.at(_portId).getComponent<Text>().setString(
+                Client::get().getPort());
         }
-         system.render(window, _entitiesMenu);
+        system.render(window, _entitiesMenu);
     }
 }
 

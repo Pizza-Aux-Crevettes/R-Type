@@ -6,6 +6,7 @@
 */
 
 #include "component/hotkey/HotkeysManager.hpp"
+#include "component/bullet/BulletManager.hpp"
 #include "component/hotkey/HotkeysCodes.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "util/Logger.hpp"
@@ -50,6 +51,9 @@ void HotkeysManager::initHotkeys() {
         {static_cast<int16_t>(HotkeysCodes::ARROW_BOTTOM),
          [](int32_t playerId) {
              PlayerManager::get().movePlayer(playerId, 0, PLAYER_SPEED);
+         }},
+        {static_cast<int16_t>(HotkeysCodes::SPACE), [this](int playerId) {
+             BulletManager::get().handlePlayerShoot(playerId);
          }}};
 
     Logger::success("[HotkeysManager] Hotkey actions initialized.");

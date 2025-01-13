@@ -50,6 +50,4 @@ class Client {
     std::string getPort();
     std::string getIp();
     sf::Event getEvent();
-
-
 };
