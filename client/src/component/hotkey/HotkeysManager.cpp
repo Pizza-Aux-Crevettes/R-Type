@@ -11,6 +11,7 @@
 #include "network/protocol/Protocol.hpp"
 #include "network/socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
+#include "Client.hpp"
 
 HotkeysManager::HotkeysManager() {
     _keys = {{HotkeysCodes::ARROW_TOP, sf::Keyboard::Up},
@@ -32,15 +33,17 @@ void HotkeysManager::setKey(const HotkeysCodes hotkey,
 }
 
 void HotkeysManager::checkKey(const sf::Event& event) {
-    for (const auto& [hotkey, key] : _keys) {
+    if (Client::get().getIsPlayed()) {
+        for (const auto& [hotkey, key] : _keys) {
         if (key == event.key.code) {
             SmartBuffer smartBuffer;
-            Logger::debug(std::to_string(event.key.code));
-            smartBuffer << static_cast<int16_t>(
+             smartBuffer << static_cast<int16_t>(
                                Protocol::OpCode::HOTKEY_PRESSED)
                         << static_cast<int32_t>(Protocol::get().getPlayerId())
                         << static_cast<int16_t>(hotkey);
             UdpSocket::send(smartBuffer);
+
         }
+    }
     }
 }
