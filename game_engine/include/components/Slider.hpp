@@ -26,7 +26,7 @@ class Slider : public Component {
     void setBarShape(const sf::RectangleShape&);
     sf::CircleShape& getCursorShape();
     void setCursorShape(const sf::CircleShape&);
-    float getValue() const;
+    int getValue() const;
     void setValue(float);
     void setMinValue(float minValue);
     float getMinValue() const;
@@ -37,7 +37,6 @@ class Slider : public Component {
     void setSetCallback(std::function<void(float)>);
     void setGetCallback(std::function<float()>);
     float triggerSetCallback(float value);
-    float triggerGetCallback();
     void display() const;
 
   private:

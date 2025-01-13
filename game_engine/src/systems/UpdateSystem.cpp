@@ -10,6 +10,7 @@
 #include <components/Text.hpp>
 #include <components/Shape.hpp>
 #include "System.hpp"
+#include <iostream>
 
 void GameEngine::System::updateEntityPosition(const int id, std::map<int, Entity>& entities,
                                               const std::pair<float, float>& pos,
@@ -31,6 +32,7 @@ void GameEngine::System::updateText(const int id, std::map<int, Entity>& entitie
         auto& textComp = entity.getComponent<Text>();
         textComp.setString(text);
         textComp.getText().setString(text);
+        std::cout << "system update text in update" << std::endl;
     }
 }
 

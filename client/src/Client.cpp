@@ -81,7 +81,7 @@ void Client::manageClient() {
             if (event.type == sf::Event::KeyPressed)
                 input.checkKey(event);
             menu.setupInput(event);
-            optionMenu.setNewKey(event);
+            optionMenu.setNewKey(event, system);
 
         }
         window.clear();

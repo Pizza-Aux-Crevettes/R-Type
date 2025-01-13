@@ -52,10 +52,11 @@ OptionMenu::createEntityButton(int id, std::string title, std::string font,
                                std::vector<std::pair<float, float>> position,
                                std::function<void()> callback) {
     auto newEntity = GameEngine::Entity(id);
-    auto button = Button(title, font, fontSize);
+    auto button = Button("", font, fontSize);
     button.setCallback(callback);
     newEntity.addComponent(button);
     newEntity.addComponent(Position(position));
+    newEntity.addComponent(Text(title, "assets/font/Inter_Bold.ttf", 20));
     newEntity.addComponent(Color({255, 255, 255, 255}));
     return newEntity;
 }
@@ -74,7 +75,17 @@ GameEngine::Entity OptionMenu::createEntitySlider(
     return newEntity;
 }
 
-void OptionMenu::setNewKey(const sf::Event& event) {
+GameEngine::Entity
+OptionMenu::createEntityRect(int id, const std::pair<int, int> size, const std::vector<std::pair<float, float>> position, sf::Color color, std::function<void()> callback) {
+    auto rectEntity = GameEngine::Entity(id);
+    auto buttonRect = ButtonRect(size, color);
+    buttonRect.setCallback(callback);
+    rectEntity.addComponent(buttonRect);
+    rectEntity.addComponent(Position(position));
+    return rectEntity;
+}
+
+void OptionMenu::setNewKey(const sf::Event& event, GameEngine::System& system) {
     if (_waitingForKey && event.type == sf::Event::KeyPressed) {
         sf::Keyboard::Key newKey = event.key.code;
 
@@ -86,6 +97,16 @@ void OptionMenu::setNewKey(const sf::Event& event) {
         HotkeysManager::get().setKey(_hotkeyPressed, newKey);
         std::cout << "New : " << HotkeysManager::get().keyToString(HotkeysManager::get().getKey(_hotkeyPressed)) << std::endl;
         _waitingForKey = false;
+
+        if (_hotkeyEntityMap.find(_hotkeyPressed) != _hotkeyEntityMap.end()) {
+            int entityId = _hotkeyEntityMap[_hotkeyPressed];
+            std::cout << "entity id " << entityId << std::endl;
+            system.update(entityId, _entitiesMenuOption, GameEngine::UpdateType::Text, HotkeysManager::get().keyToString(newKey));
+            std::cout << "system update text" << std::endl;
+
+        } else {
+            std::cerr << "Error: Hotkey entity not found!" << std::endl;
+        }
     }
 }
 
@@ -105,125 +126,89 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                             //    20, {{750, 50}}, [this]() { Menu::get().setMenuState(Menu::MenuState::MainMenu); }));
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, "OPTIONS", {{300, 10}}, 45));
+// Sound
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, "Sound", {{40, 100}}, 20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(entityId++, "Key control", {{40, 170}}, 20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(entityId++,
-                             "Font for people with reading difficulties",
-                             {{40, 240}}, 20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(entityId++, "Size of elements", {{40, 310}}, 20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(entityId++, "High contrast", {{40, 380}}, 20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(entityId++, "High difficulty", {{40, 450}}, 20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(entityId++, "Controller  mode", {{40, 520}}, 20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityButton( entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_TOP)), "assets/font/Inter_Bold.ttf",
-                              20, {{200, 185}},
-                              [this]() {
-                                _waitingForKey = true;
-                                _hotkeyPressed = HotkeysCodes::ARROW_TOP; }));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityButton( entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_BOTTOM)), "assets/font/Inter_Bold.ttf",
-                              20, {{300, 185}},
-                              [this]() {
-                                _waitingForKey = true;
-                                _hotkeyPressed = HotkeysCodes::ARROW_BOTTOM; }));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityButton( entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_LEFT)), "assets/font/Inter_Bold.ttf",
-                              20, {{400, 185}},
-                              [this]() {
-                                _waitingForKey = true;
-                                _hotkeyPressed = HotkeysCodes::ARROW_LEFT; }));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityButton( entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_RIGHT)), "assets/font/Inter_Bold.ttf",
-                              20, {{500, 185}},
-                              [this]() {
-                                _waitingForKey = true;
-                                _hotkeyPressed = HotkeysCodes::ARROW_RIGHT; }));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityButton( entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::AUTO_FIRE)), "assets/font/Inter_Bold.ttf",
-                              20, {{600, 185}},
-                              [this]() {
-                                _waitingForKey = true;
-                                _hotkeyPressed = HotkeysCodes::AUTO_FIRE; }));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityButton( entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::SHOOT)), "assets/font/Inter_Bold.ttf",
-                              20, {{700, 185}},
-                              [this]() {
-                                _waitingForKey = true;
-                                _hotkeyPressed = HotkeysCodes::SHOOT; }));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityOptionButton(entityId++, {{720, 240}},
-                                     [this]() { setAdaptabilityText(); }));
-        _entitiesMenuOption.emplace(
-            entityId, createEntityOptionButton(entityId++, {{720, 380}},
-                                               [this]() { setContrast(); }));
-        _entitiesMenuOption.emplace(
-            entityId, createEntityOptionButton(entityId++, {{720, 450}},
-                                               [this]() { setDifficulty(); }));
-        _entitiesMenuOption.emplace(
-            entityId, createEntityOptionButton(entityId++, {{720, 520}},
-                                               [this]() { setControl(); }));
-        _entitiesMenuOption.emplace(
-            entityId,
+        _entitiesMenuOption.emplace( entityId,
             createEntityText(entityId++, "Game effects", {{160, 85}}, 15));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(entityId++, std::to_string(getVolumnGame()),
-                             {{140, 105}}, 15));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntitySlider(
-                entityId++, {0, 100}, {{160, 115}},
-                [this]() { return static_cast<float>(getVolumnMusic()); },
-                [this](float newValue) {
-                    setVolumnMusic(static_cast<int>(newValue));
-                }));
+        _entitiesMenuOption.emplace( entityId,
+            createEntityText(entityId++, std::to_string(getVolumnGame()), {{130, 105}}, 15));
+        _entitiesMenuOption.emplace( entityId,
+            createEntitySlider( entityId++, {0, 100}, {{155, 115}}, [this]() { return getVolumnMusic(); }, [this](int newValue) { setVolumnMusic(newValue); }));
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, "Music", {{545, 85}}, 15));
+        _entitiesMenuOption.emplace( entityId,
+            createEntityText(entityId++, std::to_string(getVolumnMusic()), {{520, 105}}, 15));
+        _entitiesMenuOption.emplace( entityId,
+            createEntitySlider( entityId++, {0, 100}, {{545, 115}}, [this]() { return (getVolumnGame()); }, [this](int newValue) { setVolumnGame(newValue); }));
+
+// Key control
+        _entitiesMenuOption.emplace( entityId,
+            createEntityText(entityId++, "Key control", {{40, 170}}, 20));
+        _entitiesMenuOption.emplace( entityId,
+            createEntityRect( entityId++, {150, 50}, {{200, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_TOP; }));
+        _hotkeyEntityMap[HotkeysCodes::ARROW_TOP] = entityId - 1;
         _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(entityId++, std::to_string(getVolumnMusic()),
-                             {{525, 105}}, 15));
+            entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_TOP)), {{200, 170}}, 20));
+        _entitiesMenuOption.emplace( entityId,
+            createEntityRect( entityId++, {150, 50}, {{300, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_BOTTOM; }));
         _entitiesMenuOption.emplace(
-            entityId,
-            createEntitySlider(
-                entityId++, {0, 100}, {{545, 115}},
-                [this]() { return static_cast<float>(getVolumnGame()); },
-                [this](float newValue) {
-                    setVolumnGame(static_cast<int>(newValue));
-                }));
+            entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_BOTTOM)), {{300, 170}}, 20));
+        _hotkeyEntityMap[HotkeysCodes::ARROW_BOTTOM] = entityId - 1;
+        _entitiesMenuOption.emplace( entityId,
+            createEntityRect( entityId++, {150, 50}, {{400, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_LEFT; }));
         _entitiesMenuOption.emplace(
-            entityId,
+            entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_LEFT)), {{400, 170}}, 20));
+        _hotkeyEntityMap[HotkeysCodes::ARROW_LEFT] = entityId - 1;
+        _entitiesMenuOption.emplace( entityId,
+            createEntityRect( entityId++, {150, 50}, {{500, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_RIGHT; }));
+        _entitiesMenuOption.emplace(
+            entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_RIGHT)), {{500, 170}}, 20));
+        _hotkeyEntityMap[HotkeysCodes::ARROW_RIGHT] = entityId - 1;
+        _entitiesMenuOption.emplace( entityId,
+            createEntityRect( entityId++, {150, 50}, {{600, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::AUTO_FIRE; }));
+        _entitiesMenuOption.emplace(
+            entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::AUTO_FIRE)), {{600, 170}}, 20));
+        _hotkeyEntityMap[HotkeysCodes::AUTO_FIRE] = entityId - 1;
+        _entitiesMenuOption.emplace( entityId,
+            createEntityRect( entityId++, {150, 50}, {{700, 170}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::SHOOT; }));
+        _entitiesMenuOption.emplace(
+            entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::SHOOT)), {{700, 170}}, 20));
+        _hotkeyEntityMap[HotkeysCodes::SHOOT] = entityId - 1;
+
+// Adaptability
+        _entitiesMenuOption.emplace( entityId,
+            createEntityText(entityId++, "Font for people with reading difficulties", {{40, 240}}, 20));
+        _entitiesMenuOption.emplace( entityId,
+            createEntityOptionButton(entityId++, {{720, 240}}, [this]() { setAdaptabilityText(); }));
+    
+// Size of elements
+        _entitiesMenuOption.emplace( entityId,
+            createEntityText(entityId++, "Size of elements", {{40, 310}}, 20));
+        _entitiesMenuOption.emplace( entityId,
             createEntityText(entityId++, "Enlarge", {{545, 280}}, 15));
+        _entitiesMenuOption.emplace( entityId,
+            createEntityText(entityId++, std::to_string(getElementSize()), {{520, 300}}, 15));
+        _entitiesMenuOption.emplace( entityId,
+            createEntitySlider( entityId++, {0, 100}, {{545, 310}}, [this]() { return getElementSize(); }, [this](int newValue) { setElementSize(newValue); }));
+        
+// Contrast
+        _entitiesMenuOption.emplace( entityId,
+            createEntityText(entityId++, "High contrast", {{40, 380}}, 20));
         _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(entityId++, std::to_string(getElementSize()),
-                             {{525, 300}}, 15));
+            entityId, createEntityOptionButton(entityId++, {{720, 380}}, [this]() { setContrast(); }));
+
+// Difficulty
+        _entitiesMenuOption.emplace( entityId,
+            createEntityText(entityId++, "High difficulty", {{40, 450}}, 20));
         _entitiesMenuOption.emplace(
-            entityId,
-            createEntitySlider(
-                entityId++, {0, 2}, {{545, 310}},
-                [this]() { return static_cast<float>(getElementSize()); },
-                [this](float newValue) { setElementSize(newValue); }));
+            entityId, createEntityOptionButton(entityId++, {{720, 450}}, [this]() { setDifficulty(); }));
+
+// Controller
+        _entitiesMenuOption.emplace( entityId,
+            createEntityText(entityId++, "Controller  mode", {{40, 520}}, 20));
+        _entitiesMenuOption.emplace(
+            entityId, createEntityOptionButton(entityId++, {{720, 520}}, [this]() { setControl(); }));
         _entitiesInitialized = true;
     }
     system.render(window, _entitiesMenuOption);
@@ -270,11 +255,11 @@ void OptionMenu::setAdaptabilityText() {
 }
 
 // Element size
-float OptionMenu::getElementSize() {
+int OptionMenu::getElementSize() {
     return _elementSize;
 }
 
-void OptionMenu::setElementSize(float new_size) {
+void OptionMenu::setElementSize(int new_size) {
     _elementSize = new_size;
     std::cout << "New element size " << _elementSize << std::endl;
 }

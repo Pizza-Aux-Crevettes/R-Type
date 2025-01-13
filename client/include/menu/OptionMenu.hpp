@@ -28,7 +28,7 @@ class OptionMenu {
     bool _constrast = false;
     bool _waitingForKey = false;
     HotkeysCodes _hotkeyPressed;
-
+    std::map<HotkeysCodes, int> _hotkeyEntityMap;
   public:
     OptionMenu();
     ~OptionMenu();
@@ -41,15 +41,18 @@ class OptionMenu {
                              std::function<void()>);
     GameEngine::Entity
     createEntityButton(int id, std::string title, std::string font,
-                       int fontSize,
-                       std::vector<std::pair<float, float>> position,
-                       std::function<void()> callback);
+                        int fontSize,
+                        std::vector<std::pair<float, float>> position,
+                        std::function<void()> callback);
     GameEngine::Entity
     createEntitySlider(int, const std::pair<int, int>,
-                       const std::vector<std::pair<float, float>>,
-                       std::function<float()>, std::function<void(float)>);
+                        const std::vector<std::pair<float, float>>,
+                        std::function<float()>, std::function<void(float)>);
+    GameEngine::Entity createEntityRect(int id, const std::pair<int, int> size,
+                        const std::vector<std::pair<float, float>> position,
+                        sf::Color color, std::function<void()> callback);
     void displayOptionMenu(sf::RenderWindow&, GameEngine::System);
-    void setNewKey(const sf::Event& event);
+    void setNewKey(const sf::Event& event, GameEngine::System& system);
     int getVolumnMusic();
     void setVolumnMusic(int);
     int getVolumnGame();
@@ -58,8 +61,8 @@ class OptionMenu {
     void setResolution(int);
     bool getAdaptabilityText();
     void setAdaptabilityText();
-    float getElementSize();
-    void setElementSize(float);
+    int getElementSize();
+    void setElementSize(int);
     bool getDifficulty();
     void setDifficulty();
     bool getControl();

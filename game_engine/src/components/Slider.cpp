@@ -13,6 +13,7 @@
 
 #include "components/Slider.hpp"
 #include <iostream>
+#include <cmath> 
 
 /**
  * @brief Constructor for the Slider component.
@@ -139,8 +140,8 @@ void Slider::setValue(float value) {
  *
  * @return A float representing the current value of the slider.
  */
-float Slider::getValue() const {
-    return _currentValue;
+int Slider::getValue() const {
+    return  static_cast<int>(round(_currentValue));
 }
 
 /**
@@ -219,18 +220,6 @@ void Slider::setGetCallback(std::function<float()> callback) {
  * This function call the function set in callback of the Slider component.
  */
 float Slider::triggerSetCallback(float newValue) {
-    if (getCallback) {
-        return getCallback();
-    }
-    return 0.0f;
-}
-
-/**
- * @brief Execute function get callback.
- *
- * This function call the function get in callback of the Slider component.
- */
-float Slider::triggerGetCallback() {
     if (getCallback) {
         return getCallback();
     }

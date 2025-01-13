@@ -118,7 +118,8 @@ void GameEngine::System::optionButtonSystem(sf::RenderWindow& window,
 }
 
 void GameEngine::System::sliderSystem(sf::RenderWindow& window,
-                                      GameEngine::Entity& entity) {
+                                      GameEngine::Entity& entity, std::map<int, Entity>& entities) {
+    GameEngine::System system;
     if (entity.hasComponent<Slider>() && entity.hasComponent<Position>()) {
         auto& sliderComp = entity.getComponent<Slider>();
         auto& positionComp = entity.getComponent<Position>();
@@ -179,10 +180,12 @@ void GameEngine::System::sliderSystem(sf::RenderWindow& window,
                     cursorX - sliderComp.getCursorShape().getRadius(),
                     sliderComp.getCursorShape().getPosition().y);
                 sliderComp.triggerSetCallback(sliderComp.getValue());
+                system.update(entity.getEntityId(), entities, UpdateType::Text, std::to_string(sliderComp.getValue()));
             }
         }
         window.draw(sliderComp.getBarShape());
         window.draw(sliderComp.getCursorShape());
+
     }
 }
 
