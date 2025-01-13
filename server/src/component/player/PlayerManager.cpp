@@ -6,7 +6,7 @@
 */
 
 #include "component/player/PlayerManager.hpp"
-#include "component/map/MapManager.hpp"
+#include "component/obstacle/ObstacleManager.hpp"
 #include "component/player/PlayerProtocol.hpp"
 #include "socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
@@ -105,8 +105,7 @@ void PlayerManager::movePlayer(int32_t playerId, int32_t offsetX,
     Point currentPos = player->getPosition();
     Point newPos(currentPos.getX() + offsetX, currentPos.getY() + offsetY);
 
-    if (!MapManager::get().getCurrentMap()->isVoidBlock(newPos.getX(),
-                                                        newPos.getY())) {
+    if (!ObstacleManager::get().isVoid(newPos.getX(), newPos.getY())) {
         Logger::info("[PlayerManager] Player " + std::to_string(playerId) +
                      " cannot move to blocked position (" +
                      std::to_string(newPos.getX()) + ", " +

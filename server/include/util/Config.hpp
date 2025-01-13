@@ -34,3 +34,9 @@ enum Config {
     // Bullet
     BULLET_SPEED = 10,
 };
+
+static constexpr char NAME_LABEL[] = "name=";
+static constexpr char MAP_LABEL[] = "map=###";
+static constexpr char END_LABEL[] = "###";
+static constexpr int NAME_OFFSET = 5;
+static constexpr int BLOCK_OFFSET = 4;

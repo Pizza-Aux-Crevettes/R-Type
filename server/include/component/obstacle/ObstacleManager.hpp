@@ -18,9 +18,10 @@ class ObstacleManager {
     static ObstacleManager& get();
 
     void addObstacle(const std::shared_ptr<Obstacle>& obstacle);
-    std::vector<std::shared_ptr<Obstacle>> getObstacles() const;
+    const std::vector<std::shared_ptr<Obstacle>>& getAllObstacles() const;
     bool isObstacleCodeValid(const std::string& code) const;
     ObstacleType getObstacleType(const std::string& code) const;
+    bool isVoid(int32_t x, int32_t y) const;
     void reset();
 
   private:

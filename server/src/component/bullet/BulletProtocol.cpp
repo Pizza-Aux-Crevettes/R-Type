@@ -14,8 +14,7 @@
 /**
  * @brief Send the bullet update to the client
  *
- * @param udpSocket The UDP socket
- * @param client The client address
+ * @param clientAddr The client address
  * @param smartBuffer The smart buffer
  *
  * Protocol: BULLET_POSITION_UPDATE

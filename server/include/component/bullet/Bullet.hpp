@@ -16,7 +16,6 @@ class Bullet {
     int getId() const;
     const Point& getPosition() const;
     void move();
-    bool isOutsideViewport(int viewportWidth, int viewportHeight) const;
 
   private:
     int _id;

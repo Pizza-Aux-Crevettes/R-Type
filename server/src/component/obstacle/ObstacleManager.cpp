@@ -6,6 +6,8 @@
 */
 
 #include "component/obstacle/ObstacleManager.hpp"
+#include "component/map/MapProtocol.hpp"
+#include "util/Config.hpp"
 #include "util/Logger.hpp"
 
 /**
@@ -52,9 +54,10 @@ void ObstacleManager::addObstacle(const std::shared_ptr<Obstacle>& obstacle) {
 /**
  * @brief Get all obstacles
  *
- * @return std::vector<std::shared_ptr<Obstacle>> The obstacles
+ * @return const std::vector<std::shared_ptr<Obstacle>>& The obstacles
  */
-std::vector<std::shared_ptr<Obstacle>> ObstacleManager::getObstacles() const {
+const std::vector<std::shared_ptr<Obstacle>>&
+ObstacleManager::getAllObstacles() const {
     return _obstacles;
 }
 
@@ -82,6 +85,27 @@ ObstacleType ObstacleManager::getObstacleType(const std::string& code) const {
 
     throw std::runtime_error("[ObstacleManager] Invalid obstacle code: " +
                              code);
+}
+
+/**
+ * @brief Check if a block is void
+ *
+ * @param x The x position of the block
+ * @param y The y position of the block
+ * @return bool
+ */
+bool ObstacleManager::isVoid(int32_t x, int32_t y) const {
+    for (const auto& obstacle : _obstacles) {
+        int32_t blockX = obstacle->getPosition().getX();
+        int32_t blockY = obstacle->getPosition().getY();
+
+        if (x >= blockX && x < blockX + BLOCK_SIZE && y >= blockY &&
+            y < blockY + BLOCK_SIZE) {
+            return obstacle->getType() == ObstacleType::NONE;
+        }
+    }
+
+    return true;
 }
 
 /**

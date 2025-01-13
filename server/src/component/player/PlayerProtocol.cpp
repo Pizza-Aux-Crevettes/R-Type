@@ -56,8 +56,7 @@ void PlayerProtocol::newPlayer(const int clientSocket,
 /**
  * @brief Update the player's position and broadcast the update to all clients
  *
- * @param udpSocket The UDP socket
- * @param player The player to update
+ * @param clientAddr The client address
  * @param smartBuffer The SmartBuffer to use for the response
  *
  * Protocol: PLAYER_POSITION_UPDATE
@@ -90,10 +89,7 @@ void PlayerProtocol::sendPlayerPosition(const sockaddr_in& clientAddr,
 /**
  * @brief Delete a player and broadcast the deletion to all clients
  *
- * @param udpSocket The UDP socket
- * @param client The client's address
  * @param playerId The player's ID
- * @param smartBuffer The SmartBuffer to use for the response
  *
  * Protocol: PLAYER_DELETED
  * Payload: playerId (int32_t)
@@ -106,7 +102,7 @@ void PlayerProtocol::sendPlayerDeleted(const int32_t playerId) {
                 << static_cast<int32_t>(playerId);
 
     UdpSocket::get().sendToAll(smartBuffer);
-    
+
     Logger::packet("[PlayerProtocol] Player deleted sent:\n"
                    "  - Player ID: " +
                    std::to_string(playerId));

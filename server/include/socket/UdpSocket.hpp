@@ -27,7 +27,8 @@ class UdpSocket {
     void init();
     void readLoop();
     void sendLoop();
-    void sendToOne(const sockaddr_in& clientAddrt, const SmartBuffer& smartBuffer);
+    void sendToOne(const sockaddr_in& clientAddrt,
+                   const SmartBuffer& smartBuffer);
     void sendToAll(const SmartBuffer& smartBuffer);
     std::vector<sockaddr_in> getClients();
     void close() const;

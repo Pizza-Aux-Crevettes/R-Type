@@ -11,7 +11,6 @@
 #include <memory>
 #include <netinet/in.h>
 #include <thread>
-#include "component/map/MapManager.hpp"
 
 class MapProtocol {
   public:
@@ -19,4 +18,5 @@ class MapProtocol {
                                    SmartBuffer& smartBuffer);
     static void sendObstaclesUpdate(const sockaddr_in& clientAddr,
                                     SmartBuffer& smartBuffer);
+    static void sendObstacleDeleted(const int32_t obstacleId);
 };

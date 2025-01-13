@@ -100,14 +100,10 @@ void UdpSocket::sendLoop() {
             BulletManager::get().updateBullets();
 
             for (const auto& client : _clients) {
-                PlayerProtocol::sendPlayerPosition(client,
-                                                   smartBuffer);
-                MapProtocol::sendViewportUpdate(client,
-                                                smartBuffer);
-                MapProtocol::sendObstaclesUpdate(client,
-                                                 smartBuffer);
-                BulletProtocol::sendBulletsUpdate(client,
-                                                  smartBuffer);
+                PlayerProtocol::sendPlayerPosition(client, smartBuffer);
+                MapProtocol::sendViewportUpdate(client, smartBuffer);
+                MapProtocol::sendObstaclesUpdate(client, smartBuffer);
+                BulletProtocol::sendBulletsUpdate(client, smartBuffer);
             }
         }
 
@@ -133,9 +129,10 @@ void UdpSocket::sendLoop() {
  * @param clientSocket The UDP socket
  * @param smartBuffer The SmartBuffer to send
  */
-void UdpSocket::sendToOne(const sockaddr_in& clientAddr, const SmartBuffer& smartBuffer) {
+void UdpSocket::sendToOne(const sockaddr_in& clientAddr,
+                          const SmartBuffer& smartBuffer) {
     sendto(_udpSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0,
-               reinterpret_cast<const sockaddr*>(&clientAddr), sizeof(clientAddr));
+           reinterpret_cast<const sockaddr*>(&clientAddr), sizeof(clientAddr));
 }
 
 /**

@@ -6,6 +6,7 @@
 */
 
 #include "component/map/MapProtocol.hpp"
+#include "component/obstacle/ObstacleManager.hpp"
 #include "protocol/Protocol.hpp"
 #include "socket/UdpSocket.hpp"
 #include "util/Config.hpp"
@@ -14,7 +15,6 @@
 /**
  * @brief Send a viewport update to a client
  *
- * @param udpSocket The UDP socket to use
  * @param clientAddr The client's address
  * @param smartBuffer The SmartBuffer to use for the response
  *
@@ -23,10 +23,8 @@
  */
 void MapProtocol::sendViewportUpdate(const sockaddr_in& clientAddr,
                                      SmartBuffer& smartBuffer) {
-    const auto& viewport = MapManager::get().getCurrentMap()->getViewport();
-
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::VIEWPORT_UPDATE)
-                << static_cast<int32_t>(viewport);
+                << static_cast<int32_t>(0);
 
     UdpSocket::get().sendToOne(clientAddr, smartBuffer);
 
@@ -36,7 +34,6 @@ void MapProtocol::sendViewportUpdate(const sockaddr_in& clientAddr,
 /**
  * @brief Send an obstacles update to a client
  *
- * @param udpSocket The UDP socket to use
  * @param clientAddr The client's address
  * @param smartBuffer The SmartBuffer to use for the response
  *
@@ -45,14 +42,7 @@ void MapProtocol::sendViewportUpdate(const sockaddr_in& clientAddr,
  */
 void MapProtocol::sendObstaclesUpdate(const sockaddr_in& clientAddr,
                                       SmartBuffer& smartBuffer) {
-    const auto& obstacles =
-        MapManager::get().getCurrentMap()->getObstaclesByViewport();
-    if (obstacles.empty()) {
-        Logger::warning("[MapProtocol] No obstacles to send.");
-        return;
-    }
-
-    for (const auto& obstacle : obstacles) {
+    for (const auto& obstacle : ObstacleManager::get().getAllObstacles()) {
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(Protocol::OpCode::OBSTACLES_UPDATE)
                     << static_cast<int32_t>(obstacle->getId())
@@ -65,4 +55,26 @@ void MapProtocol::sendObstaclesUpdate(const sockaddr_in& clientAddr,
     }
 
     Logger::packet("[MapProtocol] Obstacles update sent to client.");
+}
+
+/**
+ * @brief Send a obstacle deleted to all clients
+ *
+ * @param obstacleId The block ID
+ *
+ * Protocol: OBSTACLES_DELETED
+ * Payload: obstacleId (int32_t)
+ */
+void MapProtocol::sendObstacleDeleted(const int32_t obstacleId) {
+    SmartBuffer smartBuffer;
+
+    smartBuffer.reset();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::OBSTACLES_DELETED)
+                << static_cast<int32_t>(obstacleId);
+
+    UdpSocket::get().sendToAll(smartBuffer);
+
+    Logger::packet("[MapProtocol] Obstacle deleted sent:\n"
+                   "  - Obstacle ID: " +
+                   std::to_string(obstacleId));
 }
