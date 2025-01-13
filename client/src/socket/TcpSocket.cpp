@@ -5,12 +5,12 @@
 ** TcpSocket.cpp
 */
 
-#include "network/socket/TcpSocket.hpp"
+#include "socket/TcpSocket.hpp"
 #include <stdexcept>
 #include <sys/socket.h>
 #include <unistd.h>
-#include "network/protocol/Protocol.hpp"
-#include "network/socket/Singleton.hpp"
+#include "protocol/Protocol.hpp"
+#include "socket/Singleton.hpp"
 #include "util/Config.hpp"
 
 TcpSocket::TcpSocket(const std::string& serverAddress, const int port)

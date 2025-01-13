@@ -59,7 +59,7 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
                        " to new player.");
 
         // Sleep for a short time to avoid packet loss
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 }
 

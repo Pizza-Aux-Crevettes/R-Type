@@ -13,41 +13,41 @@
 #include "components/Sprite.hpp"
 #include "components/Text.hpp"
 #include "components/Texture.hpp"
-#include "network/protocol/NetworkClient.hpp"
+#include "protocol/NetworkClient.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
-void runNetworkClient(NetworkClient& networkClient, Client* client) {
-    try {
-        while (!Client::get().getIsPlayed())
-            ;
-        networkClient.run();
-    } catch (const std::exception& e) {
-        Logger::error("[Server Thread] Error: " + std::string(e.what()));
-    }
-}
+// void runNetworkClient(NetworkClient& networkClient, Client* client) {
+//     try {
+//         while (!Client::get().getIsPlayed())
+//             ;
+//         networkClient.run();
+//     } catch (const std::exception& e) {
+//         Logger::error("[Server Thread] Error: " + std::string(e.what()));
+//     }
+// }
 
-void initializeNetwork(NetworkClient& networkClient) {
-    networkClient.init();
-    networkClient.connectTCP();
-    networkClient.connectUDP();
+// void initializeNetwork(NetworkClient& networkClient) {
+//     networkClient.init();
+//     networkClient.connectTCP();  
+//     networkClient.connectUDP();
 
-    Logger::success("[Main] Network initialized successfully.");
-}
+//     Logger::success("[Main] Network initialized successfully.");
+// }
 
 int main() {
     try {
         Client client;
-        NetworkClient networkClient("127.0.0.1", SERVER_PORT);
+        // NetworkClient networkClient(Client::get().getIp(), std::any_cast<int>(Client::get().getPort()));
 
-        initializeNetwork(networkClient);
-        std::thread serverThread(runNetworkClient, std::ref(networkClient),
-                                 &client);
+        // initializeNetwork(networkClient);
+        // std::thread serverThread(runNetworkClient, std::ref(networkClient),
+        //                          &client);
         client.manageClient();
 
-        if (serverThread.joinable()) {
-            serverThread.join();
-        }
+        // if (serverThread.joinable()) {
+        //     serverThread.join();
+        // }
     } catch (const std::exception& e) {
         Logger::error("[Main] Error: " + std::string(e.what()));
 

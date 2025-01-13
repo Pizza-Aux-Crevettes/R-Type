@@ -38,5 +38,5 @@ class EntityManager {
     void addItem(std::map<int, std::map<std::string, std::any>> items);
     void setUpdateItems(std::map<int, std::map<std::string, std::any>>);
     std::map<int, std::map<std::string, std::any>> getUpdateItems();
-    sf::Texture manageBackground();
+    sf::Texture manageBackground(sf::RenderWindow& window);
 };

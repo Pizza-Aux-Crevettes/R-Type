@@ -5,11 +5,11 @@
 ** Socket.cpp
 */
 
-#include "network/socket/Socket.hpp"
+#include "socket/Socket.hpp"
 #include <arpa/inet.h>
 #include <stdexcept>
 #include <unistd.h>
-#include "network/socket/Singleton.hpp"
+#include "socket/Singleton.hpp"
 #include "util/Config.hpp"
 
 Socket::Socket(const std::string& serverAddress, int port) : _socket(FAILURE) {

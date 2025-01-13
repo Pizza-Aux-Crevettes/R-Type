@@ -19,6 +19,29 @@
 #include "EntityManager.hpp"
 #include "component/hotkey/HotkeysManager.hpp"
 #include "menu/Menu.hpp"
+#include "network/protocol/NetworkClient.hpp"
+#include "util/Logger.hpp"
+#include "network/protocol/Protocol.hpp"
+#include "network/socket/TcpSocket.hpp"
+#include "util/Config.hpp"
+
+
+
+void runNetworkClient(NetworkClient& networkClient) {
+    try {
+        networkClient.run();
+    } catch (const std::exception& e) {
+        Logger::error("[Server Thread] Error: " + std::string(e.what()));
+    }
+}
+
+void initializeNetwork(NetworkClient& networkClient) {
+    networkClient.init();
+    networkClient.connectTCP();
+    networkClient.connectUDP();
+
+    Logger::success("[Main] Network initialized successfully.");
+}
 
 Client::Client() {}
 
@@ -43,6 +66,7 @@ void Client::manageBackground(GameEngine::System system, sf::Clock clock,
     shape.setTextureRect(
         sf::IntRect(textureOffset.x, textureOffset.y, 800, 600));
 }
+
 Client& Client::get() {
     static Client instance;
     return instance;
@@ -57,22 +81,24 @@ bool Client::getIsPlayed() {
 }
 
 void Client::manageClient() {
-
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "RTYPE");
     HotkeysManager input;
     GameEngine::System system;
-    sf::Texture background = EntityManager::get().manageBackground();
+    sf::Texture background = EntityManager::get().manageBackground(window);
     Menu menu;
     OptionMenu optionMenu;
 
     sf::Clock clock;
+    bool serverInitialized = false;
+    std::unique_ptr<NetworkClient> networkClient = nullptr;
+    std::thread serverThread;
+
     while (window.isOpen()) {
         manageBackground(system, clock, background);
         std::map<int, GameEngine::Entity> entitiesList =
             EntityManager::get().getEntityList();
         sf::Event event;
         while (window.pollEvent(event)) {
-
             if (event.type == sf::Event::Closed) {
                 window.close();
                 return;
@@ -85,11 +111,33 @@ void Client::manageClient() {
         if (!Client::get().getIsPlayed()) {
             menu.displayMenu(window, system, optionMenu);
         } else {
-            if (entitiesList.size() > 0) {
+            if (!serverInitialized) {
+                try {
+                    networkClient = std::make_unique<NetworkClient>(Client::get().getIp(), SERVER_PORT);
+                    initializeNetwork(*networkClient);
+                    serverThread = std::thread(runNetworkClient, std::ref(*networkClient));
+                    serverThread.detach();
+
+                    SmartBuffer smartBuffer;
+                    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER);
+                    smartBuffer << Client::get().getUsername();
+                    TcpSocket::send(smartBuffer);
+
+                    serverInitialized = true;
+                } catch (const std::exception& e) {
+                    Logger::error("[Main] Failed to initialize network: " + std::string(e.what()));
+                    window.close();
+                    return;
+                }
+            }
+            if (!entitiesList.empty()) {
                 system.render(window, entitiesList);
             }
         }
         window.display();
+    }
+    if (serverThread.joinable()) {
+        serverThread.join();
     }
 }
 
