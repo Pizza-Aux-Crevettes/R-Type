@@ -49,6 +49,10 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
         handlePlayerUpdatePosition(smartBuffer);
         break;
 
+    case PLAYER_DELETED:
+        handlePlayerDeleted(smartBuffer);
+        break;
+
     case VIEWPORT_UPDATE:
         handleViewportUpdate(smartBuffer);
         break;
@@ -120,6 +124,14 @@ void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
 
     std::map<std::string, std::any> emptyMap;
     EntityManager::get().CompareEntities(playerId, emptyMap, {x, y});
+}
+
+void Protocol::handlePlayerDeleted(SmartBuffer& smartBuffer) {
+    int32_t playerId;
+    smartBuffer >> playerId;
+
+    Logger::info("[Protocol] PLAYER_DELETED - Deleted Player ID: " +
+                 std::to_string(playerId));
 }
 
 void Protocol::handleViewportUpdate(SmartBuffer& smartBuffer) {

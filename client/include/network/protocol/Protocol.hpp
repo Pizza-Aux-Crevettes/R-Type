@@ -52,6 +52,7 @@ class Protocol {
     static void handleNewPlayerCallback(SmartBuffer& smartBuffer);
     static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer);
     static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer);
+    static void handlePlayerDeleted(SmartBuffer& smartBuffer);
     static void handlePlayerUpdateLife(SmartBuffer& smartBuffer);
     static void handleViewportUpdate(SmartBuffer& smartBuffer);
     static void handleBlocksUpdate(SmartBuffer& smartBuffer);
