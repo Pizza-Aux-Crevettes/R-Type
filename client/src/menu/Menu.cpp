@@ -6,8 +6,8 @@
 */
 
 #include "menu/Menu.hpp"
-#include "Client.hpp"
 #include <SmartBuffer.hpp>
+#include "Client.hpp"
 #include "network/protocol/Protocol.hpp"
 #include "network/socket/TcpSocket.hpp"
 #include "util/getResponsiveValue.hpp"
@@ -221,8 +221,7 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
                      responsive.getResponsiveSizeY(1080, currentHeight, 5)},
                     "assets/sprite/intact-boss.png", {0, 0, 200, 200},
                     {{responsive.getResponsivePosX(1920, currentWidth, 1400),
-                      responsive.getResponsivePosY(1080, currentHeight,
-                                                   1)}}));
+                      responsive.getResponsivePosY(1080, currentHeight, 1)}}));
 
             _entitiesMenu.emplace(
                 entityId,

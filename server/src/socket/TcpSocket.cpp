@@ -6,19 +6,21 @@
 */
 
 #include "socket/TcpSocket.hpp"
+#include "component/player/PlayerManager.hpp"
 #include "protocol/Protocol.hpp"
 #include "socket/Server.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
-std::vector<int> TcpSocket::_clients;
-std::mutex TcpSocket::_clientsMutex;
-
 /**
- * @brief Construct a new TcpSocket:: TcpSocket object
+ * @brief Get the TcpSocket instance
  *
+ * @return TcpSocket&
  */
-TcpSocket::TcpSocket() : _tcpSocket(FAILURE) {}
+TcpSocket& TcpSocket::get() {
+    static TcpSocket instance;
+    return instance;
+}
 
 /**
  * @brief Destroy the TcpSocket:: TcpSocket object
@@ -33,13 +35,11 @@ TcpSocket::~TcpSocket() {
  *
  */
 void TcpSocket::init() {
-    // Create the socket
     _tcpSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (_tcpSocket == FAILURE) {
         throw std::runtime_error("Failed to create TCP socket.");
     }
 
-    // Set socket options
     int opt = 1;
     if (setsockopt(_tcpSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) <
         0) {
@@ -47,7 +47,6 @@ void TcpSocket::init() {
             "[TCP Socket] Failed to set socket options (SO_REUSEADDR).");
     }
 
-    // Bind the socket
     _tcpAddr.sin_family = AF_INET;
     _tcpAddr.sin_addr.s_addr = INADDR_ANY;
     _tcpAddr.sin_port = htons(PORT);
@@ -56,7 +55,6 @@ void TcpSocket::init() {
         throw std::runtime_error("Bind failed for TCP socket.");
     }
 
-    // Listen for incoming connections
     if (listen(_tcpSocket, 3) < SUCCESS) {
         throw std::runtime_error("Listen failed for TCP socket.");
     }
@@ -69,7 +67,6 @@ void TcpSocket::readLoop() const {
         sockaddr_in clientAddr{};
         socklen_t addrLen = sizeof(clientAddr);
 
-        // Accept incoming connections
         const int clientSocket = accept(
             _tcpSocket, reinterpret_cast<sockaddr*>(&clientAddr), &addrLen);
         if (clientSocket < SUCCESS) {
@@ -77,41 +74,36 @@ void TcpSocket::readLoop() const {
             continue;
         }
 
-        // Add the client to the list
-        addClient(clientSocket);
+        TcpSocket::get().addClient(clientSocket);
 
         Logger::socket("[TCP Socket] Client connected: " +
                        std::to_string(clientSocket));
 
-        // Handle the message
-        std::thread([this, clientSocket, clientAddr]() {
+        std::thread([clientSocket, clientAddr]() {
             SmartBuffer smartBuffer;
-            this->handleRead(clientSocket, smartBuffer, clientAddr);
+            TcpSocket::get().handleRead(clientSocket, smartBuffer);
         }).detach();
     }
 }
 
-void TcpSocket::handleRead(const int clientSocket, SmartBuffer& smartBuffer,
-                           const sockaddr_in& clientAddr) {
+void TcpSocket::handleRead(const int clientSocket, SmartBuffer& smartBuffer) {
     while (true) {
         char buffer[DEFAULT_BYTES] = {};
 
-        // Read the message
         const ssize_t bytesRead = read(clientSocket, buffer, sizeof(buffer));
         if (bytesRead <= SUCCESS) {
             Logger::socket("[TCP Socket] Client disconnected: " +
                            std::to_string(clientSocket));
 
-            // Close the client socket
             ::close(clientSocket);
             removeClient(clientSocket);
             break;
         }
 
-        // Handle the message
         smartBuffer.reset();
         smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer), bytesRead);
-        Protocol::handleMessage(clientSocket, smartBuffer, clientAddr);
+
+        Protocol::handleMessage(clientSocket, smartBuffer);
     }
 }
 
@@ -156,6 +148,17 @@ void TcpSocket::addClient(const int clientSocket) {
 void TcpSocket::removeClient(const int clientSocket) {
     std::lock_guard lock(_clientsMutex);
     std::erase(_clients, clientSocket);
+
+    for (auto& [id, player] : PlayerManager::get().getPlayers()) {
+        if (player->getClientSocket() == clientSocket) {
+            PlayerManager::get().removePlayer(id);
+
+            Logger::info("[TcpSocket] Removed Player ID " + std::to_string(id) +
+                         " associated with Client Socket " +
+                         std::to_string(clientSocket));
+            break;
+        }
+    }
 }
 
 /**

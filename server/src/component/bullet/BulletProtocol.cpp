@@ -17,16 +17,14 @@
  * @param udpSocket The UDP socket
  * @param client The client address
  * @param smartBuffer The smart buffer
+ *
+ * Protocol: BULLET_POSITION_UPDATE
+ * Payload: bulletId (int32_t), posX (int32_t), posY (int32_t)
  */
-void BulletProtocol::sendBulletsUpdate(const int udpSocket,
-                                       const sockaddr_in& client,
+void BulletProtocol::sendBulletsUpdate(const sockaddr_in& clientAddr,
                                        SmartBuffer& smartBuffer) {
-    // Get all bullets
     auto& bullets = BulletManager::get().getBullets();
-
-    // Loop through all bullets
     for (const auto& [id, bullet] : bullets) {
-        // Create the response buffer for the bullet
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(
                            Protocol::OpCode::BULLET_POSITION_UPDATE)
@@ -34,8 +32,7 @@ void BulletProtocol::sendBulletsUpdate(const int udpSocket,
                     << static_cast<int32_t>(bullet->getPosition().getX())
                     << static_cast<int32_t>(bullet->getPosition().getY());
 
-        // Broadcast the bullet update to all clients
-        UdpSocket::sendToOne(udpSocket, client, smartBuffer);
+        UdpSocket::get().sendToOne(clientAddr, smartBuffer);
 
         Logger::packet("[BulletProtocol] Bullet update sent:\n"
                        "  - Bullet ID: " +

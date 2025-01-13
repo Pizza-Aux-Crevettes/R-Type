@@ -15,10 +15,8 @@
 
 class MapProtocol {
   public:
-    static void sendViewportUpdate(const int udpSocket,
-                                   const sockaddr_in& clientAddr,
+    static void sendViewportUpdate(const sockaddr_in& clientAddr,
                                    SmartBuffer& smartBuffer);
-    static void sendObstaclesUpdate(const int udpSocket,
-                                    const sockaddr_in& clientAddr,
+    static void sendObstaclesUpdate(const sockaddr_in& clientAddr,
                                     SmartBuffer& smartBuffer);
 };

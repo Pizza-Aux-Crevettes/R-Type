@@ -23,7 +23,6 @@ ObstacleManager& ObstacleManager::get() {
  *
  */
 ObstacleManager::ObstacleManager() {
-    // Initialize obstacle mappings
     _obstacleMapping = {
         {"0001", ObstacleType::BLOCK},
         {"0002", ObstacleType::BLOCK2},

@@ -15,23 +15,29 @@
 #include <netinet/in.h>
 #include <thread>
 #include <unistd.h>
+#include "util/Config.hpp"
 
 class UdpSocket {
   public:
-    UdpSocket();
-    ~UdpSocket();
+    UdpSocket(const UdpSocket&) = delete;
+    UdpSocket& operator=(const UdpSocket&) = delete;
+
+    static UdpSocket& get();
 
     void init();
     void readLoop();
     void sendLoop();
-    static void sendToOne(int udpSocket, const sockaddr_in& clientAddr,
-                          const SmartBuffer& smartBuffer);
+    void sendToOne(const sockaddr_in& clientAddrt, const SmartBuffer& smartBuffer);
+    void sendToAll(const SmartBuffer& smartBuffer);
     std::vector<sockaddr_in> getClients();
     void close() const;
 
   private:
-    int _udpSocket;
-    sockaddr_in _udpAddr{};
+    UdpSocket() = default;
+    ~UdpSocket();
+
+    int _udpSocket = FAILURE;
+    sockaddr_in _udpAddr;
     std::vector<sockaddr_in> _clients;
     std::mutex _clientsMutex;
 

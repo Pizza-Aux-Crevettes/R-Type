@@ -21,21 +21,25 @@ class Protocol {
         NEW_PLAYER = 10,
         NEW_PLAYER_CALLBACK = 11,
         NEW_PLAYER_BROADCAST = 12,
+
         PLAYER_POSITION_UPDATE = 13,
         PLAYER_LIFE_UPDATE = 14,
+        PLAYER_DELETED = 15,
 
-        MAP_VIEWPORT_UPDATE = 20,
-        MAP_OBSTACLES_UPDATE = 21,
+        VIEWPORT_UPDATE = 20,
 
-        BULLET_POSITION_UPDATE = 30,
+        OBSTACLES_UPDATE = 30,
+        OBSTACLES_DELETED = 31,
+
+        BULLET_POSITION_UPDATE = 40,
+        BULLET_DELETED = 41,
     };
 
     Protocol(const Protocol&) = delete;
     Protocol& operator=(const Protocol&) = delete;
 
     static Protocol& get();
-    static void handleMessage(int clientSocket, SmartBuffer& smartBuffer,
-                              const sockaddr_in& clientAddr);
+    static void handleMessage(int clientSocket, SmartBuffer& smartBuffer);
 
   private:
     Protocol() = default;

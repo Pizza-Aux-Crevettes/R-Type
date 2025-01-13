@@ -17,49 +17,39 @@
  *
  * @param clientSocket The client's TCP socket
  * @param smartBuffer The SmartBuffer to use for the response
- * @param clientAddr The client's address
  *
  * Protocol: NEW_PLAYER
  * Payload: playerName (string)
  */
-void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
-                               const sockaddr_in& clientAddr) {
-    // Extract buffer data
+void PlayerProtocol::newPlayer(const int clientSocket,
+                               SmartBuffer& smartBuffer) {
     std::string name;
     smartBuffer >> name;
 
-    // Create a new player
     const auto player = PlayerManager::get().createPlayer(name);
+    player->setClientSocket(clientSocket);
 
-    // Create the response buffer for the new player
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER_CALLBACK)
                 << static_cast<int32_t>(player->getId());
 
-    // Send the player ID to the client that requested it
-    TcpSocket::sendToOne(clientSocket, smartBuffer);
+    TcpSocket::get().sendToOne(clientSocket, smartBuffer);
 
     Logger::packet("[PlayerProtocol] Sent player ID " +
                    std::to_string(player->getId()) + " to client ");
 
-    // Parse all existing players
     for (const auto& [id, existingPlayer] : PlayerManager::get().getPlayers()) {
-        // Create the response buffer for the existing player
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(
                            Protocol::OpCode::NEW_PLAYER_BROADCAST)
                     << static_cast<int32_t>(existingPlayer->getId())
                     << std::string{existingPlayer->getName()};
 
-        // Send the existing player to the new player
-        TcpSocket::sendToAll(smartBuffer);
+        UdpSocket::get().sendToAll(smartBuffer);
 
         Logger::packet("[PlayerProtocol] Sent existing player ID " +
                        std::to_string(existingPlayer->getId()) +
                        " to new player.");
-
-        // Sleep for a short time to avoid packet loss
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
     }
 }
 
@@ -73,26 +63,51 @@ void PlayerProtocol::newPlayer(const int clientSocket, SmartBuffer& smartBuffer,
  * Protocol: PLAYER_POSITION_UPDATE
  * Payload: playerId (int32_t), posX (int32_t), posY (int32_t)
  */
-void PlayerProtocol::sendPositionsUpdate(const int udpSocket,
-                                         const sockaddr_in& client,
-                                         const std::shared_ptr<Player>& player,
-                                         SmartBuffer& smartBuffer) {
-    // Create the response buffer
+void PlayerProtocol::sendPlayerPosition(const sockaddr_in& clientAddr,
+                                        SmartBuffer& smartBuffer) {
+
+    const auto& players = PlayerManager::get().getPlayers();
+    for (const auto& [id, player] : players) {
+        smartBuffer.reset();
+        smartBuffer << static_cast<int16_t>(
+                           Protocol::OpCode::PLAYER_POSITION_UPDATE)
+                    << static_cast<int32_t>(player->getId())
+                    << static_cast<int32_t>(player->getPosition().getX())
+                    << static_cast<int32_t>(player->getPosition().getY());
+
+        UdpSocket::get().sendToOne(clientAddr, smartBuffer);
+
+        Logger::packet("[PlayerProtocol] Position update sent:\n"
+                       "  - Player ID: " +
+                       std::to_string(player->getId()) +
+                       "\n"
+                       "  - Position: (" +
+                       std::to_string(player->getPosition().getX()) + ", " +
+                       std::to_string(player->getPosition().getY()) + ")");
+    }
+}
+
+/**
+ * @brief Delete a player and broadcast the deletion to all clients
+ *
+ * @param udpSocket The UDP socket
+ * @param client The client's address
+ * @param playerId The player's ID
+ * @param smartBuffer The SmartBuffer to use for the response
+ *
+ * Protocol: PLAYER_DELETED
+ * Payload: playerId (int32_t)
+ */
+void PlayerProtocol::sendPlayerDeleted(const int32_t playerId) {
+    SmartBuffer smartBuffer;
+
     smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(
-                       Protocol::OpCode::PLAYER_POSITION_UPDATE)
-                << static_cast<int32_t>(player->getId())
-                << static_cast<int32_t>(player->getPosition().getX())
-                << static_cast<int32_t>(player->getPosition().getY());
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::PLAYER_DELETED)
+                << static_cast<int32_t>(playerId);
 
-    // Broadcast the position update to all clients
-    UdpSocket::sendToOne(udpSocket, client, smartBuffer);
-
-    Logger::packet("[PlayerProtocol] Position update sent:\n"
+    UdpSocket::get().sendToAll(smartBuffer);
+    
+    Logger::packet("[PlayerProtocol] Player deleted sent:\n"
                    "  - Player ID: " +
-                   std::to_string(player->getId()) +
-                   "\n"
-                   "  - Position: (" +
-                   std::to_string(player->getPosition().getX()) + ", " +
-                   std::to_string(player->getPosition().getY()) + ")");
+                   std::to_string(playerId));
 }

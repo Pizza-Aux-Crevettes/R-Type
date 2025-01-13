@@ -49,11 +49,11 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
         handlePlayerUpdatePosition(smartBuffer);
         break;
 
-    case MAP_VIEWPORT_UPDATE:
+    case VIEWPORT_UPDATE:
         handleViewportUpdate(smartBuffer);
         break;
 
-    case MAP_OBSTACLES_UPDATE:
+    case OBSTACLES_UPDATE:
         handleBlocksUpdate(smartBuffer);
         break;
 

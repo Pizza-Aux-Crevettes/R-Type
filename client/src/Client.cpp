@@ -20,12 +20,10 @@
 #include "component/hotkey/HotkeysManager.hpp"
 #include "menu/Menu.hpp"
 #include "network/protocol/NetworkClient.hpp"
-#include "util/Logger.hpp"
 #include "network/protocol/Protocol.hpp"
 #include "network/socket/TcpSocket.hpp"
 #include "util/Config.hpp"
-
-
+#include "util/Logger.hpp"
 
 void runNetworkClient(NetworkClient& networkClient) {
     try {
@@ -113,19 +111,23 @@ void Client::manageClient() {
         } else {
             if (!serverInitialized) {
                 try {
-                    networkClient = std::make_unique<NetworkClient>(/*Client::get().getIp()*/"127.0.0.1", SERVER_PORT);
+                    networkClient = std::make_unique<NetworkClient>(
+                        /*Client::get().getIp()*/ "127.0.0.1", SERVER_PORT);
                     initializeNetwork(*networkClient);
-                    serverThread = std::thread(runNetworkClient, std::ref(*networkClient));
+                    serverThread =
+                        std::thread(runNetworkClient, std::ref(*networkClient));
                     serverThread.detach();
 
                     SmartBuffer smartBuffer;
-                    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER);
+                    smartBuffer
+                        << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER);
                     smartBuffer << Client::get().getUsername();
                     TcpSocket::send(smartBuffer);
 
                     serverInitialized = true;
                 } catch (const std::exception& e) {
-                    Logger::error("[Main] Failed to initialize network: " + std::string(e.what()));
+                    Logger::error("[Main] Failed to initialize network: " +
+                                  std::string(e.what()));
                     window.close();
                     return;
                 }

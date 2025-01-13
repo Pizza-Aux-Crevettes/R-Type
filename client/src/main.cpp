@@ -29,7 +29,7 @@
 
 // void initializeNetwork(NetworkClient& networkClient) {
 //     networkClient.init();
-//     networkClient.connectTCP();  
+//     networkClient.connectTCP();
 //     networkClient.connectUDP();
 
 //     Logger::success("[Main] Network initialized successfully.");
@@ -38,7 +38,8 @@
 int main() {
     try {
         Client client;
-        // NetworkClient networkClient(Client::get().getIp(), std::any_cast<int>(Client::get().getPort()));
+        // NetworkClient networkClient(Client::get().getIp(),
+        // std::any_cast<int>(Client::get().getPort()));
 
         // initializeNetwork(networkClient);
         // std::thread serverThread(runNetworkClient, std::ref(networkClient),
