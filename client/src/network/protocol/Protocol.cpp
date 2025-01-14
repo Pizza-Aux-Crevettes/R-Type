@@ -10,6 +10,7 @@
 #include "EntityManager.hpp"
 #include "util/Logger.hpp"
 #include "components/Sound.hpp"
+#include "Client.hpp"
 
 int32_t Protocol::_playerId = -1;
 
@@ -92,7 +93,13 @@ void Protocol::handleNewPlayerCallback(SmartBuffer& smartBuffer) {
         {"TextureRect", std::vector<int>{0, 0, 34, 15}},
         {"Position", std::pair<float, float>(0.0f, 0.0f)}};
 
+    std::map<std::string, std::any> playerNameItems = {
+        {"Link", std::string(Client::get().getUsername())},
+        {"Position", std::pair<float, float>(0.0f, -10.0f)}
+    };
+
     EntityManager::get().CompareEntities(playerId, newItems, {0.0f, 0.0f});
+    EntityManager::get().CompareEntities(playerId + 10000, playerNameItems, {0.0f, 00.0f});
 }
 
 void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
@@ -106,7 +113,13 @@ void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
         {"TextureRect", std::vector<int>{0, 0, 34, 15}},
         {"Position", std::pair<float, float>(0.0f, 0.0f)}};
 
+    std::map<std::string, std::any> playerNameItems = {
+        {"Link", std::string(playerName)},
+        {"Position", std::pair<float, float>(0.0f, -10.0f)}
+    };
+
     EntityManager::get().CompareEntities(playerId, newItems, {0.0f, 0.0f});
+    EntityManager::get().CompareEntities(playerId + 10000, playerNameItems, {00.0f, -10.0f});
 }
 
 void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
