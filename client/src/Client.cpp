@@ -91,6 +91,7 @@ Sound Client::getBulletSound() {
 void Client::manageClient() {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "RTYPE");
     std::string ipAdress;
+    std::string username;
     HotkeysManager input;
     GameEngine::System system;
     sf::Texture background = EntityManager::get().manageBackground(window);
@@ -163,6 +164,11 @@ void Client::manageClient() {
                     } else {
                         ipAdress = Client::get().getIp();
                     }
+                    if (Client::get().getUsername() == "") {
+                        username = "Guest";
+                    } else {
+                        username = Client::get().getUsername();
+                    }
                     networkClient = std::make_unique<NetworkClient>(ipAdress, SERVER_PORT);
                     initializeNetwork(*networkClient);
                     serverThread = std::thread(runNetworkClient, std::ref(*networkClient));
@@ -170,7 +176,7 @@ void Client::manageClient() {
 
                     SmartBuffer smartBuffer;
                     smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER);
-                    smartBuffer << Client::get().getUsername();
+                    smartBuffer << username;
                     TcpSocket::send(smartBuffer);
 
                     menuSound.getSound().stop();
