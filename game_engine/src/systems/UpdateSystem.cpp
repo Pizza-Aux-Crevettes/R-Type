@@ -25,9 +25,11 @@ void GameEngine::System::updateEntityPosition(
     }
     if (entity.hasComponent<Shape>()) {
         if (entity.getComponent<Shape>().getShapeType() == Rectangle) {
-            updatePos(entity, entity.getComponent<Shape>().getRect(), pos, posId);
+            updatePos(entity, entity.getComponent<Shape>().getRect(), pos,
+                      posId);
         } else {
-            updatePos(entity, entity.getComponent<Shape>().getCircle(), pos, posId);
+            updatePos(entity, entity.getComponent<Shape>().getCircle(), pos,
+                      posId);
         }
     }
 }

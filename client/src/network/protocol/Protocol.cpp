@@ -80,11 +80,9 @@ void Protocol::handleNewPlayerCallback(SmartBuffer& smartBuffer) {
 
     Protocol::setPlayerId(playerId);
 
-
     Logger::success("[Protocol] NEW_PLAYER_CALLBACK - Assigned Player ID: " +
                     std::to_string(playerId));
 
-    
     Logger::success("[Protocol] NEW_PLAYER_CALLBACK - Assigned Player ID: " +
                     std::to_string(playerId));
 
@@ -122,16 +120,16 @@ void Protocol::handlePlayerDeleted(SmartBuffer& smartBuffer) {
     int32_t playerId;
     smartBuffer >> playerId;
 
-    //Logger::info("[Protocol] PLAYER_DELETED\n"
-    //             "  -> Deleted Player ID: " + std::to_string(playerId));
+    // Logger::info("[Protocol] PLAYER_DELETED\n"
+    //              "  -> Deleted Player ID: " + std::to_string(playerId));
 }
 
 void Protocol::handleViewportUpdate(SmartBuffer& smartBuffer) {
     double viewport;
     smartBuffer >> viewport;
 
-    //Logger::info("[Protocol] VIEWPORT_UPDATE\n"
-    //             "  -> Updated Viewport: " + std::to_string(viewport));
+    // Logger::info("[Protocol] VIEWPORT_UPDATE\n"
+    //              "  -> Updated Viewport: " + std::to_string(viewport));
 
     Client::get().setViewport(viewport);
 }
@@ -140,7 +138,7 @@ void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
     int32_t obstacleId, x, y;
     int16_t type, size;
     smartBuffer >> obstacleId >> x >> y >> size >> type;
-    
+
     Logger::info("[Protocol] MAP_OBSTACLES_UPDATE - Obstacle ID: " +
                  std::to_string(obstacleId) + ", Position: (" +
                  std::to_string(x) + ", " + std::to_string(y) +
@@ -158,8 +156,8 @@ void Protocol::handleBlockDeleted(SmartBuffer& smartBuffer) {
     int32_t obstacleId;
     smartBuffer >> obstacleId;
 
-    //Logger::info("[Protocol] OBSTACLE_DELETED\n"
-    //             "  -> Deleted Obstacle ID: " + std::to_string(obstacleId));
+    // Logger::info("[Protocol] OBSTACLE_DELETED\n"
+    //              "  -> Deleted Obstacle ID: " + std::to_string(obstacleId));
 }
 
 void Protocol::handleBulletsUpdate(SmartBuffer& smartBuffer) {
@@ -177,6 +175,6 @@ void Protocol::handleBulletDeleted(SmartBuffer& smartBuffer) {
     int32_t bulletId;
     smartBuffer >> bulletId;
 
-    //Logger::info("[Protocol] BULLET_DELETED\n"
-    //             "  -> Deleted Bullet ID: " + std::to_string(bulletId));
+    // Logger::info("[Protocol] BULLET_DELETED\n"
+    //              "  -> Deleted Bullet ID: " + std::to_string(bulletId));
 }

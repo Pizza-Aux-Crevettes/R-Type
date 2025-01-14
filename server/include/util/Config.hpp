@@ -25,12 +25,12 @@ enum Config {
     // Player
     DEFAULT_HEALTH = 100,
     DEFAULT_LIVES = 3,
-    PLAYER_SPEED = 10,
+    PLAYER_SPEED = 30,
 
     // Map
     BLOCK_SIZE = 32,
     RENDER_DISTANCE = 100,
-    SPEED = 2
+    SPEED = 2,
 
     // Bullet
     BULLET_SPEED = 10,
