@@ -14,11 +14,11 @@
 #include <components/Position.hpp>
 #include <components/Sprite.hpp>
 #include <components/Texture.hpp>
-#include "components/Sound.hpp"
 #include <menu/OptionMenu.hpp>
 #include <thread>
 #include "EntityManager.hpp"
 #include "component/hotkey/HotkeysManager.hpp"
+#include "components/Sound.hpp"
 #include "menu/Menu.hpp"
 #include "network/protocol/NetworkClient.hpp"
 #include "network/protocol/Protocol.hpp"
@@ -92,20 +92,24 @@ void Client::manageClient() {
     Sound gameSound;
     Sound bulletSound;
     Sound clickSound;
-    
-    if (!menuSound.getSoundBuffer().loadFromFile("assets/sounds/ambien-song.wav")) {
+
+    if (!menuSound.getSoundBuffer().loadFromFile(
+            "assets/sounds/ambien-song.wav")) {
         std::cerr << "Error: unable to load the audio file." << std::endl;
     }
 
-    if (!gameSound.getSoundBuffer().loadFromFile("assets/sounds/boss-song.wav")) {
+    if (!gameSound.getSoundBuffer().loadFromFile(
+            "assets/sounds/boss-song.wav")) {
         std::cerr << "Error: unable to load the audio file." << std::endl;
     }
 
-    if (!bulletSound.getSoundBuffer().loadFromFile("assets/sounds/shoot-sound.wav")) {
+    if (!bulletSound.getSoundBuffer().loadFromFile(
+            "assets/sounds/shoot-sound.wav")) {
         std::cerr << "Error: unable to load the audio file." << std::endl;
     }
 
-    if (!clickSound.getSoundBuffer().loadFromFile("assets/sounds/click-menu.wav")) {
+    if (!clickSound.getSoundBuffer().loadFromFile(
+            "assets/sounds/click-menu.wav")) {
         std::cerr << "Error: unable to load the audio file." << std::endl;
     }
 
@@ -137,7 +141,8 @@ void Client::manageClient() {
                 clickSound.getSound().play();
             }
             if (serverInitialized) {
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+                if (event.type == sf::Event::KeyPressed &&
+                    event.key.code == sf::Keyboard::Space) {
                     bulletSound.getSound().play();
                 }
             }
@@ -145,7 +150,6 @@ void Client::manageClient() {
                 input.checkKey(event);
             menu.setupInput(event);
             optionMenu.setNewKey(event, system);
-
         }
         window.clear();
         if (!Client::get().getIsPlayed()) {
@@ -163,14 +167,16 @@ void Client::manageClient() {
                     } else {
                         username = Client::get().getUsername();
                     }
-                    networkClient = std::make_unique<NetworkClient>(ipAdress, SERVER_PORT);
+                    networkClient =
+                        std::make_unique<NetworkClient>(ipAdress, SERVER_PORT);
                     initializeNetwork(*networkClient);
                     serverThread =
                         std::thread(runNetworkClient, std::ref(*networkClient));
                     serverThread.detach();
 
                     SmartBuffer smartBuffer;
-                    smartBuffer << static_cast<int16_t>(Protocol::OpCode::CREATE_PLAYER);
+                    smartBuffer << static_cast<int16_t>(
+                        Protocol::OpCode::CREATE_PLAYER);
                     smartBuffer << username;
                     TcpSocket::send(smartBuffer);
 

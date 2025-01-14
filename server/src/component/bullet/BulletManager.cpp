@@ -40,7 +40,7 @@ void BulletManager::addBullet(std::shared_ptr<Bullet> bullet) {
  */
 void BulletManager::updateBullets() {
     int viewportEnd = RENDER_DISTANCE * BLOCK_SIZE;
-    
+
     for (auto& b : _bullets) {
         auto& bullet = b.second;
 

@@ -157,7 +157,8 @@ void TcpSocket::addClient(const int clientSocket) {
  */
 void TcpSocket::removeClient(const int clientSocket) {
     std::lock_guard lock(_clientsMutex);
-    std::erase(_clients, clientSocket);
+    _clients.erase(std::remove(_clients.begin(), _clients.end(), clientSocket),
+                   _clients.end());
 
     for (auto& [id, player] : PlayerManager::get().getPlayers()) {
         if (player->getClientSocket() == clientSocket) {

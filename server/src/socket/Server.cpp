@@ -60,11 +60,8 @@ int Server::start() {
     Logger::info("[Server] Starting main loop. Listening for connections...");
 
     try {
-        _threads.emplace_back(&UdpSocket::readLoop, &_udpSocket);
-        Logger::thread("[Server] UDP read loop thread started.");
-
-        _threads.emplace_back(&UdpSocket::sendLoop, &_udpSocket);
-        Logger::thread("[Server] UDP send loop thread started.");
+        _threads.emplace_back([&]() { _udpSocket.run(); });
+        Logger::thread("[Server] UDP run launched (3 internal threads).");
 
         _threads.emplace_back(&TcpSocket::readLoop, &_tcpSocket);
         Logger::thread("[Server] TCP read loop thread started.");

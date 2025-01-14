@@ -8,8 +8,8 @@
 #include "network/protocol/Protocol.hpp"
 #include <iostream>
 #include "EntityManager.hpp"
-#include "util/Logger.hpp"
 #include "components/Sound.hpp"
+#include "util/Logger.hpp"
 
 int32_t Protocol::_playerId = -1;
 
@@ -55,7 +55,7 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     case UPDATE_BULLETS:
         handleUpdateBullets(smartBuffer);
         break;
-        
+
     case DELETE_ENTITY:
         handleDeleteEntity(smartBuffer);
         break;
@@ -140,9 +140,8 @@ void Protocol::handleDeleteEntity(SmartBuffer& smartBuffer) {
 
     Logger::info("[Protocol] Deleting entity: " + std::to_string(entityId));
 
-    /*std::map<int, GameEngine::Entity> _entities =  EntityManager::get().getEntityList();
-    if (_entities.empty()) {
-        return;
+    /*std::map<int, GameEngine::Entity> _entities =
+    EntityManager::get().getEntityList(); if (_entities.empty()) { return;
     }
 
     if (auto search = _entities.find(entityId); search != _entities.end()) {

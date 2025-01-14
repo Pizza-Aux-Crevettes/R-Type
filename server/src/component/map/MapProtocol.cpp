@@ -32,7 +32,8 @@ void MapProtocol::sendViewportUpdate(const sockaddr_in& clientAddr,
     UdpSocket::get().sendToOne(clientAddr, smartBuffer);
 
     Logger::packet("[MapProtocol] Viewport update sent to client:\n"
-                    " - Value: " + std::to_string(viewport));
+                   " - Value: " +
+                   std::to_string(viewport));
 }
 
 /**
@@ -42,7 +43,8 @@ void MapProtocol::sendViewportUpdate(const sockaddr_in& clientAddr,
  * @param smartBuffer The SmartBuffer to use for the response
  *
  * Protocol: UPDATE_OBSTACLES
- * Payload: id (int32_t), x (int32_t), y (int32_t), size (int16_t), type (int16_t)
+ * Payload: id (int32_t), x (int32_t), y (int32_t), size (int16_t), type
+ * (int16_t)
  */
 void MapProtocol::sendObstaclesUpdate(const sockaddr_in& clientAddr,
                                       SmartBuffer& smartBuffer) {

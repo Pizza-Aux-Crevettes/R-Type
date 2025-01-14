@@ -20,11 +20,11 @@
  *
  * Protocol: CREATE_PLAYER
  * Payload: playerName (string)
- * 
+ *
  * Reponse 1 (One client):
  * Protocol: CREATE_PLAYER_CALLBACK
  * Payload: playerId (int32_t)
- * 
+ *
  * Response 2 (All clients):
  * Protocol: CREATE_PLAYER_BROADCAST
  * Payload: playerId (int32_t), playerName (string)
@@ -38,7 +38,8 @@ void PlayerProtocol::newPlayer(const int clientSocket,
     player->setClientSocket(clientSocket);
 
     smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::CREATE_PLAYER_CALLBACK)
+    smartBuffer << static_cast<int16_t>(
+                       Protocol::OpCode::CREATE_PLAYER_CALLBACK)
                 << static_cast<int32_t>(player->getId());
 
     TcpSocket::get().sendToOne(clientSocket, smartBuffer);

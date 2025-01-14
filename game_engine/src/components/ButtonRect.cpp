@@ -24,7 +24,8 @@ the ButtonRect's
  * height).
  */
 
-ButtonRect::ButtonRect(const std::pair<int, int>& sizeRect, sf::Color color, bool showOutline)
+ButtonRect::ButtonRect(const std::pair<int, int>& sizeRect, sf::Color color,
+                       bool showOutline)
     : _size(sizeRect), _color(color), _showOutline(showOutline) {}
 
 /**
