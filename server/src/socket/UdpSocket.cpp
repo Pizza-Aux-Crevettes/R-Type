@@ -105,7 +105,6 @@ void UdpSocket::sendLoop() {
                 PlayerProtocol::sendPlayerPosition(client, smartBuffer);
                 MapProtocol::sendViewportUpdate(client, smartBuffer);
                 MapProtocol::sendObstaclesUpdate(client, smartBuffer);
-                MapProtocol::sendObstaclesDeleted(client, smartBuffer);
                 BulletProtocol::sendBulletsUpdate(client, smartBuffer);
             }
         }

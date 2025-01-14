@@ -117,10 +117,10 @@ ObstacleType ObstacleManager::getObstacleType(const std::string& code) const {
  *
  */
 void ObstacleManager::updateObstacles() {
-    _viewport += SPEED;
+    _viewport += MAP_SPEED;
 
     for (const auto& obstacle : _obstacles) {
-        obstacle->setPosition(Point(obstacle->getPosition().getX() - SPEED,
+        obstacle->setPosition(Point(obstacle->getPosition().getX() - MAP_SPEED,
                                     obstacle->getPosition().getY()));
     }
 }

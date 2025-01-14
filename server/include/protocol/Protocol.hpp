@@ -15,22 +15,15 @@ class Protocol {
   public:
     enum OpCode {
         DEFAULT = 0,
-
         HOTKEY_PRESSED = 1,
-
-        NEW_PLAYER = 10,
-        NEW_PLAYER_CALLBACK = 11,
-        NEW_PLAYER_BROADCAST = 12,
-        PLAYERS_UPDATE = 13,
-        PLAYER_DELETED = 15,
-
-        VIEWPORT_UPDATE = 20,
-
-        OBSTACLES_UPDATE = 30,
-        OBSTACLE_DELETED = 31,
-
-        BULLETS_UPDATE = 40,
-        BULLET_DELETED = 41,
+        CREATE_PLAYER = 10,
+        CREATE_PLAYER_CALLBACK = 11,
+        CREATE_PLAYER_BROADCAST = 12,
+        UPDATE_PLAYERS = 20,
+        UPDATE_VIEWPORT = 21,
+        UPDATE_OBSTACLES = 22,
+        UPDATE_BULLETS = 23,
+        DELETE_ENTITY = 30,
     };
 
     Protocol(const Protocol&) = delete;

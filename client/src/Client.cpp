@@ -170,7 +170,7 @@ void Client::manageClient() {
                     serverThread.detach();
 
                     SmartBuffer smartBuffer;
-                    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER);
+                    smartBuffer << static_cast<int16_t>(Protocol::OpCode::CREATE_PLAYER);
                     smartBuffer << username;
                     TcpSocket::send(smartBuffer);
 

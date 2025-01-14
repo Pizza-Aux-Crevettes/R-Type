@@ -6,6 +6,8 @@
 */
 
 #include "component/bullet/BulletManager.hpp"
+#include "component/map/MapProtocol.hpp"
+#include "component/obstacle/ObstacleManager.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
@@ -37,14 +39,22 @@ void BulletManager::addBullet(std::shared_ptr<Bullet> bullet) {
  *
  */
 void BulletManager::updateBullets() {
-    int viewportWidth = RENDER_DISTANCE * BLOCK_SIZE;
-    int viewportHeight = RENDER_DISTANCE * BLOCK_SIZE;
+    int viewportStart = ObstacleManager::get().getViewport() - BLOCK_SIZE;
+    int viewportEnd = ObstacleManager::get().getViewport() + (RENDER_DISTANCE * BLOCK_SIZE) + BLOCK_SIZE;
+    
+    for (auto& b : _bullets) {
+        auto& bullet = b.second;
 
-    for (auto it = _bullets.begin(); it != _bullets.end();) {
-        auto& bullet = it->second;
+        if (bullet->getPosition().getX() > viewportEnd) {
+            Logger::info("[BulletManager] Removed bullet with ID: " +
+                         std::to_string(bullet->getId()));
+
+            MapProtocol::sendEntityDeleted(bullet->getId());
+            _bullets.erase(bullet->getId());
+            continue;
+        }
 
         bullet->move();
-        it++;
     }
 }
 
