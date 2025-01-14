@@ -56,7 +56,7 @@ class Menu {
                       std::string inputVar);
 
     void isClickedPlay();
-    void isClickedExit();
+    void isClickedExit(sf::RenderWindow& window);
     void isClickedInput(bool isIpClicked, bool isPortClicked,
                         bool isUsernameClicked);
     void setupInput(const sf::Event& event);
@@ -70,6 +70,5 @@ class Menu {
     bool _isPortClicked;
     bool _isUsernameClicked;
     int _ipId;
-    int _portId;
     int _usernameId;
 };

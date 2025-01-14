@@ -21,11 +21,10 @@
 #include "component/hotkey/HotkeysManager.hpp"
 #include "menu/Menu.hpp"
 #include "network/protocol/NetworkClient.hpp"
-#include "util/Logger.hpp"
 #include "network/protocol/Protocol.hpp"
 #include "network/socket/TcpSocket.hpp"
 #include "util/Config.hpp"
-
+#include "util/Logger.hpp"
 
 void runNetworkClient(NetworkClient& networkClient) {
     try {
@@ -117,6 +116,8 @@ void Client::manageClient() {
 
     menuSound.getSound().setLoop(true);
     gameSound.getSound().setLoop(true);
+
+    menuSound.getSound().play();
     sf::Clock clock;
     bool serverInitialized = false;
     std::unique_ptr<NetworkClient> networkClient = nullptr;
@@ -164,7 +165,8 @@ void Client::manageClient() {
                     }
                     networkClient = std::make_unique<NetworkClient>(ipAdress, SERVER_PORT);
                     initializeNetwork(*networkClient);
-                    serverThread = std::thread(runNetworkClient, std::ref(*networkClient));
+                    serverThread =
+                        std::thread(runNetworkClient, std::ref(*networkClient));
                     serverThread.detach();
 
                     SmartBuffer smartBuffer;
@@ -176,7 +178,8 @@ void Client::manageClient() {
                     gameSound.getSound().play();
                     serverInitialized = true;
                 } catch (const std::exception& e) {
-                    Logger::error("[Main] Failed to initialize network: " + std::string(e.what()));
+                    Logger::error("[Main] Failed to initialize network: " +
+                                  std::string(e.what()));
                     window.close();
                     return;
                 }
@@ -215,10 +218,10 @@ sf::Event Client::getEvent() {
     return _event;
 }
 
-void Client::setViewport(int32_t viewport) {
+void Client::setViewport(double viewport) {
     _viewportX = viewport;
 }
 
-int32_t Client::getViewport() {
+double Client::getViewport() {
     return _viewportX;
 }

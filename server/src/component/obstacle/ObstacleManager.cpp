@@ -6,7 +6,11 @@
 */
 
 #include "component/obstacle/ObstacleManager.hpp"
+#include "component/map/MapProtocol.hpp"
+#include "util/Config.hpp"
 #include "util/Logger.hpp"
+
+static constexpr unsigned int OFFSET = 3;
 
 /**
  * @brief Get the ObstacleManager instance
@@ -23,7 +27,6 @@ ObstacleManager& ObstacleManager::get() {
  *
  */
 ObstacleManager::ObstacleManager() {
-    // Initialize obstacle mappings
     _obstacleMapping = {
         {"0001", ObstacleType::BLOCK},
         {"0002", ObstacleType::BLOCK2},
@@ -32,6 +35,29 @@ ObstacleManager::ObstacleManager() {
     };
 
     Logger::info("[ObstacleManager] Initialized obstacle mappings.");
+}
+
+/**
+ * @brief Convert an ObstacleType to a string
+ *
+ * @param type The ObstacleType
+ * @return std::string The string representation
+ */
+std::string ObstacleManager::ObstacleTypeToString(ObstacleType type) {
+    switch (type) {
+    case ObstacleType::NONE:
+        return "NONE";
+    case ObstacleType::BLOCK:
+        return "BLOCK";
+    case ObstacleType::BLOCK2:
+        return "BLOCK2";
+    case ObstacleType::BLOCK3:
+        return "BLOCK3";
+    case ObstacleType::BLOCK4:
+        return "BLOCK4";
+    default:
+        return "UNKNOWN";
+    }
 }
 
 /**
@@ -53,9 +79,10 @@ void ObstacleManager::addObstacle(const std::shared_ptr<Obstacle>& obstacle) {
 /**
  * @brief Get all obstacles
  *
- * @return std::vector<std::shared_ptr<Obstacle>> The obstacles
+ * @return const std::vector<std::shared_ptr<Obstacle>>& The obstacles
  */
-std::vector<std::shared_ptr<Obstacle>> ObstacleManager::getObstacles() const {
+const std::vector<std::shared_ptr<Obstacle>>&
+ObstacleManager::getAllObstacles() const {
     return _obstacles;
 }
 
@@ -86,11 +113,55 @@ ObstacleType ObstacleManager::getObstacleType(const std::string& code) const {
 }
 
 /**
+ * @brief Update the viewport and visible obstacles
+ *
+ */
+void ObstacleManager::updateObstacles() {
+    _viewport += SPEED;
+
+    for (const auto& obstacle : _obstacles) {
+        obstacle->setPosition(Point(obstacle->getPosition().getX() - SPEED,
+                                    obstacle->getPosition().getY()));
+    }
+}
+
+/**
+ * @brief Get the viewport
+ *
+ * @return double The viewport
+ */
+double ObstacleManager::getViewport() const {
+    return _viewport;
+}
+
+/**
+ * @brief Check if a block is void
+ *
+ * @param x The x position of the block
+ * @param y The y position of the block
+ * @return bool
+ */
+bool ObstacleManager::isVoid(int32_t x, int32_t y) const {
+    for (const auto& obstacle : _obstacles) {
+        int32_t blockX = obstacle->getPosition().getX();
+        int32_t blockY = obstacle->getPosition().getY();
+
+        if (x >= blockX && x < blockX + BLOCK_SIZE && y >= blockY &&
+            y < blockY + BLOCK_SIZE) {
+            return obstacle->getType() == ObstacleType::NONE;
+        }
+    }
+
+    return true;
+}
+
+/**
  * @brief Reset the obstacle manager
  *
  */
 void ObstacleManager::reset() {
     _obstacles.clear();
+    _viewport = 0;
 
     Logger::info("[ObstacleManager] Cleared all obstacles.");
 }

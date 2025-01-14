@@ -14,10 +14,8 @@
 
 class PlayerProtocol {
   public:
-    static void newPlayer(int clientSocket, SmartBuffer& smartBuffer,
-                          const sockaddr_in& clientAddr);
-    static void sendPositionsUpdate(const int udpSocket,
-                                    const sockaddr_in& client,
-                                    const std::shared_ptr<Player>& player,
-                                    SmartBuffer& smartBuffer);
+    static void newPlayer(int clientSocket, SmartBuffer& smartBuffer);
+    static void sendPlayerPosition(const sockaddr_in& clientAddr,
+                                   SmartBuffer& smartBuffer);
+    static void sendPlayerDeleted(const int32_t playerId);
 };

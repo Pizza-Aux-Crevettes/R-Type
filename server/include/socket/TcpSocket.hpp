@@ -15,27 +15,32 @@
 #include <thread>
 #include <unistd.h>
 #include <vector>
+#include "util/Config.hpp"
 
 class TcpSocket {
   public:
-    TcpSocket();
-    ~TcpSocket();
+    TcpSocket(const TcpSocket&) = delete;
+    TcpSocket& operator=(const TcpSocket&) = delete;
+
+    static TcpSocket& get();
 
     void init();
     void readLoop() const;
-    static void sendToOne(int clientSocket, const SmartBuffer& smartBuffer);
-    static void sendToAll(const SmartBuffer& smartBuffer);
-    static std::vector<int> getClients();
+    void sendToOne(const int clientSocket, const SmartBuffer& smartBuffer);
+    void sendToAll(const SmartBuffer& smartBuffer);
+    std::vector<int> getClients();
     void close() const;
 
   private:
-    int _tcpSocket;
-    sockaddr_in _tcpAddr{};
-    static std::vector<int> _clients;
-    static std::mutex _clientsMutex;
+    TcpSocket() = default;
+    ~TcpSocket();
 
-    static void handleRead(int clientSocket, SmartBuffer& smartBuffer,
-                           const sockaddr_in& clientAddr);
-    static void addClient(int clientSocket);
-    static void removeClient(int clientSocket);
+    int _tcpSocket = FAILURE;
+    sockaddr_in _tcpAddr{};
+    std::vector<int> _clients;
+    std::mutex _clientsMutex;
+
+    void handleRead(const int clientSocket, SmartBuffer& smartBuffer);
+    void addClient(const int clientSocket);
+    void removeClient(const int clientSocket);
 };

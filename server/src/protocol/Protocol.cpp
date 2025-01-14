@@ -26,23 +26,19 @@ Protocol& Protocol::get() {
  * @param smartBuffer The SmartBuffer containing the message
  * @param clientAddr The client's address
  */
-void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer,
-                             const sockaddr_in& clientAddr) {
-    // Check if the buffer is large enough to contain the OpCode
+void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer) {
     if (smartBuffer.getSize() < sizeof(int16_t)) {
         Logger::warning(
             "[Protocol] Received invalid message with insufficient size.");
         return;
     }
 
-    // Extract the OpCode
     int16_t opCode;
     smartBuffer >> opCode;
 
     Logger::info("[Protocol] Handling message with OpCode: " +
                  std::to_string(opCode));
 
-    // Handle the message based on the OpCode
     switch (static_cast<OpCode>(opCode)) {
     case DEFAULT:
         Logger::warning("[Protocol] DEFAULT OpCode received. No action taken.");
@@ -50,7 +46,7 @@ void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer,
 
     case NEW_PLAYER:
         Logger::info("[Protocol] NEW_PLAYER operation.");
-        PlayerProtocol::newPlayer(clientSocket, smartBuffer, clientAddr);
+        PlayerProtocol::newPlayer(clientSocket, smartBuffer);
         break;
 
     case HOTKEY_PRESSED:
