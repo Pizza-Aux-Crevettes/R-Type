@@ -14,31 +14,25 @@ class Protocol {
   public:
     enum OpCode {
         DEFAULT = 0,
-
         HOTKEY_PRESSED = 1,
-
-        NEW_PLAYER = 10,
-        NEW_PLAYER_CALLBACK = 11,
-        NEW_PLAYER_BROADCAST = 12,
-        PLAYERS_UPDATE = 13,
-        PLAYER_DELETED = 15,
-
-        VIEWPORT_UPDATE = 20,
-
-        OBSTACLES_UPDATE = 30,
-        OBSTACLE_DELETED = 31,
-
-        BULLETS_UPDATE = 40,
-        BULLET_DELETED = 41,
+        CREATE_PLAYER = 10,
+        CREATE_PLAYER_CALLBACK = 11,
+        CREATE_PLAYER_BROADCAST = 12,
+        UPDATE_PLAYERS = 20,
+        UPDATE_VIEWPORT = 21,
+        UPDATE_OBSTACLES = 22,
+        UPDATE_BULLETS = 23,
+        DELETE_ENTITY = 30,
     };
 
     Protocol(const Protocol&) = delete;
     Protocol& operator=(const Protocol&) = delete;
 
     static Protocol& get();
-    static void handleMessage(SmartBuffer& smartBuffer);
+
     static int32_t getPlayerId();
     static void setPlayerId(int32_t playerId);
+    static void handleMessage(SmartBuffer& smartBuffer);
 
   private:
     Protocol() = default;
@@ -46,15 +40,11 @@ class Protocol {
 
     static int32_t _playerId;
 
-    static void handleDefault(SmartBuffer& smartBuffer);
-    static void handleNewPlayerCallback(SmartBuffer& smartBuffer);
-    static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer);
-    static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer);
-    static void handlePlayerDeleted(SmartBuffer& smartBuffer);
-    static void handlePlayerUpdateLife(SmartBuffer& smartBuffer);
-    static void handleViewportUpdate(SmartBuffer& smartBuffer);
-    static void handleBlocksUpdate(SmartBuffer& smartBuffer);
-    static void handleBlockDeleted(SmartBuffer& smartBuffer);
-    static void handleBulletsUpdate(SmartBuffer& smartBuffer);
-    static void handleBulletDeleted(SmartBuffer& smartBuffer);
+    static void handleCreatePlayerCallback(SmartBuffer& smartBuffer);
+    static void handleCreatePlayerBroadcast(SmartBuffer& smartBuffer);
+    static void handleUpdatePlayer(SmartBuffer& smartBuffer);
+    static void handleUpdateViewport(SmartBuffer& smartBuffer);
+    static void handleUpdateBlocks(SmartBuffer& smartBuffer);
+    static void handleUpdateBullets(SmartBuffer& smartBuffer);
+    static void handleDeleteEntity(SmartBuffer& smartBuffer);
 };

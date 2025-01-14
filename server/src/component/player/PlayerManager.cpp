@@ -6,6 +6,7 @@
 */
 
 #include "component/player/PlayerManager.hpp"
+#include "component/map/MapProtocol.hpp"
 #include "component/obstacle/ObstacleManager.hpp"
 #include "component/player/PlayerProtocol.hpp"
 #include "socket/UdpSocket.hpp"
@@ -72,12 +73,11 @@ std::shared_ptr<Player> PlayerManager::findPlayerById(int32_t playerId) const {
 bool PlayerManager::removePlayer(int32_t playerId) {
     auto it = _players.find(playerId);
     if (it != _players.end()) {
-        _players.erase(it);
-
-        PlayerProtocol::sendPlayerDeleted(playerId);
-
         Logger::success("[PlayerManager] Player removed. Player ID: " +
                         std::to_string(playerId));
+
+        MapProtocol::sendEntityDeleted(playerId);
+        _players.erase(it);
         return true;
     }
 

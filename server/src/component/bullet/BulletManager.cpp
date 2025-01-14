@@ -6,6 +6,8 @@
 */
 
 #include "component/bullet/BulletManager.hpp"
+#include "component/map/MapProtocol.hpp"
+#include "component/obstacle/ObstacleManager.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
@@ -26,7 +28,8 @@ BulletManager& BulletManager::get() {
  * @param bullet The bullet to add
  */
 void BulletManager::addBullet(std::shared_ptr<Bullet> bullet) {
-    _bullets[bullet->getId()] = bullet;
+    std::lock_guard<std::mutex> lock(_bulletsMutex);
+    _bullets.push_back(bullet);
 
     Logger::info("[BulletManager] Added bullet with ID: " +
                  std::to_string(bullet->getId()));
@@ -36,15 +39,24 @@ void BulletManager::addBullet(std::shared_ptr<Bullet> bullet) {
  * @brief Update all bullets
  *
  */
-void BulletManager::updateBullets() {
-    int viewportWidth = RENDER_DISTANCE * BLOCK_SIZE;
-    int viewportHeight = RENDER_DISTANCE * BLOCK_SIZE;
+void BulletManager::updateBullets()
+{
+    std::lock_guard<std::mutex> lock(_bulletsMutex);
+    int viewportEnd = RENDER_DISTANCE * BLOCK_SIZE;
 
     for (auto it = _bullets.begin(); it != _bullets.end();) {
-        auto& bullet = it->second;
+        auto &bullet = *it;
 
-        bullet->move();
-        it++;
+        if (bullet->getPosition().getX() > viewportEnd) {
+            Logger::info("[BulletManager] Bullet with ID: " +
+                         std::to_string(bullet->getId()) + " is out of bounds.");
+
+            MapProtocol::sendEntityDeleted(bullet->getId());
+            it = _bullets.erase(it);
+        } else {
+            bullet->move();
+            ++it;
+        }
     }
 }
 
@@ -53,8 +65,9 @@ void BulletManager::updateBullets() {
  *
  * @return const std::unordered_map<int, std::shared_ptr<Bullet>>&
  */
-const std::unordered_map<int, std::shared_ptr<Bullet>>&
-BulletManager::getBullets() const {
+std::vector<std::shared_ptr<Bullet>>&
+BulletManager::getBullets() {
+    std::lock_guard<std::mutex> lock(_bulletsMutex);
     return _bullets;
 }
 

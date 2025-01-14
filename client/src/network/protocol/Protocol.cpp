@@ -8,9 +8,9 @@
 #include "network/protocol/Protocol.hpp"
 #include <iostream>
 #include "EntityManager.hpp"
-#include "util/Logger.hpp"
 #include "components/Sound.hpp"
 #include "Client.hpp"
+#include "util/Logger.hpp"
 
 int32_t Protocol::_playerId = -1;
 
@@ -33,40 +33,32 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
 
     switch (opCode) {
 
-    case NEW_PLAYER_CALLBACK:
-        handleNewPlayerCallback(smartBuffer);
+    case CREATE_PLAYER_CALLBACK:
+        handleCreatePlayerCallback(smartBuffer);
         break;
 
-    case NEW_PLAYER_BROADCAST:
-        handleNewPlayerBroadcast(smartBuffer);
+    case CREATE_PLAYER_BROADCAST:
+        handleCreatePlayerBroadcast(smartBuffer);
         break;
 
-    case PLAYERS_UPDATE:
-        handlePlayerUpdatePosition(smartBuffer);
+    case UPDATE_PLAYERS:
+        handleUpdatePlayer(smartBuffer);
         break;
 
-    case PLAYER_DELETED:
-        handlePlayerDeleted(smartBuffer);
+    case UPDATE_VIEWPORT:
+        handleUpdateViewport(smartBuffer);
         break;
 
-    case VIEWPORT_UPDATE:
-        handleViewportUpdate(smartBuffer);
+    case UPDATE_OBSTACLES:
+        handleUpdateBlocks(smartBuffer);
         break;
 
-    case OBSTACLES_UPDATE:
-        handleBlocksUpdate(smartBuffer);
+    case UPDATE_BULLETS:
+        handleUpdateBullets(smartBuffer);
         break;
 
-    case OBSTACLE_DELETED:
-        handleBlockDeleted(smartBuffer);
-        break;
-
-    case BULLETS_UPDATE:
-        handleBulletsUpdate(smartBuffer);
-        break;
-
-    case BULLET_DELETED:
-        handleBulletDeleted(smartBuffer);
+    case DELETE_ENTITY:
+        handleDeleteEntity(smartBuffer);
         break;
 
     default:
@@ -76,17 +68,11 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     }
 }
 
-void Protocol::handleNewPlayerCallback(SmartBuffer& smartBuffer) {
+void Protocol::handleCreatePlayerCallback(SmartBuffer& smartBuffer) {
     int32_t playerId;
     smartBuffer >> playerId;
 
     Protocol::setPlayerId(playerId);
-
-    Logger::success("[Protocol] NEW_PLAYER_CALLBACK - Assigned Player ID: " +
-                    std::to_string(playerId));
-
-    Logger::success("[Protocol] NEW_PLAYER_CALLBACK - Assigned Player ID: " +
-                    std::to_string(playerId));
 
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/spaceship.png")},
@@ -102,7 +88,7 @@ void Protocol::handleNewPlayerCallback(SmartBuffer& smartBuffer) {
     EntityManager::get().CompareEntities(playerId + 10000, playerNameItems, {0.0f, 00.0f});
 }
 
-void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
+void Protocol::handleCreatePlayerBroadcast(SmartBuffer& smartBuffer) {
     int32_t playerId;
     std::string playerName;
 
@@ -122,7 +108,7 @@ void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
     EntityManager::get().CompareEntities(playerId + 10000, playerNameItems, {00.0f, -10.0f});
 }
 
-void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
+void Protocol::handleUpdatePlayer(SmartBuffer& smartBuffer) {
     int32_t playerId, x, y;
     smartBuffer >> playerId >> x >> y;
 
@@ -130,33 +116,17 @@ void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
     EntityManager::get().CompareEntities(playerId, emptyMap, {x, y});
 }
 
-void Protocol::handlePlayerDeleted(SmartBuffer& smartBuffer) {
-    int32_t playerId;
-    smartBuffer >> playerId;
-
-    // Logger::info("[Protocol] PLAYER_DELETED\n"
-    //              "  -> Deleted Player ID: " + std::to_string(playerId));
-}
-
-void Protocol::handleViewportUpdate(SmartBuffer& smartBuffer) {
+void Protocol::handleUpdateViewport(SmartBuffer& smartBuffer) {
     double viewport;
     smartBuffer >> viewport;
-
-    // Logger::info("[Protocol] VIEWPORT_UPDATE\n"
-    //              "  -> Updated Viewport: " + std::to_string(viewport));
 
     Client::get().setViewport(viewport);
 }
 
-void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
+void Protocol::handleUpdateBlocks(SmartBuffer& smartBuffer) {
     int32_t obstacleId, x, y;
     int16_t type, size;
     smartBuffer >> obstacleId >> x >> y >> size >> type;
-
-    Logger::info("[Protocol] MAP_OBSTACLES_UPDATE - Obstacle ID: " +
-                 std::to_string(obstacleId) + ", Position: (" +
-                 std::to_string(x) + ", " + std::to_string(y) +
-                 "), Type: " + std::to_string(type));
 
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/asteroids_8.png")},
@@ -166,21 +136,9 @@ void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
     EntityManager::get().CompareEntities(obstacleId, newItems, {x, y});
 }
 
-void Protocol::handleBlockDeleted(SmartBuffer& smartBuffer) {
-    int32_t obstacleId;
-    smartBuffer >> obstacleId;
-
-    // Logger::info("[Protocol] OBSTACLE_DELETED\n"
-    //              "  -> Deleted Obstacle ID: " + std::to_string(obstacleId));
-}
-
-void Protocol::handleBulletsUpdate(SmartBuffer& smartBuffer) {
+void Protocol::handleUpdateBullets(SmartBuffer& smartBuffer) {
     int32_t bulletId, x, y;
     smartBuffer >> bulletId >> x >> y;
-
-    Logger::info("[Protocol] BULLET_POSITION_UPDATE - Bullet ID: " +
-            std::to_string(bulletId) + ", New Position: (" +
-            std::to_string(x) + ", " + std::to_string(y) + ")");
 
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/shoot_blue.png")},
@@ -189,10 +147,19 @@ void Protocol::handleBulletsUpdate(SmartBuffer& smartBuffer) {
     EntityManager::get().CompareEntities(bulletId, newItems, {x, y});
 }
 
-void Protocol::handleBulletDeleted(SmartBuffer& smartBuffer) {
-    int32_t bulletId;
-    smartBuffer >> bulletId;
+void Protocol::handleDeleteEntity(SmartBuffer& smartBuffer) {
+    int32_t entityId;
+    smartBuffer >> entityId;
 
-    // Logger::info("[Protocol] BULLET_DELETED\n"
-    //              "  -> Deleted Bullet ID: " + std::to_string(bulletId));
+    Logger::info("[Protocol] Deleting entity: " + std::to_string(entityId));
+
+    auto& _entities = EntityManager::get().getEntityList();
+
+	if (_entities.empty()) {
+    	return;
+	}
+
+    if (auto search = _entities.find(entityId); search != _entities.end()) {
+        _entities.erase(entityId);
+    }
 }

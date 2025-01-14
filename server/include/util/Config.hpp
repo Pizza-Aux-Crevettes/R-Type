@@ -11,7 +11,8 @@ enum Config {
     // Socket
     DEFAULT_BYTES = 1024,
     PORT = 8080,
-    FPS = 60,
+    CADENCY = 20,
+    TICK_PER_SECOND = 1000 / CADENCY,
 
     // Program
     SUCCESS = 0,
@@ -28,9 +29,9 @@ enum Config {
     PLAYER_SPEED = 30,
 
     // Map
-    BLOCK_SIZE = 32,
-    RENDER_DISTANCE = 100,
-    SPEED = 2,
+    BLOCK_SIZE = 64,
+    RENDER_DISTANCE = 15,
+    MAP_SPEED = 2,
 
     // Bullet
     BULLET_SPEED = 10,

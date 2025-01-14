@@ -9,8 +9,8 @@
 #include <components/Shape.hpp>
 #include <components/Sprite.hpp>
 #include <components/Text.hpp>
-#include "System.hpp"
 #include <iostream>
+#include "System.hpp"
 
 void GameEngine::System::updateEntityPosition(
     const int id, std::map<int, Entity>& entities,

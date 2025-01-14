@@ -57,6 +57,20 @@ void UdpSocket::init() {
 }
 
 /**
+ * @brief Run the UDP socket
+ *
+ */
+void UdpSocket::run() {
+    std::thread readThread([this]() { readLoop(); });
+    std::thread updateThread([this]() { updateLoop(); });
+    std::thread sendThread([this]() { sendLoop(); });
+
+    readThread.detach();
+    updateThread.detach();
+    sendThread.detach();
+}
+
+/**
  * @brief Read loop for the UDP socket
  *
  */
@@ -84,28 +98,48 @@ void UdpSocket::readLoop() {
 }
 
 /**
+ * @brief Update loop for the UDP socket
+ *
+ */
+void UdpSocket::updateLoop() {
+    while (true) {
+        auto frameStart = std::chrono::high_resolution_clock::now();
+
+        if (!PlayerManager::get().getPlayers().empty()) {
+            BulletManager::get().updateBullets();
+            ObstacleManager::get().updateObstacles();
+        }
+
+        auto frameEnd = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+            frameEnd - frameStart);
+        int sleepTime = TICK_PER_SECOND - duration.count();
+
+        if (sleepTime > 0) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
+        } else {
+            Logger::warning("[UDP Socket] updateLoop exceeded 50 ms! Took " +
+                            std::to_string(duration.count()) + " ms.");
+        }
+    }
+}
+
+/**
  * @brief Send loop for the UDP socket
  *
  */
 void UdpSocket::sendLoop() {
-    const int frameDurationMs = 1000 / FPS;
     SmartBuffer smartBuffer;
 
     while (true) {
         auto frameStart = std::chrono::high_resolution_clock::now();
 
-        if (!_clients.empty() && !PlayerManager::get().getPlayers().empty()) {
-            Logger::info("[UDP Socket] Sending updates to " +
-                         std::to_string(_clients.size()) + " clients.");
-
-            BulletManager::get().updateBullets();
-            ObstacleManager::get().updateObstacles();
-
+        if (!PlayerManager::get().getPlayers().empty() &&
+            !getClients().empty()) {
             for (const auto& client : _clients) {
                 PlayerProtocol::sendPlayerPosition(client, smartBuffer);
                 MapProtocol::sendViewportUpdate(client, smartBuffer);
                 MapProtocol::sendObstaclesUpdate(client, smartBuffer);
-                MapProtocol::sendObstaclesDeleted(client, smartBuffer);
                 BulletProtocol::sendBulletsUpdate(client, smartBuffer);
             }
         }
@@ -114,14 +148,14 @@ void UdpSocket::sendLoop() {
         auto frameDuration =
             std::chrono::duration_cast<std::chrono::milliseconds>(frameEnd -
                                                                   frameStart);
+        int sleepTime = TICK_PER_SECOND - frameDuration.count();
 
-        int sleepTime = frameDurationMs - frameDuration.count();
         if (sleepTime > 0) {
             std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
         } else {
-            Logger::warning(
-                "[UDP Socket] Frame exceeded target duration! Took " +
-                std::to_string(frameDuration.count()) + " ms.");
+            Logger::warning("[UDP Socket] sendLoop exceeded " +
+                            std::to_string(TICK_PER_SECOND) + " ms! Took " +
+                            std::to_string(frameDuration.count()) + " ms.");
         }
     }
 }

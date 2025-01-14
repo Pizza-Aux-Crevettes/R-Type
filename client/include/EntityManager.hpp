@@ -30,8 +30,8 @@ class EntityManager {
 
   public:
     static EntityManager& get();
-    void setEntityList(int, GameEngine::Entity);
-    std::map<int, GameEngine::Entity> getEntityList();
+    void setEntityList(std::map<int, GameEngine::Entity> entities);
+    std::map<int, GameEngine::Entity>& getEntityList();
     void CompareEntities(int, std::map<std::string, std::any>,
                          std::pair<float, float> updatePosition);
     void CreateEntity(int, std::map<std::string, std::any>);

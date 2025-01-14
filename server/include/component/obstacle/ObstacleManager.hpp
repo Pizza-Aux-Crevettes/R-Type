@@ -20,6 +20,7 @@ class ObstacleManager {
     std::string ObstacleTypeToString(ObstacleType type);
     void addObstacle(const std::shared_ptr<Obstacle>& obstacle);
     const std::vector<std::shared_ptr<Obstacle>>& getAllObstacles() const;
+    const std::vector<std::shared_ptr<Obstacle>>& getVisibleObstacles() const;
     bool isObstacleCodeValid(const std::string& code) const;
     ObstacleType getObstacleType(const std::string& code) const;
     void updateObstacles();
@@ -36,7 +37,4 @@ class ObstacleManager {
     std::vector<std::shared_ptr<Obstacle>> _visibleObstacles;
     std::vector<std::shared_ptr<Obstacle>> _previousVisibleObstacles;
     std::unordered_map<std::string, ObstacleType> _obstacleMapping;
-
-    bool isInsideViewport(const std::shared_ptr<Obstacle>& obstacle,
-                          double viewportStart, double viewportEnd) const;
 };

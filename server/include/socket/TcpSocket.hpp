@@ -8,6 +8,7 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
+#include <algorithm>
 #include <arpa/inet.h>
 #include <memory>
 #include <mutex>

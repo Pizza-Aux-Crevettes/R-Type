@@ -36,15 +36,12 @@ void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer) {
     int16_t opCode;
     smartBuffer >> opCode;
 
-    Logger::info("[Protocol] Handling message with OpCode: " +
-                 std::to_string(opCode));
-
     switch (static_cast<OpCode>(opCode)) {
     case DEFAULT:
         Logger::warning("[Protocol] DEFAULT OpCode received. No action taken.");
         break;
 
-    case NEW_PLAYER:
+    case CREATE_PLAYER:
         Logger::info("[Protocol] NEW_PLAYER operation.");
         PlayerProtocol::newPlayer(clientSocket, smartBuffer);
         break;
