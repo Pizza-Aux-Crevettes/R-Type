@@ -140,8 +140,7 @@ void Client::manageClient() {
                     bulletSound.getSound().play();
                 }
             }
-            if (event.type == sf::Event::KeyPressed)
-                input.checkKey(event);
+            input.checkKey(event);
             menu.setupInput(event);
             optionMenu.setNewKey(event, system);
 

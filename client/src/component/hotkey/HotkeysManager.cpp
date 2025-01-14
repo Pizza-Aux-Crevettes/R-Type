@@ -40,17 +40,29 @@ void HotkeysManager::setKey(const HotkeysCodes hotkey,
 
 void HotkeysManager::checkKey(const sf::Event& event) {
     if (Client::get().getIsPlayed()) {
-        for (const auto& [hotkey, key] : _keys) {
-        if (key == event.key.code) {
-            SmartBuffer smartBuffer;
-             smartBuffer << static_cast<int16_t>(
-                               Protocol::OpCode::HOTKEY_PRESSED)
-                        << static_cast<int32_t>(Protocol::get().getPlayerId())
-                        << static_cast<int16_t>(hotkey);
-            UdpSocket::send(smartBuffer);
-
+        if (event.type == sf::Event::KeyPressed) {
+            for (const auto& [hotkey, key] : _keys) {
+                if (key == event.key.code) {
+                    _activeKeys.insert(hotkey);
+                }
+            }
         }
-    }
+        if (event.type == sf::Event::KeyReleased) {
+            for (const auto& [hotkey, key] : _keys) {
+                if (key == event.key.code) {
+                    _activeKeys.erase(hotkey);
+                }
+            }
+        }
+        if (!_activeKeys.empty()) {
+            for (HotkeysCodes hotkey : _activeKeys) {
+                SmartBuffer smartBuffer;
+                smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
+                            << static_cast<int32_t>(Protocol::get().getPlayerId());
+                smartBuffer << static_cast<int16_t>(hotkey);
+                UdpSocket::send(smartBuffer);
+            }
+        }
     }
 }
 
