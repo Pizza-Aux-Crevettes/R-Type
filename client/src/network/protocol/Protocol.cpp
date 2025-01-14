@@ -60,9 +60,17 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     case OBSTACLES_UPDATE:
         handleBlocksUpdate(smartBuffer);
         break;
+    
+    case OBSTACLES_DELETED:
+        handleBlockDeleted(smartBuffer);
+
 
     case BULLET_POSITION_UPDATE:
         handleBulletsUpdate(smartBuffer);
+
+    case BULLET_DELETED:
+        handleBulletDeleted(smartBuffer);
+
         break;
 
     default:
@@ -161,6 +169,15 @@ void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
     EntityManager::get().CompareEntities(obstacleId, newItems, {x, y});
 }
 
+void Protocol::handleBlockDeleted(SmartBuffer& smartBuffer) {
+    int32_t obstacleId;
+    smartBuffer >> obstacleId;
+
+    Logger::info("[Protocol] MAP_OBSTACLE_DELETED - Deleted Obstacle ID: " +
+                 std::to_string(obstacleId));
+}
+
+
 void Protocol::handleBulletsUpdate(SmartBuffer& smartBuffer) {
     int32_t bulletId, x, y;
     smartBuffer >> bulletId >> x >> y;
@@ -174,4 +191,12 @@ void Protocol::handleBulletsUpdate(SmartBuffer& smartBuffer) {
         {"Position", std::pair<float, float>(x, y)}};
 
     EntityManager::get().CompareEntities(bulletId, newItems, {x, y});
+}
+
+void Protocol::handleBulletDeleted(SmartBuffer& smartBuffer) {
+    int32_t bulletId;
+    smartBuffer >> bulletId;
+
+    Logger::info("[Protocol] BULLET_DELETED - Deleted Bullet ID: " +
+                 std::to_string(bulletId));
 }

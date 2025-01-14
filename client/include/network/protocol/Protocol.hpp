@@ -56,5 +56,7 @@ class Protocol {
     static void handlePlayerUpdateLife(SmartBuffer& smartBuffer);
     static void handleViewportUpdate(SmartBuffer& smartBuffer);
     static void handleBlocksUpdate(SmartBuffer& smartBuffer);
+    static void handleBlockDeleted(SmartBuffer& smartBuffer);
     static void handleBulletsUpdate(SmartBuffer& smartBuffer);
+    static void handleBulletDeleted(SmartBuffer& smartBuffer);
 };

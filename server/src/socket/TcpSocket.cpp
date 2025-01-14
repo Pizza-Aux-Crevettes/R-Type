@@ -62,6 +62,10 @@ void TcpSocket::init() {
     Logger::socket("[TCP Socket] Successfully initialized.");
 }
 
+/**
+ * @brief Read loop for the TCP socket
+ *
+ */
 void TcpSocket::readLoop() const {
     while (true) {
         sockaddr_in clientAddr{};
@@ -86,6 +90,12 @@ void TcpSocket::readLoop() const {
     }
 }
 
+/**
+ * @brief Handle the read event
+ *
+ * @param clientSocket The client socket
+ * @param smartBuffer The SmartBuffer to use for the response
+ */
 void TcpSocket::handleRead(const int clientSocket, SmartBuffer& smartBuffer) {
     while (true) {
         char buffer[DEFAULT_BYTES] = {};
