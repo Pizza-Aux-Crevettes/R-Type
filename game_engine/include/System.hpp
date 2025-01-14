@@ -54,7 +54,7 @@ class System {
     void shapeSystem(sf::RenderWindow& window, Entity& entity);
     void buttonSystem(sf::RenderWindow& window, Entity& entity);
     void optionButtonSystem(sf::RenderWindow& window, Entity& entity);
-    void sliderSystem(sf::RenderWindow& window, Entity& entity);
+    void sliderSystem(sf::RenderWindow& window, Entity& entity, std::map<int, Entity>& entities);
     void buttonRectSystem(sf::RenderWindow& window, Entity& entity);
 };
 

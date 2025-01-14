@@ -10,6 +10,7 @@
 #include <components/Sprite.hpp>
 #include <components/Text.hpp>
 #include "System.hpp"
+#include <iostream>
 
 void GameEngine::System::updateEntityPosition(
     const int id, std::map<int, Entity>& entities,

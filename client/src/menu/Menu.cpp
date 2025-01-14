@@ -16,6 +16,11 @@ Menu::Menu() {}
 
 Menu::~Menu() {}
 
+Menu& Menu::get() {
+    static Menu instance;
+    return instance;
+}
+
 GameEngine::Entity
 Menu::createEntityButton(int id, std::string title, std::string font,
                          int fontSize,
@@ -46,7 +51,7 @@ Menu::createEntityRect(int id, const std::pair<int, int> size,
                        const std::vector<std::pair<float, float>> position,
                        sf::Color color, std::function<void()> callback) {
     auto rectEntity = GameEngine::Entity(id);
-    auto buttonRect = ButtonRect(size, color);
+    auto buttonRect = ButtonRect(size, color, false);
     buttonRect.setCallback(callback);
     rectEntity.addComponent(buttonRect);
     rectEntity.addComponent(Position(position));
@@ -322,12 +327,16 @@ void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system,
 
 
     switch (_currentMenuState) {
-    case MenuState::MainMenu:
-        initMainMenu(window, system);
-        break;
-    case MenuState::OptionMenu: {
-        optionMenu.displayOptionMenu(window, system);
-        break;
-    };
+        case MenuState::MainMenu:
+            initMainMenu(window, system);
+            break;
+        case MenuState::OptionMenu: {
+            optionMenu.displayOptionMenu(window, system);
+            break;
+        };
     }
+}
+
+void Menu::setMenuState(MenuState state) {
+    _currentMenuState = state;
 }
