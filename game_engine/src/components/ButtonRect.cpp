@@ -24,8 +24,8 @@ the ButtonRect's
  * height).
  */
 
-ButtonRect::ButtonRect(const std::pair<int, int>& sizeRect, sf::Color color)
-    : _size(sizeRect), _color(color) {}
+ButtonRect::ButtonRect(const std::pair<int, int>& sizeRect, sf::Color color, bool showOutline)
+    : _size(sizeRect), _color(color), _showOutline(showOutline) {}
 
 /**
  * @brief Destructor for the ButtonRect component.
@@ -101,6 +101,17 @@ bool ButtonRect::getIsLoaded() const {
  */
 void ButtonRect::setCallback(std::function<void()> callback) {
     _callback = callback;
+}
+
+/**
+ * @brief Get the outline status of the ButtonRect.
+ *
+ * This function retrieves the outline status of the ButtonRect.
+ *
+ * @return A boolean indicating if the ButtonRect outline is show.
+ */
+bool ButtonRect::getShowOutline() const {
+    return this->_showOutline;
 }
 
 /**

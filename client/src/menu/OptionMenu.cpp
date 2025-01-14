@@ -79,7 +79,7 @@ GameEngine::Entity OptionMenu::createEntitySlider(
 GameEngine::Entity
 OptionMenu::createEntityRect(int id, const std::pair<int, int> size, const std::vector<std::pair<float, float>> position, sf::Color color, std::function<void()> callback) {
     auto rectEntity = GameEngine::Entity(id);
-    auto buttonRect = ButtonRect(size, color);
+    auto buttonRect = ButtonRect(size, color, true);
     buttonRect.setCallback(callback);
     rectEntity.addComponent(buttonRect);
     rectEntity.addComponent(Position(position));
@@ -168,63 +168,63 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                 responsive.getResponsivePosY(600, currentHeight, 170)}}, 20));
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_TOP)), {{
-                responsive.getResponsivePosX(800, currentWidth, 200),
+                responsive.getResponsivePosX(800, currentWidth, 160),
                 responsive.getResponsivePosY(600, currentHeight, 170)}}, 20));
         _hotkeyEntityMap[HotkeysCodes::ARROW_TOP] = entityId;
         _entitiesMenuOption.emplace( entityId,
             createEntityRect( entityId++, {150, 50}, {{
-                responsive.getResponsivePosX(800, currentWidth, 200),
-                responsive.getResponsivePosY(600, currentHeight, 170)}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_TOP; }));
+                responsive.getResponsivePosX(800, currentWidth, 155),
+                responsive.getResponsivePosY(600, currentHeight, 163)}}, sf::Color::White, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_TOP; }));
         
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_BOTTOM)), {{
-                responsive.getResponsivePosX(800, currentWidth, 300),
+                responsive.getResponsivePosX(800, currentWidth, 260),
                 responsive.getResponsivePosY(600, currentHeight, 170)}}, 20));
         _hotkeyEntityMap[HotkeysCodes::ARROW_BOTTOM] = entityId;
         _entitiesMenuOption.emplace( entityId,
             createEntityRect( entityId++, {150, 50}, {{
-                responsive.getResponsivePosX(800, currentWidth, 300),
-                responsive.getResponsivePosY(600, currentHeight, 170)}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_BOTTOM; }));
+                responsive.getResponsivePosX(800, currentWidth, 255),
+                responsive.getResponsivePosY(600, currentHeight, 163)}}, sf::Color::White, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_BOTTOM; }));
         
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_LEFT)), {{
-                responsive.getResponsivePosX(800, currentWidth, 400),
+                responsive.getResponsivePosX(800, currentWidth, 360),
                 responsive.getResponsivePosY(600, currentHeight, 170)}}, 20));
         _hotkeyEntityMap[HotkeysCodes::ARROW_LEFT] = entityId;
         _entitiesMenuOption.emplace( entityId,
             createEntityRect( entityId++, {150, 50}, {{
-                responsive.getResponsivePosX(800, currentWidth, 400),
-                responsive.getResponsivePosY(600, currentHeight, 170)}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_LEFT; }));
+                responsive.getResponsivePosX(800, currentWidth, 355),
+                responsive.getResponsivePosY(600, currentHeight, 163)}}, sf::Color::White, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_LEFT; }));
         
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_RIGHT)), {{
-                responsive.getResponsivePosX(800, currentWidth, 500),
+                responsive.getResponsivePosX(800, currentWidth, 460),
                 responsive.getResponsivePosY(600, currentHeight, 170)}}, 20));
         _hotkeyEntityMap[HotkeysCodes::ARROW_RIGHT] = entityId;
         _entitiesMenuOption.emplace( entityId,
             createEntityRect( entityId++, {150, 50}, {{
-                responsive.getResponsivePosX(800, currentWidth, 500),
-                responsive.getResponsivePosY(600, currentHeight, 170)}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_RIGHT; }));
+                responsive.getResponsivePosX(800, currentWidth, 455),
+                responsive.getResponsivePosY(600, currentHeight, 163)}}, sf::Color::White, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ARROW_RIGHT; }));
         
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ENTER)), {{
-                responsive.getResponsivePosX(800, currentWidth, 600),
+                responsive.getResponsivePosX(800, currentWidth, 560),
                 responsive.getResponsivePosY(600, currentHeight, 170)}}, 20));
         _hotkeyEntityMap[HotkeysCodes::ENTER] = entityId;
         _entitiesMenuOption.emplace( entityId,
             createEntityRect( entityId++, {150, 50}, {{
-                responsive.getResponsivePosX(800, currentWidth, 600),
-                responsive.getResponsivePosY(600, currentHeight, 170)}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ENTER; }));
+                responsive.getResponsivePosX(800, currentWidth, 555),
+                responsive.getResponsivePosY(600, currentHeight, 163)}}, sf::Color::White, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::ENTER; }));
         
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::SPACE)), {{
-                responsive.getResponsivePosX(800, currentWidth, 700),
+                responsive.getResponsivePosX(800, currentWidth, 660),
                 responsive.getResponsivePosY(600, currentHeight, 170)}}, 20));
         _hotkeyEntityMap[HotkeysCodes::SPACE] = entityId;
         _entitiesMenuOption.emplace( entityId,
             createEntityRect( entityId++, {150, 50}, {{
-                responsive.getResponsivePosX(800, currentWidth, 700),
-                responsive.getResponsivePosY(600, currentHeight, 170)}}, sf::Color::Transparent, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::SPACE; }));
+                responsive.getResponsivePosX(800, currentWidth, 655),
+                responsive.getResponsivePosY(600, currentHeight, 163)}}, sf::Color::White, [this]() { _waitingForKey = true; _hotkeyPressed = HotkeysCodes::SPACE; }));
 
 // Adaptability
         _entitiesMenuOption.emplace( entityId,

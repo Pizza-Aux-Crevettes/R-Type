@@ -18,7 +18,7 @@ HotkeysManager::HotkeysManager() {
              {HotkeysCodes::ARROW_LEFT, sf::Keyboard::Left},
              {HotkeysCodes::ARROW_RIGHT, sf::Keyboard::Right},
              {HotkeysCodes::SPACE, sf::Keyboard::Space},
-             {HotkeysCodes::ENTER, sf::Keyboard::Space}};
+             {HotkeysCodes::ENTER, sf::Keyboard::Enter}};
 }
 
 HotkeysManager::~HotkeysManager() = default;

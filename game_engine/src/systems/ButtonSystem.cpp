@@ -201,8 +201,17 @@ void GameEngine::System::buttonRectSystem(sf::RenderWindow& window,
                              buttonRectComp.getSize().second));
             buttonRectComp.getButtonRect().setPosition(
                 positionComp.getPositionX(0), positionComp.getPositionY(0));
-            buttonRectComp.getButtonRect().setFillColor(
-                buttonRectComp.getColor());
+            if (!buttonRectComp.getShowOutline()) {
+                buttonRectComp.getButtonRect().setFillColor(
+                    buttonRectComp.getColor());
+            } else {
+                buttonRectComp.getButtonRect().setOutlineThickness(2);
+                buttonRectComp.getButtonRect().setOutlineColor(
+                    buttonRectComp.getColor());
+                buttonRectComp.getButtonRect().setFillColor(
+                    sf::Color::Transparent);
+                
+            }
             buttonRectComp.setIsLoaded(true);
         }
         static std::map<GameEngine::Entity*, bool> wasPressedMap;

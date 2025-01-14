@@ -51,7 +51,7 @@ Menu::createEntityRect(int id, const std::pair<int, int> size,
                        const std::vector<std::pair<float, float>> position,
                        sf::Color color, std::function<void()> callback) {
     auto rectEntity = GameEngine::Entity(id);
-    auto buttonRect = ButtonRect(size, color);
+    auto buttonRect = ButtonRect(size, color, false);
     buttonRect.setCallback(callback);
     rectEntity.addComponent(buttonRect);
     rectEntity.addComponent(Position(position));

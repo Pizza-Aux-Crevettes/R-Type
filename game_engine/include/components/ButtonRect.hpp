@@ -15,7 +15,7 @@
 class ButtonRect : public Component {
   public:
     ButtonRect(const std::pair<int, int>& sizeRect = {150, 50},
-               sf::Color color = sf::Color::Red);
+               sf::Color color = sf::Color::Red, bool showOutline = false);
     ~ButtonRect();
 
     sf::RectangleShape& getButtonRect();
@@ -25,6 +25,8 @@ class ButtonRect : public Component {
 
     void setIsLoaded(bool isLoaded);
     bool getIsLoaded() const;
+
+    bool getShowOutline() const;
 
     void display() const override;
     bool isHovered(sf::Vector2i mousePos);
@@ -38,4 +40,5 @@ class ButtonRect : public Component {
     std::function<void()> _callback;
     bool _isLoad = false;
     sf::Color _color;
+    bool _showOutline;
 };
