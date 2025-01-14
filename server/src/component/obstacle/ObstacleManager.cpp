@@ -10,8 +10,6 @@
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
-static constexpr unsigned int OFFSET = 3;
-
 /**
  * @brief Get the ObstacleManager instance
  *
@@ -87,6 +85,16 @@ ObstacleManager::getAllObstacles() const {
 }
 
 /**
+ * @brief Get the visible obstacles
+ *
+ * @return const std::vector<std::shared_ptr<Obstacle>>& The visible obstacles
+ */
+const std::vector<std::shared_ptr<Obstacle>>&
+ObstacleManager::getVisibleObstacles() const {
+    return _visibleObstacles;
+}
+
+/**
  * @brief Check if an obstacle code is valid
  *
  * @param code The obstacle code
@@ -117,10 +125,16 @@ ObstacleType ObstacleManager::getObstacleType(const std::string& code) const {
  *
  */
 void ObstacleManager::updateObstacles() {
-    _viewport += SPEED;
+    _previousVisibleObstacles = _visibleObstacles;
+    _visibleObstacles.clear();
+    _viewport += MAP_SPEED;
 
     for (const auto& obstacle : _obstacles) {
-        obstacle->setPosition(Point(obstacle->getPosition().getX() - SPEED,
+        if (obstacle->getPosition().getX() < RENDER_DISTANCE * BLOCK_SIZE &&
+            obstacle->getPosition().getX() > -BLOCK_SIZE) {
+            _visibleObstacles.push_back(obstacle);
+        }
+        obstacle->setPosition(Point(obstacle->getPosition().getX() - MAP_SPEED,
                                     obstacle->getPosition().getY()));
     }
 }

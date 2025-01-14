@@ -12,8 +12,8 @@
 */
 
 #include "components/Slider.hpp"
+#include <cmath>
 #include <iostream>
-#include <cmath> 
 
 /**
  * @brief Constructor for the Slider component.
@@ -141,7 +141,7 @@ void Slider::setValue(float value) {
  * @return A float representing the current value of the slider.
  */
 int Slider::getValue() const {
-    return  static_cast<int>(round(_currentValue));
+    return static_cast<int>(round(_currentValue));
 }
 
 /**

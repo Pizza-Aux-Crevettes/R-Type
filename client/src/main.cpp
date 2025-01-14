@@ -20,7 +20,7 @@
 int main() {
     try {
         Client client;
-      
+
         client.manageClient();
     } catch (const std::exception& e) {
         Logger::error("[Main] Error: " + std::string(e.what()));

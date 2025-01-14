@@ -298,15 +298,14 @@ void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system,
                        OptionMenu& optionMenu) {
     std::map<int, GameEngine::Entity> entities;
 
-
     switch (_currentMenuState) {
-        case MenuState::MainMenu:
-            initMainMenu(window, system);
-            break;
-        case MenuState::OptionMenu: {
-            optionMenu.displayOptionMenu(window, system);
-            break;
-        };
+    case MenuState::MainMenu:
+        initMainMenu(window, system);
+        break;
+    case MenuState::OptionMenu: {
+        optionMenu.displayOptionMenu(window, system);
+        break;
+    };
     }
 }
 

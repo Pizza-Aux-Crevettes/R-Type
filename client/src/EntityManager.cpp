@@ -19,11 +19,11 @@ EntityManager& EntityManager::get() {
     return instance;
 }
 
-void EntityManager::setEntityList(int id, GameEngine::Entity entity) {
-    _entities.emplace(id, std::move(entity));
+void EntityManager::setEntityList(std::map<int, GameEngine::Entity> entities) {
+    _entities = entities;
 }
 
-std::map<int, GameEngine::Entity> EntityManager::getEntityList() {
+std::map<int, GameEngine::Entity>& EntityManager::getEntityList() {
     return _entities;
 }
 
