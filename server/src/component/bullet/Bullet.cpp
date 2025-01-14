@@ -44,16 +44,3 @@ void Bullet::move() {
     _position.setX(_position.getX() + _direction.getX() * _speed);
     _position.setY(_position.getY() + _direction.getY() * _speed);
 }
-
-/**
- * @brief Check if the bullet is outside the viewport
- *
- * @param viewport The current viewport
- * @return true If the bullet is outside the viewport
- * @return false Otherwise
- */
-bool Bullet::isOutsideViewport(int viewportWidth, int viewportHeight) const {
-    return _position.getX() < 0 || _position.getY() < 0 ||
-           _position.getX() >= viewportWidth ||
-           _position.getY() >= viewportHeight;
-}

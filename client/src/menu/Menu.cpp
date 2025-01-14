@@ -6,8 +6,8 @@
 */
 
 #include "menu/Menu.hpp"
-#include "Client.hpp"
 #include <SmartBuffer.hpp>
+#include "Client.hpp"
 #include "network/protocol/Protocol.hpp"
 #include "network/socket/TcpSocket.hpp"
 #include "util/getResponsiveValue.hpp"

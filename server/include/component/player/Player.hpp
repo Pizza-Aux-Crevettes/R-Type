@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <optional>
 #include <string>
 #include "component/attr/Health.hpp"
 #include "util/Point.hpp"
@@ -23,6 +24,8 @@ class Player {
     const Point& getSize() const;
     double getSpeed() const;
     const Health& getHealth() const;
+    std::optional<int> getClientSocket() const;
+    void setClientSocket(int clientSocket);
 
   private:
     int32_t _id;
@@ -31,4 +34,5 @@ class Player {
     Point _size;
     double _speed;
     Health _health;
+    std::optional<int> _clientSocket;
 };

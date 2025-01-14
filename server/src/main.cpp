@@ -5,7 +5,7 @@
 ** main.cpp
 */
 
-#include "component/map/MapManager.hpp"
+#include "component/map/MapLoader.hpp"
 #include "socket/Server.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
@@ -22,11 +22,9 @@ int main() {
         Logger::success("[Main] Server successfully initialized on port " +
                         std::to_string(PORT) + ".");
 
-        // Preload maps
-        MapManager::get().preloadMapsFromFolder("./server/maps");
-        MapManager::get().setCurrentMap(1);
+        MapLoader mapLoader;
+        mapLoader.loadMapFromFile("./server/maps/map1.map");
 
-        // Start the server
         Server::get().start();
     } catch (const std::exception& e) {
         Logger::error("[Main] Critical server error: " + std::string(e.what()));

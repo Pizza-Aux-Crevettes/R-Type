@@ -11,14 +11,13 @@
 #include <memory>
 #include <netinet/in.h>
 #include <thread>
-#include "component/map/MapManager.hpp"
 
 class MapProtocol {
   public:
-    static void sendViewportUpdate(const int udpSocket,
-                                   const sockaddr_in& clientAddr,
+    static void sendViewportUpdate(const sockaddr_in& clientAddr,
                                    SmartBuffer& smartBuffer);
-    static void sendObstaclesUpdate(const int udpSocket,
-                                    const sockaddr_in& clientAddr,
+    static void sendObstaclesUpdate(const sockaddr_in& clientAddr,
                                     SmartBuffer& smartBuffer);
+    static void sendObstaclesDeleted(const sockaddr_in& clientAddr,
+                                     SmartBuffer& smartBuffer);
 };

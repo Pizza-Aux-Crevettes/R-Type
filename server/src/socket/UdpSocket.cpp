@@ -9,6 +9,7 @@
 #include "component/bullet/BulletManager.hpp"
 #include "component/bullet/BulletProtocol.hpp"
 #include "component/map/MapProtocol.hpp"
+#include "component/obstacle/ObstacleManager.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "component/player/PlayerProtocol.hpp"
 #include "protocol/Protocol.hpp"
@@ -17,10 +18,14 @@
 #include "util/Logger.hpp"
 
 /**
- * @brief Construct a new UdpSocket:: UdpSocket object
+ * @brief Get the UdpSocket instance
  *
+ * @return UdpSocket&
  */
-UdpSocket::UdpSocket() : _udpSocket(FAILURE) {}
+UdpSocket& UdpSocket::get() {
+    static UdpSocket instance;
+    return instance;
+}
 
 /**
  * @brief Destroy the UdpSocket:: UdpSocket object
@@ -35,13 +40,11 @@ UdpSocket::~UdpSocket() {
  *
  */
 void UdpSocket::init() {
-    // Create the socket
     _udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
     if (_udpSocket == FAILURE) {
         throw std::runtime_error("Failed to create UDP socket.");
     }
 
-    // Bind the socket
     _udpAddr.sin_family = AF_INET;
     _udpAddr.sin_addr.s_addr = INADDR_ANY;
     _udpAddr.sin_port = htons(PORT);
@@ -65,19 +68,17 @@ void UdpSocket::readLoop() {
         sockaddr_in clientAddr{};
         socklen_t addrLen = sizeof(clientAddr);
 
-        // Read the message
         const ssize_t bytesRead =
             recvfrom(_udpSocket, buffer, sizeof(buffer), 0,
                      reinterpret_cast<sockaddr*>(&clientAddr), &addrLen);
         if (bytesRead > SUCCESS) {
-            // Add the client to the list
             addClient(clientAddr);
 
-            // Handle the message
             smartBuffer.reset();
             smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer),
                                bytesRead);
-            Protocol::handleMessage(_udpSocket, smartBuffer, clientAddr);
+
+            Protocol::handleMessage(_udpSocket, smartBuffer);
         }
     }
 }
@@ -91,7 +92,6 @@ void UdpSocket::sendLoop() {
     SmartBuffer smartBuffer;
 
     while (true) {
-        // Capture frame start and calculate duration
         auto frameStart = std::chrono::high_resolution_clock::now();
 
         if (!_clients.empty() && !PlayerManager::get().getPlayers().empty()) {
@@ -99,34 +99,22 @@ void UdpSocket::sendLoop() {
                          std::to_string(_clients.size()) + " clients.");
 
             BulletManager::get().updateBullets();
+            ObstacleManager::get().updateObstacles();
 
             for (const auto& client : _clients) {
-                // Send player updates
-                const auto& players = PlayerManager::get().getPlayers();
-                for (const auto& [playerId, player] : players) {
-                    PlayerProtocol::sendPositionsUpdate(_udpSocket, client,
-                                                        player, smartBuffer);
-                }
-
-                // Send map updates
-                MapProtocol::sendViewportUpdate(_udpSocket, client,
-                                                smartBuffer);
-                MapProtocol::sendObstaclesUpdate(_udpSocket, client,
-                                                 smartBuffer);
-
-                // Send bullet updates
-                BulletProtocol::sendBulletsUpdate(_udpSocket, client,
-                                                  smartBuffer);
+                PlayerProtocol::sendPlayerPosition(client, smartBuffer);
+                MapProtocol::sendViewportUpdate(client, smartBuffer);
+                MapProtocol::sendObstaclesUpdate(client, smartBuffer);
+                MapProtocol::sendObstaclesDeleted(client, smartBuffer);
+                BulletProtocol::sendBulletsUpdate(client, smartBuffer);
             }
         }
 
-        // Capture frame end and calculate duration
         auto frameEnd = std::chrono::high_resolution_clock::now();
         auto frameDuration =
             std::chrono::duration_cast<std::chrono::milliseconds>(frameEnd -
                                                                   frameStart);
 
-        // Sleep to maintain target frame rate
         int sleepTime = frameDurationMs - frameDuration.count();
         if (sleepTime > 0) {
             std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
@@ -141,25 +129,35 @@ void UdpSocket::sendLoop() {
 /**
  * @brief Send a message to a client
  *
- * @param udpSocket The UDP socket
- * @param clientAddr The client's address
+ * @param clientSocket The UDP socket
  * @param smartBuffer The SmartBuffer to send
  */
-void UdpSocket::sendToOne(const int udpSocket, const sockaddr_in& clientAddr,
+void UdpSocket::sendToOne(const sockaddr_in& clientAddr,
                           const SmartBuffer& smartBuffer) {
-    sendto(udpSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0,
+    sendto(_udpSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0,
            reinterpret_cast<const sockaddr*>(&clientAddr), sizeof(clientAddr));
 }
 
 /**
- * @brief Handle a read message
+ * @brief Send a message to all clients
  *
- * @param smartBuffer The SmartBuffer to handle
+ * @param smartBuffer The SmartBuffer to send
+ */
+void UdpSocket::sendToAll(const SmartBuffer& smartBuffer) {
+    std::lock_guard lock(_clientsMutex);
+    for (const auto& client : _clients) {
+        sendto(_udpSocket, smartBuffer.getBuffer(), smartBuffer.getSize(), 0,
+               reinterpret_cast<const sockaddr*>(&client), sizeof(client));
+    }
+}
+
+/**
+ * @brief Send a message to all clients
+ *
+ * @param smartBuffer The SmartBuffer to send
  */
 void UdpSocket::addClient(const sockaddr_in& clientAddr) {
     std::lock_guard lock(_clientsMutex);
-
-    // Check if the client is already registered
     for (const auto& client : _clients) {
         if (client.sin_addr.s_addr == clientAddr.sin_addr.s_addr &&
             client.sin_port == clientAddr.sin_port) {
@@ -167,7 +165,6 @@ void UdpSocket::addClient(const sockaddr_in& clientAddr) {
         }
     }
 
-    // Register the client
     _clients.push_back(clientAddr);
 
     Logger::info("[UDP Socket] New client registered: " +

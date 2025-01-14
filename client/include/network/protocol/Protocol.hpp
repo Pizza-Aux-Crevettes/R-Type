@@ -20,13 +20,16 @@ class Protocol {
         NEW_PLAYER = 10,
         NEW_PLAYER_CALLBACK = 11,
         NEW_PLAYER_BROADCAST = 12,
-        PLAYER_POSITION_UPDATE = 13,
-        PLAYER_LIFE_UPDATE = 14,
+        PLAYERS_UPDATE = 13,
+        PLAYER_DELETED = 15,
 
-        MAP_VIEWPORT_UPDATE = 20,
-        MAP_OBSTACLES_UPDATE = 21,
+        VIEWPORT_UPDATE = 20,
 
-        BULLET_POSITION_UPDATE = 30,
+        OBSTACLES_UPDATE = 30,
+        OBSTACLE_DELETED = 31,
+
+        BULLETS_UPDATE = 40,
+        BULLET_DELETED = 41,
     };
 
     Protocol(const Protocol&) = delete;
@@ -47,8 +50,11 @@ class Protocol {
     static void handleNewPlayerCallback(SmartBuffer& smartBuffer);
     static void handleNewPlayerBroadcast(SmartBuffer& smartBuffer);
     static void handlePlayerUpdatePosition(SmartBuffer& smartBuffer);
+    static void handlePlayerDeleted(SmartBuffer& smartBuffer);
     static void handlePlayerUpdateLife(SmartBuffer& smartBuffer);
     static void handleViewportUpdate(SmartBuffer& smartBuffer);
     static void handleBlocksUpdate(SmartBuffer& smartBuffer);
+    static void handleBlockDeleted(SmartBuffer& smartBuffer);
     static void handleBulletsUpdate(SmartBuffer& smartBuffer);
+    static void handleBulletDeleted(SmartBuffer& smartBuffer);
 };

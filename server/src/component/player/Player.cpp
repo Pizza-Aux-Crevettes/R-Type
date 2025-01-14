@@ -21,7 +21,8 @@
 Player::Player(const std::string& name, const Point& position,
                const Point& size, double speed)
     : _id(IDManager::getNextId()), _name(name), _position(position),
-      _size(size), _speed(speed), _health(Health()) {}
+      _size(size), _speed(speed), _health(Health()),
+      _clientSocket(std::nullopt) {}
 
 /**
  * @brief Get the player's ID
@@ -84,4 +85,22 @@ const Health& Player::getHealth() const {
  */
 double Player::getSpeed() const {
     return _speed;
+}
+
+/**
+ * @brief Get the client socket associated with the player
+ *
+ * @return std::optional<int>
+ */
+std::optional<int> Player::getClientSocket() const {
+    return _clientSocket;
+}
+
+/**
+ * @brief Associate a client socket with the player
+ *
+ * @param clientSocket The client socket ID
+ */
+void Player::setClientSocket(int clientSocket) {
+    _clientSocket = clientSocket;
 }

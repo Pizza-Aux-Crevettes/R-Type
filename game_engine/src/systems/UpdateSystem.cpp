@@ -24,10 +24,18 @@ void GameEngine::System::updateEntityPosition(
     if (entity.hasComponent<Text>()) {
         updatePos(entity, entity.getComponent<Text>().getText(), pos, posId);
     }
+    if (entity.hasComponent<Shape>()) {
+        if (entity.getComponent<Shape>().getShapeType() == Rectangle) {
+            updatePos(entity, entity.getComponent<Shape>().getRect(), pos,
+                      posId);
+        } else {
+            updatePos(entity, entity.getComponent<Shape>().getCircle(), pos,
+                      posId);
+        }
+    }
 }
 
-void GameEngine::System::updateText(Entity& entity,
-                                    const std::string& text) {
+void GameEngine::System::updateText(Entity& entity, const std::string& text) {
     if (entity.hasComponent<Text>()) {
         auto& textComp = entity.getComponent<Text>();
         textComp.setString(text);
@@ -46,8 +54,7 @@ void GameEngine::System::updateTextSize(const int id,
     }
 }
 
-void GameEngine::System::updateTexture(Entity& entity,
-                                       std::string& texture) {
+void GameEngine::System::updateTexture(Entity& entity, std::string& texture) {
     if (entity.hasComponent<Texture>()) {
         auto& textureComp = entity.getComponent<Texture>();
         textureComp.setTexturePath(texture);

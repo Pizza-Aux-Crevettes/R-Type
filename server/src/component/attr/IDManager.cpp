@@ -7,7 +7,6 @@
 
 #include "component/attr/IDManager.hpp"
 
-// Initialize the static atomic ID counter
 std::atomic<int32_t> IDManager::_currentId = 1;
 
 /**
