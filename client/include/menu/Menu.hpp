@@ -56,7 +56,7 @@ class Menu {
                       std::string inputVar);
 
     void isClickedPlay();
-    void isClickedExit();
+    void isClickedExit(sf::RenderWindow& window);
     void isClickedInput(bool isIpClicked, bool isPortClicked,
                         bool isUsernameClicked);
     void setupInput(const sf::Event& event);

@@ -121,8 +121,9 @@ void Menu::setupInput(const sf::Event& event) {
     }
 }
 
-void Menu::isClickedExit() {
+void Menu::isClickedExit(sf::RenderWindow& window) {
     std::cout << "Button Exit clicked!" << std::endl;
+    window.close();
 }
 
 void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
@@ -167,7 +168,7 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
                     entityId++, "EXIT", "assets/font/Inter_Bold.ttf", 50,
                     {{responsive.getResponsivePosX(1920, currentWidth, 870),
                       responsive.getResponsivePosY(1080, currentHeight, 646)}},
-                    [this]() { isClickedExit(); }));
+                    [this, &window]() { isClickedExit(window); }));
             _entitiesMenu.emplace(
                 entityId,
                 createEntitySprite(
