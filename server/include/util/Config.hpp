@@ -30,6 +30,7 @@ enum Config {
     // Map
     BLOCK_SIZE = 32,
     RENDER_DISTANCE = 100,
+    SPEED = 2
 
     // Bullet
     BULLET_SPEED = 10,
