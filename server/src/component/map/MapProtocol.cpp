@@ -51,7 +51,9 @@ void MapProtocol::sendObstaclesUpdate(const sockaddr_in& clientAddr,
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(Protocol::OpCode::OBSTACLES_UPDATE)
                     << static_cast<int32_t>(obstacle->getId())
-                    << static_cast<int32_t>(obstacle->getPosition().getX() - ObstacleManager::get().getViewport())
+                    << static_cast<int32_t>(
+                           obstacle->getPosition().getX() -
+                           ObstacleManager::get().getViewport())
                     << static_cast<int32_t>(obstacle->getPosition().getY())
                     << static_cast<int16_t>(BLOCK_SIZE)
                     << static_cast<int16_t>(obstacle->getType());

@@ -120,8 +120,8 @@ void ObstacleManager::updateObstacles() {
     _viewport += 0.1;
 
     for (const auto& obstacle : _obstacles) {
-        obstacle->setPosition(
-            Point(obstacle->getPosition().getX() - 0.1, obstacle->getPosition().getY()));
+        obstacle->setPosition(Point(obstacle->getPosition().getX() - 0.1,
+                                    obstacle->getPosition().getY()));
     }
 }
 
