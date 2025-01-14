@@ -114,6 +114,9 @@ void UdpSocket::sendLoop() {
             std::chrono::duration_cast<std::chrono::milliseconds>(frameEnd -
                                                                   frameStart);
 
+                Logger::info("[UDP Socket] Frame duration: " + std::to_string(frameDuration.count()) + " ms.");
+
+
         int sleepTime = frameDurationMs - frameDuration.count();
         if (sleepTime > 0) {
             std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));

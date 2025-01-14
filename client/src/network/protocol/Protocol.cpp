@@ -138,10 +138,15 @@ void Protocol::handleDeleteEntity(SmartBuffer& smartBuffer) {
     int32_t entityId;
     smartBuffer >> entityId;
 
-    auto entity = EntityManager::get().getEntityList().find(entityId);
-    if (entity == EntityManager::get().getEntityList().end()) {
+    Logger::info("[Protocol] Deleting entity: " + std::to_string(entityId));
+
+    /*std::map<int, GameEngine::Entity> _entities =  EntityManager::get().getEntityList();
+    if (_entities.empty()) {
         return;
     }
 
-    EntityManager::get().getEntityList().erase(entityId);
+    if (auto search = _entities.find(entityId); search != _entities.end()) {
+        _entities.erase(entityId);
+        EntityManager::get().setEntityList(_entities);
+    }*/
 }

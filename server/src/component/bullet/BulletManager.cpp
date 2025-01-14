@@ -39,8 +39,7 @@ void BulletManager::addBullet(std::shared_ptr<Bullet> bullet) {
  *
  */
 void BulletManager::updateBullets() {
-    int viewportStart = ObstacleManager::get().getViewport() - BLOCK_SIZE;
-    int viewportEnd = ObstacleManager::get().getViewport() + (RENDER_DISTANCE * BLOCK_SIZE) + BLOCK_SIZE;
+    int viewportEnd = RENDER_DISTANCE * BLOCK_SIZE;
     
     for (auto& b : _bullets) {
         auto& bullet = b.second;

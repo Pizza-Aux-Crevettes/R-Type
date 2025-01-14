@@ -29,7 +29,7 @@ enum Config {
 
     // Map
     BLOCK_SIZE = 64,
-    RENDER_DISTANCE = 10,
+    RENDER_DISTANCE = 15,
     MAP_SPEED = 2,
 
     // Bullet
