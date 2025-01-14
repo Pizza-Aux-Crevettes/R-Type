@@ -70,6 +70,5 @@ class Menu {
     bool _isPortClicked;
     bool _isUsernameClicked;
     int _ipId;
-    int _portId;
     int _usernameId;
 };

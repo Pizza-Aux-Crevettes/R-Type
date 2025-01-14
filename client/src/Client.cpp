@@ -117,6 +117,8 @@ void Client::manageClient() {
 
     menuSound.getSound().setLoop(true);
     gameSound.getSound().setLoop(true);
+
+    menuSound.getSound().play();
     sf::Clock clock;
     bool serverInitialized = false;
     std::unique_ptr<NetworkClient> networkClient = nullptr;
