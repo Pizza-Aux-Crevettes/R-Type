@@ -6,7 +6,9 @@
 */
 
 #include "component/player/PlayerManager.hpp"
-#include "component/map/MapManager.hpp"
+#include "component/obstacle/ObstacleManager.hpp"
+#include "component/player/PlayerProtocol.hpp"
+#include "socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
 
 /**
@@ -25,7 +27,6 @@ PlayerManager& PlayerManager::get() {
  * @return std::shared_ptr<Player> The created player
  */
 std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
-    // Create the player
     auto player =
         std::make_shared<Player>(name, Point(50, 50), Point(20, 10), 1.0);
     _players[player->getId()] = player;
@@ -51,7 +52,6 @@ std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
  * @return std::shared_ptr<Player> The player
  */
 std::shared_ptr<Player> PlayerManager::findPlayerById(int32_t playerId) const {
-    // Find the player by their ID
     auto it = _players.find(playerId);
     if (it != _players.end()) {
         return it->second;
@@ -70,10 +70,11 @@ std::shared_ptr<Player> PlayerManager::findPlayerById(int32_t playerId) const {
  * @return false If the player was not removed
  */
 bool PlayerManager::removePlayer(int32_t playerId) {
-    // Find the player by their ID
     auto it = _players.find(playerId);
     if (it != _players.end()) {
         _players.erase(it);
+
+        PlayerProtocol::sendPlayerDeleted(playerId);
 
         Logger::success("[PlayerManager] Player removed. Player ID: " +
                         std::to_string(playerId));
@@ -94,7 +95,6 @@ bool PlayerManager::removePlayer(int32_t playerId) {
  */
 void PlayerManager::movePlayer(int32_t playerId, int32_t offsetX,
                                int32_t offsetY) {
-    // Find the player by their ID
     auto player = findPlayerById(playerId);
     if (!player) {
         Logger::warning("[PlayerManager] Player not found. Player ID: " +
@@ -102,13 +102,10 @@ void PlayerManager::movePlayer(int32_t playerId, int32_t offsetX,
         return;
     }
 
-    // Calculate the new position
     Point currentPos = player->getPosition();
     Point newPos(currentPos.getX() + offsetX, currentPos.getY() + offsetY);
 
-    // Check if the new position is valid
-    if (!MapManager::get().getCurrentMap()->isVoidBlock(newPos.getX(),
-                                                        newPos.getY())) {
+    if (!ObstacleManager::get().isVoid(newPos.getX(), newPos.getY())) {
         Logger::info("[PlayerManager] Player " + std::to_string(playerId) +
                      " cannot move to blocked position (" +
                      std::to_string(newPos.getX()) + ", " +
@@ -116,7 +113,6 @@ void PlayerManager::movePlayer(int32_t playerId, int32_t offsetX,
         return;
     }
 
-    // Move the player if the position is valid
     player->setPosition(newPos);
     Logger::success("[PlayerManager] Player " + std::to_string(playerId) +
                     " moved to position (" + std::to_string(newPos.getX()) +

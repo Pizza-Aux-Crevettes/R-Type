@@ -6,7 +6,6 @@
 */
 
 #include "component/bullet/BulletManager.hpp"
-#include "component/map/MapManager.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
@@ -38,22 +37,14 @@ void BulletManager::addBullet(std::shared_ptr<Bullet> bullet) {
  *
  */
 void BulletManager::updateBullets() {
-    auto viewport = MapManager::get().getCurrentMap()->getViewport();
     int viewportWidth = RENDER_DISTANCE * BLOCK_SIZE;
     int viewportHeight = RENDER_DISTANCE * BLOCK_SIZE;
 
     for (auto it = _bullets.begin(); it != _bullets.end();) {
         auto& bullet = it->second;
-        bullet->move();
 
-        if (bullet->isOutsideViewport(viewportWidth, viewportHeight)) {
-            Logger::info("[BulletManager] Bullet " +
-                         std::to_string(bullet->getId()) +
-                         " removed (out of viewport).");
-            it = _bullets.erase(it);
-        } else {
-            ++it;
-        }
+        bullet->move();
+        it++;
     }
 }
 

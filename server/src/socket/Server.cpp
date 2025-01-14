@@ -28,12 +28,10 @@ Server::Server() {
     Logger::info("[Server] Starting initialization...");
 
     try {
-        // Initialize the TCP socket
         _tcpSocket.init();
         Logger::socket("[Server] TCP socket initialized successfully on port " +
                        std::to_string(PORT) + ".");
 
-        // Initialize the UDP socket
         _udpSocket.init();
         Logger::socket("[Server] UDP socket initialized successfully on port " +
                        std::to_string(PORT) + ".");
@@ -51,7 +49,6 @@ Server::Server() {
 Server::~Server() {
     Logger::info("[Server] Shutting down...");
 
-    // Close all threads
     closeThreads();
     _tcpSocket.close();
     _udpSocket.close();
