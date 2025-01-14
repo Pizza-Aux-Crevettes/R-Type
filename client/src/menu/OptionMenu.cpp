@@ -53,11 +53,10 @@ OptionMenu::createEntityButton(int id, std::string title, std::string font,
                                std::vector<std::pair<float, float>> position,
                                std::function<void()> callback) {
     auto newEntity = GameEngine::Entity(id);
-    auto button = Button("", font, fontSize);
+    auto button = Button(title, font, fontSize);
     button.setCallback(callback);
     newEntity.addComponent(button);
     newEntity.addComponent(Position(position));
-    newEntity.addComponent(Text(title, "assets/font/Inter_Bold.ttf", 20));
     newEntity.addComponent(Color({255, 255, 255, 255}));
     return newEntity;
 }
@@ -88,6 +87,18 @@ GameEngine::Entity OptionMenu::createEntityRect(
     return rectEntity;
 }
 
+GameEngine::Entity
+OptionMenu::createEntitySprite(int id, const std::pair<float, float> size,
+                         std::string texture, std::vector<int> textureRect,
+                         const std::vector<std::pair<float, float>> position) {
+    auto newEntity = GameEngine::Entity(id);
+    newEntity.addComponent(Sprite(size));
+    newEntity.addComponent(Texture(texture, textureRect));
+    newEntity.addComponent(Position(position));
+    return newEntity;
+}
+
+
 void OptionMenu::setNewKey(const sf::Event& event, GameEngine::System& system) {
     if (_waitingForKey && event.type == sf::Event::KeyPressed) {
         sf::Keyboard::Key newKey = event.key.code;
@@ -98,10 +109,6 @@ void OptionMenu::setNewKey(const sf::Event& event, GameEngine::System& system) {
         }
 
         HotkeysManager::get().setKey(_hotkeyPressed, newKey);
-        std::cout << "New : "
-                  << HotkeysManager::get().keyToString(
-                         HotkeysManager::get().getKey(_hotkeyPressed))
-                  << std::endl;
         _waitingForKey = false;
 
         if (_hotkeyEntityMap.find(_hotkeyPressed) != _hotkeyEntityMap.end()) {
@@ -116,10 +123,6 @@ void OptionMenu::setNewKey(const sf::Event& event, GameEngine::System& system) {
     }
 }
 
-void isClickedExit() {
-    std::cout << "Button Exit clicked!" << std::endl;
-}
-
 void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                                    GameEngine::System system) {
     GetResponsiveValue responsive;
@@ -127,96 +130,64 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
     int currentHeight = window.getSize().y;
     if (!_entitiesInitialized) {
         int entityId = 0;
+        _entitiesMenuOption.emplace( entityId,
+            createEntitySprite( entityId++,
+                {responsive.getResponsiveSizeX(800, currentWidth, 4),
+                 responsive.getResponsiveSizeY(600, currentHeight, 4)},
+                "assets/sprite/space.png", {0, 0, 400, 400},
+                {{responsive.getResponsivePosX(800, currentWidth, 0),
+                  responsive.getResponsivePosY(600, currentHeight,
+                                               30)}}));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityButton(
-                entityId++, "Exit", "assets/font/Inter_Bold.ttf", 20,
-                {{responsive.getResponsivePosX(800, currentWidth, 750),
-                  responsive.getResponsivePosY(600, currentHeight, 25)}},
-                [this]() {
-                    isClickedExit();
-                    Menu::get().setMenuState(Menu::MenuState::MainMenu);
-                }));
-        //    20, {{750, 50}}, [this]() {
-        //    Menu::get().setMenuState(Menu::MenuState::MainMenu); }));
+            createEntityButton(entityId++, "Back", "assets/font/Inter_Bold.ttf", 20, {{
+                responsive.getResponsivePosX(800, currentWidth, 750),
+                responsive.getResponsivePosY(600, currentHeight, 25)}}, [this]() { Menu::get().setMenuState(Menu::MenuState::MainMenu);}));
         _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(
-                entityId++, "OPTIONS",
-                {{responsive.getResponsivePosX(800, currentWidth, 365),
-                  responsive.getResponsivePosY(600, currentHeight, 10)}},
-                45));
+            entityId, createEntityText(entityId++, "OPTIONS", {{
+                responsive.getResponsivePosX(800, currentWidth, 340),
+                responsive.getResponsivePosY(600, currentHeight, 10)}}, 45));
 
-        // Sound
+// Sound
         _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(
-                entityId++, "Sound",
-                {{responsive.getResponsivePosX(800, currentWidth, 40),
-                  responsive.getResponsivePosY(600, currentHeight, 100)}},
-                20));
+            entityId, createEntityText(entityId++, "Sound", {{
+                responsive.getResponsivePosX(800, currentWidth, 40),
+                responsive.getResponsivePosY(600, currentHeight, 100)}}, 20));
+        _entitiesMenuOption.emplace( entityId,
+            createEntityText(entityId++, "Game effects", {{
+                responsive.getResponsivePosX(800, currentWidth, 180),
+                responsive.getResponsivePosY(600, currentHeight, 85)}}, 15));
+        _entitiesMenuOption.emplace( entityId,
+            createEntityText(entityId++, std::to_string(getVolumnGame()), {{
+                responsive.getResponsivePosX(800, currentWidth, 160),
+                responsive.getResponsivePosY(600, currentHeight, 110)}}, 15));
+        _entitiesMenuOption.emplace( entityId,
+            createEntitySlider( entityId++, {0, 100}, {{
+                responsive.getResponsivePosX(800, currentWidth, 180),
+                responsive.getResponsivePosY(600, currentHeight, 115)}}, [this]() { return getVolumnMusic(); }, [this](int newValue) { setVolumnMusic(newValue); }));
         _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(
-                entityId++, "Game effects",
-                {{responsive.getResponsivePosX(800, currentWidth, 180),
-                  responsive.getResponsivePosY(600, currentHeight, 85)}},
-                15));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(
-                entityId++, std::to_string(getVolumnGame()),
-                {{responsive.getResponsivePosX(800, currentWidth, 160),
-                  responsive.getResponsivePosY(600, currentHeight, 110)}},
-                15));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntitySlider(
-                entityId++, {0, 100},
-                {{responsive.getResponsivePosX(800, currentWidth, 180),
-                  responsive.getResponsivePosY(600, currentHeight, 115)}},
-                [this]() { return getVolumnMusic(); },
-                [this](int newValue) { setVolumnMusic(newValue); }));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(
-                entityId++, "Music",
-                {{responsive.getResponsivePosX(800, currentWidth, 580),
-                  responsive.getResponsivePosY(600, currentHeight, 85)}},
-                15));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(
-                entityId++, std::to_string(getVolumnMusic()),
-                {{responsive.getResponsivePosX(800, currentWidth, 560),
-                  responsive.getResponsivePosY(600, currentHeight, 110)}},
-                15));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntitySlider(
-                entityId++, {0, 100},
-                {{responsive.getResponsivePosX(800, currentWidth, 580),
-                  responsive.getResponsivePosY(600, currentHeight, 115)}},
-                [this]() { return (getVolumnGame()); },
-                [this](int newValue) { setVolumnGame(newValue); }));
+            entityId, createEntityText(entityId++, "Music", {{
+                responsive.getResponsivePosX(800, currentWidth, 580),
+                responsive.getResponsivePosY(600, currentHeight, 85)}}, 15));
+        _entitiesMenuOption.emplace( entityId,
+            createEntityText(entityId++, std::to_string(getVolumnMusic()), {{
+                responsive.getResponsivePosX(800, currentWidth, 560),
+                responsive.getResponsivePosY(600, currentHeight, 110)}}, 15));
+        _entitiesMenuOption.emplace( entityId,
+            createEntitySlider( entityId++, {0, 100}, {{
+                responsive.getResponsivePosX(800, currentWidth, 580),
+                responsive.getResponsivePosY(600, currentHeight, 115)}}, [this]() { return (getVolumnGame()); }, [this](int newValue) { setVolumnGame(newValue); }));
 
-        // Key control
+// Key control
+        _entitiesMenuOption.emplace( entityId,
+            createEntityText(entityId++, "Key control", {{
+                responsive.getResponsivePosX(800, currentWidth, 40),
+                responsive.getResponsivePosY(600, currentHeight, 170)}}, 20));
         _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(
-                entityId++, "Key control",
-                {{responsive.getResponsivePosX(800, currentWidth, 40),
-                  responsive.getResponsivePosY(600, currentHeight, 170)}},
-                20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(
-                entityId++,
-                HotkeysManager::get().keyToString(
-                    HotkeysManager::get().getKey(HotkeysCodes::ARROW_TOP)),
-                {{responsive.getResponsivePosX(800, currentWidth, 160),
-                  responsive.getResponsivePosY(600, currentHeight, 170)}},
-                20));
+            entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_TOP)), {{
+                responsive.getResponsivePosX(800, currentWidth, 160),
+                responsive.getResponsivePosY(600, currentHeight, 170)}}, 20));
+      
         _hotkeyEntityMap[HotkeysCodes::ARROW_TOP] = entityId;
         _entitiesMenuOption.emplace(
             entityId,

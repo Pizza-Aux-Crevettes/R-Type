@@ -86,7 +86,6 @@ void Client::manageClient() {
     HotkeysManager input;
     GameEngine::System system;
     sf::Texture background = EntityManager::get().manageBackground(window);
-    Menu menu;
     OptionMenu optionMenu;
     Sound menuSound;
     Sound gameSound;
@@ -148,12 +147,12 @@ void Client::manageClient() {
             }
             if (event.type == sf::Event::KeyPressed)
                 input.checkKey(event);
-            menu.setupInput(event);
+            Menu::get().setupInput(event);
             optionMenu.setNewKey(event, system);
         }
         window.clear();
         if (!Client::get().getIsPlayed()) {
-            menu.displayMenu(window, system, optionMenu);
+            Menu::get().displayMenu(window, system, optionMenu);
         } else {
             if (!serverInitialized) {
                 try {

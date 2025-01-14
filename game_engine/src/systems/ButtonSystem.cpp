@@ -23,29 +23,28 @@ void GameEngine::System::buttonSystem(sf::RenderWindow& window,
 
             buttonComp.getText().setFont(buttonComp.getFont());
             buttonComp.getText().setString(buttonComp.getString());
-            buttonComp.getText().setCharacterSize(
-                buttonComp.getCharacterSize());
+            buttonComp.getText().setCharacterSize(buttonComp.getCharacterSize());
             buttonComp.getText().setFillColor(sf::Color::White);
 
-            sf::FloatRect textBounds = buttonComp.getText().getGlobalBounds();
+            sf::FloatRect textBounds = buttonComp.getText().getLocalBounds();
 
+            float padding = 10.f;
             buttonComp.getButton().setSize(
-                sf::Vector2f(textBounds.width, textBounds.height));
+                sf::Vector2f(textBounds.width + 2 * padding, textBounds.height + 2 * padding));
             buttonComp.getButton().setFillColor(sf::Color::Transparent);
             buttonComp.getButton().setPosition(positionComp.getPositionX(0),
-                                               positionComp.getPositionY(0));
+                                            positionComp.getPositionY(0));
 
-            buttonComp.getText().setOrigin(textBounds.width / 2,
-                                           textBounds.height / 2);
+            buttonComp.getText().setOrigin(
+                textBounds.left + textBounds.width / 2,
+                textBounds.top + textBounds.height / 2);
             buttonComp.getText().setPosition(
-                buttonComp.getButton().getPosition().x +
-                    buttonComp.getButton().getSize().x / 2,
-                (buttonComp.getButton().getPosition().y +
-                 buttonComp.getButton().getSize().y / 2) -
-                    15);
+                buttonComp.getButton().getPosition().x + buttonComp.getButton().getSize().x / 2,
+                buttonComp.getButton().getPosition().y + buttonComp.getButton().getSize().y / 2);
 
             buttonComp.setIsLoaded(true);
         }
+
         static std::map<GameEngine::Entity*, bool> wasPressedMap;
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::FloatRect buttonBounds = buttonComp.getButton().getGlobalBounds();
