@@ -68,8 +68,7 @@ void PlayerProtocol::sendPlayerPosition(const sockaddr_in& clientAddr,
     const auto& players = PlayerManager::get().getPlayers();
     for (const auto& [id, player] : players) {
         smartBuffer.reset();
-        smartBuffer << static_cast<int16_t>(
-                           Protocol::OpCode::PLAYER_POSITION_UPDATE)
+        smartBuffer << static_cast<int16_t>(Protocol::OpCode::PLAYERS_UPDATE)
                     << static_cast<int32_t>(player->getId())
                     << static_cast<int32_t>(player->getPosition().getX())
                     << static_cast<int32_t>(player->getPosition().getY());

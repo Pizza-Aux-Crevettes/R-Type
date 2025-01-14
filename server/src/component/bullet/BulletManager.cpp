@@ -42,7 +42,7 @@ void BulletManager::updateBullets() {
 
     for (auto it = _bullets.begin(); it != _bullets.end();) {
         auto& bullet = it->second;
-        
+
         bullet->move();
         it++;
     }

@@ -29,13 +29,7 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     int16_t opCode;
     smartBuffer >> opCode;
 
-    // Logger::info("[Protocol] Handling message with OpCode: " +
-    //              std::to_string(opCode));
-
     switch (opCode) {
-    case DEFAULT:
-        handleDefault(smartBuffer);
-        break;
 
     case NEW_PLAYER_CALLBACK:
         handleNewPlayerCallback(smartBuffer);
@@ -45,7 +39,7 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
         handleNewPlayerBroadcast(smartBuffer);
         break;
 
-    case PLAYER_POSITION_UPDATE:
+    case PLAYERS_UPDATE:
         handlePlayerUpdatePosition(smartBuffer);
         break;
 
@@ -60,17 +54,17 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     case OBSTACLES_UPDATE:
         handleBlocksUpdate(smartBuffer);
         break;
-    
-    case OBSTACLES_DELETED:
+
+    case OBSTACLE_DELETED:
         handleBlockDeleted(smartBuffer);
+        break;
 
-
-    case BULLET_POSITION_UPDATE:
+    case BULLETS_UPDATE:
         handleBulletsUpdate(smartBuffer);
+        break;
 
     case BULLET_DELETED:
         handleBulletDeleted(smartBuffer);
-
         break;
 
     default:
@@ -80,19 +74,17 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     }
 }
 
-void Protocol::handleDefault(SmartBuffer& smartBuffer) {
-    std::string test;
-    smartBuffer >> test;
-
-    Logger::info("[Protocol] DEFAULT - Test Payload: " + test);
-}
-
 void Protocol::handleNewPlayerCallback(SmartBuffer& smartBuffer) {
     int32_t playerId;
     smartBuffer >> playerId;
 
     Protocol::setPlayerId(playerId);
 
+
+    Logger::success("[Protocol] NEW_PLAYER_CALLBACK - Assigned Player ID: " +
+                    std::to_string(playerId));
+
+    
     Logger::success("[Protocol] NEW_PLAYER_CALLBACK - Assigned Player ID: " +
                     std::to_string(playerId));
 
@@ -110,9 +102,6 @@ void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
 
     smartBuffer >> playerId >> playerName;
 
-    Logger::info("[Protocol] NEW_PLAYER_BROADCAST - Player ID: " +
-                 std::to_string(playerId) + ", Player Name: " + playerName);
-
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/spaceship.png")},
         {"TextureRect", std::vector<int>{0, 0, 34, 15}},
@@ -123,12 +112,7 @@ void Protocol::handleNewPlayerBroadcast(SmartBuffer& smartBuffer) {
 
 void Protocol::handlePlayerUpdatePosition(SmartBuffer& smartBuffer) {
     int32_t playerId, x, y;
-
     smartBuffer >> playerId >> x >> y;
-
-    Logger::info("[Protocol] PLAYER_POSITION_UPDATE - Player ID: " +
-                 std::to_string(playerId) + ", New Position: (" +
-                 std::to_string(x) + ", " + std::to_string(y) + ")");
 
     std::map<std::string, std::any> emptyMap;
     EntityManager::get().CompareEntities(playerId, emptyMap, {x, y});
@@ -138,16 +122,17 @@ void Protocol::handlePlayerDeleted(SmartBuffer& smartBuffer) {
     int32_t playerId;
     smartBuffer >> playerId;
 
-    Logger::info("[Protocol] PLAYER_DELETED - Deleted Player ID: " +
-                 std::to_string(playerId));
+    //Logger::info("[Protocol] PLAYER_DELETED\n"
+    //             "  -> Deleted Player ID: " + std::to_string(playerId));
 }
 
 void Protocol::handleViewportUpdate(SmartBuffer& smartBuffer) {
-    int32_t viewport;
+    double viewport;
     smartBuffer >> viewport;
 
-    Logger::info("[Protocol] MAP_VIEWPORT_UPDATE - Updated Viewport: " +
-                 std::to_string(viewport));
+    //Logger::info("[Protocol] VIEWPORT_UPDATE\n"
+    //             "  -> Updated Viewport: " + std::to_string(viewport));
+
     Client::get().setViewport(viewport);
 }
 
@@ -155,11 +140,11 @@ void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
     int32_t obstacleId, x, y;
     int16_t type, size;
     smartBuffer >> obstacleId >> x >> y >> size >> type;
-
-    // Logger::info("[Protocol] MAP_OBSTACLES_UPDATE - Obstacle ID: " +
-    //              std::to_string(obstacleId) + ", Position: (" +
-    //              std::to_string(x) + ", " + std::to_string(y) +
-    //              "), Type: " + std::to_string(type));
+    
+    Logger::info("[Protocol] MAP_OBSTACLES_UPDATE - Obstacle ID: " +
+                 std::to_string(obstacleId) + ", Position: (" +
+                 std::to_string(x) + ", " + std::to_string(y) +
+                 "), Type: " + std::to_string(type));
 
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/obstacle.png")},
@@ -173,18 +158,13 @@ void Protocol::handleBlockDeleted(SmartBuffer& smartBuffer) {
     int32_t obstacleId;
     smartBuffer >> obstacleId;
 
-    Logger::info("[Protocol] MAP_OBSTACLE_DELETED - Deleted Obstacle ID: " +
-                 std::to_string(obstacleId));
+    //Logger::info("[Protocol] OBSTACLE_DELETED\n"
+    //             "  -> Deleted Obstacle ID: " + std::to_string(obstacleId));
 }
-
 
 void Protocol::handleBulletsUpdate(SmartBuffer& smartBuffer) {
     int32_t bulletId, x, y;
     smartBuffer >> bulletId >> x >> y;
-
-    Logger::info("[Protocol] BULLET_POSITION_UPDATE - Bullet ID: " +
-                 std::to_string(bulletId) + ", New Position: (" +
-                 std::to_string(x) + ", " + std::to_string(y) + ")");
 
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/shoot_blue.png")},
@@ -197,6 +177,6 @@ void Protocol::handleBulletDeleted(SmartBuffer& smartBuffer) {
     int32_t bulletId;
     smartBuffer >> bulletId;
 
-    Logger::info("[Protocol] BULLET_DELETED - Deleted Bullet ID: " +
-                 std::to_string(bulletId));
+    //Logger::info("[Protocol] BULLET_DELETED\n"
+    //             "  -> Deleted Bullet ID: " + std::to_string(bulletId));
 }

@@ -9,6 +9,7 @@
 #include "component/bullet/BulletManager.hpp"
 #include "component/bullet/BulletProtocol.hpp"
 #include "component/map/MapProtocol.hpp"
+#include "component/obstacle/ObstacleManager.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "component/player/PlayerProtocol.hpp"
 #include "protocol/Protocol.hpp"
@@ -98,11 +99,13 @@ void UdpSocket::sendLoop() {
                          std::to_string(_clients.size()) + " clients.");
 
             BulletManager::get().updateBullets();
+            ObstacleManager::get().updateObstacles();
 
             for (const auto& client : _clients) {
                 PlayerProtocol::sendPlayerPosition(client, smartBuffer);
                 MapProtocol::sendViewportUpdate(client, smartBuffer);
                 MapProtocol::sendObstaclesUpdate(client, smartBuffer);
+                MapProtocol::sendObstaclesDeleted(client, smartBuffer);
                 BulletProtocol::sendBulletsUpdate(client, smartBuffer);
             }
         }

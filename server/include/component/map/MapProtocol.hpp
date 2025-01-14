@@ -18,5 +18,6 @@ class MapProtocol {
                                    SmartBuffer& smartBuffer);
     static void sendObstaclesUpdate(const sockaddr_in& clientAddr,
                                     SmartBuffer& smartBuffer);
-    static void sendObstacleDeleted(const int32_t obstacleId);
+    static void sendObstaclesDeleted(const sockaddr_in& clientAddr,
+                                     SmartBuffer& smartBuffer);
 };

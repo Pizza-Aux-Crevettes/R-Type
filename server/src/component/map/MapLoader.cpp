@@ -44,7 +44,8 @@ void MapLoader::loadMapFromFile(const std::string& filePath) {
     }
 
     if (name.empty()) {
-        throw std::runtime_error("[MapLoader] Map file missing name: " + filePath);
+        throw std::runtime_error("[MapLoader] Map file missing name: " +
+                                 filePath);
     }
 
     Logger::success("[MapLoader] Successfully loaded map: " + name);
@@ -63,7 +64,8 @@ void MapLoader::parseMapLine(const std::string& line, int32_t y) {
         std::string blockCode = line.substr(x, BLOCK_OFFSET);
 
         if (ObstacleManager::get().isObstacleCodeValid(blockCode)) {
-            int32_t blockX = static_cast<int32_t>(x / BLOCK_OFFSET) * BLOCK_SIZE;
+            int32_t blockX =
+                static_cast<int32_t>(x / BLOCK_OFFSET) * BLOCK_SIZE;
 
             auto obstacle = std::make_shared<Obstacle>(
                 ObstacleManager::get().getObstacleType(blockCode),

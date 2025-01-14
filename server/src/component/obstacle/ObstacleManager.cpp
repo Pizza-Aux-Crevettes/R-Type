@@ -10,6 +10,8 @@
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
+static constexpr unsigned int OFFSET = 3;
+
 /**
  * @brief Get the ObstacleManager instance
  *
@@ -33,6 +35,29 @@ ObstacleManager::ObstacleManager() {
     };
 
     Logger::info("[ObstacleManager] Initialized obstacle mappings.");
+}
+
+/**
+ * @brief Convert an ObstacleType to a string
+ *
+ * @param type The ObstacleType
+ * @return std::string The string representation
+ */
+std::string ObstacleManager::ObstacleTypeToString(ObstacleType type) {
+    switch (type) {
+    case ObstacleType::NONE:
+        return "NONE";
+    case ObstacleType::BLOCK:
+        return "BLOCK";
+    case ObstacleType::BLOCK2:
+        return "BLOCK2";
+    case ObstacleType::BLOCK3:
+        return "BLOCK3";
+    case ObstacleType::BLOCK4:
+        return "BLOCK4";
+    default:
+        return "UNKNOWN";
+    }
 }
 
 /**
@@ -88,6 +113,28 @@ ObstacleType ObstacleManager::getObstacleType(const std::string& code) const {
 }
 
 /**
+ * @brief Update the viewport and visible obstacles
+ *
+ */
+void ObstacleManager::updateObstacles() {
+    _viewport += 0.1;
+
+    for (const auto& obstacle : _obstacles) {
+        obstacle->setPosition(
+            Point(obstacle->getPosition().getX() - 0.1, obstacle->getPosition().getY()));
+    }
+}
+
+/**
+ * @brief Get the viewport
+ *
+ * @return double The viewport
+ */
+double ObstacleManager::getViewport() const {
+    return _viewport;
+}
+
+/**
  * @brief Check if a block is void
  *
  * @param x The x position of the block
@@ -114,6 +161,7 @@ bool ObstacleManager::isVoid(int32_t x, int32_t y) const {
  */
 void ObstacleManager::reset() {
     _obstacles.clear();
+    _viewport = 0;
 
     Logger::info("[ObstacleManager] Cleared all obstacles.");
 }

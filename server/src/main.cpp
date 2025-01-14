@@ -24,7 +24,7 @@ int main() {
 
         MapLoader mapLoader;
         mapLoader.loadMapFromFile("./server/maps/map1.map");
-        
+
         Server::get().start();
     } catch (const std::exception& e) {
         Logger::error("[Main] Critical server error: " + std::string(e.what()));

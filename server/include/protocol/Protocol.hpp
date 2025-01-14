@@ -21,17 +21,15 @@ class Protocol {
         NEW_PLAYER = 10,
         NEW_PLAYER_CALLBACK = 11,
         NEW_PLAYER_BROADCAST = 12,
-
-        PLAYER_POSITION_UPDATE = 13,
-        PLAYER_LIFE_UPDATE = 14,
+        PLAYERS_UPDATE = 13,
         PLAYER_DELETED = 15,
 
         VIEWPORT_UPDATE = 20,
 
         OBSTACLES_UPDATE = 30,
-        OBSTACLES_DELETED = 31,
+        OBSTACLE_DELETED = 31,
 
-        BULLET_POSITION_UPDATE = 40,
+        BULLETS_UPDATE = 40,
         BULLET_DELETED = 41,
     };
 

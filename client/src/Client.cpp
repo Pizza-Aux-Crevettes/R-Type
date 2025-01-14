@@ -166,10 +166,10 @@ sf::Event Client::getEvent() {
     return _event;
 }
 
-void Client::setViewport(int32_t viewport) {
+void Client::setViewport(double viewport) {
     _viewportX = viewport;
 }
 
-int32_t Client::getViewport() {
+double Client::getViewport() {
     return _viewportX;
 }

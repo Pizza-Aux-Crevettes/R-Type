@@ -19,16 +19,20 @@
  * @param smartBuffer The SmartBuffer to use for the response
  *
  * Protocol: VIEWPORT_UPDATE
- * Payload: viewport (int32_t)
+ * Payload: viewport (double)
  */
 void MapProtocol::sendViewportUpdate(const sockaddr_in& clientAddr,
                                      SmartBuffer& smartBuffer) {
+    double viewport = ObstacleManager::get().getViewport();
+
+    smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(Protocol::OpCode::VIEWPORT_UPDATE)
-                << static_cast<int32_t>(0);
+                << static_cast<double>(viewport);
 
     UdpSocket::get().sendToOne(clientAddr, smartBuffer);
 
-    Logger::packet("[MapProtocol] Viewport update sent to client.");
+    Logger::packet("[MapProtocol] Viewport update sent to client Viewport: " +
+                   std::to_string(viewport));
 }
 
 /**
@@ -42,19 +46,27 @@ void MapProtocol::sendViewportUpdate(const sockaddr_in& clientAddr,
  */
 void MapProtocol::sendObstaclesUpdate(const sockaddr_in& clientAddr,
                                       SmartBuffer& smartBuffer) {
-    for (const auto& obstacle : ObstacleManager::get().getAllObstacles()) {
+    const auto& visibleObstacles = ObstacleManager::get().getAllObstacles();
+    for (const auto& obstacle : visibleObstacles) {
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(Protocol::OpCode::OBSTACLES_UPDATE)
                     << static_cast<int32_t>(obstacle->getId())
-                    << static_cast<int32_t>(obstacle->getPosition().getX())
+                    << static_cast<int32_t>(obstacle->getPosition().getX() - ObstacleManager::get().getViewport())
                     << static_cast<int32_t>(obstacle->getPosition().getY())
                     << static_cast<int16_t>(BLOCK_SIZE)
                     << static_cast<int16_t>(obstacle->getType());
 
         UdpSocket::get().sendToOne(clientAddr, smartBuffer);
-    }
 
-    Logger::packet("[MapProtocol] Obstacles update sent to client.");
+        Logger::packet(
+            "[MapProtocol] Obstacle update sent:\n"
+            "  - ID: " +
+            std::to_string(obstacle->getId()) + "\n  - Position: (" +
+            std::to_string(obstacle->getPosition().getX()) + ", " +
+            std::to_string(obstacle->getPosition().getY()) + ")" +
+            "\n  - Type: " +
+            ObstacleManager::get().ObstacleTypeToString(obstacle->getType()));
+    }
 }
 
 /**
@@ -65,16 +77,18 @@ void MapProtocol::sendObstaclesUpdate(const sockaddr_in& clientAddr,
  * Protocol: OBSTACLES_DELETED
  * Payload: obstacleId (int32_t)
  */
-void MapProtocol::sendObstacleDeleted(const int32_t obstacleId) {
-    SmartBuffer smartBuffer;
+void MapProtocol::sendObstaclesDeleted(const sockaddr_in& clientAddr,
+                                       SmartBuffer& smartBuffer) {
+    /*const auto& differences = ObstacleManager::get().getDifferences();
+    for (const auto& obstacle : differences) {
+        smartBuffer.reset();
+        smartBuffer << static_cast<int16_t>(Protocol::OpCode::OBSTACLE_DELETED)
+                    << static_cast<int32_t>(obstacle->getId());
 
-    smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::OBSTACLES_DELETED)
-                << static_cast<int32_t>(obstacleId);
+        UdpSocket::get().sendToOne(clientAddr, smartBuffer);
 
-    UdpSocket::get().sendToAll(smartBuffer);
-
-    Logger::packet("[MapProtocol] Obstacle deleted sent:\n"
-                   "  - Obstacle ID: " +
-                   std::to_string(obstacleId));
+        Logger::packet("[MapProtocol] Obstacle deleted sent:\n"
+                       "  - ID: " +
+                       std::to_string(obstacle->getId()));
+    }*/
 }
