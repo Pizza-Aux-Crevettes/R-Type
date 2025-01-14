@@ -80,14 +80,6 @@ bool Client::getIsPlayed() {
     return _isPlay;
 }
 
-void Client::setBulletSound(Sound bulletSound) {
-    this->_bulletSound = bulletSound;
-}
-
-Sound Client::getBulletSound() {
-    return this->_bulletSound;
-}
-
 void Client::manageClient() {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "RTYPE");
     std::string ipAdress;
@@ -125,7 +117,6 @@ void Client::manageClient() {
 
     menuSound.getSound().setLoop(true);
     gameSound.getSound().setLoop(true);
-    Client::get().setBulletSound(bulletSound);
     sf::Clock clock;
     bool serverInitialized = false;
     std::unique_ptr<NetworkClient> networkClient = nullptr;
@@ -180,7 +171,7 @@ void Client::manageClient() {
                     TcpSocket::send(smartBuffer);
 
                     menuSound.getSound().stop();
-                    //gameSound.getSound().play();
+                    gameSound.getSound().play();
                     serverInitialized = true;
                 } catch (const std::exception& e) {
                     Logger::error("[Main] Failed to initialize network: " + std::string(e.what()));
