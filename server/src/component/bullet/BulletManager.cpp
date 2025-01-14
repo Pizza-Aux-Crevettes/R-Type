@@ -41,19 +41,19 @@ void BulletManager::addBullet(std::shared_ptr<Bullet> bullet) {
 void BulletManager::updateBullets() {
     int viewportEnd = RENDER_DISTANCE * BLOCK_SIZE;
 
-    for (auto& b : _bullets) {
-        auto& bullet = b.second;
+    for (auto it = _bullets.begin(); it != _bullets.end();) {
+        auto &bullet = it->second;
 
         if (bullet->getPosition().getX() > viewportEnd) {
             Logger::info("[BulletManager] Removed bullet with ID: " +
                          std::to_string(bullet->getId()));
 
             MapProtocol::sendEntityDeleted(bullet->getId());
-            _bullets.erase(bullet->getId());
-            continue;
+            it = _bullets.erase(it);
+        } else {
+            bullet->move();
+            it++;
         }
-
-        bullet->move();
     }
 }
 

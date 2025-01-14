@@ -48,7 +48,7 @@ void MapProtocol::sendViewportUpdate(const sockaddr_in& clientAddr,
  */
 void MapProtocol::sendObstaclesUpdate(const sockaddr_in& clientAddr,
                                       SmartBuffer& smartBuffer) {
-    const auto& visibleObstacles = ObstacleManager::get().getAllObstacles();
+    const auto& visibleObstacles = ObstacleManager::get().getVisibleObstacles();
     for (const auto& obstacle : visibleObstacles) {
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(Protocol::OpCode::UPDATE_OBSTACLES)
