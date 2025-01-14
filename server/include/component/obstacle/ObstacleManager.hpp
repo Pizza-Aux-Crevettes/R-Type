@@ -35,6 +35,5 @@ class ObstacleManager {
     double _viewport = 0;
     std::vector<std::shared_ptr<Obstacle>> _obstacles;
     std::vector<std::shared_ptr<Obstacle>> _visibleObstacles;
-    std::vector<std::shared_ptr<Obstacle>> _previousVisibleObstacles;
     std::unordered_map<std::string, ObstacleType> _obstacleMapping;
 };

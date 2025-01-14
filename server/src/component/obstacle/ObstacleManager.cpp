@@ -125,14 +125,15 @@ ObstacleType ObstacleManager::getObstacleType(const std::string& code) const {
  *
  */
 void ObstacleManager::updateObstacles() {
-    _previousVisibleObstacles = _visibleObstacles;
     _visibleObstacles.clear();
     _viewport += MAP_SPEED;
 
     for (const auto& obstacle : _obstacles) {
-        if (obstacle->getPosition().getX() < RENDER_DISTANCE * BLOCK_SIZE &&
-            obstacle->getPosition().getX() > -BLOCK_SIZE) {
+        if (obstacle->getPosition().getX() < RENDER_DISTANCE * BLOCK_SIZE && obstacle->getPosition().getX() > -BLOCK_SIZE) {
             _visibleObstacles.push_back(obstacle);
+        }
+        if (obstacle->getPosition().getX() < -BLOCK_SIZE) {
+            MapProtocol::sendEntityDeleted(obstacle->getId());
         }
         obstacle->setPosition(Point(obstacle->getPosition().getX() - MAP_SPEED,
                                     obstacle->getPosition().getY()));
