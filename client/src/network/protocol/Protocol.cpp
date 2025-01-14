@@ -127,10 +127,21 @@ void Protocol::handleUpdateBlocks(SmartBuffer& smartBuffer) {
     int32_t obstacleId, x, y;
     int16_t type, size;
     smartBuffer >> obstacleId >> x >> y >> size >> type;
+    std::vector<int> rectVector = {0, 0, 50, 60};
+
+    if (type == 1) {
+        rectVector = {0, 0, 50, 60};
+    } else if (type == 2) {
+        rectVector = {130, 70, 60, 60};
+    } else if (type == 3) {
+        rectVector = {130, 130, 50, 60};
+    } else if (type == 4) {
+        rectVector = {130, 0, 60, 60};
+    }
 
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/asteroids_8.png")},
-        {"TextureRect", std::vector<int>{0, 0, 50, 60}},
+        {"TextureRect", std::vector<int>{rectVector}},
         {"Size", std::pair<float, float>(size, size)},
         {"Position", std::pair<float, float>(x, y)}};
     EntityManager::get().CompareEntities(obstacleId, newItems, {x, y});
