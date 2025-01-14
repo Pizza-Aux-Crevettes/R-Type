@@ -47,7 +47,8 @@ void PlayerProtocol::newPlayer(const int clientSocket,
     Logger::packet("[PlayerProtocol] Sent player ID " +
                    std::to_string(player->getId()) + " to client ");
 
-    for (const auto& [id, existingPlayer] : PlayerManager::get().getPlayers()) {
+    const auto& players = PlayerManager::get().getPlayers();
+    for (const auto& [id, existingPlayer] : players) {
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(
                            Protocol::OpCode::CREATE_PLAYER_BROADCAST)

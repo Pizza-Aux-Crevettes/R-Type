@@ -22,7 +22,8 @@
  */
 void BulletProtocol::sendBulletsUpdate(const sockaddr_in& clientAddr,
                                        SmartBuffer& smartBuffer) {
-    for (const auto& [id, bullet] : BulletManager::get().getBullets()) {
+    auto bullets = BulletManager::get().getBullets();
+    for (const auto& bullet : bullets) {
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(Protocol::OpCode::UPDATE_BULLETS)
                     << static_cast<int32_t>(bullet->getId())
