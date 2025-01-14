@@ -158,11 +158,13 @@ void Client::manageClient() {
                 try {
                     if (Client::get().getIp() == "") {
                         ipAdress = "127.0.0.1";
+                        Client::get().setIp(ipAdress);
                     } else {
                         ipAdress = Client::get().getIp();
                     }
                     if (Client::get().getUsername() == "") {
                         username = "Guest";
+                        Client::get().setUsername(username);
                     } else {
                         username = Client::get().getUsername();
                     }

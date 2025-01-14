@@ -12,6 +12,8 @@
 #include <components/Shape.hpp>
 #include <components/Sprite.hpp>
 #include <components/Texture.hpp>
+#include <components/Text.hpp>
+#include <components/Link.hpp>
 #include <iostream>
 #include <map>
 #include "Entity.hpp"
