@@ -90,6 +90,7 @@ Sound Client::getBulletSound() {
 
 void Client::manageClient() {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "RTYPE");
+    std::string ipAdress;
     HotkeysManager input;
     GameEngine::System system;
     sf::Texture background = EntityManager::get().manageBackground(window);
@@ -123,9 +124,6 @@ void Client::manageClient() {
 
     menuSound.getSound().setLoop(true);
     gameSound.getSound().setLoop(true);
-
-    //menuSound.getSound().play();
-
     Client::get().setBulletSound(bulletSound);
     sf::Clock clock;
     bool serverInitialized = false;
@@ -160,7 +158,12 @@ void Client::manageClient() {
         } else {
             if (!serverInitialized) {
                 try {
-                    networkClient = std::make_unique<NetworkClient>(/*Client::get().getIp()*/"127.0.0.1", SERVER_PORT);
+                    if (Client::get().getIp() == "") {
+                        ipAdress = "127.0.0.1";
+                    } else {
+                        ipAdress = Client::get().getIp();
+                    }
+                    networkClient = std::make_unique<NetworkClient>(ipAdress, SERVER_PORT);
                     initializeNetwork(*networkClient);
                     serverThread = std::thread(runNetworkClient, std::ref(*networkClient));
                     serverThread.detach();

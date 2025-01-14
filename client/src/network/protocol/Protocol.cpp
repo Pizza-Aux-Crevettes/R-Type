@@ -29,10 +29,6 @@ void Protocol::setPlayerId(int32_t playerId) {
 void Protocol::handleMessage(SmartBuffer& smartBuffer) {
     int16_t opCode;
     smartBuffer >> opCode;
-
-    // Logger::info("[Protocol] Handling message with OpCode: " +
-    //              std::to_string(opCode));
-
     switch (opCode) {
     case DEFAULT:
         handleDefault(smartBuffer);
@@ -137,10 +133,10 @@ void Protocol::handleBlocksUpdate(SmartBuffer& smartBuffer) {
     int16_t type, size;
     smartBuffer >> obstacleId >> x >> y >> size >> type;
 
-    // Logger::info("[Protocol] MAP_OBSTACLES_UPDATE - Obstacle ID: " +
-    //              std::to_string(obstacleId) + ", Position: (" +
-    //              std::to_string(x) + ", " + std::to_string(y) +
-    //              "), Type: " + std::to_string(type));
+    Logger::info("[Protocol] MAP_OBSTACLES_UPDATE - Obstacle ID: " +
+                 std::to_string(obstacleId) + ", Position: (" +
+                 std::to_string(x) + ", " + std::to_string(y) +
+                 "), Type: " + std::to_string(type));
 
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/asteroids_8.png")},
@@ -162,9 +158,5 @@ void Protocol::handleBulletsUpdate(SmartBuffer& smartBuffer) {
         {"Texture", std::string("assets/sprite/shoot_blue.png")},
         {"TextureRect", std::vector<int>{180, 0, 50, 20}},
         {"Position", std::pair<float, float>(x, y)}};
-
-    //Sound bulletSound = Client::get().getBulletSound();
-    //bulletSound.getSound().play();
-
     EntityManager::get().CompareEntities(bulletId, newItems, {x, y});
 }
