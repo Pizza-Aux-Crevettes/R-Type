@@ -23,7 +23,7 @@ Before getting started, make sure you have the following installed on your machi
 1. Clone the repository:
 
     ```bash
-    git clone git@github.com:EpitechPromo2027/B-CCP-500-TLS-5-2-rtype-anastasia.bouby.git
+    git clone --recurse-submodules git@github.com:EpitechPromo2027/B-CCP-500-TLS-5-2-rtype-anastasia.bouby.git
     cd B-CCP-500-TLS-5-2-rtype-anastasia.bouby
     ```
 
@@ -39,20 +39,18 @@ Before getting started, make sure you have the following installed on your machi
 
 1. Start the Server:
 
-    Make sure to be in **B-CCP-500-TLS-5-2-rtype-anastasia.bouby/build/**
+    Make sure to be in **B-CCP-500-TLS-5-2-rtype-anastasia.bouby/**
 
     ```bash
-    cd server/
-    ./Server
+    ./build/server/Server
     ```
 
 2. Start the Client:
 
-    Open a new terminal and make sure to be in **B-CCP-500-TLS-5-2-rtype-anastasia.bouby/build/**
+    Open a new terminal and make sure to be in **B-CCP-500-TLS-5-2-rtype-anastasia.bouby/**
 
     ```bash
-    cd client/
-    ./Client
+    ./build/client/Client
     ```
 ---
 
@@ -66,5 +64,5 @@ Before getting started, make sure you have the following installed on your machi
 
 `game_engine/`: Handles server-side game_engine.
 
-`network/`: Handles server-side networking.
+`server/`: Handles server-side networking.
 
