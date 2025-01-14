@@ -53,6 +53,7 @@ class OptionMenu {
                         sf::Color color, std::function<void()> callback);
     void displayOptionMenu(sf::RenderWindow&, GameEngine::System);
     void setNewKey(const sf::Event& event, GameEngine::System& system);
+    void isClickedBack();
     int getVolumnMusic();
     void setVolumnMusic(int);
     int getVolumnGame();

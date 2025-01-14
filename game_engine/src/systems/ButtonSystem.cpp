@@ -31,6 +31,7 @@ void GameEngine::System::buttonSystem(sf::RenderWindow& window,
 
             buttonComp.getButton().setSize(
                 sf::Vector2f(textBounds.width, textBounds.height));
+
             buttonComp.getButton().setFillColor(sf::Color::Transparent);
             buttonComp.getButton().setPosition(positionComp.getPositionX(0),
                                                positionComp.getPositionY(0));

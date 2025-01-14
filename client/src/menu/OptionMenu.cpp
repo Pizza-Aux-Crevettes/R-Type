@@ -53,11 +53,10 @@ OptionMenu::createEntityButton(int id, std::string title, std::string font,
                                std::vector<std::pair<float, float>> position,
                                std::function<void()> callback) {
     auto newEntity = GameEngine::Entity(id);
-    auto button = Button("", font, fontSize);
+    auto button = Button(title, font, fontSize);
     button.setCallback(callback);
     newEntity.addComponent(button);
     newEntity.addComponent(Position(position));
-    newEntity.addComponent(Text(title, "assets/font/Inter_Bold.ttf", 20));
     newEntity.addComponent(Color({255, 255, 255, 255}));
     return newEntity;
 }
@@ -108,8 +107,8 @@ void OptionMenu::setNewKey(const sf::Event& event, GameEngine::System& system) {
     }
 }
 
-void isClickedExit() {
-    std::cout << "Button Exit clicked!" << std::endl;
+void OptionMenu::isClickedBack() {
+    std::cout << "Button back clicked!" << std::endl;
 }
 
 void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
@@ -121,11 +120,9 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
         int entityId = 0;
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityButton(entityId++, "Exit", "assets/font/Inter_Bold.ttf", 20, {{
+            createEntityButton(entityId++, "Back", "assets/font/Inter_Bold.ttf", 20, {{
                 responsive.getResponsivePosX(800, currentWidth, 750),
-                responsive.getResponsivePosY(600, currentHeight, 25)}}, [this]() { isClickedExit();
-                               Menu::get().setMenuState(Menu::MenuState::MainMenu); }));
-                            //    20, {{750, 50}}, [this]() { Menu::get().setMenuState(Menu::MenuState::MainMenu); }));
+                responsive.getResponsivePosY(600, currentHeight, 25)}}, [this]() { isClickedBack();}));
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, "OPTIONS", {{
                 responsive.getResponsivePosX(800, currentWidth, 365),
