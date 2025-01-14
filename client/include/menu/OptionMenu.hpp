@@ -48,9 +48,14 @@ class OptionMenu {
     createEntitySlider(int, const std::pair<int, int>,
                         const std::vector<std::pair<float, float>>,
                         std::function<float()>, std::function<void(float)>);
-    GameEngine::Entity createEntityRect(int id, const std::pair<int, int> size,
+    GameEngine::Entity
+    createEntityRect(int id, const std::pair<int, int> size,
                         const std::vector<std::pair<float, float>> position,
                         sf::Color color, std::function<void()> callback);
+    GameEngine::Entity
+    createEntitySprite(int id, const std::pair<float, float> size,
+                       std::string texture, std::vector<int> textureRect,
+                       const std::vector<std::pair<float, float>> position);
     void displayOptionMenu(sf::RenderWindow&, GameEngine::System);
     void setNewKey(const sf::Event& event, GameEngine::System& system);
     int getVolumnMusic();

@@ -142,12 +142,12 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
                 entityId,
                 createEntitySprite(
                     entityId++,
-                    {responsive.getResponsiveSizeX(1920, currentWidth, 8),
-                     responsive.getResponsiveSizeY(1080, currentHeight, 8)},
-                    "assets/sprite/map.png", {0, 0, 200, 200},
-                    {{responsive.getResponsivePosX(1920, currentWidth, 1),
+                    {responsive.getResponsiveSizeX(1920, currentWidth, 5),
+                     responsive.getResponsiveSizeY(1080, currentHeight, 5)},
+                    "assets/sprite/space.png", {0, 0, 400, 400},
+                    {{responsive.getResponsivePosX(1920, currentWidth, -400),
                       responsive.getResponsivePosY(1080, currentHeight,
-                                                   -180)}}));
+                                                   -170)}}));
             _entitiesMenu.emplace(
                 entityId,
                 createEntityButton(
