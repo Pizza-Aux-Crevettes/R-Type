@@ -26,8 +26,13 @@
 
 class Menu {
   public:
+    enum class MenuState { MainMenu, OptionMenu };
+
     Menu();
     ~Menu();
+
+    static Menu& get();
+
     void initMainMenu(sf::RenderWindow& window, GameEngine::System system);
     void displayMenu(sf::RenderWindow& window, GameEngine::System system,
                      OptionMenu& optionMenu);
@@ -44,6 +49,7 @@ class Menu {
     createEntityRect(int id, const std::pair<int, int> size,
                      const std::vector<std::pair<float, float>> position,
                      sf::Color color, std::function<void()> callback);
+    void setMenuState(MenuState state);
     GameEngine::Entity
     createEntityInput(int id, std::string font, int fontSize,
                       const std::vector<std::pair<float, float>> position,
@@ -59,12 +65,10 @@ class Menu {
     std::map<int, GameEngine::Entity> _entitiesMenu;
     bool _entitiesInitialized = false;
     bool _canDisplay = true;
-    enum class MenuState { MainMenu, OptionMenu };
     MenuState _currentMenuState = MenuState::MainMenu;
     bool _isIpClicked;
     bool _isPortClicked;
     bool _isUsernameClicked;
     int _ipId;
-    int _portId;
     int _usernameId;
 };

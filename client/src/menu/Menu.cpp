@@ -16,6 +16,11 @@ Menu::Menu() {}
 
 Menu::~Menu() {}
 
+Menu& Menu::get() {
+    static Menu instance;
+    return instance;
+}
+
 GameEngine::Entity
 Menu::createEntityButton(int id, std::string title, std::string font,
                          int fontSize,
@@ -46,7 +51,7 @@ Menu::createEntityRect(int id, const std::pair<int, int> size,
                        const std::vector<std::pair<float, float>> position,
                        sf::Color color, std::function<void()> callback) {
     auto rectEntity = GameEngine::Entity(id);
-    auto buttonRect = ButtonRect(size, color);
+    auto buttonRect = ButtonRect(size, color, false);
     buttonRect.setCallback(callback);
     rectEntity.addComponent(buttonRect);
     rectEntity.addComponent(Position(position));
@@ -139,29 +144,29 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
                     {responsive.getResponsiveSizeX(1920, currentWidth, 8),
                      responsive.getResponsiveSizeY(1080, currentHeight, 8)},
                     "assets/sprite/map.png", {0, 0, 200, 200},
-                    {{responsive.getResponsivePosX(1920, currentWidth, -1300),
+                    {{responsive.getResponsivePosX(1920, currentWidth, 1),
                       responsive.getResponsivePosY(1080, currentHeight,
-                                                   -300)}}));
+                                                   -180)}}));
             _entitiesMenu.emplace(
                 entityId,
                 createEntityButton(
                     entityId++, "PLAY", "assets/font/Inter_Bold.ttf", 50,
-                    {{responsive.getResponsivePosX(1920, currentWidth, 900),
-                      responsive.getResponsivePosY(1080, currentHeight, 345)}},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 860),
+                      responsive.getResponsivePosY(1080, currentHeight, 365)}},
                     [this]() { isClickedPlay(); }));
             _entitiesMenu.emplace(
                 entityId,
                 createEntityButton(
                     entityId++, "OPTION", "assets/font/Inter_Bold.ttf", 50,
-                    {{responsive.getResponsivePosX(1920, currentWidth, 860),
-                      responsive.getResponsivePosY(1080, currentHeight, 480)}},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 810),
+                      responsive.getResponsivePosY(1080, currentHeight, 500)}},
                     [this]() { _currentMenuState = MenuState::OptionMenu; }));
             _entitiesMenu.emplace(
                 entityId,
                 createEntityButton(
                     entityId++, "EXIT", "assets/font/Inter_Bold.ttf", 50,
-                    {{responsive.getResponsivePosX(1920, currentWidth, 910),
-                      responsive.getResponsivePosY(1080, currentHeight, 626)}},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 870),
+                      responsive.getResponsivePosY(1080, currentHeight, 646)}},
                     [this]() { isClickedExit(); }));
             _entitiesMenu.emplace(
                 entityId,
@@ -190,7 +195,7 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
                     {responsive.getResponsiveSizeX(1920, currentWidth, 5),
                      responsive.getResponsiveSizeY(1080, currentHeight, 5)},
                     "assets/sprite/enemy.png", {0, 0, 50, 80},
-                    {{responsive.getResponsivePosX(1920, currentWidth, 280),
+                    {{responsive.getResponsivePosX(1920, currentWidth, 180),
                       responsive.getResponsivePosY(1080, currentHeight,
                                                    820)}}));
             _entitiesMenu.emplace(
@@ -221,86 +226,61 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
                      responsive.getResponsiveSizeY(1080, currentHeight, 5)},
                     "assets/sprite/intact-boss.png", {0, 0, 200, 200},
                     {{responsive.getResponsivePosX(1920, currentWidth, 1400),
-                      responsive.getResponsivePosY(1080, currentHeight, 1)}}));
+                      responsive.getResponsivePosY(1080, currentHeight,
+                                                   -65)}}));
 
             _entitiesMenu.emplace(
                 entityId,
                 createEntityRect(
                     entityId++,
-                    {responsive.getResponsiveSizeX(1920, currentWidth, 150),
+                    {responsive.getResponsiveSizeX(1920, currentWidth, 300),
                      responsive.getResponsiveSizeY(1080, currentHeight, 50)},
-                    {{responsive.getResponsivePosX(1920, currentWidth, 1300),
-                      responsive.getResponsivePosY(1080, currentHeight, 80)}},
-                    sf::Color::Red, [this]() {
+                    {{responsive.getResponsivePosX(1920, currentWidth, 500),
+                      responsive.getResponsivePosY(1080, currentHeight, 870)}},
+                    sf::Color(169, 169, 169), [this]() {
                         isClickedInput(false, false, true);
                     })); // username inputRect
             _entitiesMenu.emplace(
                 entityId,
                 createEntityInput(
-                    entityId++, "assets/font/Inter_Bold.ttf", 40,
-                    {{responsive.getResponsivePosX(1920, currentWidth, 1050),
-                      responsive.getResponsivePosY(1080, currentHeight, 78)}},
-                    "Username"));
+                    entityId++, "assets/font/Inter_Bold.ttf", 30,
+                    {{responsive.getResponsivePosX(1920, currentWidth, 500),
+                      responsive.getResponsivePosY(1080, currentHeight, 800)}},
+                    "Username:"));
             _entitiesMenu.emplace(
                 entityId,
                 createEntityInput(
-                    entityId++, "assets/font/Inter_Bold.ttf", 40,
-                    {{responsive.getResponsivePosX(1920, currentWidth, 1305),
-                      responsive.getResponsivePosY(1080, currentHeight, 78)}},
+                    entityId++, "assets/font/Inter_Bold.ttf", 20,
+                    {{responsive.getResponsivePosX(1920, currentWidth, 510),
+                      responsive.getResponsivePosY(1080, currentHeight, 875)}},
                     "")); // username input text
             _usernameId = entityId;
             _entitiesMenu.emplace(
                 entityId,
                 createEntityRect(
                     entityId++,
-                    {responsive.getResponsiveSizeX(1920, currentWidth, 150),
+                    {responsive.getResponsiveSizeX(1920, currentWidth, 300),
                      responsive.getResponsiveSizeY(1080, currentHeight, 50)},
-                    {{responsive.getResponsivePosX(1920, currentWidth, 1300),
-                      responsive.getResponsivePosY(1080, currentHeight, 150)}},
-                    sf::Color::Red, [this]() {
+                    {{responsive.getResponsivePosX(1920, currentWidth, 1150),
+                      responsive.getResponsivePosY(1080, currentHeight, 870)}},
+                    sf::Color(169, 169, 169), [this]() {
                         isClickedInput(true, false, false);
                     })); // ip inputRect
             _entitiesMenu.emplace(
                 entityId,
                 createEntityInput(
-                    entityId++, "assets/font/Inter_Bold.ttf", 40,
-                    {{responsive.getResponsivePosX(1920, currentWidth, 1050),
-                      responsive.getResponsivePosY(1080, currentHeight, 148)}},
-                    "IP"));
+                    entityId++, "assets/font/Inter_Bold.ttf", 30,
+                    {{responsive.getResponsivePosX(1920, currentWidth, 1150),
+                      responsive.getResponsivePosY(1080, currentHeight, 800)}},
+                    "Adresse IP:"));
             _entitiesMenu.emplace(
                 entityId,
                 createEntityInput(
-                    entityId++, "assets/font/Inter_Bold.ttf", 40,
-                    {{responsive.getResponsivePosX(1920, currentWidth, 1305),
-                      responsive.getResponsivePosY(1080, currentHeight, 148)}},
+                    entityId++, "assets/font/Inter_Bold.ttf", 20,
+                    {{responsive.getResponsivePosX(1920, currentWidth, 1160),
+                      responsive.getResponsivePosY(1080, currentHeight, 875)}},
                     "")); // ip input text
             _ipId = entityId;
-            _entitiesMenu.emplace(
-                entityId,
-                createEntityRect(
-                    entityId++,
-                    {responsive.getResponsiveSizeX(1920, currentWidth, 150),
-                     responsive.getResponsiveSizeY(1080, currentHeight, 50)},
-                    {{responsive.getResponsivePosX(1920, currentWidth, 1300),
-                      responsive.getResponsivePosY(1080, currentHeight, 220)}},
-                    sf::Color::Red, [this]() {
-                        isClickedInput(false, true, false);
-                    })); // port inputRect
-            _entitiesMenu.emplace(
-                entityId,
-                createEntityInput(
-                    entityId++, "assets/font/Inter_Bold.ttf", 40,
-                    {{responsive.getResponsivePosX(1920, currentWidth, 1050),
-                      responsive.getResponsivePosY(1080, currentHeight, 218)}},
-                    "Port"));
-            _entitiesMenu.emplace(
-                entityId,
-                createEntityInput(
-                    entityId++, "assets/font/Inter_Bold.ttf", 40,
-                    {{responsive.getResponsivePosX(1920, currentWidth, 1305),
-                      responsive.getResponsivePosY(1080, currentHeight, 218)}},
-                    "")); // port input tex
-            _portId = entityId;
             _entitiesInitialized = true;
         } else {
             _entitiesMenu.at(_usernameId)
@@ -308,8 +288,6 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
                 .setString(Client::get().getUsername());
             _entitiesMenu.at(_ipId).getComponent<Text>().setString(
                 Client::get().getIp());
-            _entitiesMenu.at(_portId).getComponent<Text>().setString(
-                Client::get().getPort());
         }
         system.render(window, _entitiesMenu);
     }
@@ -318,32 +296,19 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
 void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system,
                        OptionMenu& optionMenu) {
     std::map<int, GameEngine::Entity> entities;
-    sf::SoundBuffer ambienBuffer;
-    sf::SoundBuffer clickBuffer;
 
-    if (!ambienBuffer.loadFromFile("assets/sounds/ambien-song.wav")) {
-        std::cerr << "Error: unable to load the audio file." << std::endl;
-    }
-
-    if (!clickBuffer.loadFromFile("assets/sounds/click-menu.wav")) {
-        std::cerr << "Error: unable to load the audio file." << std::endl;
-    }
-
-    sf::Sound ambienSound;
-    sf::Sound clickMenuSound;
-
-    ambienSound.setBuffer(ambienBuffer);
-    clickMenuSound.setBuffer(clickBuffer);
-
-    ambienSound.play();
 
     switch (_currentMenuState) {
-    case MenuState::MainMenu:
-        initMainMenu(window, system);
-        break;
-    case MenuState::OptionMenu: {
-        optionMenu.displayOptionMenu(window, system);
-        break;
-    };
+        case MenuState::MainMenu:
+            initMainMenu(window, system);
+            break;
+        case MenuState::OptionMenu: {
+            optionMenu.displayOptionMenu(window, system);
+            break;
+        };
     }
+}
+
+void Menu::setMenuState(MenuState state) {
+    _currentMenuState = state;
 }
