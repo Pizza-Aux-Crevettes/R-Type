@@ -8,6 +8,7 @@
 #pragma once
 
 #include "util/Point.hpp"
+#include <cstdint>
 
 class Bullet {
   public:

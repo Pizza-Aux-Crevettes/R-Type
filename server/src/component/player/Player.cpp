@@ -19,8 +19,7 @@
  * @param speed The player's speed
  */
 Player::Player(const std::string& name, const Point& position)
-    : _id(IDManager::getNextId()), _name(name), _position(position),
-      _health(Health()), _clientSocket(std::nullopt) {}
+    : _id(IDManager::getNextId()), _name(name), _position(position), _clientSocket(std::nullopt) {}
 
 /**
  * @brief Get the player's ID
@@ -56,15 +55,6 @@ const Point& Player::getPosition() const {
  */
 void Player::setPosition(const Point& position) {
     _position = position;
-}
-
-/**
- * @brief Set the player's thread ID
- *
- * @param threadId The thread ID
- */
-const Health& Player::getHealth() const {
-    return _health;
 }
 
 /**

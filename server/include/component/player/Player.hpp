@@ -10,7 +10,6 @@
 #include <memory>
 #include <optional>
 #include <string>
-#include "component/attr/Health.hpp"
 #include "util/Point.hpp"
 
 class Player {
@@ -21,7 +20,6 @@ class Player {
     const std::string& getName() const;
     const Point& getPosition() const;
     void setPosition(const Point& position);
-    const Health& getHealth() const;
     std::optional<int> getClientSocket() const;
     void setClientSocket(int clientSocket);
 
@@ -31,6 +29,5 @@ class Player {
     Point _position;
     Point _size;
     double _speed;
-    Health _health;
     std::optional<int> _clientSocket;
 };

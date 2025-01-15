@@ -9,6 +9,7 @@
 #include "component/obstacle/ObstacleManager.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "util/Logger.hpp"
+#include "util/Config.hpp"
 
 /**
  * @brief Generate a random spawn position
