@@ -12,12 +12,13 @@
 
 struct EnemyProperties {
     EnemyType type;
-    int width;
-    int height;
-    double speed;
-    double bulletSpeed;
-    int shootCooldown;
-    int shootRange;
+    int16_t speed;
+    int16_t width;
+    int16_t height;
+    int16_t bulletSpeed;
+    int16_t bulletDamage;
+    int16_t shootCooldown;
+    int16_t shootRange;
 };
 
 class EnemyManager {
@@ -26,7 +27,7 @@ class EnemyManager {
 
     std::string EnemyTypeToString(EnemyType type) const;
     void addEnemy(const std::shared_ptr<Enemy>& enemy);
-    std::shared_ptr<Enemy> findById(int enemyId) const;
+    std::shared_ptr<Enemy> findById(int32_t enemyId) const;
     void updateEnemies();
     const std::vector<std::shared_ptr<Enemy>>& getEnemies() const;
     const std::vector<std::shared_ptr<Enemy>>& getVisibleEnemies() const;
