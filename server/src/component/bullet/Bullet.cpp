@@ -15,16 +15,16 @@
  * @param direction Direction vector (normalized)
  * @param speed Speed of the bullet
  */
-Bullet::Bullet(const Point& position, const Point& direction, double speed)
+Bullet::Bullet(const Point& position, const Point& direction, int16_t speed)
     : _id(IDManager::getNextId()), _position(position), _direction(direction),
       _speed(speed) {}
 
 /**
  * @brief Get the ID of the bullet
  *
- * @return int The bullet ID
+ * @return int32_t The bullet ID
  */
-int Bullet::getId() const {
+int32_t Bullet::getId() const {
     return _id;
 }
 

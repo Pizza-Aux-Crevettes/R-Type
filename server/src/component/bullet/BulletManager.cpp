@@ -74,10 +74,8 @@ void BulletManager::handlePlayerShoot(int playerId) {
     if (!player)
         return;
 
-    auto position = player->getPosition();
     Point direction(1, 0);
-    auto speed = PLAYER_BULLET_SPEED;
-    auto bullet = std::make_shared<Bullet>(position, direction, speed);
+    auto bullet = std::make_shared<Bullet>(player->getPosition(), direction, PLAYER_BULLET_SPEED);
     addBullet(bullet);
 }
 
@@ -91,9 +89,7 @@ void BulletManager::handleEnemyShoot(int enemyId) {
     if (!enemy)
         return;
 
-    Point enemyPosition = enemy->getPosition();
     Point direction(-1, 0);
-    double speed = enemy->getBulletSpeed();
-    auto bullet = std::make_shared<Bullet>(enemyPosition, direction, speed);
+    auto bullet = std::make_shared<Bullet>(enemy->getPosition(), direction, enemy->getBulletSpeed());
     addBullet(bullet);
 }

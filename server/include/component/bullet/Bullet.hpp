@@ -11,15 +11,15 @@
 
 class Bullet {
   public:
-    Bullet(const Point& position, const Point& direction, double speed);
+    Bullet(const Point& position, const Point& direction, int16_t speed);
 
-    int getId() const;
+    int32_t getId() const;
     const Point& getPosition() const;
     void move();
 
   private:
-    int _id;
+    int32_t _id;
     Point _position;
     Point _direction;
-    double _speed;
+    int16_t _speed;
 };
