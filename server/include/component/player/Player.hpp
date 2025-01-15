@@ -11,10 +11,11 @@
 #include <optional>
 #include <string>
 #include "util/Point.hpp"
+#include "util/Config.hpp"
 
 class Player {
   public:
-    Player(const std::string& name, const Point& position);
+    Player(const std::string& name, const Point& position, int16_t health = DEFAULT_HEALTH);
 
     int32_t getId() const;
     const std::string& getName() const;
@@ -22,12 +23,15 @@ class Player {
     void setPosition(const Point& position);
     std::optional<int> getClientSocket() const;
     void setClientSocket(int clientSocket);
+    void takeDamage(int16_t damage);
+    int16_t getHealth() const;
 
   private:
     int32_t _id;
     std::string _name;
     Point _position;
     Point _size;
-    double _speed;
+    int16_t _speed;
+    int16_t _health;
     std::optional<int> _clientSocket;
 };

@@ -137,17 +137,14 @@ void EnemyManager::updateEnemies() {
     }
 
     auto& players = PlayerManager::get().getPlayers();
-    for (const auto& enemy : _visibleEnemies) {
-        enemy->updateShootCooldown();
-        if (!enemy->canShoot()) continue;
-
-        for (const auto& player : players) {
-            if (std::abs(player->getPosition().getX() -
-                         enemy->getPosition().getX()) <
-                enemy->getShootRange()) {
-                BulletManager::get().handleEnemyShoot(enemy->getId());
-                enemy->resetShootCooldown();
-                break;
+    for (const auto& player : players) {
+        for (const auto& enemy : _visibleEnemies) {
+            if (enemy->collidesWith(player)) {
+                player->takeDamage(enemy->getBulletDamage());
+                Logger::info("[EnemyManager] Player " + player->getName() +
+                             " took " + std::to_string(enemy->getBulletDamage()) +
+                             " damage from enemy " +
+                             std::to_string(enemy->getId()));
             }
         }
     }

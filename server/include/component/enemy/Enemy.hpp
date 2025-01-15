@@ -24,6 +24,7 @@ class Enemy {
     const Point& getPosition() const;
     int16_t getSpeed() const;
     int16_t getBulletSpeed() const;
+    int16_t getBulletDamage() const;
     int16_t getWidth() const;
     int16_t getHeight() const;
     int16_t getShootCooldown() const;

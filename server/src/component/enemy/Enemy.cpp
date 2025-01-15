@@ -14,16 +14,17 @@
  * @param type The type of the enemy
  * @param position The position of the enemy
  * @param speed The speed of the enemy
- * @param bulletSpeed The speed of the enemy's bullets
  * @param width The width of the enemy
  * @param height The height of the enemy
+ * @param bulletSpeed The speed of the enemy's bullets
+ * @param bulletDamage The damage of the enemy's bullets
  * @param shootCooldown The cooldown between shots
  * @param shootRange The range at which the enemy can shoot
  */
 Enemy::Enemy(EnemyType type, const Point& position, int16_t speed, int16_t width, int16_t height, int16_t bulletSpeed, int16_t bulletDamage, int16_t shootCooldown,
              int16_t shootRange)
     : _id(IDManager::getNextId()), _type(type), _position(position),
-      _speed(speed), _bulletSpeed(bulletSpeed), _width(width), _height(height),
+      _speed(speed), _width(width), _height(height), _bulletSpeed(bulletSpeed), _bulletDamage(bulletDamage),
       _shootCooldown(shootCooldown), _shootRange(shootRange),
       _currentCooldown(0) {}
 
@@ -70,6 +71,15 @@ int16_t Enemy::getSpeed() const {
  */
 int16_t Enemy::getBulletSpeed() const {
     return _bulletSpeed;
+}
+
+/**
+ * @brief Get the speed of the enemy's bullets
+ *
+ * @return int16_t The speed of the enemy's bullets
+ */
+int16_t Enemy::getBulletDamage() const {
+    return _bulletDamage;
 }
 
 /**

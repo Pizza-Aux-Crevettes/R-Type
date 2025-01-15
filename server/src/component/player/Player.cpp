@@ -15,11 +15,9 @@
  * @param playerId The player's ID
  * @param name The player's name
  * @param position The player's position
- * @param size The player's size
- * @param speed The player's speed
  */
-Player::Player(const std::string& name, const Point& position)
-    : _id(IDManager::getNextId()), _name(name), _position(position), _clientSocket(std::nullopt) {}
+Player::Player(const std::string& name, const Point& position, int16_t health)
+    : _id(IDManager::getNextId()), _name(name), _position(position), _health(health), _clientSocket(std::nullopt) {}
 
 /**
  * @brief Get the player's ID
@@ -73,4 +71,25 @@ std::optional<int> Player::getClientSocket() const {
  */
 void Player::setClientSocket(int clientSocket) {
     _clientSocket = clientSocket;
+}
+
+/**
+ * @brief Take damage
+ *
+ * @param damage The amount of damage to take
+ */
+void Player::takeDamage(int16_t damage) {
+    _health -= damage;
+    if (_health <= 0) {
+        Logger::info("[Player] Player " + _name + " died.");
+    }
+}
+
+/**
+ * @brief Get the player's health
+ *
+ * @return int16_t The player's health
+ */
+int16_t Player::getHealth() const {
+    return _health;
 }
