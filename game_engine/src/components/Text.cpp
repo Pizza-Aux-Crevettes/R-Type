@@ -56,30 +56,79 @@ void Text::setString(const std::string& text) {
     this->_initText = text;
 }
 
+/**
+ * @brief Get the font of the Text component.
+ *
+ * This function retrieves the font used by the text component.
+ *
+ * @return The font used by the text component.
+ */
 sf::Font& Text::getFont() {
     return this->_font;
 }
 
+/**
+ * @brief Get the character size of the Text component.
+ *
+ * This function retrieves the character size of the text component.
+ *
+ * @return The character size of the text component.
+ */
 unsigned int Text::getCharacterSize() const {
     return this->_charSize;
 }
 
+/**
+ * @brief Set the character size of the Text component.
+ *
+ * This function sets the character size of the text component.
+ *
+ * @param characterSize The new character size to set.
+ */
 void Text::setCharacterSize(unsigned int characterSize) {
     this->_charSize = characterSize;
 }
 
+/**
+ * @brief Get whether the Text component is loaded.
+ *
+ * This function checks if the Text component has been initialized.
+ *
+ * @return True if the Text is loaded, false otherwise.
+ */
 bool Text::getIsLoaded() const {
     return this->_isLoad;
 }
 
+/**
+ * @brief Get the font file of the Text component.
+ *
+ * This function retrieves the font file used by the text component.
+ *
+ * @return The font file used by the text component.
+ */
 std::string Text::getFontFile() const {
     return this->_fontFile;
 }
 
+/**
+ * @brief Set whether the Text component is loaded.
+ *
+ * This function sets the loaded state of the Text component.
+ *
+ * @param isLoaded The new loaded state of the component.
+ */
 void Text::setIsLoaded(const bool isLoaded) {
     this->_isLoad = isLoaded;
 }
 
+/**
+ * @brief Get the sf::Text object of the Text component.
+ *
+ * This function retrieves the sf::Text object used by the text component.
+ *
+ * @return The sf::Text object used by the text component.
+ */
 sf::Text& Text::getText() {
     return this->_text;
 }
