@@ -164,9 +164,10 @@ void TcpSocket::removeClient(const int clientSocket) {
         if (player->getClientSocket() == clientSocket) {
             PlayerManager::get().removePlayer(id);
 
-            Logger::success("[TcpSocket] Removed player with ID: " + std::to_string(id) +
-                         ", associated with client socket " +
-                         std::to_string(clientSocket));
+            Logger::success(
+                "[TcpSocket] Removed player with ID: " + std::to_string(id) +
+                ", associated with client socket " +
+                std::to_string(clientSocket));
             break;
         }
     }

@@ -118,8 +118,9 @@ void UdpSocket::updateLoop() {
         if (sleepTime > 0) {
             std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
         } else {
-            Logger::warning("[UDP Socket] Tick delay on update loop exceeded 50 ms! Took " +
-                            std::to_string(duration.count()) + " ms.");
+            Logger::warning(
+                "[UDP Socket] Tick delay on update loop exceeded 50 ms! Took " +
+                std::to_string(duration.count()) + " ms.");
         }
     }
 }

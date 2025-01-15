@@ -8,8 +8,8 @@
 #pragma once
 
 #include <algorithm>
-#include <random>
 #include <memory>
+#include <random>
 #include <ranges>
 #include <unordered_map>
 #include "component/player/Player.hpp"

@@ -19,8 +19,8 @@
  * @param speed The player's speed
  */
 Player::Player(const std::string& name, const Point& position)
-    : _id(IDManager::getNextId()), _name(name), _position(position), _health(Health()),
-      _clientSocket(std::nullopt) {}
+    : _id(IDManager::getNextId()), _name(name), _position(position),
+      _health(Health()), _clientSocket(std::nullopt) {}
 
 /**
  * @brief Get the player's ID

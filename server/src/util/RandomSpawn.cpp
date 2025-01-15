@@ -6,17 +6,16 @@
 */
 
 #include "util/RandomSpawn.hpp"
+#include "component/obstacle/ObstacleManager.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "util/Logger.hpp"
-#include "component/obstacle/ObstacleManager.hpp"
 
 /**
  * @brief Generate a random spawn position
  *
  * @return const Point The spawn position
  */
-const Point RandomSpawn::generateRandomSpawnPosition()
-{
+const Point RandomSpawn::generateRandomSpawnPosition() {
     const int xMin = BLOCK_SIZE + 20;
     const int xMax = 100;
     const int yMin = BLOCK_SIZE + 20;
@@ -38,7 +37,8 @@ const Point RandomSpawn::generateRandomSpawnPosition()
         }
     }
 
-    Logger::warning("[PlayerManager] Failed to find a free spawn position after 100 attempts. Fallback to (84, 84).");
+    Logger::warning("[PlayerManager] Failed to find a free spawn position "
+                    "after 100 attempts. Fallback to (84, 84).");
     return Point(84, 84);
 }
 
@@ -50,8 +50,7 @@ const Point RandomSpawn::generateRandomSpawnPosition()
  * @return true If the spawn position is free
  * @return false If the spawn position is not free
  */
-bool RandomSpawn::isSpawnFree(int x, int y)
-{
+bool RandomSpawn::isSpawnFree(int x, int y) {
     const auto& obstacles = ObstacleManager::get().getAllObstacles();
     for (const auto& obs : obstacles) {
         if (obs->contains(x, y) || obs->contains(x + PLAYER_WIDTH, y) ||

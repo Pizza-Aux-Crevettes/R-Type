@@ -30,7 +30,6 @@ PlayerManager& PlayerManager::get() {
  */
 std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
     Point spawnPos = RandomSpawn::generateRandomSpawnPosition();
-    
     auto player =
         std::make_shared<Player>(name, Point(spawnPos.getX(), spawnPos.getY()));
     _players[player->getId()] = player;
