@@ -13,21 +13,7 @@
 #include "network/socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
 
-HotkeysManager::HotkeysManager() {
-    _keys = {{HotkeysCodes::ARROW_TOP, sf::Keyboard::Up},
-             {HotkeysCodes::ARROW_BOTTOM, sf::Keyboard::Down},
-             {HotkeysCodes::ARROW_LEFT, sf::Keyboard::Left},
-             {HotkeysCodes::ARROW_RIGHT, sf::Keyboard::Right},
-             {HotkeysCodes::SPACE, sf::Keyboard::Space},
-             {HotkeysCodes::ENTER, sf::Keyboard::Enter}};
-    
-    _activeKeys = {{HotkeysCodes::ARROW_TOP, false},
-                    {HotkeysCodes::ARROW_BOTTOM, false},
-                    {HotkeysCodes::ARROW_LEFT, false},
-                    {HotkeysCodes::ARROW_RIGHT, false},
-                    {HotkeysCodes::SPACE, false},
-                    {HotkeysCodes::ENTER, false}};
-}
+HotkeysManager::HotkeysManager() {}
 
 HotkeysManager::~HotkeysManager() = default;
 
@@ -36,81 +22,45 @@ HotkeysManager& HotkeysManager::get() {
     return instance;
 }
 
-sf::Keyboard::Key HotkeysManager::getKey(const HotkeysCodes hotkey) {
-    return _keys[hotkey];
-}
-
-void HotkeysManager::setKey(const HotkeysCodes hotkey,
-                            sf::Keyboard::Key newKey) {
-    _keys[hotkey] = newKey;
-}
-
 void HotkeysManager::checkKey(const sf::Event& event) {
     if (Client::get().getIsPlayed()) {
-        // if (event.type == sf::Event::KeyPressed) {
-        //     for (const auto& [hotkey, key] : _keys) {
-        //         if (key == event.key.code) {
-        //             _activeKeys[hotkey] = true;
-        //         }
-        //     }
-        // }
-        // if (event.type == sf::Event::KeyReleased) {
-        //     for (const auto& [hotkey, key] : _keys) {
-        //         if (key == event.key.code) {
-        //             _activeKeys[hotkey] = false;
-        //         }
-        //     }
-        // }
-        // if (!_activeKeys.empty()) {
-        //     for (auto it = _activeKeys.begin(); it != _activeKeys.end(); it++) {
-        //         if (it->second == true) {
-        //             SmartBuffer smartBuffer;
-        //             smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
-        //                         << static_cast<int32_t>(Protocol::get().getPlayerId());
-        //             smartBuffer << static_cast<int16_t>(it->first);
-        //             UdpSocket::send(smartBuffer);
-        //         }
-                
-        //     }
-        // }
-
         if (event.type == sf::Event::KeyPressed) {
-            if (sf::Keyboard::isKeyPressed(getKey(HotkeysCodes::SPACE))) {
+            if (sf::Keyboard::isKeyPressed(getShoot())) {
                 SmartBuffer smartBuffer;
                 smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
                             << static_cast<int32_t>(Protocol::get().getPlayerId())
                             << static_cast<int16_t>(HotkeysCodes::SPACE);
                 UdpSocket::send(smartBuffer);
             }
-            if (sf::Keyboard::isKeyPressed(getKey(HotkeysCodes::ARROW_LEFT))) {
+            if (sf::Keyboard::isKeyPressed(getLeft())) {
                 SmartBuffer smartBuffer;
                 smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
                             << static_cast<int32_t>(Protocol::get().getPlayerId())
                             << static_cast<int16_t>(HotkeysCodes::ARROW_LEFT);
                 UdpSocket::send(smartBuffer);
             }
-            if (sf::Keyboard::isKeyPressed(getKey(HotkeysCodes::ARROW_RIGHT))) {
+            if (sf::Keyboard::isKeyPressed(getRight())) {
                 SmartBuffer smartBuffer;
                 smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
                             << static_cast<int32_t>(Protocol::get().getPlayerId())
                             << static_cast<int16_t>(HotkeysCodes::ARROW_RIGHT);
                 UdpSocket::send(smartBuffer);
             }
-            if (sf::Keyboard::isKeyPressed(getKey(HotkeysCodes::ARROW_BOTTOM))) {
+            if (sf::Keyboard::isKeyPressed(getBottom())) {
                 SmartBuffer smartBuffer;
                 smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
                             << static_cast<int32_t>(Protocol::get().getPlayerId())
                             << static_cast<int16_t>(HotkeysCodes::ARROW_BOTTOM);
                 UdpSocket::send(smartBuffer);
             }
-            if (sf::Keyboard::isKeyPressed(getKey(HotkeysCodes::ARROW_TOP))) {
+            if (sf::Keyboard::isKeyPressed(getTop())) {
                 SmartBuffer smartBuffer;
                 smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
                             << static_cast<int32_t>(Protocol::get().getPlayerId())
                             << static_cast<int16_t>(HotkeysCodes::ARROW_TOP);
                 UdpSocket::send(smartBuffer);
             }
-            if (sf::Keyboard::isKeyPressed(getKey(HotkeysCodes::ENTER))) {
+            if (sf::Keyboard::isKeyPressed(getAutoFire())) {
                 SmartBuffer smartBuffer;
                 smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
                             << static_cast<int32_t>(Protocol::get().getPlayerId())
@@ -122,10 +72,9 @@ void HotkeysManager::checkKey(const sf::Event& event) {
 }
 
 bool HotkeysManager::isKeyUsed(sf::Keyboard::Key key) {
-    for (const auto& [hotkey, assignedKey] : _keys) {
-        if (assignedKey == key) {
-            return true;
-        }
+
+    if (key == _bottom || key == _top || key == _right || key == _left || key == _shoot || key == _autoFire) {
+        return true;
     }
     return false;
 }
@@ -242,4 +191,52 @@ std::string HotkeysManager::keyToString(sf::Keyboard::Key key) {
     } else {
         return "Unknown";
     }
+}
+
+
+void HotkeysManager::setBottom(sf::Keyboard::Key bottom) {
+    _bottom = bottom;
+}
+
+void HotkeysManager::setTop(sf::Keyboard::Key top) {
+    _top = top;
+}
+void HotkeysManager::setLeft(sf::Keyboard::Key left) {
+    _left = left;
+}
+
+void HotkeysManager::setRight(sf::Keyboard::Key right) {
+    _right = right;
+}
+
+void HotkeysManager::setShoot(sf::Keyboard::Key shoot) {
+    _shoot = shoot;
+}
+    
+void HotkeysManager::setAutoFire(sf::Keyboard::Key autoFire) {
+    _autoFire = autoFire;
+}
+
+sf::Keyboard::Key HotkeysManager::getBottom() {
+    return _bottom;
+}
+
+sf::Keyboard::Key HotkeysManager::getTop() {
+    return _top;
+}
+
+sf::Keyboard::Key HotkeysManager::getLeft() {
+    return _left;
+}
+
+sf::Keyboard::Key HotkeysManager::getRight(){
+    return _right;
+}
+
+sf::Keyboard::Key HotkeysManager::getShoot() {
+    return _shoot;
+}
+
+sf::Keyboard::Key HotkeysManager::getAutoFire() {
+    return _autoFire;
 }

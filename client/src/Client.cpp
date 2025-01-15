@@ -142,7 +142,7 @@ void Client::manageClient() {
             }
             if (serverInitialized) {
                 if (event.type == sf::Event::KeyPressed &&
-                    event.key.code == sf::Keyboard::Space) {
+                    event.key.code == HotkeysManager::get().getShoot()) {
                     bulletSound.getSound().play();
                 }
             }

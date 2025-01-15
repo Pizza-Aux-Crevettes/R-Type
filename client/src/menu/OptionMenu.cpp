@@ -108,15 +108,65 @@ void OptionMenu::setNewKey(const sf::Event& event, GameEngine::System& system) {
             return;
         }
 
-        HotkeysManager::get().setKey(_hotkeyPressed, newKey);
+        if (_hotkeyPressed == HotkeysCodes::ARROW_BOTTOM) {
+            HotkeysManager::get().setBottom(newKey);
+        }
+        if (_hotkeyPressed == HotkeysCodes::ARROW_TOP) {
+            HotkeysManager::get().setTop(newKey);
+        }
+        if (_hotkeyPressed == HotkeysCodes::ARROW_RIGHT) {
+            HotkeysManager::get().setRight(newKey);
+        }
+        if (_hotkeyPressed == HotkeysCodes::ARROW_LEFT) {
+            HotkeysManager::get().setLeft(newKey);
+        }
+        if (_hotkeyPressed == HotkeysCodes::SPACE) {
+            HotkeysManager::get().setShoot(newKey);
+        }
+        if (_hotkeyPressed == HotkeysCodes::ENTER) {
+            HotkeysManager::get().setAutoFire(newKey);
+        }
+        
         _waitingForKey = false;
 
         if (_hotkeyEntityMap.find(_hotkeyPressed) != _hotkeyEntityMap.end()) {
             int entityId = _hotkeyEntityMap[_hotkeyPressed];
-            system.update(entityId, _entitiesMenuOption,
+            if (_hotkeyPressed == HotkeysCodes::ARROW_BOTTOM) {
+                system.update(entityId, _entitiesMenuOption,
                           GameEngine::UpdateType::Text,
                           HotkeysManager::get().keyToString(
-                              HotkeysManager::get().getKey(_hotkeyPressed)));
+                              HotkeysManager::get().getBottom()));
+            }
+            if (_hotkeyPressed == HotkeysCodes::ARROW_TOP) {
+                system.update(entityId, _entitiesMenuOption,
+                          GameEngine::UpdateType::Text,
+                          HotkeysManager::get().keyToString(
+                              HotkeysManager::get().getTop()));
+            }
+            if (_hotkeyPressed == HotkeysCodes::ARROW_RIGHT) {
+                system.update(entityId, _entitiesMenuOption,
+                          GameEngine::UpdateType::Text,
+                          HotkeysManager::get().keyToString(
+                              HotkeysManager::get().getRight()));
+            }
+            if (_hotkeyPressed == HotkeysCodes::ARROW_LEFT) {
+                system.update(entityId, _entitiesMenuOption,
+                          GameEngine::UpdateType::Text,
+                          HotkeysManager::get().keyToString(
+                              HotkeysManager::get().getLeft()));
+            }
+            if (_hotkeyPressed == HotkeysCodes::SPACE) {
+                system.update(entityId, _entitiesMenuOption,
+                          GameEngine::UpdateType::Text,
+                          HotkeysManager::get().keyToString(
+                              HotkeysManager::get().getShoot()));
+            }
+            if (_hotkeyPressed == HotkeysCodes::ENTER) {
+                system.update(entityId, _entitiesMenuOption,
+                          GameEngine::UpdateType::Text,
+                          HotkeysManager::get().keyToString(
+                              HotkeysManager::get().getAutoFire()));
+            }
         } else {
             std::cerr << "Error: Hotkey entity not found!" << std::endl;
         }
@@ -184,7 +234,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                 responsive.getResponsivePosX(800, currentWidth, 40),
                 responsive.getResponsivePosY(600, currentHeight, 170)}}, 20));
         _entitiesMenuOption.emplace(
-            entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_TOP)), {{
+            entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getTop()), {{
                 responsive.getResponsivePosX(800, currentWidth, 160),
                 responsive.getResponsivePosY(600, currentHeight, 170)}}, 20));
       
@@ -205,7 +255,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
             createEntityText(
                 entityId++,
                 HotkeysManager::get().keyToString(
-                    HotkeysManager::get().getKey(HotkeysCodes::ARROW_BOTTOM)),
+                    HotkeysManager::get().getBottom()),
                 {{responsive.getResponsivePosX(800, currentWidth, 260),
                   responsive.getResponsivePosY(600, currentHeight, 170)}},
                 20));
@@ -226,7 +276,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
             createEntityText(
                 entityId++,
                 HotkeysManager::get().keyToString(
-                    HotkeysManager::get().getKey(HotkeysCodes::ARROW_LEFT)),
+                    HotkeysManager::get().getLeft()),
                 {{responsive.getResponsivePosX(800, currentWidth, 360),
                   responsive.getResponsivePosY(600, currentHeight, 170)}},
                 20));
@@ -247,7 +297,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
             createEntityText(
                 entityId++,
                 HotkeysManager::get().keyToString(
-                    HotkeysManager::get().getKey(HotkeysCodes::ARROW_RIGHT)),
+                    HotkeysManager::get().getRight()),
                 {{responsive.getResponsivePosX(800, currentWidth, 460),
                   responsive.getResponsivePosY(600, currentHeight, 170)}},
                 20));
@@ -268,7 +318,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
             createEntityText(
                 entityId++,
                 HotkeysManager::get().keyToString(
-                    HotkeysManager::get().getKey(HotkeysCodes::ENTER)),
+                    HotkeysManager::get().getAutoFire()),
                 {{responsive.getResponsivePosX(800, currentWidth, 560),
                   responsive.getResponsivePosY(600, currentHeight, 170)}},
                 20));
@@ -289,7 +339,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
             createEntityText(
                 entityId++,
                 HotkeysManager::get().keyToString(
-                    HotkeysManager::get().getKey(HotkeysCodes::SPACE)),
+                    HotkeysManager::get().getShoot()),
                 {{responsive.getResponsivePosX(800, currentWidth, 660),
                   responsive.getResponsivePosY(600, currentHeight, 170)}},
                 20));
