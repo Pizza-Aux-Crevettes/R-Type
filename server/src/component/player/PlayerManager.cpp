@@ -11,6 +11,7 @@
 #include "component/player/PlayerProtocol.hpp"
 #include "socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
+#include "util/RandomSpawn.hpp"
 
 /**
  * @brief Construct a new PlayerManager:: PlayerManager object
@@ -28,8 +29,9 @@ PlayerManager& PlayerManager::get() {
  * @return std::shared_ptr<Player> The created player
  */
 std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
+    Point spawnPos = RandomSpawn::generateRandomSpawnPosition();
     auto player =
-        std::make_shared<Player>(name, Point(50, 50), Point(20, 10), 1.0);
+        std::make_shared<Player>(name, Point(spawnPos.getX(), spawnPos.getY()));
     _players[player->getId()] = player;
 
     Logger::success("[PlayerManager] Player created:\n"
@@ -73,9 +75,6 @@ std::shared_ptr<Player> PlayerManager::findPlayerById(int32_t playerId) const {
 bool PlayerManager::removePlayer(int32_t playerId) {
     auto it = _players.find(playerId);
     if (it != _players.end()) {
-        Logger::success("[PlayerManager] Player removed. Player ID: " +
-                        std::to_string(playerId));
-
         MapProtocol::sendEntityDeleted(playerId);
         _players.erase(it);
         return true;
@@ -103,20 +102,13 @@ void PlayerManager::movePlayer(int32_t playerId, int32_t offsetX,
     }
 
     Point currentPos = player->getPosition();
-    Point newPos(currentPos.getX() + offsetX, currentPos.getY() + offsetY);
+    int32_t moveX = ObstacleManager::get().getMaxMoveDistance(
+        currentPos.getX(), currentPos.getY(), offsetX, 0);
+    int32_t moveY = ObstacleManager::get().getMaxMoveDistance(
+        currentPos.getX(), currentPos.getY(), 0, offsetY);
 
-    if (!ObstacleManager::get().isVoid(newPos.getX(), newPos.getY())) {
-        Logger::info("[PlayerManager] Player " + std::to_string(playerId) +
-                     " cannot move to blocked position (" +
-                     std::to_string(newPos.getX()) + ", " +
-                     std::to_string(newPos.getY()) + ").");
-        return;
-    }
-
+    Point newPos(currentPos.getX() + moveX, currentPos.getY() + moveY);
     player->setPosition(newPos);
-    Logger::success("[PlayerManager] Player " + std::to_string(playerId) +
-                    " moved to position (" + std::to_string(newPos.getX()) +
-                    ", " + std::to_string(newPos.getY()) + ").");
 }
 
 /**

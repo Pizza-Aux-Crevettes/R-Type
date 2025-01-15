@@ -24,7 +24,5 @@ class HotkeysManager {
     HotkeysManager();
     ~HotkeysManager() = default;
 
-    void initHotkeys();
-
     std::unordered_map<int16_t, std::function<void(int32_t)>> _hotkeyActions;
 };

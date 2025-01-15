@@ -42,12 +42,10 @@ void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer) {
         break;
 
     case CREATE_PLAYER:
-        Logger::info("[Protocol] NEW_PLAYER operation.");
         PlayerProtocol::newPlayer(clientSocket, smartBuffer);
         break;
 
     case HOTKEY_PRESSED:
-        Logger::info("[Protocol] HOTKEY_PRESSED operation.");
         HotkeysProtocol::processHotkey(clientSocket, smartBuffer);
         break;
 

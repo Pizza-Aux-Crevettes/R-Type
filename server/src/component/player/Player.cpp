@@ -18,11 +18,9 @@
  * @param size The player's size
  * @param speed The player's speed
  */
-Player::Player(const std::string& name, const Point& position,
-               const Point& size, double speed)
+Player::Player(const std::string& name, const Point& position)
     : _id(IDManager::getNextId()), _name(name), _position(position),
-      _size(size), _speed(speed), _health(Health()),
-      _clientSocket(std::nullopt) {}
+      _health(Health()), _clientSocket(std::nullopt) {}
 
 /**
  * @brief Get the player's ID
@@ -65,26 +63,8 @@ void Player::setPosition(const Point& position) {
  *
  * @param threadId The thread ID
  */
-const Point& Player::getSize() const {
-    return _size;
-}
-
-/**
- * @brief Set the player's thread ID
- *
- * @param threadId The thread ID
- */
 const Health& Player::getHealth() const {
     return _health;
-}
-
-/**
- * @brief Set the player's thread ID
- *
- * @param threadId The thread ID
- */
-double Player::getSpeed() const {
-    return _speed;
 }
 
 /**

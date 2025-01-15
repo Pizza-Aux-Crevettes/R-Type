@@ -26,8 +26,6 @@ void MapLoader::loadMapFromFile(const std::string& filePath) {
     bool parsingMap = false;
     int32_t y = 0;
 
-    ObstacleManager::get().reset();
-
     for (const auto& line : lines) {
         if (line.find(NAME_LABEL) == 0) {
             name = line.substr(NAME_OFFSET);

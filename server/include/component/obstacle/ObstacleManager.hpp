@@ -24,13 +24,13 @@ class ObstacleManager {
     bool isObstacleCodeValid(const std::string& code) const;
     ObstacleType getObstacleType(const std::string& code) const;
     void updateObstacles();
+    int32_t getMaxMoveDistance(int32_t x, int32_t y, int32_t offsetX,
+                               int32_t offsetY) const;
     double getViewport() const;
-    bool isVoid(int32_t x, int32_t y) const;
-    void reset();
 
   private:
     ObstacleManager();
-    ~ObstacleManager() = default;
+    ~ObstacleManager();
 
     double _viewport = 0;
     std::vector<std::shared_ptr<Obstacle>> _obstacles;

@@ -118,8 +118,9 @@ void UdpSocket::updateLoop() {
         if (sleepTime > 0) {
             std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
         } else {
-            Logger::warning("[UDP Socket] updateLoop exceeded 50 ms! Took " +
-                            std::to_string(duration.count()) + " ms.");
+            Logger::warning(
+                "[UDP Socket] Tick delay on update loop exceeded 50 ms! Took " +
+                std::to_string(duration.count()) + " ms.");
         }
     }
 }
@@ -153,7 +154,7 @@ void UdpSocket::sendLoop() {
         if (sleepTime > 0) {
             std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
         } else {
-            Logger::warning("[UDP Socket] sendLoop exceeded " +
+            Logger::warning("[UDP Socket] Tick delay on send loop exceeded " +
                             std::to_string(TICK_PER_SECOND) + " ms! Took " +
                             std::to_string(frameDuration.count()) + " ms.");
         }
@@ -201,9 +202,9 @@ void UdpSocket::addClient(const sockaddr_in& clientAddr) {
 
     _clients.push_back(clientAddr);
 
-    Logger::info("[UDP Socket] New client registered: " +
-                 std::string(inet_ntoa(clientAddr.sin_addr)) + ":" +
-                 std::to_string(ntohs(clientAddr.sin_port)));
+    Logger::socket("[UDP Socket] New client connected: " +
+                   std::string(inet_ntoa(clientAddr.sin_addr)) + ":" +
+                   std::to_string(ntohs(clientAddr.sin_port)));
 }
 
 /**

@@ -24,14 +24,20 @@ enum Config {
     END_STR = '\0',
 
     // Player
+    PLAYER_WIDTH = 34,
+    PLAYER_HEIGHT = 15,
+    PLAYER_SPEED = 30,
     DEFAULT_HEALTH = 100,
     DEFAULT_LIVES = 3,
-    PLAYER_SPEED = 30,
+
+    // Obstacle
+    BLOCK_SIZE = 64,
 
     // Map
-    BLOCK_SIZE = 64,
     RENDER_DISTANCE = 20,
     MAP_SPEED = 2,
+    MAP_WIDTH = 1280,
+    MAP_HEIGHT = 720,
 
     // Bullet
     BULLET_SPEED = 10,
