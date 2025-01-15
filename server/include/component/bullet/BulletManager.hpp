@@ -18,7 +18,8 @@ class BulletManager {
     void addBullet(std::shared_ptr<Bullet> bullet);
     void updateBullets();
     std::vector<std::shared_ptr<Bullet>>& getBullets();
-    static void handlePlayerShoot(int playerId);
+    void handlePlayerShoot(int playerId);
+    void handleEnemyShoot(int enemyId);
 
   private:
     BulletManager() = default;

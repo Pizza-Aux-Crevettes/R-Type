@@ -160,14 +160,16 @@ void TcpSocket::removeClient(const int clientSocket) {
     _clients.erase(std::remove(_clients.begin(), _clients.end(), clientSocket),
                    _clients.end());
 
-    for (auto& [id, player] : PlayerManager::get().getPlayers()) {
-        if (player->getClientSocket() == clientSocket) {
-            PlayerManager::get().removePlayer(id);
+    auto& players = PlayerManager::get().getPlayers();
+    for (auto it = players.begin(); it != players.end(); ++it) {
+        if ((*it)->getClientSocket() == clientSocket) {
+            int playerId = (*it)->getId();
+            PlayerManager::get().removePlayer(playerId);
 
-            Logger::success(
-                "[TcpSocket] Removed player with ID: " + std::to_string(id) +
-                ", associated with client socket " +
-                std::to_string(clientSocket));
+            Logger::success("[TcpSocket] Removed player with ID: " +
+                            std::to_string(playerId) +
+                            ", associated with client socket " +
+                            std::to_string(clientSocket));
             break;
         }
     }

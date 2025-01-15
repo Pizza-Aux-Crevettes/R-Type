@@ -7,17 +7,17 @@
 
 #pragma once
 
-#include <string>
 #include <memory>
+#include <string>
 #include "component/player/Player.hpp"
 #include "util/Point.hpp"
 
 enum class ObstacleType {
     NONE,
-    BLOCK,
-    BLOCK2,
-    BLOCK3,
-    BLOCK4,
+    OBSTACLE,
+    OBSTACLE2,
+    OBSTACLE3,
+    OBSTACLE4,
 };
 
 class Obstacle {

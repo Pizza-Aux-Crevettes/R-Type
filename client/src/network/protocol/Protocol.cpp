@@ -57,6 +57,10 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
         handleUpdateBullets(smartBuffer);
         break;
 
+    case UPDATE_ENEMIES:
+        handleUpdateEnemies(smartBuffer);
+        break;
+
     case DELETE_ENTITY:
         handleDeleteEntity(smartBuffer);
         break;
@@ -70,7 +74,9 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
 
 void Protocol::handleCreatePlayerCallback(SmartBuffer& smartBuffer) {
     int32_t playerId;
-    smartBuffer >> playerId;
+    int16_t width, height;
+    
+    smartBuffer >> playerId >> width >> height;
 
     Protocol::setPlayerId(playerId);
 
@@ -91,8 +97,9 @@ void Protocol::handleCreatePlayerCallback(SmartBuffer& smartBuffer) {
 void Protocol::handleCreatePlayerBroadcast(SmartBuffer& smartBuffer) {
     int32_t playerId;
     std::string playerName;
+    int16_t width, height;
 
-    smartBuffer >> playerId >> playerName;
+    smartBuffer >> playerId >> playerName >> width >> height;
 
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/spaceship.png")},
@@ -110,6 +117,7 @@ void Protocol::handleCreatePlayerBroadcast(SmartBuffer& smartBuffer) {
 
 void Protocol::handleUpdatePlayer(SmartBuffer& smartBuffer) {
     int32_t playerId, x, y;
+    
     smartBuffer >> playerId >> x >> y;
 
     std::map<std::string, std::any> emptyMap;
@@ -118,6 +126,7 @@ void Protocol::handleUpdatePlayer(SmartBuffer& smartBuffer) {
 
 void Protocol::handleUpdateViewport(SmartBuffer& smartBuffer) {
     double viewport;
+    
     smartBuffer >> viewport;
 
     Client::get().setViewport(viewport);
@@ -126,7 +135,9 @@ void Protocol::handleUpdateViewport(SmartBuffer& smartBuffer) {
 void Protocol::handleUpdateBlocks(SmartBuffer& smartBuffer) {
     int32_t obstacleId, x, y;
     int16_t type, size;
+    
     smartBuffer >> obstacleId >> x >> y >> size >> type;
+    
     std::vector<int> rectVector = {0, 0, 50, 60};
 
     if (type == 1) {
@@ -147,8 +158,26 @@ void Protocol::handleUpdateBlocks(SmartBuffer& smartBuffer) {
     EntityManager::get().CompareEntities(obstacleId, newItems, {x, y});
 }
 
+void Protocol::handleUpdateEnemies(SmartBuffer& smartBuffer) {
+    int32_t enemyId, x, y;
+    int16_t type, width, height;
+    
+    smartBuffer >> enemyId >> x >> y >> width >> height >> type;
+    
+    std::vector<int> rectVector = {0, 0, 66, 57};
+    std::map<std::string, std::any> newItems = {
+        {"Texture", std::string("assets/sprite/enemy.png")},
+        {"TextureRect", std::vector<int>{rectVector}},
+        {"Size", std::pair<float, float>(width, height)},
+        {"Position", std::pair<float, float>(x, y)}};
+    EntityManager::get().CompareEntities(enemyId, newItems, {x, y});
+
+    Logger::info("[Protocol] Updating enemy: " + std::to_string(enemyId));
+}
+
 void Protocol::handleUpdateBullets(SmartBuffer& smartBuffer) {
     int32_t bulletId, x, y;
+    
     smartBuffer >> bulletId >> x >> y;
 
     std::map<std::string, std::any> newItems = {
@@ -160,9 +189,10 @@ void Protocol::handleUpdateBullets(SmartBuffer& smartBuffer) {
 
 void Protocol::handleDeleteEntity(SmartBuffer& smartBuffer) {
     int32_t entityId;
+    
     smartBuffer >> entityId;
 
-    Logger::info("[Protocol] Deleting entity: " + std::to_string(entityId));
+    //Logger::info("[Protocol] Deleting entity: " + std::to_string(entityId));
 
     auto& _entities = EntityManager::get().getEntityList();
 

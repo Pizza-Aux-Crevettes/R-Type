@@ -7,7 +7,6 @@
 
 #include "component/map/MapLoader.hpp"
 #include "socket/Server.hpp"
-#include "util/Config.hpp"
 #include "util/Logger.hpp"
 
 /**

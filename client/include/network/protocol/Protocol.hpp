@@ -22,6 +22,7 @@ class Protocol {
         UPDATE_VIEWPORT = 21,
         UPDATE_OBSTACLES = 22,
         UPDATE_BULLETS = 23,
+        UPDATE_ENEMIES = 24,
         DELETE_ENTITY = 30,
     };
 
@@ -46,5 +47,6 @@ class Protocol {
     static void handleUpdateViewport(SmartBuffer& smartBuffer);
     static void handleUpdateBlocks(SmartBuffer& smartBuffer);
     static void handleUpdateBullets(SmartBuffer& smartBuffer);
+    static void handleUpdateEnemies(SmartBuffer& smartBuffer);
     static void handleDeleteEntity(SmartBuffer& smartBuffer);
 };

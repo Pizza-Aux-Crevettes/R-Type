@@ -27,10 +27,10 @@ ObstacleManager& ObstacleManager::get() {
  */
 ObstacleManager::ObstacleManager() {
     _obstacleMapping = {
-        {"0001", ObstacleType::BLOCK},
-        {"0002", ObstacleType::BLOCK2},
-        {"0003", ObstacleType::BLOCK3},
-        {"0004", ObstacleType::BLOCK4},
+        {"B001", ObstacleType::OBSTACLE},
+        {"B002", ObstacleType::OBSTACLE2},
+        {"B003", ObstacleType::OBSTACLE3},
+        {"B004", ObstacleType::OBSTACLE4},
     };
 
     Logger::success("[ObstacleManager] Initialized obstacle mappings.");
@@ -51,14 +51,14 @@ std::string ObstacleManager::ObstacleTypeToString(ObstacleType type) {
     switch (type) {
     case ObstacleType::NONE:
         return "NONE";
-    case ObstacleType::BLOCK:
-        return "BLOCK";
-    case ObstacleType::BLOCK2:
-        return "BLOCK2";
-    case ObstacleType::BLOCK3:
-        return "BLOCK3";
-    case ObstacleType::BLOCK4:
-        return "BLOCK4";
+    case ObstacleType::OBSTACLE:
+        return "OBSTACLE";
+    case ObstacleType::OBSTACLE2:
+        return "OBSTACLE2";
+    case ObstacleType::OBSTACLE3:
+        return "OBSTACLE3";
+    case ObstacleType::OBSTACLE4:
+        return "OBSTACLE4";
     default:
         return "UNKNOWN";
     }
@@ -133,17 +133,17 @@ void ObstacleManager::updateObstacles() {
         obstacle->setPosition(Point(obstacle->getPosition().getX() - MAP_SPEED,
                                     obstacle->getPosition().getY()));
 
-        for (const auto& [id, player] : players) {
+        for (const auto& player : players) {
             if (obstacle->collidesWith(player)) {
                 PlayerManager::get().movePlayer(player->getId(), -MAP_SPEED, 0);
             }
         }
 
-        if (obstacle->getPosition().getX() < RENDER_DISTANCE * BLOCK_SIZE &&
-            obstacle->getPosition().getX() > -BLOCK_SIZE) {
+        if (obstacle->getPosition().getX() < RENDER_DISTANCE * OBSTACLE_SIZE &&
+            obstacle->getPosition().getX() > -OBSTACLE_SIZE) {
             _visibleObstacles.push_back(obstacle);
         }
-        if (obstacle->getPosition().getX() < -BLOCK_SIZE) {
+        if (obstacle->getPosition().getX() < -OBSTACLE_SIZE) {
             MapProtocol::sendEntityDeleted(obstacle->getId());
         }
     }
@@ -164,25 +164,25 @@ int32_t ObstacleManager::getMaxMoveDistance(int32_t x, int32_t y,
         int32_t blockY = obstacle->getPosition().getY();
 
         if (offsetX != 0) {
-            if (y + PLAYER_HEIGHT > blockY && y < blockY + BLOCK_SIZE) {
+            if (y + PLAYER_HEIGHT > blockY && y < blockY + OBSTACLE_SIZE) {
                 if (offsetX > 0 && x + PLAYER_WIDTH <= blockX &&
                     x + PLAYER_WIDTH + offsetX > blockX) {
                     return blockX - (x + PLAYER_WIDTH);
-                } else if (offsetX < 0 && x >= blockX + BLOCK_SIZE &&
-                           x + offsetX < blockX + BLOCK_SIZE) {
-                    return blockX + BLOCK_SIZE - x;
+                } else if (offsetX < 0 && x >= blockX + OBSTACLE_SIZE &&
+                           x + offsetX < blockX + OBSTACLE_SIZE) {
+                    return blockX + OBSTACLE_SIZE - x;
                 }
             }
         }
 
         if (offsetY != 0) {
-            if (x + PLAYER_WIDTH > blockX && x < blockX + BLOCK_SIZE) {
+            if (x + PLAYER_WIDTH > blockX && x < blockX + OBSTACLE_SIZE) {
                 if (offsetY > 0 && y + PLAYER_HEIGHT <= blockY &&
                     y + PLAYER_HEIGHT + offsetY > blockY) {
                     return blockY - (y + PLAYER_HEIGHT);
-                } else if (offsetY < 0 && y >= blockY + BLOCK_SIZE &&
-                           y + offsetY < blockY + BLOCK_SIZE) {
-                    return blockY + BLOCK_SIZE - y;
+                } else if (offsetY < 0 && y >= blockY + OBSTACLE_SIZE &&
+                           y + offsetY < blockY + OBSTACLE_SIZE) {
+                    return blockY + OBSTACLE_SIZE - y;
                 }
             }
         }

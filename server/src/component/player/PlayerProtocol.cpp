@@ -23,11 +23,12 @@
  *
  * Reponse 1 (One client):
  * Protocol: CREATE_PLAYER_CALLBACK
- * Payload: playerId (int32_t)
+ * Payload: playerId (int32_t), width (int16_t), height (int16_t)
  *
  * Response 2 (All clients):
  * Protocol: CREATE_PLAYER_BROADCAST
- * Payload: playerId (int32_t), playerName (string)
+ * Payload: playerId (int32_t), playerName (string), width (int16_t), height
+ * (int16_t)
  */
 void PlayerProtocol::newPlayer(const int clientSocket,
                                SmartBuffer& smartBuffer) {
@@ -40,17 +41,21 @@ void PlayerProtocol::newPlayer(const int clientSocket,
     smartBuffer.reset();
     smartBuffer << static_cast<int16_t>(
                        Protocol::OpCode::CREATE_PLAYER_CALLBACK)
-                << static_cast<int32_t>(player->getId());
+                << static_cast<int32_t>(player->getId())
+                << static_cast<int16_t>(PLAYER_WIDTH)
+                << static_cast<int16_t>(PLAYER_HEIGHT);
 
     TcpSocket::get().sendToOne(clientSocket, smartBuffer);
 
     const auto& players = PlayerManager::get().getPlayers();
-    for (const auto& [id, existingPlayer] : players) {
+    for (const auto& existingPlayer : players) {
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(
                            Protocol::OpCode::CREATE_PLAYER_BROADCAST)
                     << static_cast<int32_t>(existingPlayer->getId())
-                    << std::string{existingPlayer->getName()};
+                    << std::string{existingPlayer->getName()}
+                    << static_cast<int16_t>(PLAYER_WIDTH)
+                    << static_cast<int16_t>(PLAYER_HEIGHT);
 
         UdpSocket::get().sendToAll(smartBuffer);
     }
@@ -69,7 +74,7 @@ void PlayerProtocol::sendPlayerPosition(const sockaddr_in& clientAddr,
                                         SmartBuffer& smartBuffer) {
 
     const auto& players = PlayerManager::get().getPlayers();
-    for (const auto& [id, player] : players) {
+    for (const auto& player : players) {
         smartBuffer.reset();
         smartBuffer << static_cast<int16_t>(Protocol::OpCode::UPDATE_PLAYERS)
                     << static_cast<int32_t>(player->getId())

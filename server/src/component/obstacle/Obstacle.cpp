@@ -72,8 +72,8 @@ void Obstacle::setPosition(const Point& position) {
  * @return false Otherwise
  */
 bool Obstacle::contains(int32_t x, int32_t y) const {
-    return x >= _position.getX() && x < _position.getX() + BLOCK_SIZE &&
-           y >= _position.getY() && y < _position.getY() + BLOCK_SIZE;
+    return x >= _position.getX() && x < _position.getX() + OBSTACLE_SIZE &&
+           y >= _position.getY() && y < _position.getY() + OBSTACLE_SIZE;
 }
 
 /**
