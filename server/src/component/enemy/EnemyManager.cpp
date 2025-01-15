@@ -117,10 +117,6 @@ std::shared_ptr<Enemy> EnemyManager::findById(int enemyId) const {
  * @brief Update all enemies
  *
  */
-/**
- * @brief Update all enemies
- *
- */
 void EnemyManager::updateEnemies() {
     _visibleEnemies.clear();
 
@@ -142,9 +138,8 @@ void EnemyManager::updateEnemies() {
 
     auto& players = PlayerManager::get().getPlayers();
     for (const auto& enemy : _visibleEnemies) {
-        if (!enemy->canShoot()) {
-            continue;
-        }
+        enemy->updateShootCooldown();
+        if (!enemy->canShoot()) continue;
 
         for (const auto& player : players) {
             if (std::abs(player->getPosition().getX() -

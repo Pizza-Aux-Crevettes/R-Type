@@ -26,7 +26,6 @@ class Obstacle {
 
     int32_t getId() const;
     ObstacleType getType() const;
-    void setType(ObstacleType type);
     const Point& getPosition() const;
     void setPosition(const Point& position);
     bool contains(int32_t x, int32_t y) const;

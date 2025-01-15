@@ -16,42 +16,35 @@ enum class EnemyType { NONE, ENEMY1, ENEMY2, ENEMY3, ENEMY4 };
 
 class Enemy {
   public:
-    Enemy(EnemyType type, const Point& position, double speed,
-          double bulletSpeed, int width, int height, int shootCooldown,
-          int shootRange);
+    Enemy(EnemyType type, const Point& position, int16_t speed, int16_t width, int16_t height, int16_t bulletSpeed, int16_t bulletDamage, int16_t shootCooldown,
+          int16_t shootRange);
 
     int32_t getId() const;
     EnemyType getType() const;
-    void setType(EnemyType type);
     const Point& getPosition() const;
-    void setPosition(const Point& position);
-    double getSpeed() const;
-    void setSpeed(double speed);
-    double getBulletSpeed() const;
-    void setBulletSpeed(double bulletSpeed);
-    int getWidth() const;
-    void setWidth(int width);
-    int getHeight() const;
-    void setHeight(int height);
-    int getShootCooldown() const;
-    void setShootCooldown(int shootCooldown);
-    int getShootRange() const;
-    void setShootRange(int shootRange);
+    int16_t getSpeed() const;
+    int16_t getBulletSpeed() const;
+    int16_t getWidth() const;
+    int16_t getHeight() const;
+    int16_t getShootCooldown() const;
+    int16_t getShootRange() const;
     bool contains(int32_t x, int32_t y) const;
     bool collidesWith(const std::shared_ptr<Player>& player) const;
     bool canShoot() const;
     void resetShootCooldown();
+    void updateShootCooldown();
     void move();
 
   private:
     int32_t _id;
     EnemyType _type;
     Point _position;
-    double _speed;
-    double _bulletSpeed;
-    int _width;
-    int _height;
-    int _shootCooldown;
-    int _shootRange;
-    int _currentCooldown;
+    int16_t _speed;
+    int16_t _width;
+    int16_t _height;
+    int16_t _bulletSpeed;
+    int16_t _bulletDamage;
+    int16_t _shootCooldown;
+    int16_t _shootRange;
+    int16_t _currentCooldown;
 };
