@@ -26,7 +26,7 @@
 
 class Menu {
   public:
-    enum class MenuState { MainMenu, OptionMenu, GameMenu };
+    enum class MenuState { MainMenu, OptionMenu };
 
     Menu();
     ~Menu();
