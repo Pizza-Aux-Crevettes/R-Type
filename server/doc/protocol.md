@@ -57,12 +57,16 @@ Each message has the following form:
 - **Description**: Server response confirming the creation of a new player.  
 - **Payload**:  
   - `playerId` (int32_t)
+  - `width` (int16_t)
+  - `height` (int16_t)
 
 ### CREATE_PLAYER_BROADCAST
 - **Description**: Broadcasts to all clients that a new player has joined.  
 - **Payload**:  
   - `playerId` (int32_t)  
   - `playerName` (string)
+  - `width` (int16_t)
+  - `height` (int16_t)
 
 ---
 

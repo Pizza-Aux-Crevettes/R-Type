@@ -133,7 +133,7 @@ void ObstacleManager::updateObstacles() {
         obstacle->setPosition(Point(obstacle->getPosition().getX() - MAP_SPEED,
                                     obstacle->getPosition().getY()));
 
-        for (const auto& [id, player] : players) {
+        for (const auto& player : players) {
             if (obstacle->collidesWith(player)) {
                 PlayerManager::get().movePlayer(player->getId(), -MAP_SPEED, 0);
             }

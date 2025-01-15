@@ -23,12 +23,14 @@ enum Config {
     // String
     END_STR = '\0',
 
+    // Default
+    DEFAULT_HEALTH = 100,
+    DEFAULT_LIVES = 3,
+
     // Player
     PLAYER_WIDTH = 34,
     PLAYER_HEIGHT = 15,
     PLAYER_SPEED = 30,
-    DEFAULT_HEALTH = 100,
-    DEFAULT_LIVES = 3,
 
     // Obstacle
     BLOCK_SIZE = 64,

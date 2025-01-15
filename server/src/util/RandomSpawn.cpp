@@ -61,7 +61,7 @@ bool RandomSpawn::isSpawnFree(int x, int y) {
     }
 
     const auto& players = PlayerManager::get().getPlayers();
-    for (const auto& [pid, player] : players) {
+    for (const auto& player : players) {
         int px = player->getPosition().getX();
         int py = player->getPosition().getY();
 

@@ -6,6 +6,7 @@
 */
 
 #include "component/bullet/BulletManager.hpp"
+#include "component/enemy/EnemyManager.hpp"
 #include "component/map/MapProtocol.hpp"
 #include "component/obstacle/ObstacleManager.hpp"
 #include "component/player/PlayerManager.hpp"
@@ -77,9 +78,36 @@ void BulletManager::handlePlayerShoot(int playerId) {
     }
 
     auto position = player->getPosition();
-    auto direction = Point(1, 0);
+    Point direction(1, 0);
     auto speed = BULLET_SPEED;
 
     auto bullet = std::make_shared<Bullet>(position, direction, speed);
-    BulletManager::get().addBullet(bullet);
+    addBullet(bullet);
+}
+
+/**
+ * @brief Handle the enemy shoot event
+ *
+ * @param enemyId The ID of the enemy who shot
+ */
+void BulletManager::handleEnemyShoot(int enemyId) {
+    auto enemy = EnemyManager::get().getEnemies();
+    auto it = std::find_if(enemy.begin(), enemy.end(),
+                           [enemyId](const std::shared_ptr<Enemy>& e) {
+                               return e->getId() == enemyId;
+                           });
+
+    if (it == enemy.end()) {
+        Logger::warning("[BulletManager] Enemy not found. Enemy ID: " +
+                        std::to_string(enemyId));
+        return;
+    }
+
+    auto& enemyInstance = *it;
+    Point enemyPosition = enemyInstance->getPosition();
+    Point direction(-1, 0);
+    double speed = BULLET_SPEED;
+
+    auto bullet = std::make_shared<Bullet>(enemyPosition, direction, speed);
+    addBullet(bullet);
 }

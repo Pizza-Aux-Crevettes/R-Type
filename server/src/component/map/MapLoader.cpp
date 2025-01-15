@@ -6,6 +6,7 @@
 */
 
 #include "component/map/MapLoader.hpp"
+#include "component/enemy/EnemyManager.hpp"
 #include "component/obstacle/ObstacleManager.hpp"
 #include "util/Config.hpp"
 #include "util/FileReader.hpp"
@@ -59,17 +60,29 @@ void MapLoader::parseMapLine(const std::string& line, int32_t y) {
     int32_t blockY = y * BLOCK_SIZE;
 
     for (size_t x = 0; x < line.size(); x += BLOCK_OFFSET) {
-        std::string blockCode = line.substr(x, BLOCK_OFFSET);
+        std::string code = line.substr(x, BLOCK_OFFSET);
 
-        if (ObstacleManager::get().isObstacleCodeValid(blockCode)) {
+        if (ObstacleManager::get().isObstacleCodeValid(code)) {
             int32_t blockX =
                 static_cast<int32_t>(x / BLOCK_OFFSET) * BLOCK_SIZE;
 
             auto obstacle = std::make_shared<Obstacle>(
-                ObstacleManager::get().getObstacleType(blockCode),
+                ObstacleManager::get().getObstacleType(code),
                 Point(blockX, blockY));
-
             ObstacleManager::get().addObstacle(obstacle);
+        } else if (EnemyManager::get().isEnemyCodeValid(code)) {
+            int32_t enemyX =
+                static_cast<int32_t>(x / BLOCK_OFFSET) * BLOCK_SIZE;
+
+            const auto& properties = EnemyManager::get().getEnemyProperties(code);
+
+            auto enemy = std::make_shared<Enemy>(
+                properties.type, Point(enemyX, blockY), properties.speed,
+                properties.bulletSpeed, properties.width, properties.height, properties.shootCooldown, properties.shootRange);
+
+            enemy->setShootCooldown(properties.shootCooldown);
+            enemy->setShootRange(properties.shootRange);
+            EnemyManager::get().addEnemy(enemy);
         }
     }
 }

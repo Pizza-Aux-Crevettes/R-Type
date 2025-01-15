@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include <string>
 #include <memory>
+#include <string>
 #include "component/player/Player.hpp"
 #include "util/Point.hpp"
 

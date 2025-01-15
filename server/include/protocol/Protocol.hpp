@@ -23,6 +23,7 @@ class Protocol {
         UPDATE_VIEWPORT = 21,
         UPDATE_OBSTACLES = 22,
         UPDATE_BULLETS = 23,
+        UPDATE_ENEMIES = 24,
         DELETE_ENTITY = 30,
     };
 
