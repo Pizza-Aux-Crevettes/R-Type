@@ -17,12 +17,12 @@ class SoundManager {
 
     static SoundManager& get();
 
-    void setEffectSound(std::string title, std::string);
-    void setMusicSound(std::string title, std::string);
+    void setEffectSound(const std::string& title, const std::string& soundFile);
+    void setMusicSound(const std::string& title, const std::string& soundFile);
     void setEffectVolumn(int volume);
     void setMusicVolumn(int volume);
-    Sound getEffectSound(std::string key);
-    Sound getMusicSound(std::string key);
+    Sound& getEffectSound(const std::string& key);
+    Sound& getMusicSound(const std::string& key);
 
   private:
     std::map<std::string, Sound> _gameEffects;

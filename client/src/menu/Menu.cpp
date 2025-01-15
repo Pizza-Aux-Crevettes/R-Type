@@ -122,7 +122,6 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
             GetResponsiveValue responsive;
             int currentWidth = window.getSize().x;
             int currentHeight = window.getSize().y;
-            std::cout << currentWidth << std::endl;
 
             int entityId = 0;
 

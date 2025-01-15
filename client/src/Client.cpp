@@ -91,6 +91,8 @@ void Client::manageClient() {
     SoundManager::get().setEffectSound("bullet", "assets/sounds/shoot-sound.wav");
     SoundManager::get().setEffectSound("click", "assets/sounds/click-menu.wav");
 
+    SoundManager::get().setEffectSound("click", "assets/sounds/click-menu.wav");
+    SoundManager::get().setEffectSound("click", "assets/sounds/click-menu.wav");
     SoundManager::get().getMusicSound("menu").getSound().play();
     sf::Clock clock;
     bool serverInitialized = false;

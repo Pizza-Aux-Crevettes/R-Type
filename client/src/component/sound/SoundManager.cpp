@@ -18,47 +18,47 @@ SoundManager& SoundManager::get() {
     return instance;
 }
 
-void SoundManager::setEffectSound(std::string title, std::string soundFile) {
-    auto newSound = Sound();
+void SoundManager::setEffectSound(const std::string& title, const std::string& soundFile) {
+    Sound newSound;
     if (!newSound.getSoundBuffer().loadFromFile(soundFile)) {
-        std::cerr << "Error: unable to load the audio file." << std::endl;
+        std::cerr << "Error: unable to load the audio file: " << soundFile << std::endl;
+        return;
     }
     newSound.getSound().setBuffer(newSound.getSoundBuffer());
+    newSound.getSound().setVolume(50);
     newSound.getSound().setLoop(true);
-    std::cout << "Create Sound " << title << std::endl;
-    _gameEffects[title] = newSound;
+    _gameEffects[title] = std::move(newSound);
 }
 
-void SoundManager::setMusicSound(std::string title, std::string soundFile) {
-    auto newSound = Sound();
+void SoundManager::setMusicSound(const std::string& title, const std::string& soundFile) {
+    Sound newSound;
     if (!newSound.getSoundBuffer().loadFromFile(soundFile)) {
-        std::cerr << "Error: unable to load the audio file." << std::endl;
+        std::cerr << "Error: unable to load the audio file: " << soundFile << std::endl;
+        return;
     }
+
     newSound.getSound().setBuffer(newSound.getSoundBuffer());
-    std::cout << "Create Sound " << title << std::endl;
-    _music[title] = newSound;
+    newSound.getSound().setVolume(50);
+    newSound.getSound().setLoop(true);
+    _music[title] = std::move(newSound);
 }
 
-Sound SoundManager::getEffectSound(std::string key) {
-    std::cout << "Get Sound " << key << std::endl;
+Sound& SoundManager::getEffectSound(const std::string& key) {
     return _gameEffects[key];
 }
 
-Sound SoundManager::getMusicSound(std::string key) {
-    std::cout << "Get Sound " << key << std::endl;
+Sound& SoundManager::getMusicSound(const std::string& key) {
     return _music[key];
 }
 
 void SoundManager::setEffectVolumn(int volume) {
     for (auto& [key, sound] : _gameEffects) {
-        std::cout << "Key: " << key << std::endl;
-        sound.setVolume(volume);
+        sound.setVolumeSound(volume);
     }
 }
 
 void SoundManager::setMusicVolumn(int volume) {
     for (auto& [key, sound] : _music) {
-        std::cout << "Key: " << key << std::endl;
-        sound.setVolume(volume);
+        sound.setVolumeSound(volume);
     }
 }

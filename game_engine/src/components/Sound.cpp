@@ -85,9 +85,9 @@ int Sound::getVolume() const {
  *
  * @param volume The new volume level to set (typically between 0 and 100).
  */
-void Sound::setVolume(int volume) {
-    std::cout << "Set volume " << volume << std::endl;
+void Sound::setVolumeSound(int volume) {
     this->_volume = volume;
+    _sound.setVolume(_volume);
 }
 
 /**
