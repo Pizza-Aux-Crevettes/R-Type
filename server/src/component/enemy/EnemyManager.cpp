@@ -120,23 +120,26 @@ std::shared_ptr<Enemy> EnemyManager::findById(int enemyId) const {
 void EnemyManager::updateEnemies() {
     _visibleEnemies.clear();
 
-    for (auto it = _enemies.begin(); it != _enemies.end();) {
-        auto& enemy = *it;
+    auto players = PlayerManager::get().getPlayers();
+
+    for (const auto& enemy : _enemies) {
         enemy->move();
 
+        for (const auto& player : players) {
+            if (enemy->collidesWith(player)) {
+                PlayerManager::get().movePlayer(player->getId(), -enemy->getSpeed(), 0);
+            }
+        }
+
+        if (enemy->getPosition().getX() < RENDER_DISTANCE * enemy->getWidth() &&
+            enemy->getPosition().getX() > -enemy->getWidth()) {
+            _visibleEnemies.push_back(enemy);
+        }
         if (enemy->getPosition().getX() < -enemy->getWidth()) {
             MapProtocol::sendEntityDeleted(enemy->getId());
-            it = _enemies.erase(it);
-        } else {
-            if (enemy->getPosition().getX() < RENDER_DISTANCE * OBSTACLE_SIZE &&
-                enemy->getPosition().getX() > -OBSTACLE_SIZE) {
-                _visibleEnemies.push_back(enemy);
-            }
-            ++it;
         }
     }
 
-    auto& players = PlayerManager::get().getPlayers();
     for (const auto& player : players) {
         for (const auto& enemy : _visibleEnemies) {
             if (enemy->collidesWith(player)) {

@@ -6,6 +6,7 @@
 */
 
 #include "component/obstacle/ObstacleManager.hpp"
+#include "component/enemy/EnemyManager.hpp"
 #include "component/map/MapProtocol.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "util/Config.hpp"
@@ -187,6 +188,39 @@ int32_t ObstacleManager::getMaxMoveDistance(int32_t x, int32_t y,
             }
         }
     }
+
+    auto enemies = EnemyManager::get().getEnemies();
+    for (const auto& enemy : enemies) {
+        int32_t enemyX = enemy->getPosition().getX();
+        int32_t enemyY = enemy->getPosition().getY();
+        int32_t enemyWidth = enemy->getWidth();
+        int32_t enemyHeight = enemy->getHeight();
+
+        if (offsetX != 0) {
+            if (y + PLAYER_HEIGHT > enemyY && y < enemyY + enemyHeight) {
+                if (offsetX > 0 && x + PLAYER_WIDTH <= enemyX &&
+                    x + PLAYER_WIDTH + offsetX > enemyX) {
+                    return enemyX - (x + PLAYER_WIDTH);
+                } else if (offsetX < 0 && x >= enemyX + enemyWidth &&
+                           x + offsetX < enemyX + enemyWidth) {
+                    return enemyX + enemyWidth - x;
+                }
+            }
+        }
+
+        if (offsetY != 0) {
+            if (x + PLAYER_WIDTH > enemyX && x < enemyX + enemyWidth) {
+                if (offsetY > 0 && y + PLAYER_HEIGHT <= enemyY &&
+                    y + PLAYER_HEIGHT + offsetY > enemyY) {
+                    return enemyY - (y + PLAYER_HEIGHT);
+                } else if (offsetY < 0 && y >= enemyY + enemyHeight &&
+                           y + offsetY < enemyY + enemyHeight) {
+                    return enemyY + enemyHeight - y;
+                }
+            }
+        }
+    }
+
 
     if (offsetX != 0) {
         if (x + offsetX < 0) {
