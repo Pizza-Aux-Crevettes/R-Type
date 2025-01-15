@@ -20,6 +20,13 @@ HotkeysManager::HotkeysManager() {
              {HotkeysCodes::ARROW_RIGHT, sf::Keyboard::Right},
              {HotkeysCodes::SPACE, sf::Keyboard::Space},
              {HotkeysCodes::ENTER, sf::Keyboard::Enter}};
+    
+    _activeKeys = {{HotkeysCodes::ARROW_TOP, false},
+                    {HotkeysCodes::ARROW_BOTTOM, false},
+                    {HotkeysCodes::ARROW_LEFT, false},
+                    {HotkeysCodes::ARROW_RIGHT, false},
+                    {HotkeysCodes::SPACE, false},
+                    {HotkeysCodes::ENTER, false}};
 }
 
 HotkeysManager::~HotkeysManager() = default;
@@ -40,26 +47,74 @@ void HotkeysManager::setKey(const HotkeysCodes hotkey,
 
 void HotkeysManager::checkKey(const sf::Event& event) {
     if (Client::get().getIsPlayed()) {
+        // if (event.type == sf::Event::KeyPressed) {
+        //     for (const auto& [hotkey, key] : _keys) {
+        //         if (key == event.key.code) {
+        //             _activeKeys[hotkey] = true;
+        //         }
+        //     }
+        // }
+        // if (event.type == sf::Event::KeyReleased) {
+        //     for (const auto& [hotkey, key] : _keys) {
+        //         if (key == event.key.code) {
+        //             _activeKeys[hotkey] = false;
+        //         }
+        //     }
+        // }
+        // if (!_activeKeys.empty()) {
+        //     for (auto it = _activeKeys.begin(); it != _activeKeys.end(); it++) {
+        //         if (it->second == true) {
+        //             SmartBuffer smartBuffer;
+        //             smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
+        //                         << static_cast<int32_t>(Protocol::get().getPlayerId());
+        //             smartBuffer << static_cast<int16_t>(it->first);
+        //             UdpSocket::send(smartBuffer);
+        //         }
+                
+        //     }
+        // }
+
         if (event.type == sf::Event::KeyPressed) {
-            for (const auto& [hotkey, key] : _keys) {
-                if (key == event.key.code) {
-                    _activeKeys.insert(hotkey);
-                }
-            }
-        }
-        if (event.type == sf::Event::KeyReleased) {
-            for (const auto& [hotkey, key] : _keys) {
-                if (key == event.key.code) {
-                    _activeKeys.erase(hotkey);
-                }
-            }
-        }
-        if (!_activeKeys.empty()) {
-            for (HotkeysCodes hotkey : _activeKeys) {
+            if (sf::Keyboard::isKeyPressed(getKey(HotkeysCodes::SPACE))) {
                 SmartBuffer smartBuffer;
                 smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
-                            << static_cast<int32_t>(Protocol::get().getPlayerId());
-                smartBuffer << static_cast<int16_t>(hotkey);
+                            << static_cast<int32_t>(Protocol::get().getPlayerId())
+                            << static_cast<int16_t>(HotkeysCodes::SPACE);
+                UdpSocket::send(smartBuffer);
+            }
+            if (sf::Keyboard::isKeyPressed(getKey(HotkeysCodes::ARROW_LEFT))) {
+                SmartBuffer smartBuffer;
+                smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
+                            << static_cast<int32_t>(Protocol::get().getPlayerId())
+                            << static_cast<int16_t>(HotkeysCodes::ARROW_LEFT);
+                UdpSocket::send(smartBuffer);
+            }
+            if (sf::Keyboard::isKeyPressed(getKey(HotkeysCodes::ARROW_RIGHT))) {
+                SmartBuffer smartBuffer;
+                smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
+                            << static_cast<int32_t>(Protocol::get().getPlayerId())
+                            << static_cast<int16_t>(HotkeysCodes::ARROW_RIGHT);
+                UdpSocket::send(smartBuffer);
+            }
+            if (sf::Keyboard::isKeyPressed(getKey(HotkeysCodes::ARROW_BOTTOM))) {
+                SmartBuffer smartBuffer;
+                smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
+                            << static_cast<int32_t>(Protocol::get().getPlayerId())
+                            << static_cast<int16_t>(HotkeysCodes::ARROW_BOTTOM);
+                UdpSocket::send(smartBuffer);
+            }
+            if (sf::Keyboard::isKeyPressed(getKey(HotkeysCodes::ARROW_TOP))) {
+                SmartBuffer smartBuffer;
+                smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
+                            << static_cast<int32_t>(Protocol::get().getPlayerId())
+                            << static_cast<int16_t>(HotkeysCodes::ARROW_TOP);
+                UdpSocket::send(smartBuffer);
+            }
+            if (sf::Keyboard::isKeyPressed(getKey(HotkeysCodes::ENTER))) {
+                SmartBuffer smartBuffer;
+                smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
+                            << static_cast<int32_t>(Protocol::get().getPlayerId())
+                            << static_cast<int16_t>(HotkeysCodes::ENTER);
                 UdpSocket::send(smartBuffer);
             }
         }

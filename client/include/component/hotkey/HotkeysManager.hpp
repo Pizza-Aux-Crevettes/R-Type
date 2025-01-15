@@ -9,7 +9,7 @@
 
 #include <SFML/Window.hpp>
 #include <unordered_map>
-#include <set>
+#include <map>
 #include "component/hotkey/HotkeysCodes.hpp"
 
 class HotkeysManager {
@@ -27,6 +27,6 @@ class HotkeysManager {
     std::string keyToString(sf::Keyboard::Key key);
 
   private:
-    std::set<HotkeysCodes> _activeKeys;
+    std::map<HotkeysCodes, bool> _activeKeys;
     std::unordered_map<HotkeysCodes, sf::Keyboard::Key> _keys;
 };
