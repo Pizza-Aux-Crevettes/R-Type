@@ -11,6 +11,7 @@
 #include "component/player/PlayerProtocol.hpp"
 #include "socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
+#include "util/RandomSpawn.hpp"
 
 /**
  * @brief Construct a new PlayerManager:: PlayerManager object
@@ -28,8 +29,10 @@ PlayerManager& PlayerManager::get() {
  * @return std::shared_ptr<Player> The created player
  */
 std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
+    Point spawnPos = RandomSpawn::generateRandomSpawnPosition();
+    
     auto player =
-        std::make_shared<Player>(name, Point(50, 50), Point(20, 10), 1.0);
+        std::make_shared<Player>(name, Point(spawnPos.getX(), spawnPos.getY()));
     _players[player->getId()] = player;
 
     Logger::success("[PlayerManager] Player created:\n"

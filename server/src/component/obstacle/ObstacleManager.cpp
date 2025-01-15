@@ -188,6 +188,22 @@ int32_t ObstacleManager::getMaxMoveDistance(int32_t x, int32_t y,
         }
     }
 
+    if (offsetX != 0) {
+        if (x + offsetX < 0) {
+            return -x;
+        } else if (x + PLAYER_WIDTH + offsetX > MAP_WIDTH) {
+            return MAP_WIDTH - (x + PLAYER_WIDTH);
+        }
+    }
+
+    if (offsetY != 0) {
+        if (y + offsetY < 0) {
+            return -y;
+        } else if (y + PLAYER_HEIGHT + offsetY > MAP_HEIGHT) {
+            return MAP_HEIGHT - (y + PLAYER_HEIGHT);
+        }
+    }
+
     return offsetX != 0 ? offsetX : offsetY;
 }
 

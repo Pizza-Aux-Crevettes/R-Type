@@ -8,6 +8,7 @@
 #pragma once
 
 #include <algorithm>
+#include <random>
 #include <memory>
 #include <ranges>
 #include <unordered_map>
