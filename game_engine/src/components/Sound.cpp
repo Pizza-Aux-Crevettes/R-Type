@@ -31,7 +31,6 @@ Sound::Sound(std::string soundFile, int volume)
  */
 Sound::~Sound() {}
 
-
 sf::Sound& Sound::getSound() {
     return this->_sound;
 }

@@ -80,7 +80,7 @@ void TcpSocket::readLoop() const {
 
         TcpSocket::get().addClient(clientSocket);
 
-        Logger::socket("[TCP Socket] Client connected: " +
+        Logger::socket("[TCP Socket] New client connected: " +
                        std::to_string(clientSocket));
 
         std::thread([clientSocket, clientAddr]() {
@@ -157,15 +157,19 @@ void TcpSocket::addClient(const int clientSocket) {
  */
 void TcpSocket::removeClient(const int clientSocket) {
     std::lock_guard lock(_clientsMutex);
-    std::erase(_clients, clientSocket);
+    _clients.erase(std::remove(_clients.begin(), _clients.end(), clientSocket),
+                   _clients.end());
 
-    for (auto& [id, player] : PlayerManager::get().getPlayers()) {
-        if (player->getClientSocket() == clientSocket) {
-            PlayerManager::get().removePlayer(id);
+    auto& players = PlayerManager::get().getPlayers();
+    for (auto it = players.begin(); it != players.end(); ++it) {
+        if ((*it)->getClientSocket() == clientSocket) {
+            int playerId = (*it)->getId();
+            PlayerManager::get().removePlayer(playerId);
 
-            Logger::info("[TcpSocket] Removed Player ID " + std::to_string(id) +
-                         " associated with Client Socket " +
-                         std::to_string(clientSocket));
+            Logger::success("[TcpSocket] Removed player with ID: " +
+                            std::to_string(playerId) +
+                            ", associated with client socket " +
+                            std::to_string(clientSocket));
             break;
         }
     }

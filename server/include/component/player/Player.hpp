@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <memory>
 #include <optional>
 #include <string>
 #include "component/attr/Health.hpp"
@@ -14,15 +15,12 @@
 
 class Player {
   public:
-    Player(const std::string& name, const Point& position, const Point& size,
-           double speed);
+    Player(const std::string& name, const Point& position);
 
     int32_t getId() const;
     const std::string& getName() const;
     const Point& getPosition() const;
     void setPosition(const Point& position);
-    const Point& getSize() const;
-    double getSpeed() const;
     const Health& getHealth() const;
     std::optional<int> getClientSocket() const;
     void setClientSocket(int clientSocket);

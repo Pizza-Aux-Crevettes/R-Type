@@ -19,11 +19,11 @@ EntityManager& EntityManager::get() {
     return instance;
 }
 
-void EntityManager::setEntityList(int id, GameEngine::Entity entity) {
-    _entities.emplace(id, std::move(entity));
+void EntityManager::setEntityList(std::map<int, GameEngine::Entity> entities) {
+    _entities = entities;
 }
 
-std::map<int, GameEngine::Entity> EntityManager::getEntityList() {
+std::map<int, GameEngine::Entity>& EntityManager::getEntityList() {
     return _entities;
 }
 
@@ -48,6 +48,7 @@ void EntityManager::CreateEntity(int id,
         auto textureRectIt = components.find("TextureRect");
         auto sizeIt = components.find("Size");
         auto positionIt = components.find("Position");
+        auto textLink = components.find("Link");
 
         if (textureIt != components.end()) {
             const auto& texture = textureIt->second;
@@ -82,6 +83,17 @@ void EntityManager::CreateEntity(int id,
             try {
                 newEntity.addComponent(Position(
                     {std::any_cast<std::pair<float, float>>(position)}));
+            } catch (const std::bad_any_cast& e) {
+                std::cerr << "Error casting Position component: " << e.what()
+                          << std::endl;
+            }
+        }
+
+        if (textLink != components.end()) {
+            const auto& text = textLink->second;
+            try {
+                newEntity.addComponent(Text(std::any_cast<std::string>(text), "assets/font/Inter_Bold.ttf", 10));
+                newEntity.addComponent(Link(std::any_cast<int>(id - 10000)));
             } catch (const std::bad_any_cast& e) {
                 std::cerr << "Error casting Position component: " << e.what()
                           << std::endl;

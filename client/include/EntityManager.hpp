@@ -12,6 +12,8 @@
 #include <components/Shape.hpp>
 #include <components/Sprite.hpp>
 #include <components/Texture.hpp>
+#include <components/Text.hpp>
+#include <components/Link.hpp>
 #include <iostream>
 #include <map>
 #include "Entity.hpp"
@@ -28,8 +30,8 @@ class EntityManager {
 
   public:
     static EntityManager& get();
-    void setEntityList(int, GameEngine::Entity);
-    std::map<int, GameEngine::Entity> getEntityList();
+    void setEntityList(std::map<int, GameEngine::Entity> entities);
+    std::map<int, GameEngine::Entity>& getEntityList();
     void CompareEntities(int, std::map<std::string, std::any>,
                          std::pair<float, float> updatePosition);
     void CreateEntity(int, std::map<std::string, std::any>);

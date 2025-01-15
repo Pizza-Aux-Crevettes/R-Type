@@ -8,7 +8,7 @@
 #pragma once
 
 #include <memory>
-#include <unordered_map>
+#include <vector>
 #include "component/bullet/Bullet.hpp"
 
 class BulletManager {
@@ -17,12 +17,14 @@ class BulletManager {
 
     void addBullet(std::shared_ptr<Bullet> bullet);
     void updateBullets();
-    const std::unordered_map<int, std::shared_ptr<Bullet>>& getBullets() const;
-    static void handlePlayerShoot(int playerId);
+    std::vector<std::shared_ptr<Bullet>>& getBullets();
+    void handlePlayerShoot(int playerId);
+    void handleEnemyShoot(int enemyId);
 
   private:
     BulletManager() = default;
     ~BulletManager() = default;
 
-    std::unordered_map<int, std::shared_ptr<Bullet>> _bullets;
+    std::vector<std::shared_ptr<Bullet>> _bullets;
+    std::mutex _bulletsMutex;
 };

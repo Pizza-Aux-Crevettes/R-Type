@@ -6,13 +6,15 @@
 */
 
 #include "component/player/PlayerManager.hpp"
+#include "component/map/MapProtocol.hpp"
 #include "component/obstacle/ObstacleManager.hpp"
 #include "component/player/PlayerProtocol.hpp"
 #include "socket/UdpSocket.hpp"
 #include "util/Logger.hpp"
+#include "util/RandomSpawn.hpp"
 
 /**
- * @brief Construct a new PlayerManager:: PlayerManager object
+ * @brief Construct a new PlayerManager:: Player Manager object
  *
  */
 PlayerManager& PlayerManager::get() {
@@ -21,15 +23,16 @@ PlayerManager& PlayerManager::get() {
 }
 
 /**
- * @brief Create a new player
+ * @brief Create a player
  *
- * @param name The player's name
- * @return std::shared_ptr<Player> The created player
+ * @param name The name of the player
+ * @return std::shared_ptr<Player> The player
  */
 std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
+    Point spawnPos = RandomSpawn::generateRandomSpawnPosition();
     auto player =
-        std::make_shared<Player>(name, Point(50, 50), Point(20, 10), 1.0);
-    _players[player->getId()] = player;
+        std::make_shared<Player>(name, Point(spawnPos.getX(), spawnPos.getY()));
+    _players.push_back(player);
 
     Logger::success("[PlayerManager] Player created:\n"
                     "  - Player ID: " +
@@ -46,15 +49,18 @@ std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
 }
 
 /**
- * @brief Find a player by their ID
+ * @brief Find a player by ID
  *
- * @param playerId The player's ID
+ * @param playerId The ID of the player
  * @return std::shared_ptr<Player> The player
  */
-std::shared_ptr<Player> PlayerManager::findPlayerById(int32_t playerId) const {
-    auto it = _players.find(playerId);
+std::shared_ptr<Player> PlayerManager::findByID(int32_t playerId) const {
+    auto it = std::find_if(_players.begin(), _players.end(),
+                           [playerId](const std::shared_ptr<Player>& player) {
+                               return player->getId() == playerId;
+                           });
     if (it != _players.end()) {
-        return it->second;
+        return *it;
     }
 
     Logger::warning("[PlayerManager] Player not found. Player ID: " +
@@ -63,21 +69,21 @@ std::shared_ptr<Player> PlayerManager::findPlayerById(int32_t playerId) const {
 }
 
 /**
- * @brief Remove a player by their ID
+ * @brief Remove a player
  *
- * @param playerId The player's ID
+ * @param playerId The ID of the player
  * @return true If the player was removed
  * @return false If the player was not removed
  */
 bool PlayerManager::removePlayer(int32_t playerId) {
-    auto it = _players.find(playerId);
+    auto it = std::remove_if(_players.begin(), _players.end(),
+                             [playerId](const std::shared_ptr<Player>& player) {
+                                 return player->getId() == playerId;
+                             });
+
     if (it != _players.end()) {
-        _players.erase(it);
-
-        PlayerProtocol::sendPlayerDeleted(playerId);
-
-        Logger::success("[PlayerManager] Player removed. Player ID: " +
-                        std::to_string(playerId));
+        _players.erase(it, _players.end());
+        MapProtocol::sendEntityDeleted(playerId);
         return true;
     }
 
@@ -87,15 +93,15 @@ bool PlayerManager::removePlayer(int32_t playerId) {
 }
 
 /**
- * @brief Move a player by their ID
+ * @brief Move the player
  *
- * @param playerId The player's ID
+ * @param playerId The ID of the player
  * @param offsetX The X offset
  * @param offsetY The Y offset
  */
 void PlayerManager::movePlayer(int32_t playerId, int32_t offsetX,
                                int32_t offsetY) {
-    auto player = findPlayerById(playerId);
+    auto player = findByID(playerId);
     if (!player) {
         Logger::warning("[PlayerManager] Player not found. Player ID: " +
                         std::to_string(playerId));
@@ -103,29 +109,20 @@ void PlayerManager::movePlayer(int32_t playerId, int32_t offsetX,
     }
 
     Point currentPos = player->getPosition();
-    Point newPos(currentPos.getX() + offsetX, currentPos.getY() + offsetY);
+    int32_t moveX = ObstacleManager::get().getMaxMoveDistance(
+        currentPos.getX(), currentPos.getY(), offsetX, 0);
+    int32_t moveY = ObstacleManager::get().getMaxMoveDistance(
+        currentPos.getX(), currentPos.getY(), 0, offsetY);
 
-    if (!ObstacleManager::get().isVoid(newPos.getX(), newPos.getY())) {
-        Logger::info("[PlayerManager] Player " + std::to_string(playerId) +
-                     " cannot move to blocked position (" +
-                     std::to_string(newPos.getX()) + ", " +
-                     std::to_string(newPos.getY()) + ").");
-        return;
-    }
-
+    Point newPos(currentPos.getX() + moveX, currentPos.getY() + moveY);
     player->setPosition(newPos);
-    Logger::success("[PlayerManager] Player " + std::to_string(playerId) +
-                    " moved to position (" + std::to_string(newPos.getX()) +
-                    ", " + std::to_string(newPos.getY()) + ").");
 }
 
 /**
- * @brief Get the players
+ * @brief Get all players
  *
- * @return const std::unordered_map<int32_t, std::shared_ptr<Player>>& The
- * players
+ * @return const std::vector<std::shared_ptr<Player>>&
  */
-const std::unordered_map<int32_t, std::shared_ptr<Player>>&
-PlayerManager::getPlayers() const {
+const std::vector<std::shared_ptr<Player>>& PlayerManager::getPlayers() const {
     return _players;
 }

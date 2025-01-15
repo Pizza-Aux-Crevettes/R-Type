@@ -14,12 +14,13 @@
 #include <components/Position.hpp>
 #include <components/Sprite.hpp>
 #include <components/Texture.hpp>
-#include "components/Sound.hpp"
 #include <menu/OptionMenu.hpp>
 #include <thread>
 #include "EntityManager.hpp"
 #include "component/hotkey/HotkeysManager.hpp"
+#include "components/Sound.hpp"
 #include "menu/Menu.hpp"
+#include "menu/LifeBar.hpp"
 #include "network/protocol/NetworkClient.hpp"
 #include "network/protocol/Protocol.hpp"
 #include "network/socket/TcpSocket.hpp"
@@ -83,29 +84,32 @@ void Client::manageClient() {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "RTYPE");
     std::string ipAdress;
     std::string username;
-    HotkeysManager input;
     GameEngine::System system;
     sf::Texture background = EntityManager::get().manageBackground(window);
-    Menu menu;
     OptionMenu optionMenu;
+    LifeBar lifeBarMenu;
     Sound menuSound;
     Sound gameSound;
     Sound bulletSound;
     Sound clickSound;
-    
-    if (!menuSound.getSoundBuffer().loadFromFile("assets/sounds/ambien-song.wav")) {
+
+    if (!menuSound.getSoundBuffer().loadFromFile(
+            "assets/sounds/ambien-song.wav")) {
         std::cerr << "Error: unable to load the audio file." << std::endl;
     }
 
-    if (!gameSound.getSoundBuffer().loadFromFile("assets/sounds/boss-song.wav")) {
+    if (!gameSound.getSoundBuffer().loadFromFile(
+            "assets/sounds/boss-song.wav")) {
         std::cerr << "Error: unable to load the audio file." << std::endl;
     }
 
-    if (!bulletSound.getSoundBuffer().loadFromFile("assets/sounds/shoot-sound.wav")) {
+    if (!bulletSound.getSoundBuffer().loadFromFile(
+            "assets/sounds/shoot-sound.wav")) {
         std::cerr << "Error: unable to load the audio file." << std::endl;
     }
 
-    if (!clickSound.getSoundBuffer().loadFromFile("assets/sounds/click-menu.wav")) {
+    if (!clickSound.getSoundBuffer().loadFromFile(
+            "assets/sounds/click-menu.wav")) {
         std::cerr << "Error: unable to load the audio file." << std::endl;
     }
 
@@ -137,39 +141,44 @@ void Client::manageClient() {
                 clickSound.getSound().play();
             }
             if (serverInitialized) {
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+                if (event.type == sf::Event::KeyPressed &&
+                    event.key.code == sf::Keyboard::Space) {
                     bulletSound.getSound().play();
                 }
             }
-            input.checkKey(event);
-            menu.setupInput(event);
+            if (event.type == sf::Event::KeyPressed)
+                HotkeysManager::get().checkKey(event);
+            Menu::get().setupInput(event);
             optionMenu.setNewKey(event, system);
-
         }
         window.clear();
         if (!Client::get().getIsPlayed()) {
-            menu.displayMenu(window, system, optionMenu);
+            Menu::get().displayMenu(window, system, optionMenu);
         } else {
             if (!serverInitialized) {
                 try {
                     if (Client::get().getIp() == "") {
                         ipAdress = "127.0.0.1";
+                        Client::get().setIp(ipAdress);
                     } else {
                         ipAdress = Client::get().getIp();
                     }
                     if (Client::get().getUsername() == "") {
                         username = "Guest";
+                        Client::get().setUsername(username);
                     } else {
                         username = Client::get().getUsername();
                     }
-                    networkClient = std::make_unique<NetworkClient>(ipAdress, SERVER_PORT);
+                    networkClient =
+                        std::make_unique<NetworkClient>(ipAdress, SERVER_PORT);
                     initializeNetwork(*networkClient);
                     serverThread =
                         std::thread(runNetworkClient, std::ref(*networkClient));
                     serverThread.detach();
 
                     SmartBuffer smartBuffer;
-                    smartBuffer << static_cast<int16_t>(Protocol::OpCode::NEW_PLAYER);
+                    smartBuffer << static_cast<int16_t>(
+                        Protocol::OpCode::CREATE_PLAYER);
                     smartBuffer << username;
                     TcpSocket::send(smartBuffer);
 
@@ -186,6 +195,7 @@ void Client::manageClient() {
             if (!entitiesList.empty()) {
                 system.render(window, entitiesList);
             }
+            lifeBarMenu.displayLifeBar(window, system);
         }
         window.display();
     }

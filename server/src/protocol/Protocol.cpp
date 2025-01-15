@@ -36,21 +36,16 @@ void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer) {
     int16_t opCode;
     smartBuffer >> opCode;
 
-    Logger::info("[Protocol] Handling message with OpCode: " +
-                 std::to_string(opCode));
-
     switch (static_cast<OpCode>(opCode)) {
     case DEFAULT:
         Logger::warning("[Protocol] DEFAULT OpCode received. No action taken.");
         break;
 
-    case NEW_PLAYER:
-        Logger::info("[Protocol] NEW_PLAYER operation.");
+    case CREATE_PLAYER:
         PlayerProtocol::newPlayer(clientSocket, smartBuffer);
         break;
 
     case HOTKEY_PRESSED:
-        Logger::info("[Protocol] HOTKEY_PRESSED operation.");
         HotkeysProtocol::processHotkey(clientSocket, smartBuffer);
         break;
 

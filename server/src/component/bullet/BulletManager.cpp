@@ -6,6 +6,9 @@
 */
 
 #include "component/bullet/BulletManager.hpp"
+#include "component/enemy/EnemyManager.hpp"
+#include "component/map/MapProtocol.hpp"
+#include "component/obstacle/ObstacleManager.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
@@ -26,10 +29,8 @@ BulletManager& BulletManager::get() {
  * @param bullet The bullet to add
  */
 void BulletManager::addBullet(std::shared_ptr<Bullet> bullet) {
-    _bullets[bullet->getId()] = bullet;
-
-    Logger::info("[BulletManager] Added bullet with ID: " +
-                 std::to_string(bullet->getId()));
+    std::lock_guard<std::mutex> lock(_bulletsMutex);
+    _bullets.push_back(bullet);
 }
 
 /**
@@ -37,14 +38,19 @@ void BulletManager::addBullet(std::shared_ptr<Bullet> bullet) {
  *
  */
 void BulletManager::updateBullets() {
-    int viewportWidth = RENDER_DISTANCE * BLOCK_SIZE;
-    int viewportHeight = RENDER_DISTANCE * BLOCK_SIZE;
+    std::lock_guard<std::mutex> lock(_bulletsMutex);
+    int viewportEnd = RENDER_DISTANCE * OBSTACLE_SIZE;
 
     for (auto it = _bullets.begin(); it != _bullets.end();) {
-        auto& bullet = it->second;
+        auto& bullet = *it;
 
-        bullet->move();
-        it++;
+        if (bullet->getPosition().getX() > viewportEnd) {
+            MapProtocol::sendEntityDeleted(bullet->getId());
+            it = _bullets.erase(it);
+        } else {
+            bullet->move();
+            ++it;
+        }
     }
 }
 
@@ -53,8 +59,8 @@ void BulletManager::updateBullets() {
  *
  * @return const std::unordered_map<int, std::shared_ptr<Bullet>>&
  */
-const std::unordered_map<int, std::shared_ptr<Bullet>>&
-BulletManager::getBullets() const {
+std::vector<std::shared_ptr<Bullet>>& BulletManager::getBullets() {
+    std::lock_guard<std::mutex> lock(_bulletsMutex);
     return _bullets;
 }
 
@@ -64,20 +70,30 @@ BulletManager::getBullets() const {
  * @param playerId The ID of the player who shot
  */
 void BulletManager::handlePlayerShoot(int playerId) {
-    auto player = PlayerManager::get().findPlayerById(playerId);
-    if (!player) {
-        Logger::warning("[HotkeysManager] Player " + std::to_string(playerId) +
-                        " not found.");
+    auto player = PlayerManager::get().findByID(playerId);
+    if (!player)
         return;
-    }
 
     auto position = player->getPosition();
-    auto direction = Point(1, 0);
-    auto speed = BULLET_SPEED;
-
+    Point direction(1, 0);
+    auto speed = PLAYER_BULLET_SPEED;
     auto bullet = std::make_shared<Bullet>(position, direction, speed);
-    BulletManager::get().addBullet(bullet);
+    addBullet(bullet);
+}
 
-    Logger::info("[HotkeysManager] Player " + std::to_string(playerId) +
-                 " fired a bullet.");
+/**
+ * @brief Handle the enemy shoot event
+ *
+ * @param enemyId The ID of the enemy who shot
+ */
+void BulletManager::handleEnemyShoot(int enemyId) {
+    auto enemy = EnemyManager::get().findById(enemyId);
+    if (!enemy)
+        return;
+
+    Point enemyPosition = enemy->getPosition();
+    Point direction(-1, 0);
+    double speed = enemy->getBulletSpeed();
+    auto bullet = std::make_shared<Bullet>(enemyPosition, direction, speed);
+    addBullet(bullet);
 }
