@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 #include <iomanip>
 #include "../../include/component/hotkey/HotkeysManager.hpp"
+#include "component/sound/SoundManager.hpp"
 #include "Client.hpp"
 #include "components/Button.hpp"
 #include "components/Color.hpp"
@@ -410,8 +411,9 @@ int OptionMenu::getVolumnMusic() {
 }
 
 void OptionMenu::setVolumnMusic(int new_volumn) {
-    _volumnMusic = new_volumn;
     std::cout << "New volumn music " << _volumnMusic << std::endl;
+    _volumnMusic = new_volumn;
+    SoundManager::get().setMusicVolumn(_volumnMusic);
 }
 
 // Volumn game
@@ -421,6 +423,7 @@ int OptionMenu::getVolumnGame() {
 
 void OptionMenu::setVolumnGame(int new_volumn) {
     _volumnGame = new_volumn;
+    SoundManager::get().setEffectVolumn(_volumnGame);
     std::cout << "New volumn game " << _volumnGame << std::endl;
 }
 

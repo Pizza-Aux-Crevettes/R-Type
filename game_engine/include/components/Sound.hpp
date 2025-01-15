@@ -13,8 +13,9 @@
 
 class Sound : public Component {
   public:
-    Sound(std::string soundFile = "", int volume = 100);
+    Sound(std::string soundFile = "");
     ~Sound();
+    static Sound& get();
     sf::Sound& getSound();
     sf::SoundBuffer& getSoundBuffer();
     std::string getSoundFile() const;

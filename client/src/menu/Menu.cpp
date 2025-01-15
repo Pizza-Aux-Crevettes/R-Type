@@ -69,11 +69,6 @@ Menu::createEntityInput(int id, std::string font, int fontSize,
     return inputEntity;
 }
 
-void Menu::isClickedPlay() {
-    std::cout << "Button play clicked!" << std::endl;
-    Client::get().setIsPlayed();
-}
-
 void Menu::isClickedInput(bool isIpClicked, bool isPortClicked,
                           bool isUsernameClicked) {
 
@@ -121,11 +116,6 @@ void Menu::setupInput(const sf::Event& event) {
     }
 }
 
-void Menu::isClickedExit(sf::RenderWindow& window) {
-    std::cout << "Button Exit clicked!" << std::endl;
-    window.close();
-}
-
 void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
     if (_currentMenuState == MenuState::MainMenu) {
         if (!_entitiesInitialized) {
@@ -154,21 +144,22 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
                     entityId++, "PLAY", "assets/font/Inter_Bold.ttf", 50,
                     {{responsive.getResponsivePosX(1920, currentWidth, 860),
                       responsive.getResponsivePosY(1080, currentHeight, 365)}},
-                    [this]() { isClickedPlay(); }));
+                    [this]() { Client::get().setIsPlayed(); }));
             _entitiesMenu.emplace(
                 entityId,
                 createEntityButton(
                     entityId++, "OPTION", "assets/font/Inter_Bold.ttf", 50,
                     {{responsive.getResponsivePosX(1920, currentWidth, 810),
                       responsive.getResponsivePosY(1080, currentHeight, 500)}},
-                    [this]() { _currentMenuState = MenuState::OptionMenu; }));
+                    [this]() { _currentMenuState = MenuState::OptionMenu;
+                                isClickedInput(false, false, false); }));
             _entitiesMenu.emplace(
                 entityId,
                 createEntityButton(
                     entityId++, "EXIT", "assets/font/Inter_Bold.ttf", 50,
                     {{responsive.getResponsivePosX(1920, currentWidth, 870),
                       responsive.getResponsivePosY(1080, currentHeight, 646)}},
-                    [this, &window]() { isClickedExit(window); }));
+                    [this, &window]() { window.close(); }));
             _entitiesMenu.emplace(
                 entityId,
                 createEntitySprite(
