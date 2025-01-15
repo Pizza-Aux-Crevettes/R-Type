@@ -95,6 +95,25 @@ void EnemyManager::addEnemy(const std::shared_ptr<Enemy>& enemy) {
 }
 
 /**
+ * @brief Find an enemy by its ID
+ *
+ * @param enemyId The ID of the enemy
+ * @return std::shared_ptr<Enemy> The enemy
+ */
+std::shared_ptr<Enemy> EnemyManager::findById(int enemyId) const {
+    auto it = std::find_if(_enemies.begin(), _enemies.end(),
+                           [enemyId](const std::shared_ptr<Enemy>& enemy) {
+                               return enemy->getId() == enemyId;
+                           });
+    if (it != _enemies.end()) {
+        return *it;
+    }
+
+    Logger::warning("[EnemyManager] Enemy not found. Enemy ID: " + std::to_string(enemyId));
+    return nullptr;
+}
+
+/**
  * @brief Update all enemies
  *
  */

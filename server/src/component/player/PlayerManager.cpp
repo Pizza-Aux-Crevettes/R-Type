@@ -54,11 +54,13 @@ std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
  * @param playerId The ID of the player
  * @return std::shared_ptr<Player> The player
  */
-std::shared_ptr<Player> PlayerManager::findPlayerById(int32_t playerId) const {
-    for (const auto& player : _players) {
-        if (player->getId() == playerId) {
-            return player;
-        }
+std::shared_ptr<Player> PlayerManager::findByID(int32_t playerId) const {
+    auto it = std::find_if(_players.begin(), _players.end(),
+                           [playerId](const std::shared_ptr<Player>& player) {
+                               return player->getId() == playerId;
+                           });
+    if (it != _players.end()) {
+        return *it;
     }
 
     Logger::warning("[PlayerManager] Player not found. Player ID: " +
@@ -99,7 +101,7 @@ bool PlayerManager::removePlayer(int32_t playerId) {
  */
 void PlayerManager::movePlayer(int32_t playerId, int32_t offsetX,
                                int32_t offsetY) {
-    auto player = findPlayerById(playerId);
+    auto player = findByID(playerId);
     if (!player) {
         Logger::warning("[PlayerManager] Player not found. Player ID: " +
                         std::to_string(playerId));

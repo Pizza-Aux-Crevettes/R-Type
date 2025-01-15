@@ -26,6 +26,7 @@ class EnemyManager {
 
     std::string EnemyTypeToString(EnemyType type) const;
     void addEnemy(const std::shared_ptr<Enemy>& enemy);
+    std::shared_ptr<Enemy> findById(int enemyId) const;
     void updateEnemies();
     const std::vector<std::shared_ptr<Enemy>>& getEnemies() const;
     const std::vector<std::shared_ptr<Enemy>>& getVisibleEnemies() const;
