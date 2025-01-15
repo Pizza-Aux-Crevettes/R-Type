@@ -39,7 +39,7 @@ void BulletManager::addBullet(std::shared_ptr<Bullet> bullet) {
  */
 void BulletManager::updateBullets() {
     std::lock_guard<std::mutex> lock(_bulletsMutex);
-    int viewportEnd = RENDER_DISTANCE * BLOCK_SIZE;
+    int viewportEnd = RENDER_DISTANCE * OBSTACLE_SIZE;
 
     for (auto it = _bullets.begin(); it != _bullets.end();) {
         auto& bullet = *it;
@@ -76,7 +76,7 @@ void BulletManager::handlePlayerShoot(int playerId) {
 
     auto position = player->getPosition();
     Point direction(1, 0);
-    auto speed = BULLET_SPEED;
+    auto speed = PLAYER_BULLET_SPEED;
     auto bullet = std::make_shared<Bullet>(position, direction, speed);
     addBullet(bullet);
 }

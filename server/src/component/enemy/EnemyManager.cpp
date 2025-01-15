@@ -91,8 +91,6 @@ EnemyManager::getEnemyProperties(const std::string& code) const {
  */
 void EnemyManager::addEnemy(const std::shared_ptr<Enemy>& enemy) {
     _enemies.push_back(enemy);
-    Logger::info("[EnemyManager] Added enemy with ID: " +
-                 std::to_string(enemy->getId()));
 }
 
 /**
@@ -131,14 +129,11 @@ void EnemyManager::updateEnemies() {
         enemy->move();
 
         if (enemy->getPosition().getX() < -enemy->getWidth()) {
-            Logger::info("[EnemyManager] Removed enemy with ID: " +
-                         std::to_string(enemy->getId()));
-
             MapProtocol::sendEntityDeleted(enemy->getId());
             it = _enemies.erase(it);
         } else {
-            if (enemy->getPosition().getX() < RENDER_DISTANCE * BLOCK_SIZE &&
-                enemy->getPosition().getX() > -BLOCK_SIZE) {
+            if (enemy->getPosition().getX() < RENDER_DISTANCE * OBSTACLE_SIZE &&
+                enemy->getPosition().getX() > -OBSTACLE_SIZE) {
                 _visibleEnemies.push_back(enemy);
             }
             ++it;

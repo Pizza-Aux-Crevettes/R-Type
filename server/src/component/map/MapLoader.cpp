@@ -57,14 +57,14 @@ void MapLoader::loadMapFromFile(const std::string& filePath) {
  * @param y The y position of the line
  */
 void MapLoader::parseMapLine(const std::string& line, int32_t y) {
-    int32_t blockY = y * BLOCK_SIZE;
+    int32_t blockY = y * OBSTACLE_SIZE;
 
-    for (size_t x = 0; x < line.size(); x += BLOCK_OFFSET) {
-        std::string code = line.substr(x, BLOCK_OFFSET);
+    for (size_t x = 0; x < line.size(); x += OBSTACLE_OFFSET) {
+        std::string code = line.substr(x, OBSTACLE_OFFSET);
 
         if (ObstacleManager::get().isObstacleCodeValid(code)) {
             int32_t blockX =
-                static_cast<int32_t>(x / BLOCK_OFFSET) * BLOCK_SIZE;
+                static_cast<int32_t>(x / OBSTACLE_OFFSET) * OBSTACLE_SIZE;
 
             auto obstacle = std::make_shared<Obstacle>(
                 ObstacleManager::get().getObstacleType(code),
@@ -72,7 +72,7 @@ void MapLoader::parseMapLine(const std::string& line, int32_t y) {
             ObstacleManager::get().addObstacle(obstacle);
         } else if (EnemyManager::get().isEnemyCodeValid(code)) {
             int32_t enemyX =
-                static_cast<int32_t>(x / BLOCK_OFFSET) * BLOCK_SIZE;
+                static_cast<int32_t>(x / OBSTACLE_OFFSET) * OBSTACLE_SIZE;
 
             const auto& properties =
                 EnemyManager::get().getEnemyProperties(code);

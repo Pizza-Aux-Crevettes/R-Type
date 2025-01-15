@@ -14,10 +14,10 @@
 
 enum class ObstacleType {
     NONE,
-    BLOCK,
-    BLOCK2,
-    BLOCK3,
-    BLOCK4,
+    OBSTACLE,
+    OBSTACLE2,
+    OBSTACLE3,
+    OBSTACLE4,
 };
 
 class Obstacle {

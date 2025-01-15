@@ -30,7 +30,7 @@ void ObstacleProtocol::sendObstaclesUpdate(const sockaddr_in& clientAddr,
                     << static_cast<int32_t>(obstacle->getId())
                     << static_cast<int32_t>(obstacle->getPosition().getX())
                     << static_cast<int32_t>(obstacle->getPosition().getY())
-                    << static_cast<int16_t>(BLOCK_SIZE)
+                    << static_cast<int16_t>(OBSTACLE_SIZE)
                     << static_cast<int16_t>(obstacle->getType());
 
         UdpSocket::get().sendToOne(clientAddr, smartBuffer);

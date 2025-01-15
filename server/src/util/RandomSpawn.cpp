@@ -16,10 +16,10 @@
  * @return const Point The spawn position
  */
 const Point RandomSpawn::generateRandomSpawnPosition() {
-    const int xMin = BLOCK_SIZE + 20;
+    const int xMin = OBSTACLE_SIZE + 20;
     const int xMax = 100;
-    const int yMin = BLOCK_SIZE + 20;
-    const int yMax = MAP_HEIGHT - BLOCK_SIZE - 20;
+    const int yMin = OBSTACLE_SIZE + 20;
+    const int yMax = MAP_HEIGHT - OBSTACLE_SIZE - 20;
 
     static std::random_device rd;
     static std::mt19937 gen(rd());
