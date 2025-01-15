@@ -103,17 +103,23 @@ void PlayerManager::movePlayer(int32_t playerId, int32_t offsetX,
     }
 
     Point currentPos = player->getPosition();
-    Point newPos(currentPos.getX() + offsetX, currentPos.getY() + offsetY);
+    int32_t moveX = ObstacleManager::get().getMaxMoveDistance(
+        currentPos.getX(), currentPos.getY(), offsetX, 0);
+    int32_t moveY = ObstacleManager::get().getMaxMoveDistance(
+        currentPos.getX(), currentPos.getY(), 0, offsetY);
 
-    if (!ObstacleManager::get().isVoid(newPos.getX(), newPos.getY())) {
+    if (moveX != offsetX || moveY != offsetY) {
         Logger::info("[PlayerManager] Player " + std::to_string(playerId) +
-                     " cannot move to blocked position (" +
-                     std::to_string(newPos.getX()) + ", " +
-                     std::to_string(newPos.getY()) + ").");
-        return;
+                     " cannot move fully to position (" +
+                     std::to_string(currentPos.getX() + offsetX) + ", " +
+                     std::to_string(currentPos.getY() + offsetY) +
+                     "). Adjusted movement: (" + std::to_string(moveX) + ", " +
+                     std::to_string(moveY) + ").");
     }
 
+    Point newPos(currentPos.getX() + moveX, currentPos.getY() + moveY);
     player->setPosition(newPos);
+
     Logger::success("[PlayerManager] Player " + std::to_string(playerId) +
                     " moved to position (" + std::to_string(newPos.getX()) +
                     ", " + std::to_string(newPos.getY()) + ").");

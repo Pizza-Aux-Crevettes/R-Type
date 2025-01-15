@@ -17,7 +17,7 @@
  * @param clientAddr The client address
  * @param smartBuffer The smart buffer
  *
- * Protocol: UPDATE_BULLET
+ * Protocol: UPDATE_BULLETS
  * Payload: bulletId (int32_t), posX (int32_t), posY (int32_t)
  */
 void BulletProtocol::sendBulletsUpdate(const sockaddr_in& clientAddr,

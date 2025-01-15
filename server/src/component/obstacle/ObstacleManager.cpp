@@ -7,6 +7,7 @@
 
 #include "component/obstacle/ObstacleManager.hpp"
 #include "component/map/MapProtocol.hpp"
+#include "component/player/PlayerManager.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
@@ -128,16 +129,68 @@ void ObstacleManager::updateObstacles() {
     _visibleObstacles.clear();
     _viewport += MAP_SPEED;
 
+    auto players = PlayerManager::get().getPlayers();
+
     for (const auto& obstacle : _obstacles) {
-        if (obstacle->getPosition().getX() < RENDER_DISTANCE * BLOCK_SIZE && obstacle->getPosition().getX() > -BLOCK_SIZE) {
+        obstacle->setPosition(Point(obstacle->getPosition().getX() - MAP_SPEED,
+                                    obstacle->getPosition().getY()));
+
+        for (const auto& [id, player] : players) {
+            if (obstacle->collidesWith(player)) {
+                PlayerManager::get().movePlayer(player->getId(), -MAP_SPEED, 0);
+            }
+        }
+
+        if (obstacle->getPosition().getX() < RENDER_DISTANCE * BLOCK_SIZE &&
+            obstacle->getPosition().getX() > -BLOCK_SIZE) {
             _visibleObstacles.push_back(obstacle);
         }
         if (obstacle->getPosition().getX() < -BLOCK_SIZE) {
             MapProtocol::sendEntityDeleted(obstacle->getId());
         }
-        obstacle->setPosition(Point(obstacle->getPosition().getX() - MAP_SPEED,
-                                    obstacle->getPosition().getY()));
     }
+}
+
+/**
+ * @brief Check if the player can move to a specific position
+ *
+ * @param x The x coordinate of the new position
+ * @param y The y coordinate of the new position
+ * @return int32_t The maximum distance the player can move before collision
+ */
+int32_t ObstacleManager::getMaxMoveDistance(int32_t x, int32_t y,
+                                            int32_t offsetX,
+                                            int32_t offsetY) const {
+    for (const auto& obstacle : _obstacles) {
+        int32_t blockX = obstacle->getPosition().getX();
+        int32_t blockY = obstacle->getPosition().getY();
+
+        if (offsetX != 0) {
+            if (y + PLAYER_HEIGHT > blockY && y < blockY + BLOCK_SIZE) {
+                if (offsetX > 0 && x + PLAYER_WIDTH <= blockX &&
+                    x + PLAYER_WIDTH + offsetX > blockX) {
+                    return blockX - (x + PLAYER_WIDTH);
+                } else if (offsetX < 0 && x >= blockX + BLOCK_SIZE &&
+                           x + offsetX < blockX + BLOCK_SIZE) {
+                    return blockX + BLOCK_SIZE - x;
+                }
+            }
+        }
+
+        if (offsetY != 0) {
+            if (x + PLAYER_WIDTH > blockX && x < blockX + BLOCK_SIZE) {
+                if (offsetY > 0 && y + PLAYER_HEIGHT <= blockY &&
+                    y + PLAYER_HEIGHT + offsetY > blockY) {
+                    return blockY - (y + PLAYER_HEIGHT);
+                } else if (offsetY < 0 && y >= blockY + BLOCK_SIZE &&
+                           y + offsetY < blockY + BLOCK_SIZE) {
+                    return blockY + BLOCK_SIZE - y;
+                }
+            }
+        }
+    }
+
+    return offsetX != 0 ? offsetX : offsetY;
 }
 
 /**
@@ -147,27 +200,6 @@ void ObstacleManager::updateObstacles() {
  */
 double ObstacleManager::getViewport() const {
     return _viewport;
-}
-
-/**
- * @brief Check if a block is void
- *
- * @param x The x position of the block
- * @param y The y position of the block
- * @return bool
- */
-bool ObstacleManager::isVoid(int32_t x, int32_t y) const {
-    for (const auto& obstacle : _obstacles) {
-        int32_t blockX = obstacle->getPosition().getX();
-        int32_t blockY = obstacle->getPosition().getY();
-
-        if (x >= blockX && x < blockX + BLOCK_SIZE && y >= blockY &&
-            y < blockY + BLOCK_SIZE) {
-            return obstacle->getType() == ObstacleType::NONE;
-        }
-    }
-
-    return true;
 }
 
 /**
