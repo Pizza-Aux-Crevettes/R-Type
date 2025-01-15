@@ -301,9 +301,11 @@ void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system,
     switch (_currentMenuState) {
     case MenuState::MainMenu:
         initMainMenu(window, system);
+        std::cout << "MAIN ENTTTERR" << std::endl;
         break;
     case MenuState::OptionMenu: {
         optionMenu.displayOptionMenu(window, system);
+        std::cout << "OPTIOOONN ENTTTERR" << std::endl;
         break;
     };
     }
