@@ -27,10 +27,10 @@ EnemyManager& EnemyManager::get() {
  */
 EnemyManager::EnemyManager() {
     _enemyMapping = {
-        {"E001", {EnemyType::ENEMY1, 3, 40, 40, 5, 1000, 300}},
-        {"E002", {EnemyType::ENEMY2, 10, 50, 50, 4, 800, 400}},
-        {"E003", {EnemyType::ENEMY3, 1, 60, 60, 6, 1200, 350}},
-        {"E004", {EnemyType::ENEMY4, 7, 70, 70, 7, 900, 250}},
+        {"E001", {EnemyType::ENEMY1, 3, 40, 40, 5, 10, 1000, 300}},
+        {"E002", {EnemyType::ENEMY2, 10, 50, 50, 4, 10, 800, 400}},
+        {"E003", {EnemyType::ENEMY3, 1, 60, 60, 6, 10, 1200, 350}},
+        {"E004", {EnemyType::ENEMY4, 7, 70, 70, 7, 10, 900, 250}},
     };
 
     Logger::success("[EnemyManager] Initialized enemy mappings.");
