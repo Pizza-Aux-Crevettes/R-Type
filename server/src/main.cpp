@@ -19,9 +19,6 @@ int main() {
     Logger::info("[Main] Starting application...");
 
     try {
-        Logger::success("[Main] Server successfully initialized on port " +
-                        std::to_string(PORT) + ".");
-
         MapLoader mapLoader;
         mapLoader.loadMapFromFile("./server/maps/map1.map");
 

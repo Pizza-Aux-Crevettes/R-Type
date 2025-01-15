@@ -29,14 +29,7 @@ Server::Server() {
 
     try {
         _tcpSocket.init();
-        Logger::socket("[Server] TCP socket initialized successfully on port " +
-                       std::to_string(PORT) + ".");
-
         _udpSocket.init();
-        Logger::socket("[Server] UDP socket initialized successfully on port " +
-                       std::to_string(PORT) + ".");
-
-        Logger::success("[Server] Initialization complete.");
     } catch (const std::exception& e) {
         throw std::runtime_error(std::string(e.what()));
     }
@@ -61,10 +54,7 @@ int Server::start() {
 
     try {
         _threads.emplace_back([&]() { _udpSocket.run(); });
-        Logger::thread("[Server] UDP run launched (3 internal threads).");
-
         _threads.emplace_back(&TcpSocket::readLoop, &_tcpSocket);
-        Logger::thread("[Server] TCP read loop thread started.");
 
         while (true)
             std::this_thread::sleep_for(

@@ -44,9 +44,6 @@ void PlayerProtocol::newPlayer(const int clientSocket,
 
     TcpSocket::get().sendToOne(clientSocket, smartBuffer);
 
-    Logger::packet("[PlayerProtocol] Sent player ID " +
-                   std::to_string(player->getId()) + " to client ");
-
     const auto& players = PlayerManager::get().getPlayers();
     for (const auto& [id, existingPlayer] : players) {
         smartBuffer.reset();
@@ -56,10 +53,6 @@ void PlayerProtocol::newPlayer(const int clientSocket,
                     << std::string{existingPlayer->getName()};
 
         UdpSocket::get().sendToAll(smartBuffer);
-
-        Logger::packet("[PlayerProtocol] Sent existing player ID " +
-                       std::to_string(existingPlayer->getId()) +
-                       " to new player.");
     }
 }
 
@@ -84,13 +77,5 @@ void PlayerProtocol::sendPlayerPosition(const sockaddr_in& clientAddr,
                     << static_cast<int32_t>(player->getPosition().getY());
 
         UdpSocket::get().sendToOne(clientAddr, smartBuffer);
-
-        Logger::packet("[PlayerProtocol] Position update sent:\n"
-                       "  - Player ID: " +
-                       std::to_string(player->getId()) +
-                       "\n"
-                       "  - Position: (" +
-                       std::to_string(player->getPosition().getX()) + ", " +
-                       std::to_string(player->getPosition().getY()) + ")");
     }
 }

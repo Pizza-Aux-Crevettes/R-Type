@@ -30,10 +30,6 @@ void MapProtocol::sendViewportUpdate(const sockaddr_in& clientAddr,
                 << static_cast<double>(viewport);
 
     UdpSocket::get().sendToOne(clientAddr, smartBuffer);
-
-    Logger::packet("[MapProtocol] Viewport update sent to client:\n"
-                   " - Value: " +
-                   std::to_string(viewport));
 }
 
 /**
@@ -59,15 +55,6 @@ void MapProtocol::sendObstaclesUpdate(const sockaddr_in& clientAddr,
                     << static_cast<int16_t>(obstacle->getType());
 
         UdpSocket::get().sendToOne(clientAddr, smartBuffer);
-
-        Logger::packet(
-            "[MapProtocol] Obstacle update sent:\n"
-            "  - ID: " +
-            std::to_string(obstacle->getId()) + "\n  - Position: (" +
-            std::to_string(obstacle->getPosition().getX()) + ", " +
-            std::to_string(obstacle->getPosition().getY()) + ")" +
-            "\n  - Type: " +
-            ObstacleManager::get().ObstacleTypeToString(obstacle->getType()));
     }
 }
 
@@ -85,8 +72,4 @@ void MapProtocol::sendEntityDeleted(const int32_t entityId) {
                 << static_cast<int32_t>(entityId);
 
     UdpSocket::get().sendToAll(smartBuffer);
-
-    Logger::packet("[PlayerProtocol] Entity deleted sent:\n"
-                   "  - Entity ID: " +
-                   std::to_string(entityId));
 }

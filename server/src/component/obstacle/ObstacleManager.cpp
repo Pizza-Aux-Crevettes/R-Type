@@ -33,7 +33,12 @@ ObstacleManager::ObstacleManager() {
         {"0004", ObstacleType::BLOCK4},
     };
 
-    Logger::info("[ObstacleManager] Initialized obstacle mappings.");
+    Logger::success("[ObstacleManager] Initialized obstacle mappings.");
+}
+
+ObstacleManager::~ObstacleManager() {
+    _obstacles.clear();
+    _visibleObstacles.clear();
 }
 
 /**
@@ -66,13 +71,6 @@ std::string ObstacleManager::ObstacleTypeToString(ObstacleType type) {
  */
 void ObstacleManager::addObstacle(const std::shared_ptr<Obstacle>& obstacle) {
     _obstacles.push_back(obstacle);
-
-    Logger::success(
-        "[ObstacleManager] Added obstacle. ID: " +
-        std::to_string(obstacle->getId()) +
-        ", Type: " + std::to_string(static_cast<int16_t>(obstacle->getType())) +
-        ", Position: (" + std::to_string(obstacle->getPosition().getX()) +
-        ", " + std::to_string(obstacle->getPosition().getY()) + ")");
 }
 
 /**
@@ -200,15 +198,4 @@ int32_t ObstacleManager::getMaxMoveDistance(int32_t x, int32_t y,
  */
 double ObstacleManager::getViewport() const {
     return _viewport;
-}
-
-/**
- * @brief Reset the obstacle manager
- *
- */
-void ObstacleManager::reset() {
-    _obstacles.clear();
-    _viewport = 0;
-
-    Logger::info("[ObstacleManager] Cleared all obstacles.");
 }

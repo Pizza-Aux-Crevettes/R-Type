@@ -80,7 +80,7 @@ void TcpSocket::readLoop() const {
 
         TcpSocket::get().addClient(clientSocket);
 
-        Logger::socket("[TCP Socket] Client connected: " +
+        Logger::socket("[TCP Socket] New client connected: " +
                        std::to_string(clientSocket));
 
         std::thread([clientSocket, clientAddr]() {
@@ -164,8 +164,8 @@ void TcpSocket::removeClient(const int clientSocket) {
         if (player->getClientSocket() == clientSocket) {
             PlayerManager::get().removePlayer(id);
 
-            Logger::info("[TcpSocket] Removed Player ID " + std::to_string(id) +
-                         " associated with Client Socket " +
+            Logger::success("[TcpSocket] Removed player with ID: " + std::to_string(id) +
+                         ", associated with client socket " +
                          std::to_string(clientSocket));
             break;
         }

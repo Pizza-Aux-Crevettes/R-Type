@@ -31,13 +31,5 @@ void BulletProtocol::sendBulletsUpdate(const sockaddr_in& clientAddr,
                     << static_cast<int32_t>(bullet->getPosition().getY());
 
         UdpSocket::get().sendToOne(clientAddr, smartBuffer);
-
-        Logger::packet("[BulletProtocol] Bullet update sent:\n"
-                       "  - Bullet ID: " +
-                       std::to_string(bullet->getId()) +
-                       "\n"
-                       "  - Position: (" +
-                       std::to_string(bullet->getPosition().getX()) + ", " +
-                       std::to_string(bullet->getPosition().getY()) + ")");
     }
 }

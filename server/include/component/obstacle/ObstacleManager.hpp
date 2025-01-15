@@ -27,11 +27,10 @@ class ObstacleManager {
     int32_t getMaxMoveDistance(int32_t x, int32_t y, int32_t offsetX,
                                int32_t offsetY) const;
     double getViewport() const;
-    void reset();
 
   private:
     ObstacleManager();
-    ~ObstacleManager() = default;
+    ~ObstacleManager();
 
     double _viewport = 0;
     std::vector<std::shared_ptr<Obstacle>> _obstacles;

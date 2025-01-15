@@ -73,9 +73,6 @@ std::shared_ptr<Player> PlayerManager::findPlayerById(int32_t playerId) const {
 bool PlayerManager::removePlayer(int32_t playerId) {
     auto it = _players.find(playerId);
     if (it != _players.end()) {
-        Logger::success("[PlayerManager] Player removed. Player ID: " +
-                        std::to_string(playerId));
-
         MapProtocol::sendEntityDeleted(playerId);
         _players.erase(it);
         return true;
@@ -108,21 +105,8 @@ void PlayerManager::movePlayer(int32_t playerId, int32_t offsetX,
     int32_t moveY = ObstacleManager::get().getMaxMoveDistance(
         currentPos.getX(), currentPos.getY(), 0, offsetY);
 
-    if (moveX != offsetX || moveY != offsetY) {
-        Logger::info("[PlayerManager] Player " + std::to_string(playerId) +
-                     " cannot move fully to position (" +
-                     std::to_string(currentPos.getX() + offsetX) + ", " +
-                     std::to_string(currentPos.getY() + offsetY) +
-                     "). Adjusted movement: (" + std::to_string(moveX) + ", " +
-                     std::to_string(moveY) + ").");
-    }
-
     Point newPos(currentPos.getX() + moveX, currentPos.getY() + moveY);
     player->setPosition(newPos);
-
-    Logger::success("[PlayerManager] Player " + std::to_string(playerId) +
-                    " moved to position (" + std::to_string(newPos.getX()) +
-                    ", " + std::to_string(newPos.getY()) + ").");
 }
 
 /**

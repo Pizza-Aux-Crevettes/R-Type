@@ -30,9 +30,6 @@ BulletManager& BulletManager::get() {
 void BulletManager::addBullet(std::shared_ptr<Bullet> bullet) {
     std::lock_guard<std::mutex> lock(_bulletsMutex);
     _bullets.push_back(bullet);
-
-    Logger::info("[BulletManager] Added bullet with ID: " +
-                 std::to_string(bullet->getId()));
 }
 
 /**
@@ -47,10 +44,6 @@ void BulletManager::updateBullets() {
         auto& bullet = *it;
 
         if (bullet->getPosition().getX() > viewportEnd) {
-            Logger::info("[BulletManager] Bullet with ID: " +
-                         std::to_string(bullet->getId()) +
-                         " is out of bounds.");
-
             MapProtocol::sendEntityDeleted(bullet->getId());
             it = _bullets.erase(it);
         } else {
@@ -89,7 +82,4 @@ void BulletManager::handlePlayerShoot(int playerId) {
 
     auto bullet = std::make_shared<Bullet>(position, direction, speed);
     BulletManager::get().addBullet(bullet);
-
-    Logger::info("[HotkeysManager] Player " + std::to_string(playerId) +
-                 " fired a bullet.");
 }
