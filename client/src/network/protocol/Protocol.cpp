@@ -72,11 +72,13 @@ void Protocol::handleCreatePlayerCallback(SmartBuffer& smartBuffer) {
     int32_t playerId;
     smartBuffer >> playerId;
 
+    EntityManager::get().setPlayerColor(playerId);
+    std::vector<int> playerRect = EntityManager::get().getPlayerColor();
     Protocol::setPlayerId(playerId);
 
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/spaceship.png")},
-        {"TextureRect", std::vector<int>{0, 0, 34, 15}},
+        {"TextureRect", std::vector<int>{playerRect}},
         {"Position", std::pair<float, float>(0.0f, 0.0f)}};
 
     std::map<std::string, std::any> playerNameItems = {
@@ -94,9 +96,12 @@ void Protocol::handleCreatePlayerBroadcast(SmartBuffer& smartBuffer) {
 
     smartBuffer >> playerId >> playerName;
 
+    EntityManager::get().setPlayerColor(playerId);
+    std::vector<int> playerRect = EntityManager::get().getPlayerColor();
+
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/spaceship.png")},
-        {"TextureRect", std::vector<int>{0, 0, 34, 15}},
+        {"TextureRect", std::vector<int>{playerRect}},
         {"Position", std::pair<float, float>(0.0f, 0.0f)}};
 
     std::map<std::string, std::any> playerNameItems = {
@@ -171,6 +176,9 @@ void Protocol::handleDeleteEntity(SmartBuffer& smartBuffer) {
 	}
 
     if (auto search = _entities.find(entityId); search != _entities.end()) {
+        if (auto search = _entities.find(entityId + 10000); search != _entities.end()) {
+            _entities.erase(entityId + 10000);
+        }
         _entities.erase(entityId);
     }
 }
