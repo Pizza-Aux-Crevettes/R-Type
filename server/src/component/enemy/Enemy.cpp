@@ -7,6 +7,7 @@
 
 #include "component/enemy/Enemy.hpp"
 #include "util/Config.hpp"
+#include "util/Logger.hpp"
 
 /**
  * @brief Construct a new Enemy object
@@ -180,4 +181,25 @@ void Enemy::updateShootCooldown() {
  */
 void Enemy::move() {
     _position.setX(_position.getX() - _speed);
+}
+
+/**
+ * @brief Take damage
+ *
+ * @param damage The amount of damage to take
+ */
+void Enemy::takeDamage(int16_t damage) {
+    _health -= damage;
+    if (_health <= 0) {
+        Logger::info("[Enemy] Enemy " + std::to_string(_id) + " died.");
+    }
+}
+
+/**
+ * @brief Get the enemy's health
+ *
+ * @return int16_t The enemy's health
+ */
+int16_t Enemy::getHealth() const {
+    return _health;
 }

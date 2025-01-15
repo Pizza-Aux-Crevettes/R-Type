@@ -33,6 +33,8 @@ class EnemyManager {
     const std::vector<std::shared_ptr<Enemy>>& getVisibleEnemies() const;
     bool isEnemyCodeValid(const std::string& code) const;
     EnemyProperties getEnemyProperties(const std::string& code) const;
+    void removeEnemy(int32_t enemyId);
+    void markEnemiesForDeletion(const std::vector<int32_t>& ids);
 
   private:
     EnemyManager();
@@ -41,4 +43,5 @@ class EnemyManager {
     std::unordered_map<std::string, EnemyProperties> _enemyMapping;
     std::vector<std::shared_ptr<Enemy>> _enemies;
     std::vector<std::shared_ptr<Enemy>> _visibleEnemies;
+    std::vector<int32_t> _enemiesToDelete;
 };

@@ -12,7 +12,17 @@
 #include "util/Config.hpp"
 #include "util/Point.hpp"
 
-enum class EnemyType { NONE, ENEMY1, ENEMY2, ENEMY3, ENEMY4 };
+enum class EnemyType {
+    NONE,
+    GRUNT,
+    SNIPER,
+    TANK,
+    SWARMER,
+    BOSS,
+    DRONE,
+    MINION,
+    CANNON
+};
 
 class Enemy {
   public:
@@ -35,6 +45,8 @@ class Enemy {
     void resetShootCooldown();
     void updateShootCooldown();
     void move();
+    void takeDamage(int16_t damage);
+    int16_t getHealth() const;
 
   private:
     int32_t _id;
@@ -47,5 +59,6 @@ class Enemy {
     int16_t _bulletDamage;
     int16_t _shootCooldown;
     int16_t _shootRange;
+    int16_t _health;
     int16_t _currentCooldown;
 };

@@ -7,6 +7,9 @@
 
 #pragma once
 
+#include <iostream>
+#include <cmath>
+
 class Point {
   public:
     explicit Point(double x = 0, double y = 0);
@@ -17,6 +20,7 @@ class Point {
     void setY(double y);
     Point getPoint() const;
     void setPoint(double x, double y);
+    void normalize();
 
   private:
     double _x;
