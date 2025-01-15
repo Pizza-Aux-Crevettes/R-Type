@@ -20,6 +20,7 @@
 #include "component/hotkey/HotkeysManager.hpp"
 #include "components/Sound.hpp"
 #include "menu/Menu.hpp"
+#include "menu/LifeBar.hpp"
 #include "network/protocol/NetworkClient.hpp"
 #include "network/protocol/Protocol.hpp"
 #include "network/socket/TcpSocket.hpp"
@@ -87,6 +88,7 @@ void Client::manageClient() {
     GameEngine::System system;
     sf::Texture background = EntityManager::get().manageBackground(window);
     OptionMenu optionMenu;
+    LifeBar lifeBarMenu;
     Sound menuSound;
     Sound gameSound;
     Sound bulletSound;
@@ -194,6 +196,7 @@ void Client::manageClient() {
             if (!entitiesList.empty()) {
                 system.render(window, entitiesList);
             }
+            lifeBarMenu.displayLifeBar(window, system);
         }
         window.display();
     }
