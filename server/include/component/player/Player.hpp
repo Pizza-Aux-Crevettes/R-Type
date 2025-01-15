@@ -9,6 +9,7 @@
 
 #include <optional>
 #include <string>
+#include <memory>
 #include "component/attr/Health.hpp"
 #include "util/Point.hpp"
 
