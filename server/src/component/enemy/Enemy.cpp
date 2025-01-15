@@ -20,11 +20,13 @@
  * @param shootCooldown The cooldown between shots
  * @param shootRange The range at which the enemy can shoot
  */
-Enemy::Enemy(EnemyType type, const Point& position, double speed, double bulletSpeed,
-             int width, int height, int shootCooldown, int shootRange)
-    : _id(IDManager::getNextId()), _type(type), _position(position), _speed(speed),
-      _bulletSpeed(bulletSpeed), _width(width), _height(height), _shootCooldown(shootCooldown),
-      _shootRange(shootRange), _currentCooldown(0) {}
+Enemy::Enemy(EnemyType type, const Point& position, double speed,
+             double bulletSpeed, int width, int height, int shootCooldown,
+             int shootRange)
+    : _id(IDManager::getNextId()), _type(type), _position(position),
+      _speed(speed), _bulletSpeed(bulletSpeed), _width(width), _height(height),
+      _shootCooldown(shootCooldown), _shootRange(shootRange),
+      _currentCooldown(0) {}
 
 /**
  * @brief Get the ID of the enemy

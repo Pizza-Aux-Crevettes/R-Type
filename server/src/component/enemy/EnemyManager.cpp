@@ -74,7 +74,8 @@ std::string EnemyManager::EnemyTypeToString(EnemyType type) const {
  * @param code The enemy code
  * @return EnemyProperties The properties of the enemy
  */
-EnemyProperties EnemyManager::getEnemyProperties(const std::string& code) const {
+EnemyProperties
+EnemyManager::getEnemyProperties(const std::string& code) const {
     auto it = _enemyMapping.find(code);
     if (it != _enemyMapping.end()) {
         return it->second;
@@ -109,7 +110,8 @@ std::shared_ptr<Enemy> EnemyManager::findById(int enemyId) const {
         return *it;
     }
 
-    Logger::warning("[EnemyManager] Enemy not found. Enemy ID: " + std::to_string(enemyId));
+    Logger::warning("[EnemyManager] Enemy not found. Enemy ID: " +
+                    std::to_string(enemyId));
     return nullptr;
 }
 
@@ -151,7 +153,8 @@ void EnemyManager::updateEnemies() {
 
         for (const auto& player : players) {
             if (std::abs(player->getPosition().getX() -
-                         enemy->getPosition().getX()) < enemy->getShootRange()) {
+                         enemy->getPosition().getX()) <
+                enemy->getShootRange()) {
                 BulletManager::get().handleEnemyShoot(enemy->getId());
                 enemy->resetShootCooldown();
                 break;

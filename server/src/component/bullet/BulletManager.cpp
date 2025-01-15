@@ -71,7 +71,8 @@ std::vector<std::shared_ptr<Bullet>>& BulletManager::getBullets() {
  */
 void BulletManager::handlePlayerShoot(int playerId) {
     auto player = PlayerManager::get().findByID(playerId);
-    if (!player) return;
+    if (!player)
+        return;
 
     auto position = player->getPosition();
     Point direction(1, 0);
@@ -87,7 +88,8 @@ void BulletManager::handlePlayerShoot(int playerId) {
  */
 void BulletManager::handleEnemyShoot(int enemyId) {
     auto enemy = EnemyManager::get().findById(enemyId);
-    if (!enemy) return;
+    if (!enemy)
+        return;
 
     Point enemyPosition = enemy->getPosition();
     Point direction(-1, 0);

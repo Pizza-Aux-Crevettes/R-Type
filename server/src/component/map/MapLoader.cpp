@@ -74,11 +74,13 @@ void MapLoader::parseMapLine(const std::string& line, int32_t y) {
             int32_t enemyX =
                 static_cast<int32_t>(x / BLOCK_OFFSET) * BLOCK_SIZE;
 
-            const auto& properties = EnemyManager::get().getEnemyProperties(code);
+            const auto& properties =
+                EnemyManager::get().getEnemyProperties(code);
 
             auto enemy = std::make_shared<Enemy>(
                 properties.type, Point(enemyX, blockY), properties.speed,
-                properties.bulletSpeed, properties.width, properties.height, properties.shootCooldown, properties.shootRange);
+                properties.bulletSpeed, properties.width, properties.height,
+                properties.shootCooldown, properties.shootRange);
 
             enemy->setShootCooldown(properties.shootCooldown);
             enemy->setShootRange(properties.shootRange);
