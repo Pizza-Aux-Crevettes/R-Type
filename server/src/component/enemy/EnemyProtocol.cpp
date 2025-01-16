@@ -27,7 +27,8 @@ void EnemyProtocol::sendEnemiesUpdate(const sockaddr_in& clientAddr,
     for (const auto& enemy : visibleEnemies) {
         if (enemy->getHealth() != ENEMY_FALLBACK_VALUE) {
             smartBuffer.reset();
-            smartBuffer << static_cast<int16_t>(Protocol::OpCode::UPDATE_ENEMIES)
+            smartBuffer << static_cast<int16_t>(
+                               Protocol::OpCode::UPDATE_ENEMIES)
                         << static_cast<int32_t>(enemy->getId())
                         << static_cast<int32_t>(enemy->getPosition().getX())
                         << static_cast<int32_t>(enemy->getPosition().getY())
