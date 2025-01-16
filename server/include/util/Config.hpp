@@ -26,10 +26,12 @@ enum Config {
     // Default
     DEFAULT_HEALTH = 100,
     DEFAULT_LIVES = 3,
+    DEFAULT_GONE = -9999,
 
     // Player
     PLAYER_WIDTH = 34,
     PLAYER_BULLET_SPEED = 10,
+    PLAYER_BULLET_DAMAGE = 10,
     PLAYER_HEIGHT = 15,
     PLAYER_SPEED = 30,
 
@@ -41,4 +43,8 @@ enum Config {
     MAP_SPEED = 2,
     MAP_WIDTH = 1280,
     MAP_HEIGHT = 720,
+
+    // Bullet
+    BULLET_WIDTH = 50,
+    BULLET_HEIGHT = 20,
 };

@@ -17,4 +17,6 @@ class MapProtocol {
     static void sendViewportUpdate(const sockaddr_in& clientAddr,
                                    SmartBuffer& smartBuffer);
     static void sendEntityDeleted(int32_t entityId);
+    static void sendEntityHealthUpdate(int32_t entityId, int16_t health,
+                                       int16_t maxHealth);
 };

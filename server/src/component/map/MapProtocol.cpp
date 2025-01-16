@@ -45,3 +45,25 @@ void MapProtocol::sendEntityDeleted(const int32_t entityId) {
 
     UdpSocket::get().sendToAll(smartBuffer);
 }
+
+/**
+ * @brief Send an entity health update to all clients
+ *
+ * @param entityId The entity ID
+ * @param health The entity's health
+ * @param maxHealth The entity's max health
+ *
+ * Protocol: UPDATE_ENTITY_HEALTH
+ * Payload: entityId (int32_t), health (int16_t), maxHealth (int16_t)
+ */
+void MapProtocol::sendEntityHealthUpdate(int32_t entityId, int16_t health,
+                                         int16_t maxHealth) {
+    SmartBuffer smartBuffer;
+    smartBuffer.reset();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::UPDATE_ENTITY_HEALTH)
+                << static_cast<int32_t>(entityId)
+                << static_cast<int16_t>(health)
+                << static_cast<int16_t>(maxHealth);
+
+    UdpSocket::get().sendToAll(smartBuffer);
+}

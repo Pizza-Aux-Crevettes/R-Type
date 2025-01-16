@@ -24,6 +24,8 @@ class ObstacleManager {
     bool isObstacleCodeValid(const std::string& code) const;
     ObstacleType getObstacleType(const std::string& code) const;
     void updateObstacles();
+    void forPlayers(const std::shared_ptr<Obstacle>& obstacle);
+    void invalidate(const std::shared_ptr<Obstacle>& obstacle);
     int32_t getMaxMoveDistance(int32_t x, int32_t y, int32_t offsetX,
                                int32_t offsetY) const;
     double getViewport() const;

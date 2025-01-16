@@ -37,15 +37,6 @@ ObstacleType Obstacle::getType() const {
 }
 
 /**
- * @brief Set the type of the obstacle
- *
- * @param type The new type
- */
-void Obstacle::setType(ObstacleType type) {
-    _type = type;
-}
-
-/**
  * @brief Get the position of the obstacle
  *
  * @return const Point& The position of the obstacle

@@ -65,6 +65,10 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
         handleDeleteEntity(smartBuffer);
         break;
 
+    case UPDATE_ENTITY_HEALTH:
+        handleUpdateEntityHealth(smartBuffer);
+        break;
+
     default:
         Logger::error("[Protocol] Unknown OpCode received: " +
                       std::to_string(opCode));
@@ -192,8 +196,6 @@ void Protocol::handleDeleteEntity(SmartBuffer& smartBuffer) {
     
     smartBuffer >> entityId;
 
-    //Logger::info("[Protocol] Deleting entity: " + std::to_string(entityId));
-
     auto& _entities = EntityManager::get().getEntityList();
 
 	if (_entities.empty()) {
@@ -203,4 +205,11 @@ void Protocol::handleDeleteEntity(SmartBuffer& smartBuffer) {
     if (auto search = _entities.find(entityId); search != _entities.end()) {
         _entities.erase(entityId);
     }
+}
+
+void Protocol::handleUpdateEntityHealth(SmartBuffer& smartBuffer) {
+    int32_t entityId;
+    int16_t health, maxHealth;
+    
+    smartBuffer >> entityId >> health >> maxHealth;
 }

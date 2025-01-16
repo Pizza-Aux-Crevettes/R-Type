@@ -79,11 +79,10 @@ void MapLoader::parseMapLine(const std::string& line, int32_t y) {
 
             auto enemy = std::make_shared<Enemy>(
                 properties.type, Point(enemyX, blockY), properties.speed,
-                properties.bulletSpeed, properties.width, properties.height,
-                properties.shootCooldown, properties.shootRange);
+                properties.width, properties.height, properties.bulletSpeed,
+                properties.bulletDamage, properties.shootCooldown,
+                properties.shootRange, properties.health);
 
-            enemy->setShootCooldown(properties.shootCooldown);
-            enemy->setShootRange(properties.shootRange);
             EnemyManager::get().addEnemy(enemy);
         }
     }

@@ -6,6 +6,7 @@
 */
 
 #include "component/obstacle/ObstacleManager.hpp"
+#include "component/enemy/EnemyManager.hpp"
 #include "component/map/MapProtocol.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "util/Config.hpp"
@@ -127,25 +128,39 @@ void ObstacleManager::updateObstacles() {
     _visibleObstacles.clear();
     _viewport += MAP_SPEED;
 
-    auto players = PlayerManager::get().getPlayers();
-
     for (const auto& obstacle : _obstacles) {
         obstacle->setPosition(Point(obstacle->getPosition().getX() - MAP_SPEED,
                                     obstacle->getPosition().getY()));
+        forPlayers(obstacle);
+        invalidate(obstacle);
+    }
+}
 
-        for (const auto& player : players) {
-            if (obstacle->collidesWith(player)) {
-                PlayerManager::get().movePlayer(player->getId(), -MAP_SPEED, 0);
-            }
+/**
+ * @brief Check if the obstacle collides with a player
+ *
+ * @param obstacle The obstacle to check
+ */
+void ObstacleManager::forPlayers(const std::shared_ptr<Obstacle>& obstacle) {
+    for (const auto& player : PlayerManager::get().getPlayers()) {
+        if (obstacle->collidesWith(player)) {
+            PlayerManager::get().movePlayer(player->getId(), -MAP_SPEED, 0);
         }
+    }
+}
 
-        if (obstacle->getPosition().getX() < RENDER_DISTANCE * OBSTACLE_SIZE &&
-            obstacle->getPosition().getX() > -OBSTACLE_SIZE) {
-            _visibleObstacles.push_back(obstacle);
-        }
-        if (obstacle->getPosition().getX() < -OBSTACLE_SIZE) {
-            MapProtocol::sendEntityDeleted(obstacle->getId());
-        }
+/**
+ * @brief Invalidate an obstacle
+ *
+ * @param obstacle The obstacle to invalidate
+ */
+void ObstacleManager::invalidate(const std::shared_ptr<Obstacle>& obstacle) {
+    if (obstacle->getPosition().getX() < RENDER_DISTANCE * OBSTACLE_SIZE) {
+        _visibleObstacles.push_back(obstacle);
+    }
+
+    if (obstacle->getPosition().getX() < -OBSTACLE_SIZE) {
+        MapProtocol::sendEntityDeleted(obstacle->getId());
     }
 }
 
@@ -183,6 +198,38 @@ int32_t ObstacleManager::getMaxMoveDistance(int32_t x, int32_t y,
                 } else if (offsetY < 0 && y >= blockY + OBSTACLE_SIZE &&
                            y + offsetY < blockY + OBSTACLE_SIZE) {
                     return blockY + OBSTACLE_SIZE - y;
+                }
+            }
+        }
+    }
+
+    auto enemies = EnemyManager::get().getEnemies();
+    for (const auto& enemy : enemies) {
+        int32_t enemyX = enemy->getPosition().getX();
+        int32_t enemyY = enemy->getPosition().getY();
+        int32_t enemyWidth = enemy->getWidth();
+        int32_t enemyHeight = enemy->getHeight();
+
+        if (offsetX != 0) {
+            if (y + PLAYER_HEIGHT > enemyY && y < enemyY + enemyHeight) {
+                if (offsetX > 0 && x + PLAYER_WIDTH <= enemyX &&
+                    x + PLAYER_WIDTH + offsetX > enemyX) {
+                    return enemyX - (x + PLAYER_WIDTH);
+                } else if (offsetX < 0 && x >= enemyX + enemyWidth &&
+                           x + offsetX < enemyX + enemyWidth) {
+                    return enemyX + enemyWidth - x;
+                }
+            }
+        }
+
+        if (offsetY != 0) {
+            if (x + PLAYER_WIDTH > enemyX && x < enemyX + enemyWidth) {
+                if (offsetY > 0 && y + PLAYER_HEIGHT <= enemyY &&
+                    y + PLAYER_HEIGHT + offsetY > enemyY) {
+                    return enemyY - (y + PLAYER_HEIGHT);
+                } else if (offsetY < 0 && y >= enemyY + enemyHeight &&
+                           y + offsetY < enemyY + enemyHeight) {
+                    return enemyY + enemyHeight - y;
                 }
             }
         }

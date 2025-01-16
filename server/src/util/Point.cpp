@@ -70,3 +70,15 @@ void Point::setPoint(const double x, const double y) {
     _x = x;
     _y = y;
 }
+
+/**
+ * @brief Normalize the point
+ *
+ */
+void Point::normalize() {
+    double magnitude = std::sqrt(_x * _x + _y * _y);
+    if (magnitude > 0) {
+        _x /= magnitude;
+        _y /= magnitude;
+    }
+}

@@ -27,11 +27,25 @@ EnemyManager& EnemyManager::get() {
  */
 EnemyManager::EnemyManager() {
     _enemyMapping = {
-        {"E001", {EnemyType::ENEMY1, 40, 40, 2.0, 5.0, 1000, 300}},
-        {"E002", {EnemyType::ENEMY2, 50, 50, 1.5, 4.5, 800, 400}},
-        {"E003", {EnemyType::ENEMY3, 60, 60, 2.5, 6.0, 1200, 350}},
-        {"E004", {EnemyType::ENEMY4, 70, 70, 3.0, 7.0, 900, 250}},
-    };
+        {"E001",
+         {
+             EnemyType::GRUNT, // type
+             3,                // speed
+             50,               // width
+             50,               // height
+             10,               // bulletSpeed
+             5,                // bulletDamage
+             800,              // shootCooldown
+             500,              // shootRange
+             100               // health
+         }},
+        {"E002", {EnemyType::SNIPER, 2, 40, 40, 2, 20, 1500, 800, 1000}},
+        {"E003", {EnemyType::TANK, 1, 100, 100, 2, 15, 2000, 300, 1000}},
+        {"E004", {EnemyType::SWARMER, 5, 30, 30, 4, 3, 400, 200, 2000}},
+        {"E005", {EnemyType::BOSS, 1, 200, 200, 7, 50, 3000, 1000, 1000}},
+        {"E006", {EnemyType::DRONE, 4, 40, 40, 24, 8, 1000, 600, 1000}},
+        {"E007", {EnemyType::MINION, 6, 20, 20, 4, 2, 300, 150, 1000}},
+        {"E008", {EnemyType::CANNON, 0, 80, 80, 1, 25, 2000, 1000, 1000}}};
 
     Logger::success("[EnemyManager] Initialized enemy mappings.");
 }
@@ -53,16 +67,22 @@ EnemyManager::~EnemyManager() {
  */
 std::string EnemyManager::EnemyTypeToString(EnemyType type) const {
     switch (type) {
-    case EnemyType::NONE:
-        return "NONE";
-    case EnemyType::ENEMY1:
-        return "ENEMY1";
-    case EnemyType::ENEMY2:
-        return "ENEMY2";
-    case EnemyType::ENEMY3:
-        return "ENEMY3";
-    case EnemyType::ENEMY4:
-        return "ENEMY4";
+    case EnemyType::GRUNT:
+        return "GRUNT";
+    case EnemyType::SNIPER:
+        return "SNIPER";
+    case EnemyType::TANK:
+        return "TANK";
+    case EnemyType::SWARMER:
+        return "SWARMER";
+    case EnemyType::BOSS:
+        return "BOSS";
+    case EnemyType::DRONE:
+        return "DRONE";
+    case EnemyType::MINION:
+        return "MINION";
+    case EnemyType::CANNON:
+        return "CANNON";
     default:
         return "UNKNOWN";
     }
@@ -117,44 +137,72 @@ std::shared_ptr<Enemy> EnemyManager::findById(int enemyId) const {
  * @brief Update all enemies
  *
  */
+void EnemyManager::updateEnemies() {
+    prepare();
+
+    for (const auto& enemy : _enemies) {
+        enemy->move();
+        enemy->updateShootCooldown();
+        forPlayers(enemy);
+        invalidate(enemy);
+    }
+}
+
 /**
- * @brief Update all enemies
+ * @brief Prepare the manager for the next update
  *
  */
-void EnemyManager::updateEnemies() {
+void EnemyManager::prepare() {
     _visibleEnemies.clear();
 
-    for (auto it = _enemies.begin(); it != _enemies.end();) {
-        auto& enemy = *it;
-        enemy->move();
+    if (!_enemiesToDelete.empty()) {
+        for (const auto& enemyId : _enemiesToDelete) {
+            removeEnemy(enemyId);
+        }
+        _enemiesToDelete.clear();
+    }
+}
 
-        if (enemy->getPosition().getX() < -enemy->getWidth()) {
-            MapProtocol::sendEntityDeleted(enemy->getId());
-            it = _enemies.erase(it);
-        } else {
-            if (enemy->getPosition().getX() < RENDER_DISTANCE * OBSTACLE_SIZE &&
-                enemy->getPosition().getX() > -OBSTACLE_SIZE) {
-                _visibleEnemies.push_back(enemy);
-            }
-            ++it;
+/**
+ * @brief Update the enemies for all players
+ *
+ */
+void EnemyManager::forPlayers(const std::shared_ptr<Enemy>& enemy) {
+    for (const auto& player : PlayerManager::get().getPlayers()) {
+        if (enemy->collidesWith(player)) {
+            PlayerManager::get().movePlayer(player->getId(), -enemy->getSpeed(),
+                                            0);
+            player->takeDamage(enemy->getBulletDamage() / 10);
+        }
+
+        if ((std::abs(player->getPosition().getX() -
+                      enemy->getPosition().getX()) <= enemy->getShootRange()) &&
+            (std::abs(player->getPosition().getY() -
+                      enemy->getPosition().getY()) <= enemy->getShootRange()) &&
+            enemy->canShoot()) {
+            Point direction(
+                player->getPosition().getX() - enemy->getPosition().getX(),
+                player->getPosition().getY() - enemy->getPosition().getY());
+            direction.normalize();
+            BulletManager::get().handleEnemyShoot(enemy->getId(), direction);
+            enemy->resetShootCooldown();
         }
     }
+}
 
-    auto& players = PlayerManager::get().getPlayers();
-    for (const auto& enemy : _visibleEnemies) {
-        if (!enemy->canShoot()) {
-            continue;
-        }
+/**
+ * @brief Invalidate an enemy
+ *
+ * @param enemy The enemy to invalidate
+ */
+void EnemyManager::invalidate(const std::shared_ptr<Enemy>& enemy) {
+    if (enemy->getPosition().getX() < RENDER_DISTANCE * enemy->getWidth() &&
+        enemy->getPosition().getX() > -enemy->getWidth()) {
+        _visibleEnemies.push_back(enemy);
+    }
 
-        for (const auto& player : players) {
-            if (std::abs(player->getPosition().getX() -
-                         enemy->getPosition().getX()) <
-                enemy->getShootRange()) {
-                BulletManager::get().handleEnemyShoot(enemy->getId());
-                enemy->resetShootCooldown();
-                break;
-            }
-        }
+    if (enemy->getPosition().getX() < -enemy->getWidth()) {
+        MapProtocol::sendEntityDeleted(enemy->getId());
     }
 }
 
@@ -185,4 +233,29 @@ EnemyManager::getVisibleEnemies() const {
  */
 bool EnemyManager::isEnemyCodeValid(const std::string& code) const {
     return _enemyMapping.find(code) != _enemyMapping.end();
+}
+
+/**
+ * @brief Remove an enemy by its ID
+ *
+ * @param enemyId The ID of the enemy
+ */
+void EnemyManager::removeEnemy(int32_t enemyId) {
+    auto it = std::remove_if(_enemies.begin(), _enemies.end(),
+                             [enemyId](const std::shared_ptr<Enemy>& enemy) {
+                                 return enemy->getId() == enemyId;
+                             });
+
+    if (it != _enemies.end()) {
+        _enemies.erase(it, _enemies.end());
+    }
+}
+
+/**
+ * @brief Mark enemies for deletion
+ *
+ * @param ids The IDs of the enemies to delete
+ */
+void EnemyManager::markEnemiesForDeletion(const std::vector<int32_t>& ids) {
+    _enemiesToDelete.insert(_enemiesToDelete.end(), ids.begin(), ids.end());
 }
