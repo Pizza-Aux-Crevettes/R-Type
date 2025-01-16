@@ -24,7 +24,10 @@ class HotkeysManager {
     void checkKey(const sf::Event& event);
     bool isKeyUsed(sf::Keyboard::Key key);
     std::string keyToString(sf::Keyboard::Key key);
+    void isAutoFire(HotkeysCodes code);
+    bool getAutoFireState();
 
   private:
     std::unordered_map<HotkeysCodes, sf::Keyboard::Key> _keys;
+    bool _autofire;
 };

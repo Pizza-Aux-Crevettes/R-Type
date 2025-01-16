@@ -38,10 +38,15 @@ void HotkeysManager::setKey(const HotkeysCodes hotkey,
     _keys[hotkey] = newKey;
 }
 
+bool HotkeysManager::getAutoFireState() {
+    return _autofire;
+}
+
 void HotkeysManager::checkKey(const sf::Event& event) {
     if (Client::get().getIsPlayed()) {
         for (const auto& [hotkey, key] : _keys) {
             if (key == event.key.code) {
+                isAutoFire(hotkey);
                 SmartBuffer smartBuffer;
                 smartBuffer
                     << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
@@ -60,6 +65,12 @@ bool HotkeysManager::isKeyUsed(sf::Keyboard::Key key) {
         }
     }
     return false;
+}
+
+void  HotkeysManager::isAutoFire(HotkeysCodes code) {
+    if (code == HotkeysCodes::ENTER) {
+        _autofire = !_autofire;
+    }
 }
 
 std::string HotkeysManager::keyToString(sf::Keyboard::Key key) {
