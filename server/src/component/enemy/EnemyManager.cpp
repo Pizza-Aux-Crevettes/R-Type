@@ -26,10 +26,19 @@ EnemyManager& EnemyManager::get() {
  *
  */
 EnemyManager::EnemyManager() {
-    // EnemyType, speed, width, height, bulletSpeed, bulletDamage,
-    // shootCooldown, shootRange, health
     _enemyMapping = {
-        {"E001", {EnemyType::GRUNT, 3, 50, 50, 10, 5, 800, 500, 100}},
+        {"E001",
+         {
+             EnemyType::GRUNT, // type
+             3,                // speed
+             50,               // width
+             50,               // height
+             10,               // bulletSpeed
+             5,                // bulletDamage
+             800,              // shootCooldown
+             500,              // shootRange
+             100               // health
+         }},
         {"E002", {EnemyType::SNIPER, 2, 40, 40, 2, 20, 1500, 800, 1000}},
         {"E003", {EnemyType::TANK, 1, 100, 100, 2, 15, 2000, 300, 1000}},
         {"E004", {EnemyType::SWARMER, 5, 30, 30, 4, 3, 400, 200, 2000}},
@@ -163,7 +172,7 @@ void EnemyManager::forPlayers(const std::shared_ptr<Enemy>& enemy) {
         if (enemy->collidesWith(player)) {
             PlayerManager::get().movePlayer(player->getId(), -enemy->getSpeed(),
                                             0);
-            player->takeDamage(enemy->getBulletDamage());
+            player->takeDamage(enemy->getBulletDamage() / 10);
         }
 
         if ((std::abs(player->getPosition().getX() -
