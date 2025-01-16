@@ -101,13 +101,20 @@ void BulletManager::forPlayers(
     std::vector<std::shared_ptr<Bullet>>::iterator& it,
     std::shared_ptr<Bullet>& bullet, bool& isDeleted) {
     for (const auto& player : PlayerManager::get().getPlayers()) {
-        if (bullet->getType() == BulletType::ENEMY &&
+        if (player->getHealth() > 0 && bullet->getType() == BulletType::ENEMY &&
             bullet->collidesWith(player->getPosition().getX(),
                                  player->getPosition().getY(), PLAYER_WIDTH,
                                  PLAYER_HEIGHT)) {
             player->takeDamage(bullet->getDamage());
             MapProtocol::sendEntityHealthUpdate(
                 player->getId(), player->getHealth(), player->getMaxHealth());
+
+            if (player->getHealth() <= 0 &&
+                player->getHealth() != DEFAULT_GONE) {
+                player->setHealth(DEFAULT_GONE);
+                MapProtocol::sendEntityDeleted(player->getId());
+                PlayerManager::get().removePlayer(player->getId());
+            }
 
             MapProtocol::sendEntityDeleted(bullet->getId());
             it = _bullets.erase(it);
@@ -130,7 +137,7 @@ void BulletManager::forEnemies(
     std::shared_ptr<Bullet>& bullet, bool& isDeleted,
     std::vector<int32_t>& enemiesToDelete) {
     for (const auto& enemy : EnemyManager::get().getEnemies()) {
-        if (bullet->getType() == BulletType::PLAYER &&
+        if (enemy->getHealth() > 0 && bullet->getType() == BulletType::PLAYER &&
             bullet->collidesWith(enemy->getPosition().getX(),
                                  enemy->getPosition().getY(), enemy->getWidth(),
                                  enemy->getHeight())) {
@@ -138,9 +145,8 @@ void BulletManager::forEnemies(
             MapProtocol::sendEntityHealthUpdate(
                 enemy->getId(), bullet->getDamage(), enemy->getMaxHealth());
 
-            if (enemy->getHealth() <= 0 &&
-                enemy->getHealth() != ENEMY_FALLBACK_VALUE) {
-                enemy->setHealth(ENEMY_FALLBACK_VALUE);
+            if (enemy->getHealth() <= 0 && enemy->getHealth() != DEFAULT_GONE) {
+                enemy->setHealth(DEFAULT_GONE);
                 MapProtocol::sendEntityDeleted(enemy->getId());
                 enemiesToDelete.push_back(enemy->getId());
             }

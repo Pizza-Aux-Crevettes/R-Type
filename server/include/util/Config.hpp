@@ -26,6 +26,7 @@ enum Config {
     // Default
     DEFAULT_HEALTH = 100,
     DEFAULT_LIVES = 3,
+    DEFAULT_GONE = -9999,
 
     // Player
     PLAYER_WIDTH = 34,
@@ -46,7 +47,4 @@ enum Config {
     // Bullet
     BULLET_WIDTH = 50,
     BULLET_HEIGHT = 20,
-
-    // Enemy
-    ENEMY_FALLBACK_VALUE = -9999,
 };

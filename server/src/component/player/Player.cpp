@@ -97,6 +97,15 @@ int16_t Player::getHealth() const {
 }
 
 /**
+ * @brief Set the player's health
+ *
+ * @param health The new health
+ */
+void Player::setHealth(int16_t health) {
+    _health = health;
+}
+
+/**
  * @brief Get the player's max health
  *
  * @return int16_t The player's max health

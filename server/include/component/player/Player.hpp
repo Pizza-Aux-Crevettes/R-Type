@@ -26,6 +26,7 @@ class Player {
     void setClientSocket(int clientSocket);
     void takeDamage(int16_t damage);
     int16_t getHealth() const;
+    void setHealth(int16_t health);
     int16_t getMaxHealth() const;
 
   private:
