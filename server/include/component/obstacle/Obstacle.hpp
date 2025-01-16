@@ -7,15 +7,17 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
+#include "component/player/Player.hpp"
 #include "util/Point.hpp"
 
 enum class ObstacleType {
     NONE,
-    BLOCK,
-    BLOCK2,
-    BLOCK3,
-    BLOCK4,
+    OBSTACLE,
+    OBSTACLE2,
+    OBSTACLE3,
+    OBSTACLE4,
 };
 
 class Obstacle {
@@ -24,10 +26,10 @@ class Obstacle {
 
     int32_t getId() const;
     ObstacleType getType() const;
-    void setType(ObstacleType type);
     const Point& getPosition() const;
     void setPosition(const Point& position);
     bool contains(int32_t x, int32_t y) const;
+    bool collidesWith(const std::shared_ptr<Player>& player) const;
 
   private:
     int32_t _id;

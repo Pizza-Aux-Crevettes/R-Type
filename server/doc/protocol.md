@@ -57,18 +57,22 @@ Each message has the following form:
 - **Description**: Server response confirming the creation of a new player.  
 - **Payload**:  
   - `playerId` (int32_t)
+  - `width` (int16_t)
+  - `height` (int16_t)
 
 ### CREATE_PLAYER_BROADCAST
 - **Description**: Broadcasts to all clients that a new player has joined.  
 - **Payload**:  
   - `playerId` (int32_t)  
   - `playerName` (string)
+  - `width` (int16_t)
+  - `height` (int16_t)
 
 ---
 
 ### UPDATE_PLAYERS
 - **Description**: Updates the positions (and possibly other data) of multiple players.  
-- **Payload** (implementation-dependent, for each player):
+- **Payload**:
   - `playerId` (int32_t)  
   - `posX` (int32_t)  
   - `posY` (int32_t)
@@ -80,7 +84,7 @@ Each message has the following form:
 
 ### UPDATE_OBSTACLES
 - **Description**: Updates the positions or states of obstacles on the map.  
-- **Payload** (implementation-dependent, for each obstacle):
+- **Payload**:
   - `obstacleId` (int32_t)
   - `posX` (int32_t)
   - `posY` (int32_t)
@@ -89,19 +93,28 @@ Each message has the following form:
 
 ### UPDATE_BULLETS
 - **Description**: Updates the positions or states of bullets on the map.  
-- **Payload** (implementation-dependent, for each bullet):
+- **Payload**:
   - `bulletId` (int32_t)
   - `posX` (int32_t)
   - `posY` (int32_t)
   - `speed` (int16_t)
   - `type` (int16_t)
 
----
+### UPDATE_ENTITY_HEALTH
+- **Description**: Broadcasts to all clients that an entity's health changed. 
+- **Payload**:
+  - `enemyId` (int32_t)
+  - `health` (int16_t)
+  - `maxHealth` (int16_t)
+
+--
 
 ### DELETE_ENTITY
 - **Description**: Deletes an existing entity (player, obstacle, or bullet).  
 - **Payload**:
   - `entityId` (int32_t)
+
+---
 
 ## Notes
 - All OpCodes must be handled consistently by both server and client.

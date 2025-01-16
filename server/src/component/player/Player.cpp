@@ -7,6 +7,7 @@
 
 #include "component/player/Player.hpp"
 #include "component/attr/IDManager.hpp"
+#include "util/Config.hpp"
 #include "util/Logger.hpp"
 
 /**
@@ -15,14 +16,10 @@
  * @param playerId The player's ID
  * @param name The player's name
  * @param position The player's position
- * @param size The player's size
- * @param speed The player's speed
  */
-Player::Player(const std::string& name, const Point& position,
-               const Point& size, double speed)
+Player::Player(const std::string& name, const Point& position, int16_t health)
     : _id(IDManager::getNextId()), _name(name), _position(position),
-      _size(size), _speed(speed), _health(Health()),
-      _clientSocket(std::nullopt) {}
+      _health(health), _clientSocket(std::nullopt) {}
 
 /**
  * @brief Get the player's ID
@@ -61,33 +58,6 @@ void Player::setPosition(const Point& position) {
 }
 
 /**
- * @brief Set the player's thread ID
- *
- * @param threadId The thread ID
- */
-const Point& Player::getSize() const {
-    return _size;
-}
-
-/**
- * @brief Set the player's thread ID
- *
- * @param threadId The thread ID
- */
-const Health& Player::getHealth() const {
-    return _health;
-}
-
-/**
- * @brief Set the player's thread ID
- *
- * @param threadId The thread ID
- */
-double Player::getSpeed() const {
-    return _speed;
-}
-
-/**
  * @brief Get the client socket associated with the player
  *
  * @return std::optional<int>
@@ -103,4 +73,43 @@ std::optional<int> Player::getClientSocket() const {
  */
 void Player::setClientSocket(int clientSocket) {
     _clientSocket = clientSocket;
+}
+
+/**
+ * @brief Take damage
+ *
+ * @param damage The amount of damage to take
+ */
+void Player::takeDamage(int16_t damage) {
+    _health -= damage;
+    if (_health <= 0) {
+        Logger::info("[Player] Player " + _name + " died.");
+    }
+}
+
+/**
+ * @brief Get the player's health
+ *
+ * @return int16_t The player's health
+ */
+int16_t Player::getHealth() const {
+    return _health;
+}
+
+/**
+ * @brief Set the player's health
+ *
+ * @param health The new health
+ */
+void Player::setHealth(int16_t health) {
+    _health = health;
+}
+
+/**
+ * @brief Get the player's max health
+ *
+ * @return int16_t The player's max health
+ */
+int16_t Player::getMaxHealth() const {
+    return DEFAULT_HEALTH;
 }

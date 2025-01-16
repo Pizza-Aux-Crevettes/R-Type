@@ -37,15 +37,6 @@ ObstacleType Obstacle::getType() const {
 }
 
 /**
- * @brief Set the type of the obstacle
- *
- * @param type The new type
- */
-void Obstacle::setType(ObstacleType type) {
-    _type = type;
-}
-
-/**
  * @brief Get the position of the obstacle
  *
  * @return const Point& The position of the obstacle
@@ -72,6 +63,23 @@ void Obstacle::setPosition(const Point& position) {
  * @return false Otherwise
  */
 bool Obstacle::contains(int32_t x, int32_t y) const {
-    return x >= _position.getX() && x < _position.getX() + BLOCK_SIZE &&
-           y >= _position.getY() && y < _position.getY() + BLOCK_SIZE;
+    return x >= _position.getX() && x < _position.getX() + OBSTACLE_SIZE &&
+           y >= _position.getY() && y < _position.getY() + OBSTACLE_SIZE;
+}
+
+/**
+ * @brief Check if the obstacle collides with a player
+ *
+ * @param player The player to check
+ * @return true If the obstacle collides with the player
+ * @return false Otherwise
+ */
+bool Obstacle::collidesWith(const std::shared_ptr<Player>& player) const {
+    int32_t playerX = player->getPosition().getX();
+    int32_t playerY = player->getPosition().getY();
+
+    return contains(playerX, playerY) ||
+           contains(playerX + PLAYER_WIDTH, playerY) ||
+           contains(playerX, playerY + PLAYER_HEIGHT) ||
+           contains(playerX + PLAYER_WIDTH, playerY + PLAYER_HEIGHT);
 }

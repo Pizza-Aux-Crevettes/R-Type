@@ -9,6 +9,7 @@
 #include "component/bullet/BulletManager.hpp"
 #include "component/hotkey/HotkeysCodes.hpp"
 #include "component/player/PlayerManager.hpp"
+#include "util/Config.hpp"
 #include "util/Logger.hpp"
 
 /**
@@ -16,25 +17,6 @@
  *
  */
 HotkeysManager::HotkeysManager() {
-    Logger::success("[HotkeysManager] HotkeysManager initialized.");
-    initHotkeys();
-}
-
-/**
- * @brief Get the HotkeysManager instance
- *
- * @return HotkeysManager&
- */
-HotkeysManager& HotkeysManager::get() {
-    static HotkeysManager instance;
-    return instance;
-}
-
-/**
- * @brief Initialize the hotkeys
- *
- */
-void HotkeysManager::initHotkeys() {
     _hotkeyActions = {
         {static_cast<int16_t>(HotkeysCodes::ARROW_LEFT),
          [](int32_t playerId) {
@@ -57,6 +39,16 @@ void HotkeysManager::initHotkeys() {
          }}};
 
     Logger::success("[HotkeysManager] Hotkey actions initialized.");
+}
+
+/**
+ * @brief Get the HotkeysManager instance
+ *
+ * @return HotkeysManager&
+ */
+HotkeysManager& HotkeysManager::get() {
+    static HotkeysManager instance;
+    return instance;
 }
 
 /**

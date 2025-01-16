@@ -8,13 +8,14 @@
 #include "socket/UdpSocket.hpp"
 #include "component/bullet/BulletManager.hpp"
 #include "component/bullet/BulletProtocol.hpp"
+#include "component/enemy/EnemyManager.hpp"
+#include "component/enemy/EnemyProtocol.hpp"
 #include "component/map/MapProtocol.hpp"
 #include "component/obstacle/ObstacleManager.hpp"
+#include "component/obstacle/ObstacleProtocol.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "component/player/PlayerProtocol.hpp"
 #include "protocol/Protocol.hpp"
-#include "socket/Server.hpp"
-#include "util/Config.hpp"
 #include "util/Logger.hpp"
 
 /**
@@ -106,8 +107,9 @@ void UdpSocket::updateLoop() {
         auto frameStart = std::chrono::high_resolution_clock::now();
 
         if (!PlayerManager::get().getPlayers().empty()) {
-            BulletManager::get().updateBullets();
             ObstacleManager::get().updateObstacles();
+            EnemyManager::get().updateEnemies();
+            BulletManager::get().updateBullets();
         }
 
         auto frameEnd = std::chrono::high_resolution_clock::now();
@@ -118,8 +120,9 @@ void UdpSocket::updateLoop() {
         if (sleepTime > 0) {
             std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
         } else {
-            Logger::warning("[UDP Socket] updateLoop exceeded 50 ms! Took " +
-                            std::to_string(duration.count()) + " ms.");
+            Logger::warning(
+                "[UDP Socket] Tick delay on update loop exceeded 50 ms! Took " +
+                std::to_string(duration.count()) + " ms.");
         }
     }
 }
@@ -139,7 +142,8 @@ void UdpSocket::sendLoop() {
             for (const auto& client : _clients) {
                 PlayerProtocol::sendPlayerPosition(client, smartBuffer);
                 MapProtocol::sendViewportUpdate(client, smartBuffer);
-                MapProtocol::sendObstaclesUpdate(client, smartBuffer);
+                ObstacleProtocol::sendObstaclesUpdate(client, smartBuffer);
+                EnemyProtocol::sendEnemiesUpdate(client, smartBuffer);
                 BulletProtocol::sendBulletsUpdate(client, smartBuffer);
             }
         }
@@ -153,7 +157,7 @@ void UdpSocket::sendLoop() {
         if (sleepTime > 0) {
             std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
         } else {
-            Logger::warning("[UDP Socket] sendLoop exceeded " +
+            Logger::warning("[UDP Socket] Tick delay on send loop exceeded " +
                             std::to_string(TICK_PER_SECOND) + " ms! Took " +
                             std::to_string(frameDuration.count()) + " ms.");
         }
@@ -201,9 +205,9 @@ void UdpSocket::addClient(const sockaddr_in& clientAddr) {
 
     _clients.push_back(clientAddr);
 
-    Logger::info("[UDP Socket] New client registered: " +
-                 std::string(inet_ntoa(clientAddr.sin_addr)) + ":" +
-                 std::to_string(ntohs(clientAddr.sin_port)));
+    Logger::socket("[UDP Socket] New client connected: " +
+                   std::string(inet_ntoa(clientAddr.sin_addr)) + ":" +
+                   std::to_string(ntohs(clientAddr.sin_port)));
 }
 
 /**

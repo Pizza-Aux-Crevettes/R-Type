@@ -10,6 +10,7 @@
 #include <memory>
 #include <vector>
 #include "component/bullet/Bullet.hpp"
+#include "util/Point.hpp"
 
 class BulletManager {
   public:
@@ -17,13 +18,22 @@ class BulletManager {
 
     void addBullet(std::shared_ptr<Bullet> bullet);
     void updateBullets();
+    void forObstacles(std::vector<std::shared_ptr<Bullet>>::iterator& it,
+                      std::shared_ptr<Bullet>& bullet, bool& isDeleted);
+    void forPlayers(std::vector<std::shared_ptr<Bullet>>::iterator& it,
+                    std::shared_ptr<Bullet>& bullet, bool& isDeleted);
+    void forEnemies(std::vector<std::shared_ptr<Bullet>>::iterator& it,
+                    std::shared_ptr<Bullet>& bullet, bool& isDeleted,
+                    std::vector<int32_t>& enemiesToDelete);
+    void invalidate(std::vector<std::shared_ptr<Bullet>>::iterator& it,
+                    std::shared_ptr<Bullet>& bullet, bool& isDeleted);
     std::vector<std::shared_ptr<Bullet>>& getBullets();
-    static void handlePlayerShoot(int playerId);
+    void handlePlayerShoot(int playerId);
+    void handleEnemyShoot(int enemyId, Point vector);
 
   private:
     BulletManager() = default;
     ~BulletManager() = default;
 
     std::vector<std::shared_ptr<Bullet>> _bullets;
-    std::mutex _bulletsMutex;
 };

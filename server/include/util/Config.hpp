@@ -11,6 +11,8 @@ enum Config {
     // Socket
     DEFAULT_BYTES = 1024,
     PORT = 8080,
+
+    // Server
     CADENCY = 20,
     TICK_PER_SECOND = 1000 / CADENCY,
 
@@ -19,26 +21,30 @@ enum Config {
     ERROR = 84,
     FAILURE = -1,
     BAD = 1,
-
-    // String
     END_STR = '\0',
 
-    // Player
+    // Default
     DEFAULT_HEALTH = 100,
     DEFAULT_LIVES = 3,
+    DEFAULT_GONE = -9999,
+
+    // Player
+    PLAYER_WIDTH = 34,
+    PLAYER_BULLET_SPEED = 10,
+    PLAYER_BULLET_DAMAGE = 10,
+    PLAYER_HEIGHT = 15,
     PLAYER_SPEED = 30,
 
+    // Obstacle
+    OBSTACLE_SIZE = 64,
+
     // Map
-    BLOCK_SIZE = 64,
-    RENDER_DISTANCE = 15,
+    RENDER_DISTANCE = 20,
     MAP_SPEED = 2,
+    MAP_WIDTH = 1280,
+    MAP_HEIGHT = 720,
 
     // Bullet
-    BULLET_SPEED = 10,
+    BULLET_WIDTH = 50,
+    BULLET_HEIGHT = 20,
 };
-
-static constexpr char NAME_LABEL[] = "name=";
-static constexpr char MAP_LABEL[] = "map=###";
-static constexpr char END_LABEL[] = "###";
-static constexpr int NAME_OFFSET = 5;
-static constexpr int BLOCK_OFFSET = 4;

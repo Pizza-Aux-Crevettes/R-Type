@@ -6,7 +6,9 @@
 */
 
 #include "component/obstacle/ObstacleManager.hpp"
+#include "component/enemy/EnemyManager.hpp"
 #include "component/map/MapProtocol.hpp"
+#include "component/player/PlayerManager.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
@@ -26,13 +28,18 @@ ObstacleManager& ObstacleManager::get() {
  */
 ObstacleManager::ObstacleManager() {
     _obstacleMapping = {
-        {"0001", ObstacleType::BLOCK},
-        {"0002", ObstacleType::BLOCK2},
-        {"0003", ObstacleType::BLOCK3},
-        {"0004", ObstacleType::BLOCK4},
+        {"B001", ObstacleType::OBSTACLE},
+        {"B002", ObstacleType::OBSTACLE2},
+        {"B003", ObstacleType::OBSTACLE3},
+        {"B004", ObstacleType::OBSTACLE4},
     };
 
-    Logger::info("[ObstacleManager] Initialized obstacle mappings.");
+    Logger::success("[ObstacleManager] Initialized obstacle mappings.");
+}
+
+ObstacleManager::~ObstacleManager() {
+    _obstacles.clear();
+    _visibleObstacles.clear();
 }
 
 /**
@@ -45,14 +52,14 @@ std::string ObstacleManager::ObstacleTypeToString(ObstacleType type) {
     switch (type) {
     case ObstacleType::NONE:
         return "NONE";
-    case ObstacleType::BLOCK:
-        return "BLOCK";
-    case ObstacleType::BLOCK2:
-        return "BLOCK2";
-    case ObstacleType::BLOCK3:
-        return "BLOCK3";
-    case ObstacleType::BLOCK4:
-        return "BLOCK4";
+    case ObstacleType::OBSTACLE:
+        return "OBSTACLE";
+    case ObstacleType::OBSTACLE2:
+        return "OBSTACLE2";
+    case ObstacleType::OBSTACLE3:
+        return "OBSTACLE3";
+    case ObstacleType::OBSTACLE4:
+        return "OBSTACLE4";
     default:
         return "UNKNOWN";
     }
@@ -65,13 +72,6 @@ std::string ObstacleManager::ObstacleTypeToString(ObstacleType type) {
  */
 void ObstacleManager::addObstacle(const std::shared_ptr<Obstacle>& obstacle) {
     _obstacles.push_back(obstacle);
-
-    Logger::success(
-        "[ObstacleManager] Added obstacle. ID: " +
-        std::to_string(obstacle->getId()) +
-        ", Type: " + std::to_string(static_cast<int16_t>(obstacle->getType())) +
-        ", Position: (" + std::to_string(obstacle->getPosition().getX()) +
-        ", " + std::to_string(obstacle->getPosition().getY()) + ")");
 }
 
 /**
@@ -125,18 +125,133 @@ ObstacleType ObstacleManager::getObstacleType(const std::string& code) const {
  *
  */
 void ObstacleManager::updateObstacles() {
-    _previousVisibleObstacles = _visibleObstacles;
     _visibleObstacles.clear();
     _viewport += MAP_SPEED;
 
     for (const auto& obstacle : _obstacles) {
-        if (obstacle->getPosition().getX() < RENDER_DISTANCE * BLOCK_SIZE &&
-            obstacle->getPosition().getX() > -BLOCK_SIZE) {
-            _visibleObstacles.push_back(obstacle);
-        }
         obstacle->setPosition(Point(obstacle->getPosition().getX() - MAP_SPEED,
                                     obstacle->getPosition().getY()));
+        forPlayers(obstacle);
+        invalidate(obstacle);
     }
+}
+
+/**
+ * @brief Check if the obstacle collides with a player
+ *
+ * @param obstacle The obstacle to check
+ */
+void ObstacleManager::forPlayers(const std::shared_ptr<Obstacle>& obstacle) {
+    for (const auto& player : PlayerManager::get().getPlayers()) {
+        if (obstacle->collidesWith(player)) {
+            PlayerManager::get().movePlayer(player->getId(), -MAP_SPEED, 0);
+        }
+    }
+}
+
+/**
+ * @brief Invalidate an obstacle
+ *
+ * @param obstacle The obstacle to invalidate
+ */
+void ObstacleManager::invalidate(const std::shared_ptr<Obstacle>& obstacle) {
+    if (obstacle->getPosition().getX() < RENDER_DISTANCE * OBSTACLE_SIZE) {
+        _visibleObstacles.push_back(obstacle);
+    }
+
+    if (obstacle->getPosition().getX() < -OBSTACLE_SIZE) {
+        MapProtocol::sendEntityDeleted(obstacle->getId());
+    }
+}
+
+/**
+ * @brief Check if the player can move to a specific position
+ *
+ * @param x The x coordinate of the new position
+ * @param y The y coordinate of the new position
+ * @return int32_t The maximum distance the player can move before collision
+ */
+int32_t ObstacleManager::getMaxMoveDistance(int32_t x, int32_t y,
+                                            int32_t offsetX,
+                                            int32_t offsetY) const {
+    for (const auto& obstacle : _obstacles) {
+        int32_t blockX = obstacle->getPosition().getX();
+        int32_t blockY = obstacle->getPosition().getY();
+
+        if (offsetX != 0) {
+            if (y + PLAYER_HEIGHT > blockY && y < blockY + OBSTACLE_SIZE) {
+                if (offsetX > 0 && x + PLAYER_WIDTH <= blockX &&
+                    x + PLAYER_WIDTH + offsetX > blockX) {
+                    return blockX - (x + PLAYER_WIDTH);
+                } else if (offsetX < 0 && x >= blockX + OBSTACLE_SIZE &&
+                           x + offsetX < blockX + OBSTACLE_SIZE) {
+                    return blockX + OBSTACLE_SIZE - x;
+                }
+            }
+        }
+
+        if (offsetY != 0) {
+            if (x + PLAYER_WIDTH > blockX && x < blockX + OBSTACLE_SIZE) {
+                if (offsetY > 0 && y + PLAYER_HEIGHT <= blockY &&
+                    y + PLAYER_HEIGHT + offsetY > blockY) {
+                    return blockY - (y + PLAYER_HEIGHT);
+                } else if (offsetY < 0 && y >= blockY + OBSTACLE_SIZE &&
+                           y + offsetY < blockY + OBSTACLE_SIZE) {
+                    return blockY + OBSTACLE_SIZE - y;
+                }
+            }
+        }
+    }
+
+    auto enemies = EnemyManager::get().getEnemies();
+    for (const auto& enemy : enemies) {
+        int32_t enemyX = enemy->getPosition().getX();
+        int32_t enemyY = enemy->getPosition().getY();
+        int32_t enemyWidth = enemy->getWidth();
+        int32_t enemyHeight = enemy->getHeight();
+
+        if (offsetX != 0) {
+            if (y + PLAYER_HEIGHT > enemyY && y < enemyY + enemyHeight) {
+                if (offsetX > 0 && x + PLAYER_WIDTH <= enemyX &&
+                    x + PLAYER_WIDTH + offsetX > enemyX) {
+                    return enemyX - (x + PLAYER_WIDTH);
+                } else if (offsetX < 0 && x >= enemyX + enemyWidth &&
+                           x + offsetX < enemyX + enemyWidth) {
+                    return enemyX + enemyWidth - x;
+                }
+            }
+        }
+
+        if (offsetY != 0) {
+            if (x + PLAYER_WIDTH > enemyX && x < enemyX + enemyWidth) {
+                if (offsetY > 0 && y + PLAYER_HEIGHT <= enemyY &&
+                    y + PLAYER_HEIGHT + offsetY > enemyY) {
+                    return enemyY - (y + PLAYER_HEIGHT);
+                } else if (offsetY < 0 && y >= enemyY + enemyHeight &&
+                           y + offsetY < enemyY + enemyHeight) {
+                    return enemyY + enemyHeight - y;
+                }
+            }
+        }
+    }
+
+    if (offsetX != 0) {
+        if (x + offsetX < 0) {
+            return -x;
+        } else if (x + PLAYER_WIDTH + offsetX > MAP_WIDTH) {
+            return MAP_WIDTH - (x + PLAYER_WIDTH);
+        }
+    }
+
+    if (offsetY != 0) {
+        if (y + offsetY < 0) {
+            return -y;
+        } else if (y + PLAYER_HEIGHT + offsetY > MAP_HEIGHT) {
+            return MAP_HEIGHT - (y + PLAYER_HEIGHT);
+        }
+    }
+
+    return offsetX != 0 ? offsetX : offsetY;
 }
 
 /**
@@ -146,36 +261,4 @@ void ObstacleManager::updateObstacles() {
  */
 double ObstacleManager::getViewport() const {
     return _viewport;
-}
-
-/**
- * @brief Check if a block is void
- *
- * @param x The x position of the block
- * @param y The y position of the block
- * @return bool
- */
-bool ObstacleManager::isVoid(int32_t x, int32_t y) const {
-    for (const auto& obstacle : _obstacles) {
-        int32_t blockX = obstacle->getPosition().getX();
-        int32_t blockY = obstacle->getPosition().getY();
-
-        if (x >= blockX && x < blockX + BLOCK_SIZE && y >= blockY &&
-            y < blockY + BLOCK_SIZE) {
-            return obstacle->getType() == ObstacleType::NONE;
-        }
-    }
-
-    return true;
-}
-
-/**
- * @brief Reset the obstacle manager
- *
- */
-void ObstacleManager::reset() {
-    _obstacles.clear();
-    _viewport = 0;
-
-    Logger::info("[ObstacleManager] Cleared all obstacles.");
 }
