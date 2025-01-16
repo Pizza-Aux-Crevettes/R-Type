@@ -17,6 +17,5 @@ class PlayerProtocol {
     static void newPlayer(int clientSocket, SmartBuffer& smartBuffer);
     static void sendPlayerPosition(const sockaddr_in& clientAddr,
                                    SmartBuffer& smartBuffer);
-    static void sendPlayerDeleted(const int32_t playerId);
     static void sendPlayerTakeDamage(int32_t playerId, int16_t damage);
 };

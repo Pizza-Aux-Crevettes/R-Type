@@ -27,6 +27,8 @@ class BulletManager {
                     std::vector<int32_t>& enemiesToDelete);
     void invalidate(std::vector<std::shared_ptr<Bullet>>::iterator& it,
                     std::shared_ptr<Bullet>& bullet, bool& isDeleted);
+    void deleteBullet(std::vector<std::shared_ptr<Bullet>>::iterator& it,
+                      bool& isDeleted);
     std::vector<std::shared_ptr<Bullet>>& getBullets();
     void handlePlayerShoot(int playerId);
     void handleEnemyShoot(int enemyId, Point vector);

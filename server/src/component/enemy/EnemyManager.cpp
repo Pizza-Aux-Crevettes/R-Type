@@ -166,19 +166,17 @@ void EnemyManager::forPlayers(const std::shared_ptr<Enemy>& enemy) {
             player->takeDamage(enemy->getBulletDamage());
         }
 
-        if (std::abs(player->getPosition().getX() -
-                     enemy->getPosition().getX()) <= enemy->getShootRange() &&
-            std::abs(player->getPosition().getY() -
-                     enemy->getPosition().getY()) <= enemy->getShootRange()) {
-            if (enemy->canShoot()) {
-                Point direction(
-                    player->getPosition().getX() - enemy->getPosition().getX(),
-                    player->getPosition().getY() - enemy->getPosition().getY());
-                direction.normalize();
-                BulletManager::get().handleEnemyShoot(enemy->getId(),
-                                                      direction);
-                enemy->resetShootCooldown();
-            }
+        if ((std::abs(player->getPosition().getX() -
+                      enemy->getPosition().getX()) <= enemy->getShootRange()) &&
+            (std::abs(player->getPosition().getY() -
+                      enemy->getPosition().getY()) <= enemy->getShootRange()) &&
+            enemy->canShoot()) {
+            Point direction(
+                player->getPosition().getX() - enemy->getPosition().getX(),
+                player->getPosition().getY() - enemy->getPosition().getY());
+            direction.normalize();
+            BulletManager::get().handleEnemyShoot(enemy->getId(), direction);
+            enemy->resetShootCooldown();
         }
     }
 }
