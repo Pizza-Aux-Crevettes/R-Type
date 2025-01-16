@@ -138,7 +138,8 @@ void BulletManager::forEnemies(
             EnemyProtocol::sendEnemyTakeDamage(enemy->getId(),
                                                bullet->getDamage());
 
-            if (enemy->getHealth() <= 0) {
+            if (enemy->getHealth() <= 0 && enemy->getHealth() != ENEMY_FALLBACK_VALUE){
+                enemy->setHealth(ENEMY_FALLBACK_VALUE);
                 MapProtocol::sendEntityDeleted(enemy->getId());
                 enemiesToDelete.push_back(enemy->getId());
             }

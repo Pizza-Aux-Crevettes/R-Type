@@ -46,4 +46,7 @@ enum Config {
     // Bullet
     BULLET_WIDTH = 50,
     BULLET_HEIGHT = 20,
+
+    // Enemy
+    ENEMY_FALLBACK_VALUE = -9999,
 };

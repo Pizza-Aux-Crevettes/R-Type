@@ -25,16 +25,18 @@ void EnemyProtocol::sendEnemiesUpdate(const sockaddr_in& clientAddr,
                                       SmartBuffer& smartBuffer) {
     const auto& visibleEnemies = EnemyManager::get().getVisibleEnemies();
     for (const auto& enemy : visibleEnemies) {
-        smartBuffer.reset();
-        smartBuffer << static_cast<int16_t>(Protocol::OpCode::UPDATE_ENEMIES)
-                    << static_cast<int32_t>(enemy->getId())
-                    << static_cast<int32_t>(enemy->getPosition().getX())
-                    << static_cast<int32_t>(enemy->getPosition().getY())
-                    << static_cast<int16_t>(enemy->getWidth())
-                    << static_cast<int16_t>(enemy->getHeight())
-                    << static_cast<int16_t>(enemy->getType());
+        if (enemy->getHealth() != ENEMY_FALLBACK_VALUE) {
+            smartBuffer.reset();
+            smartBuffer << static_cast<int16_t>(Protocol::OpCode::UPDATE_ENEMIES)
+                        << static_cast<int32_t>(enemy->getId())
+                        << static_cast<int32_t>(enemy->getPosition().getX())
+                        << static_cast<int32_t>(enemy->getPosition().getY())
+                        << static_cast<int16_t>(enemy->getWidth())
+                        << static_cast<int16_t>(enemy->getHeight())
+                        << static_cast<int16_t>(enemy->getType());
 
-        UdpSocket::get().sendToOne(clientAddr, smartBuffer);
+            UdpSocket::get().sendToOne(clientAddr, smartBuffer);
+        }
     }
 }
 

@@ -40,6 +40,8 @@ class Enemy {
     int16_t getHeight() const;
     int16_t getShootCooldown() const;
     int16_t getShootRange() const;
+    int16_t getHealth() const;
+    void setHealth(int16_t health);
     bool contains(int32_t x, int32_t y) const;
     bool collidesWith(const std::shared_ptr<Player>& player) const;
     bool canShoot() const;
@@ -47,7 +49,6 @@ class Enemy {
     void updateShootCooldown();
     void move();
     void takeDamage(int16_t damage);
-    int16_t getHealth() const;
 
   private:
     int32_t _id;

@@ -121,6 +121,24 @@ int16_t Enemy::getShootRange() const {
 }
 
 /**
+ * @brief Get the enemy's health
+ *
+ * @return int16_t The enemy's health
+ */
+int16_t Enemy::getHealth() const {
+    return _health;
+}
+
+/**
+ * @brief Set the enemy's health
+ *
+ * @param health The enemy's health
+ */
+void Enemy::setHealth(int16_t health) {
+    _health = health;
+}
+
+/**
  * @brief Check if the enemy contains a point
  *
  * @param x The x coordinate
@@ -194,13 +212,4 @@ void Enemy::takeDamage(int16_t damage) {
     if (_health <= 0) {
         Logger::info("[Enemy] Enemy " + std::to_string(_id) + " died.");
     }
-}
-
-/**
- * @brief Get the enemy's health
- *
- * @return int16_t The enemy's health
- */
-int16_t Enemy::getHealth() const {
-    return _health;
 }
