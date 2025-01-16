@@ -39,7 +39,6 @@ void BulletManager::addBullet(std::shared_ptr<Bullet> bullet) {
  *
  */
 void BulletManager::updateBullets() {
-    int viewportEnd = RENDER_DISTANCE * OBSTACLE_SIZE;
     std::vector<int32_t> enemiesToDelete;
 
     for (auto it = _bullets.begin(); it != _bullets.end();) {
@@ -83,7 +82,9 @@ void BulletManager::forObstacles(
         if (bullet->collidesWith(obstacle->getPosition().getX(),
                                  obstacle->getPosition().getY(), OBSTACLE_SIZE,
                                  OBSTACLE_SIZE)) {
-            deleteBullet(it, isDeleted);
+            MapProtocol::sendEntityDeleted(bullet->getId());
+            it = _bullets.erase(it);
+            isDeleted = true;
             break;
         }
     }
@@ -108,11 +109,9 @@ void BulletManager::forPlayers(
             PlayerProtocol::sendPlayerTakeDamage(player->getId(),
                                                  bullet->getDamage());
 
-            if (player->getHealth() <= 0) {
-                // @TODO Remove player
-            }
-
-            deleteBullet(it, isDeleted);
+            MapProtocol::sendEntityDeleted(bullet->getId());
+            it = _bullets.erase(it);
+            isDeleted = true;
             break;
         }
     }
@@ -140,11 +139,13 @@ void BulletManager::forEnemies(
                                                bullet->getDamage());
 
             if (enemy->getHealth() <= 0) {
-                enemiesToDelete.push_back(enemy->getId());
                 MapProtocol::sendEntityDeleted(enemy->getId());
+                enemiesToDelete.push_back(enemy->getId());
             }
 
-            deleteBullet(it, isDeleted);
+            MapProtocol::sendEntityDeleted(bullet->getId());
+            it = _bullets.erase(it);
+            isDeleted = true;
             break;
         }
     }
@@ -162,20 +163,10 @@ void BulletManager::invalidate(
     std::shared_ptr<Bullet>& bullet, bool& isDeleted) {
     if (bullet->getPosition().getX() > RENDER_DISTANCE * OBSTACLE_SIZE ||
         bullet->getPosition().getX() < -OBSTACLE_SIZE) {
-        deleteBullet(it, isDeleted);
+        MapProtocol::sendEntityDeleted(bullet->getId());
+        it = _bullets.erase(it);
+        isDeleted = true;
     }
-}
-
-/**
- * @brief Delete a bullet
- *
- * @param it The iterator of the bullet
- * @param isDeleted A boolean to check if the bullet is deleted
- */
-void BulletManager::deleteBullet(
-    std::vector<std::shared_ptr<Bullet>>::iterator& it, bool& isDeleted) {
-    it = _bullets.erase(it);
-    isDeleted = true;
 }
 
 /**
