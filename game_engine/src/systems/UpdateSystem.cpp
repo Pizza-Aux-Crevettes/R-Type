@@ -12,6 +12,18 @@
 #include <iostream>
 #include "System.hpp"
 
+/**
+ * @brief Updates the position of an entity within the game engine.
+ *
+ * This function updates the position of an entity identified by its ID.
+ * It first checks if another entity is linked with the entity and then updates the position
+ * of the entity's components (Sprite, Text, Shape) if they exist.
+ *
+ * @param id The ID of the entity to update.
+ * @param entities A map of all entities in the game engine, indexed by their IDs.
+ * @param pos A pair representing the new position (x, y) to set for the entity.
+ * @param posId An identifier for the position update, used internally by the system.
+ */
 void GameEngine::System::updateEntityPosition(
     const int id, std::map<int, Entity>& entities,
     const std::pair<float, float>& pos, const int posId) {
@@ -35,6 +47,16 @@ void GameEngine::System::updateEntityPosition(
     }
 }
 
+/**
+ * @brief Updates the text of an entity within the game engine.
+ *
+ * This function updates the text of an entity identified by its ID.
+ * It first checks if the entity has a Text component and then updates the text
+ * of the entity.
+ *
+ * @param entity The entity to update.
+ * @param text The new text to set for the entity.
+ */
 void GameEngine::System::updateText(Entity& entity, const std::string& text) {
     if (entity.hasComponent<Text>()) {
         auto& textComp = entity.getComponent<Text>();
@@ -43,6 +65,17 @@ void GameEngine::System::updateText(Entity& entity, const std::string& text) {
     }
 }
 
+/**
+ * @brief Updates the text size of an entity within the game engine.
+ *
+ * This function updates the text size of an entity identified by its ID.
+ * It first checks if the entity has a Text component and then updates the text
+ * size of the entity.
+ *
+ * @param id The ID of the entity to update.
+ * @param entities A map of all entities in the game engine, indexed by their IDs.
+ * @param textSize The new text size to set for the entity.
+ */
 void GameEngine::System::updateTextSize(const int id,
                                         std::map<int, Entity>& entities,
                                         const unsigned int textSize) {
@@ -54,6 +87,16 @@ void GameEngine::System::updateTextSize(const int id,
     }
 }
 
+/**
+ * @brief Updates the texture of an entity within the game engine.
+ *
+ * This function updates the texture of an entity identified by its ID.
+ * It first checks if the entity has a Texture component and then updates the texture
+ * of the entity.
+ *
+ * @param entity The entity to update.
+ * @param texture The new texture to set for the entity.
+ */
 void GameEngine::System::updateTexture(Entity& entity, std::string& texture) {
     if (entity.hasComponent<Texture>()) {
         auto& textureComp = entity.getComponent<Texture>();
@@ -75,6 +118,18 @@ void GameEngine::System::updateTexture(Entity& entity, std::string& texture) {
     }
 }
 
+/**
+ * @brief Global update of an entity's component.
+ *
+ * This function updates any component of the entity.
+ * It first checks if the entity has components and then updates
+ * them.
+ *
+ * @param entity The entity to update.
+ * @param drawable The component to update.
+ * @param value The new value to set for the component.
+ * @param posId An identifier for the position update, used internally by the system.
+ */
 void GameEngine::System::update(const int id, std::map<int, Entity>& entities,
                                 const UpdateType type, const std::any& value,
                                 const int posId) {
