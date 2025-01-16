@@ -25,6 +25,8 @@ class Protocol {
         UPDATE_BULLETS = 23,
         UPDATE_ENEMIES = 24,
         DELETE_ENTITY = 30,
+        ENEMY_TAKE_DAMAGE = 40,
+        PLAYER_TAKE_DAMAGE = 41,
     };
 
     Protocol(const Protocol&) = delete;

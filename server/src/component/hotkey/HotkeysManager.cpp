@@ -9,8 +9,8 @@
 #include "component/bullet/BulletManager.hpp"
 #include "component/hotkey/HotkeysCodes.hpp"
 #include "component/player/PlayerManager.hpp"
-#include "util/Logger.hpp"
 #include "util/Config.hpp"
+#include "util/Logger.hpp"
 
 /**
  * @brief Construct a new HotkeysManager:: HotkeysManager object

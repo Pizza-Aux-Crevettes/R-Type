@@ -7,20 +7,23 @@
 
 #pragma once
 
-#include "util/Point.hpp"
 #include <cstdint>
+#include "util/Point.hpp"
 
 enum class BulletType { PLAYER, ENEMY };
 
 class Bullet {
   public:
-    Bullet(const Point& position, const Point& direction, int16_t speed, BulletType type);
+    Bullet(const Point& position, const Point& direction, int16_t speed,
+           BulletType type, int16_t damage);
 
     int32_t getId() const;
     const Point& getPosition() const;
     BulletType getType() const;
+    int16_t getDamage() const;
     void move();
-    bool collidesWith(int32_t x, int32_t y, int32_t width, int32_t height) const;
+    bool collidesWith(int32_t x, int32_t y, int32_t width,
+                      int32_t height) const;
 
   private:
     int32_t _id;
@@ -28,4 +31,5 @@ class Bullet {
     Point _direction;
     int16_t _speed;
     BulletType _type;
+    int16_t _damage;
 };

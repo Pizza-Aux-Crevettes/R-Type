@@ -26,8 +26,9 @@ enum class EnemyType {
 
 class Enemy {
   public:
-    Enemy(EnemyType type, const Point& position, int16_t speed, int16_t width, int16_t height, int16_t bulletSpeed, int16_t bulletDamage, int16_t shootCooldown,
-          int16_t shootRange);
+    Enemy(EnemyType type, const Point& position, int16_t speed, int16_t width,
+          int16_t height, int16_t bulletSpeed, int16_t bulletDamage,
+          int16_t shootCooldown, int16_t shootRange);
 
     int32_t getId() const;
     EnemyType getType() const;

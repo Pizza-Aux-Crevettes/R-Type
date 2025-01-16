@@ -128,25 +128,39 @@ void ObstacleManager::updateObstacles() {
     _visibleObstacles.clear();
     _viewport += MAP_SPEED;
 
-    auto players = PlayerManager::get().getPlayers();
-
     for (const auto& obstacle : _obstacles) {
         obstacle->setPosition(Point(obstacle->getPosition().getX() - MAP_SPEED,
                                     obstacle->getPosition().getY()));
+        forPlayers(obstacle);
+        invalidate(obstacle);
+    }
+}
 
-        for (const auto& player : players) {
-            if (obstacle->collidesWith(player)) {
-                PlayerManager::get().movePlayer(player->getId(), -MAP_SPEED, 0);
-            }
+/**
+ * @brief Check if the obstacle collides with a player
+ *
+ * @param obstacle The obstacle to check
+ */
+void ObstacleManager::forPlayers(const std::shared_ptr<Obstacle>& obstacle) {
+    for (const auto& player : PlayerManager::get().getPlayers()) {
+        if (obstacle->collidesWith(player)) {
+            PlayerManager::get().movePlayer(player->getId(), -MAP_SPEED, 0);
         }
+    }
+}
 
-        if (obstacle->getPosition().getX() < RENDER_DISTANCE * OBSTACLE_SIZE &&
-            obstacle->getPosition().getX() > -OBSTACLE_SIZE) {
-            _visibleObstacles.push_back(obstacle);
-        }
-        if (obstacle->getPosition().getX() < -OBSTACLE_SIZE) {
-            MapProtocol::sendEntityDeleted(obstacle->getId());
-        }
+/**
+ * @brief Invalidate an obstacle
+ *
+ * @param obstacle The obstacle to invalidate
+ */
+void ObstacleManager::invalidate(const std::shared_ptr<Obstacle>& obstacle) {
+    if (obstacle->getPosition().getX() < RENDER_DISTANCE * OBSTACLE_SIZE) {
+        _visibleObstacles.push_back(obstacle);
+    }
+
+    if (obstacle->getPosition().getX() < -OBSTACLE_SIZE) {
+        MapProtocol::sendEntityDeleted(obstacle->getId());
     }
 }
 
@@ -220,7 +234,6 @@ int32_t ObstacleManager::getMaxMoveDistance(int32_t x, int32_t y,
             }
         }
     }
-
 
     if (offsetX != 0) {
         if (x + offsetX < 0) {

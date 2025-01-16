@@ -10,12 +10,13 @@
 #include <memory>
 #include <optional>
 #include <string>
-#include "util/Point.hpp"
 #include "util/Config.hpp"
+#include "util/Point.hpp"
 
 class Player {
   public:
-    Player(const std::string& name, const Point& position, int16_t health = DEFAULT_HEALTH);
+    Player(const std::string& name, const Point& position,
+           int16_t health = DEFAULT_HEALTH);
 
     int32_t getId() const;
     const std::string& getName() const;

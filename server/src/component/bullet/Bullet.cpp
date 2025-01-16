@@ -16,9 +16,10 @@
  * @param direction Direction vector (normalized)
  * @param speed Speed of the bullet
  */
-Bullet::Bullet(const Point& position, const Point& direction, int16_t speed, BulletType type)
+Bullet::Bullet(const Point& position, const Point& direction, int16_t speed,
+               BulletType type, int16_t damage)
     : _id(IDManager::getNextId()), _position(position), _direction(direction),
-      _speed(speed), _type(type) {}
+      _speed(speed), _type(type), _damage(damage) {}
 
 /**
  * @brief Get the ID of the bullet
@@ -39,6 +40,15 @@ const Point& Bullet::getPosition() const {
 }
 
 /**
+ * @brief Get the damage of the bullet
+ *
+ * @return int16_t The damage of the bullet
+ */
+int16_t Bullet::getDamage() const {
+    return _damage;
+}
+
+/**
  * @brief Move the bullet
  */
 void Bullet::move() {
@@ -56,10 +66,11 @@ void Bullet::move() {
  * @return true If the bullet collides with the entity
  * @return false If the bullet does not collide with the entity
  */
-bool Bullet::collidesWith(int32_t x, int32_t y, int32_t width, int32_t height) const {
+bool Bullet::collidesWith(int32_t x, int32_t y, int32_t width,
+                          int32_t height) const {
     int32_t bulletX = _position.getX();
     int32_t bulletY = _position.getY();
-    return !(bulletX + BULLET_WIDTH < x || bulletX > x + width || 
+    return !(bulletX + BULLET_WIDTH < x || bulletX > x + width ||
              bulletY + BULLET_HEIGHT < y || bulletY > y + height);
 }
 

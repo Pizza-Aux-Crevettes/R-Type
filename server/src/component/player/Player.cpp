@@ -17,7 +17,8 @@
  * @param position The player's position
  */
 Player::Player(const std::string& name, const Point& position, int16_t health)
-    : _id(IDManager::getNextId()), _name(name), _position(position), _health(health), _clientSocket(std::nullopt) {}
+    : _id(IDManager::getNextId()), _name(name), _position(position),
+      _health(health), _clientSocket(std::nullopt) {}
 
 /**
  * @brief Get the player's ID

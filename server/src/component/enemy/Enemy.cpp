@@ -22,12 +22,13 @@
  * @param shootCooldown The cooldown between shots
  * @param shootRange The range at which the enemy can shoot
  */
-Enemy::Enemy(EnemyType type, const Point& position, int16_t speed, int16_t width, int16_t height, int16_t bulletSpeed, int16_t bulletDamage, int16_t shootCooldown,
-             int16_t shootRange)
+Enemy::Enemy(EnemyType type, const Point& position, int16_t speed,
+             int16_t width, int16_t height, int16_t bulletSpeed,
+             int16_t bulletDamage, int16_t shootCooldown, int16_t shootRange)
     : _id(IDManager::getNextId()), _type(type), _position(position),
-      _speed(speed), _width(width), _height(height), _bulletSpeed(bulletSpeed), _bulletDamage(bulletDamage),
-      _shootCooldown(shootCooldown), _shootRange(shootRange),
-      _currentCooldown(0) {}
+      _speed(speed), _width(width), _height(height), _bulletSpeed(bulletSpeed),
+      _bulletDamage(bulletDamage), _shootCooldown(shootCooldown),
+      _shootRange(shootRange), _currentCooldown(0) {}
 
 /**
  * @brief Get the ID of the enemy
@@ -172,7 +173,7 @@ void Enemy::resetShootCooldown() {
  *
  */
 void Enemy::updateShootCooldown() {
-    _currentCooldown-=CADENCY;
+    _currentCooldown -= CADENCY;
 }
 
 /**

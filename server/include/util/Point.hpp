@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
 
 class Point {
   public:

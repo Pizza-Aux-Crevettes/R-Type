@@ -37,3 +37,22 @@ void EnemyProtocol::sendEnemiesUpdate(const sockaddr_in& clientAddr,
         UdpSocket::get().sendToOne(clientAddr, smartBuffer);
     }
 }
+
+/**
+ * @brief Send an enemy take damage event to all clients
+ *
+ * @param enemyId The ID of the enemy that took damage
+ * @param damage The amount of damage taken
+ *
+ * Protocol: ENEMY_TAKE_DAMAGE
+ * Payload: enemyId (int32_t), damage (int16_t)
+ */
+void EnemyProtocol::sendEnemyTakeDamage(int32_t enemyId, int16_t damage) {
+    SmartBuffer smartBuffer;
+    smartBuffer.reset();
+    smartBuffer << static_cast<int16_t>(Protocol::OpCode::ENEMY_TAKE_DAMAGE)
+                << static_cast<int32_t>(enemyId)
+                << static_cast<int16_t>(damage);
+
+    UdpSocket::get().sendToAll(smartBuffer);
+}

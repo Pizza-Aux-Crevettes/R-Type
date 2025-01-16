@@ -29,6 +29,9 @@ class EnemyManager {
     void addEnemy(const std::shared_ptr<Enemy>& enemy);
     std::shared_ptr<Enemy> findById(int32_t enemyId) const;
     void updateEnemies();
+    void prepare();
+    void forPlayers(const std::shared_ptr<Enemy>& enemy);
+    void invalidate(const std::shared_ptr<Enemy>& enemy);
     const std::vector<std::shared_ptr<Enemy>>& getEnemies() const;
     const std::vector<std::shared_ptr<Enemy>>& getVisibleEnemies() const;
     bool isEnemyCodeValid(const std::string& code) const;
