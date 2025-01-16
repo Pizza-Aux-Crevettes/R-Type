@@ -18,10 +18,15 @@ class BulletManager {
 
     void addBullet(std::shared_ptr<Bullet> bullet);
     void updateBullets();
-    void forObstacles(std::vector<std::shared_ptr<Bullet>>::iterator& it, std::shared_ptr<Bullet>& bullet, bool& isDeleted);
-    void forPlayers(std::vector<std::shared_ptr<Bullet>>::iterator& it, std::shared_ptr<Bullet>& bullet, bool& isDeleted);
-    void forEnemies(std::vector<std::shared_ptr<Bullet>>::iterator& it, std::shared_ptr<Bullet>& bullet, bool& isDeleted, std::vector<int32_t>& enemiesToDelete);
-    void invalidate(std::vector<std::shared_ptr<Bullet>>::iterator& it, std::shared_ptr<Bullet>& bullet, bool& isDeleted);
+    void forObstacles(std::vector<std::shared_ptr<Bullet>>::iterator& it,
+                      std::shared_ptr<Bullet>& bullet, bool& isDeleted);
+    void forPlayers(std::vector<std::shared_ptr<Bullet>>::iterator& it,
+                    std::shared_ptr<Bullet>& bullet, bool& isDeleted);
+    void forEnemies(std::vector<std::shared_ptr<Bullet>>::iterator& it,
+                    std::shared_ptr<Bullet>& bullet, bool& isDeleted,
+                    std::vector<int32_t>& enemiesToDelete);
+    void invalidate(std::vector<std::shared_ptr<Bullet>>::iterator& it,
+                    std::shared_ptr<Bullet>& bullet, bool& isDeleted);
     std::vector<std::shared_ptr<Bullet>>& getBullets();
     void handlePlayerShoot(int playerId);
     void handleEnemyShoot(int enemyId, Point vector);

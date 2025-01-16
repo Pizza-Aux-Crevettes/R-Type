@@ -167,9 +167,9 @@ void EnemyManager::forPlayers(const std::shared_ptr<Enemy>& enemy) {
         }
 
         if (std::abs(player->getPosition().getX() -
-                                    enemy->getPosition().getX()) <= enemy->getShootRange() &&
+                     enemy->getPosition().getX()) <= enemy->getShootRange() &&
             std::abs(player->getPosition().getY() -
-                                    enemy->getPosition().getY()) <= enemy->getShootRange()) {
+                     enemy->getPosition().getY()) <= enemy->getShootRange()) {
             if (enemy->canShoot()) {
                 Point direction(
                     player->getPosition().getX() - enemy->getPosition().getX(),

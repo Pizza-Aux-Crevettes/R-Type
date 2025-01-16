@@ -7,11 +7,11 @@
 
 #include "component/bullet/BulletManager.hpp"
 #include "component/enemy/EnemyManager.hpp"
-#include "component/map/MapProtocol.hpp"
 #include "component/enemy/EnemyProtocol.hpp"
-#include "component/player/PlayerProtocol.hpp"
+#include "component/map/MapProtocol.hpp"
 #include "component/obstacle/ObstacleManager.hpp"
 #include "component/player/PlayerManager.hpp"
+#include "component/player/PlayerProtocol.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 
@@ -47,16 +47,20 @@ void BulletManager::updateBullets() {
         bool isDeleted = false;
 
         forObstacles(it, bullet, isDeleted);
-        if (isDeleted) continue;
+        if (isDeleted)
+            continue;
 
         forPlayers(it, bullet, isDeleted);
-        if (isDeleted) continue;
+        if (isDeleted)
+            continue;
 
         forEnemies(it, bullet, isDeleted, enemiesToDelete);
-        if (isDeleted) continue;
+        if (isDeleted)
+            continue;
 
         invalidate(it, bullet, isDeleted);
-        if (isDeleted) continue;
+        if (isDeleted)
+            continue;
 
         bullet->move();
         ++it;
@@ -72,10 +76,13 @@ void BulletManager::updateBullets() {
  * @param bullet The bullet to check
  * @param isDeleted A boolean to check if the bullet is deleted
  */
-void BulletManager::forObstacles(std::vector<std::shared_ptr<Bullet>>::iterator& it, std::shared_ptr<Bullet>& bullet, bool& isDeleted) {
+void BulletManager::forObstacles(
+    std::vector<std::shared_ptr<Bullet>>::iterator& it,
+    std::shared_ptr<Bullet>& bullet, bool& isDeleted) {
     for (const auto& obstacle : ObstacleManager::get().getAllObstacles()) {
-        if (bullet->collidesWith(obstacle->getPosition().getX(), obstacle->getPosition().getY(),
-                                 OBSTACLE_SIZE, OBSTACLE_SIZE)) {
+        if (bullet->collidesWith(obstacle->getPosition().getX(),
+                                 obstacle->getPosition().getY(), OBSTACLE_SIZE,
+                                 OBSTACLE_SIZE)) {
             MapProtocol::sendEntityDeleted(bullet->getId());
             it = _bullets.erase(it);
             isDeleted = true;
@@ -91,13 +98,17 @@ void BulletManager::forObstacles(std::vector<std::shared_ptr<Bullet>>::iterator&
  * @param bullet The bullet to check
  * @param isDeleted A boolean to check if the bullet is deleted
  */
-void BulletManager::forPlayers(std::vector<std::shared_ptr<Bullet>>::iterator& it, std::shared_ptr<Bullet>& bullet, bool& isDeleted) {
+void BulletManager::forPlayers(
+    std::vector<std::shared_ptr<Bullet>>::iterator& it,
+    std::shared_ptr<Bullet>& bullet, bool& isDeleted) {
     for (const auto& player : PlayerManager::get().getPlayers()) {
-        if (bullet->getType() == BulletType::ENEMY && bullet->collidesWith(player->getPosition().getX(),
-                                                                          player->getPosition().getY(),
-                                                                          PLAYER_WIDTH, PLAYER_HEIGHT)) {
+        if (bullet->getType() == BulletType::ENEMY &&
+            bullet->collidesWith(player->getPosition().getX(),
+                                 player->getPosition().getY(), PLAYER_WIDTH,
+                                 PLAYER_HEIGHT)) {
             player->takeDamage(bullet->getDamage());
-            PlayerProtocol::sendPlayerTakeDamage(player->getId(), bullet->getDamage());
+            PlayerProtocol::sendPlayerTakeDamage(player->getId(),
+                                                 bullet->getDamage());
 
             MapProtocol::sendEntityDeleted(bullet->getId());
             it = _bullets.erase(it);
@@ -115,13 +126,18 @@ void BulletManager::forPlayers(std::vector<std::shared_ptr<Bullet>>::iterator& i
  * @param isDeleted A boolean to check if the bullet is deleted
  * @param enemiesToDelete The list of enemies to delete
  */
-void BulletManager::forEnemies(std::vector<std::shared_ptr<Bullet>>::iterator& it, std::shared_ptr<Bullet>& bullet, bool& isDeleted, std::vector<int32_t>& enemiesToDelete) {
+void BulletManager::forEnemies(
+    std::vector<std::shared_ptr<Bullet>>::iterator& it,
+    std::shared_ptr<Bullet>& bullet, bool& isDeleted,
+    std::vector<int32_t>& enemiesToDelete) {
     for (const auto& enemy : EnemyManager::get().getEnemies()) {
-        if (bullet->getType() == BulletType::PLAYER && bullet->collidesWith(enemy->getPosition().getX(),
-                                                                          enemy->getPosition().getY(),
-                                                                          enemy->getWidth(), enemy->getHeight())) {
+        if (bullet->getType() == BulletType::PLAYER &&
+            bullet->collidesWith(enemy->getPosition().getX(),
+                                 enemy->getPosition().getY(), enemy->getWidth(),
+                                 enemy->getHeight())) {
             enemy->takeDamage(bullet->getDamage());
-            EnemyProtocol::sendEnemyTakeDamage(enemy->getId(), bullet->getDamage());
+            EnemyProtocol::sendEnemyTakeDamage(enemy->getId(),
+                                               bullet->getDamage());
 
             if (enemy->getHealth() <= 0) {
                 enemiesToDelete.push_back(enemy->getId());
@@ -142,7 +158,9 @@ void BulletManager::forEnemies(std::vector<std::shared_ptr<Bullet>>::iterator& i
  * @param bullet The bullet to invalidate
  * @param isDeleted A boolean to check if the bullet is deleted
  */
-void BulletManager::invalidate(std::vector<std::shared_ptr<Bullet>>::iterator& it, std::shared_ptr<Bullet>& bullet, bool& isDeleted) {
+void BulletManager::invalidate(
+    std::vector<std::shared_ptr<Bullet>>::iterator& it,
+    std::shared_ptr<Bullet>& bullet, bool& isDeleted) {
     if (bullet->getPosition().getX() > RENDER_DISTANCE * OBSTACLE_SIZE ||
         bullet->getPosition().getX() < -OBSTACLE_SIZE) {
         MapProtocol::sendEntityDeleted(bullet->getId());
@@ -171,7 +189,9 @@ void BulletManager::handlePlayerShoot(int playerId) {
         return;
 
     Point direction(1, 0);
-    auto bullet = std::make_shared<Bullet>(player->getPosition(), direction, PLAYER_BULLET_SPEED, BulletType::PLAYER, PLAYER_BULLET_DAMAGE);
+    auto bullet = std::make_shared<Bullet>(
+        player->getPosition(), direction, PLAYER_BULLET_SPEED,
+        BulletType::PLAYER, PLAYER_BULLET_DAMAGE);
     addBullet(bullet);
 }
 
@@ -185,6 +205,8 @@ void BulletManager::handleEnemyShoot(int enemyId, Point direction) {
     if (!enemy)
         return;
 
-    auto bullet = std::make_shared<Bullet>(enemy->getPosition(), direction, enemy->getBulletSpeed(), BulletType::ENEMY, enemy->getBulletDamage());
+    auto bullet = std::make_shared<Bullet>(
+        enemy->getPosition(), direction, enemy->getBulletSpeed(),
+        BulletType::ENEMY, enemy->getBulletDamage());
     addBullet(bullet);
 }
