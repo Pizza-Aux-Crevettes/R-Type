@@ -16,6 +16,7 @@
 #include <components/Link.hpp>
 #include <iostream>
 #include <map>
+#include <random>
 #include "Entity.hpp"
 #include "System.hpp"
 
@@ -27,6 +28,7 @@ class EntityManager {
     ~EntityManager();
     std::map<int, std::map<std::string, std::any>> _items;
     std::map<int, std::map<std::string, std::any>> _updateItems;
+    std::vector<int> _playerSpriteColor;
 
   public:
     static EntityManager& get();
@@ -40,5 +42,7 @@ class EntityManager {
     void addItem(std::map<int, std::map<std::string, std::any>> items);
     void setUpdateItems(std::map<int, std::map<std::string, std::any>>);
     std::map<int, std::map<std::string, std::any>> getUpdateItems();
+    std::vector<int> getPlayerColor();
+    void setPlayerColor(int playerId);
     sf::Texture manageBackground(sf::RenderWindow& window);
 };

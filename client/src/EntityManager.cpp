@@ -127,6 +127,39 @@ std::map<int, std::map<std::string, std::any>> EntityManager::getUpdateItems() {
     return _updateItems;
 }
 
+std::vector<int> EntityManager::getPlayerColor() {
+    return _playerSpriteColor;
+}
+
+void EntityManager::setPlayerColor(int playerId) {
+    
+
+    int num = playerId % 5;
+
+    std::cout << "PLAYER ID == " << num << std::endl;
+
+    switch(num) {
+        case 1 :
+            _playerSpriteColor = {0, 0, 34, 15};
+            break;
+        case 2 :
+            _playerSpriteColor = {0, 34, 34, 15};
+            break;
+        case 3 :
+            _playerSpriteColor = {0, 51, 34, 15};
+            break;
+        case 4 :
+            _playerSpriteColor = {0, 68, 34, 15};
+            break;
+        case 5 :
+            _playerSpriteColor = {0, 85, 34, 15};
+            break;
+        default:
+            _playerSpriteColor = {0, 0, 34, 15};
+            break;
+    }
+}
+
 sf::Texture EntityManager::manageBackground(sf::RenderWindow& window) {
     GetResponsiveValue responsive;
 
