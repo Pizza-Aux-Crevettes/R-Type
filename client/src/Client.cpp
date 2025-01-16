@@ -18,7 +18,7 @@
 #include <thread>
 #include "EntityManager.hpp"
 #include "component/hotkey/HotkeysManager.hpp"
-#include "components/Sound.hpp"
+#include "component/sound/SoundManager.hpp"
 #include "menu/Menu.hpp"
 #include "menu/LifeBar.hpp"
 #include "network/protocol/NetworkClient.hpp"
@@ -84,45 +84,18 @@ void Client::manageClient() {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "RTYPE");
     std::string ipAdress;
     std::string username;
-    HotkeysManager input;
     GameEngine::System system;
     sf::Texture background = EntityManager::get().manageBackground(window);
     OptionMenu optionMenu;
     LifeBar lifeBarMenu;
-    Sound menuSound;
-    Sound gameSound;
-    Sound bulletSound;
-    Sound clickSound;
+    SoundManager::get().setMusicSound("menu", "assets/sounds/ambien-song.wav");
+    SoundManager::get().setMusicSound("game", "assets/sounds/boss-song.wav");
+    SoundManager::get().setEffectSound("bullet", "assets/sounds/shoot-sound.wav");
+    SoundManager::get().setEffectSound("click", "assets/sounds/click-menu.wav");
 
-    if (!menuSound.getSoundBuffer().loadFromFile(
-            "assets/sounds/ambien-song.wav")) {
-        std::cerr << "Error: unable to load the audio file." << std::endl;
-    }
-
-    if (!gameSound.getSoundBuffer().loadFromFile(
-            "assets/sounds/boss-song.wav")) {
-        std::cerr << "Error: unable to load the audio file." << std::endl;
-    }
-
-    if (!bulletSound.getSoundBuffer().loadFromFile(
-            "assets/sounds/shoot-sound.wav")) {
-        std::cerr << "Error: unable to load the audio file." << std::endl;
-    }
-
-    if (!clickSound.getSoundBuffer().loadFromFile(
-            "assets/sounds/click-menu.wav")) {
-        std::cerr << "Error: unable to load the audio file." << std::endl;
-    }
-
-    menuSound.getSound().setBuffer(menuSound.getSoundBuffer());
-    gameSound.getSound().setBuffer(gameSound.getSoundBuffer());
-    bulletSound.getSound().setBuffer(bulletSound.getSoundBuffer());
-    clickSound.getSound().setBuffer(clickSound.getSoundBuffer());
-
-    menuSound.getSound().setLoop(true);
-    gameSound.getSound().setLoop(true);
-
-    menuSound.getSound().play();
+    SoundManager::get().setEffectSound("click", "assets/sounds/click-menu.wav");
+    SoundManager::get().setEffectSound("click", "assets/sounds/click-menu.wav");
+    SoundManager::get().getMusicSound("menu").getSound().play();
     sf::Clock clock;
     bool serverInitialized = false;
     std::unique_ptr<NetworkClient> networkClient = nullptr;
@@ -139,16 +112,16 @@ void Client::manageClient() {
                 return;
             }
             if (event.type == sf::Event::MouseButtonPressed) {
-                clickSound.getSound().play();
+                SoundManager::get().getEffectSound("click").getSound().play();
             }
             if (serverInitialized) {
                 if (event.type == sf::Event::KeyPressed &&
-                    event.key.code == sf::Keyboard::Space) {
-                    bulletSound.getSound().play();
+                    event.key.code == HotkeysManager::get().getKey(HotkeysCodes::SPACE)) {
+                    SoundManager::get().getEffectSound("bullet").getSound().play();
                 }
             }
             if (event.type == sf::Event::KeyPressed)
-                input.checkKey(event);
+                HotkeysManager::get().checkKey(event);
             Menu::get().setupInput(event);
             optionMenu.setNewKey(event, system);
         }
@@ -183,8 +156,8 @@ void Client::manageClient() {
                     smartBuffer << username;
                     TcpSocket::send(smartBuffer);
 
-                    menuSound.getSound().stop();
-                    gameSound.getSound().play();
+                    SoundManager::get().getMusicSound("menu").getSound().stop();
+                    SoundManager::get().getMusicSound("game").getSound().play();
                     serverInitialized = true;
                 } catch (const std::exception& e) {
                     Logger::error("[Main] Failed to initialize network: " +

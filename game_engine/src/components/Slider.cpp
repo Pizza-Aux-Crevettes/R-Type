@@ -193,25 +193,14 @@ float Slider::getMaxValue() const {
 }
 
 /**
- * @brief Set function for callback.
- *
- * This function sets the callback state of the Slider component.
- * @param callback An std::function object representing the function to
- * callback.
- */
-void Slider::setSetCallback(std::function<void(float)> callback) {
-    setCallback = callback;
-}
-
-/**
  * @brief Set function for get callback.
  *
  * This function sets the get callback state of the Slider component.
  * @param callback An std::function object representing the function to
  * callback.
  */
-void Slider::setGetCallback(std::function<float()> callback) {
-    getCallback = callback;
+void Slider::setCallback(std::function<void(float)> callback) {
+    _callback = callback;
 }
 
 /**
@@ -219,11 +208,10 @@ void Slider::setGetCallback(std::function<float()> callback) {
  *
  * This function call the function set in callback of the Slider component.
  */
-float Slider::triggerSetCallback(float newValue) {
-    if (getCallback) {
-        return getCallback();
+void Slider::executeCallback(int arg) {
+    if (_callback) {
+        return _callback(arg);
     }
-    return 0.0f;
 }
 
 void Slider::display() const {

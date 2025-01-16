@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 #include <iomanip>
 #include "../../include/component/hotkey/HotkeysManager.hpp"
+#include "component/sound/SoundManager.hpp"
 #include "Client.hpp"
 #include "components/Button.hpp"
 #include "components/Color.hpp"
@@ -63,12 +64,11 @@ OptionMenu::createEntityButton(int id, std::string title, std::string font,
 
 GameEngine::Entity OptionMenu::createEntitySlider(
     int id, const std::pair<int, int> values,
-    const std::vector<std::pair<float, float>> position,
-    std::function<float()> getter, std::function<void(float)> setter) {
+    const std::vector<std::pair<float, float>> position, 
+    std::function<void(float)> callback) {
     auto newEntity = GameEngine::Entity(id);
     auto slider = Slider(values, {200, 3});
-    slider.setGetCallback(getter);
-    slider.setSetCallback(setter);
+    slider.setCallback(callback);
     newEntity.addComponent(slider);
     newEntity.addComponent(Position(position));
     newEntity.addComponent(Color({255, 255, 255, 255}));
@@ -164,7 +164,8 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
         _entitiesMenuOption.emplace( entityId,
             createEntitySlider( entityId++, {0, 100}, {{
                 responsive.getResponsivePosX(800, currentWidth, 180),
-                responsive.getResponsivePosY(600, currentHeight, 115)}}, [this]() { return getVolumnMusic(); }, [this](int newValue) { setVolumnMusic(newValue); }));
+                responsive.getResponsivePosY(600, currentHeight, 115)}},
+                [this](int newValue) { setVolumnGame(newValue);}));
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, "Music", {{
                 responsive.getResponsivePosX(800, currentWidth, 580),
@@ -176,7 +177,8 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
         _entitiesMenuOption.emplace( entityId,
             createEntitySlider( entityId++, {0, 100}, {{
                 responsive.getResponsivePosX(800, currentWidth, 580),
-                responsive.getResponsivePosY(600, currentHeight, 115)}}, [this]() { return (getVolumnGame()); }, [this](int newValue) { setVolumnGame(newValue); }));
+                responsive.getResponsivePosY(600, currentHeight, 115)}},
+                [this](int newValue) { setVolumnMusic(newValue); }));
 
 // Key control
         _entitiesMenuOption.emplace( entityId,
@@ -319,7 +321,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                 entityId++,
                 {{responsive.getResponsivePosX(800, currentWidth, 720),
                   responsive.getResponsivePosY(600, currentHeight, 240)}},
-                [this]() { setAdaptabilityText(); }));
+                [this]() { setAdaptabilityText(); std::cout << "adaptability called" << std::endl;}));
 
         // Size of elements
         _entitiesMenuOption.emplace(
@@ -349,7 +351,6 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                 entityId++, {0, 100},
                 {{responsive.getResponsivePosX(800, currentWidth, 580),
                   responsive.getResponsivePosY(600, currentHeight, 310)}},
-                [this]() { return getElementSize(); },
                 [this](int newValue) { setElementSize(newValue); }));
 
         // Contrast
@@ -411,7 +412,7 @@ int OptionMenu::getVolumnMusic() {
 
 void OptionMenu::setVolumnMusic(int new_volumn) {
     _volumnMusic = new_volumn;
-    std::cout << "New volumn music " << _volumnMusic << std::endl;
+    SoundManager::get().setMusicVolumn(_volumnMusic);
 }
 
 // Volumn game
@@ -421,7 +422,7 @@ int OptionMenu::getVolumnGame() {
 
 void OptionMenu::setVolumnGame(int new_volumn) {
     _volumnGame = new_volumn;
-    std::cout << "New volumn game " << _volumnGame << std::endl;
+    SoundManager::get().setEffectVolumn(_volumnGame);
 }
 
 // Resolution
@@ -451,7 +452,6 @@ int OptionMenu::getElementSize() {
 
 void OptionMenu::setElementSize(int new_size) {
     _elementSize = new_size;
-    std::cout << "New element size " << _elementSize << std::endl;
 }
 
 // Difficulty : false = normal && true = difficult
