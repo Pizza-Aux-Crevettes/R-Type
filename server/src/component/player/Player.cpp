@@ -7,6 +7,7 @@
 
 #include "component/player/Player.hpp"
 #include "component/attr/IDManager.hpp"
+#include "util/Config.hpp"
 #include "util/Logger.hpp"
 
 /**
@@ -93,4 +94,13 @@ void Player::takeDamage(int16_t damage) {
  */
 int16_t Player::getHealth() const {
     return _health;
+}
+
+/**
+ * @brief Get the player's max health
+ *
+ * @return int16_t The player's max health
+ */
+int16_t Player::getMaxHealth() const {
+    return DEFAULT_HEALTH;
 }

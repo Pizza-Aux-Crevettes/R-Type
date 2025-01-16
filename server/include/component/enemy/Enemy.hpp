@@ -28,7 +28,7 @@ class Enemy {
   public:
     Enemy(EnemyType type, const Point& position, int16_t speed, int16_t width,
           int16_t height, int16_t bulletSpeed, int16_t bulletDamage,
-          int16_t shootCooldown, int16_t shootRange);
+          int16_t shootCooldown, int16_t shootRange, int16_t health);
 
     int32_t getId() const;
     EnemyType getType() const;
@@ -41,6 +41,7 @@ class Enemy {
     int16_t getShootCooldown() const;
     int16_t getShootRange() const;
     int16_t getHealth() const;
+    int16_t getMaxHealth() const;
     void setHealth(int16_t health);
     bool contains(int32_t x, int32_t y) const;
     bool collidesWith(const std::shared_ptr<Player>& player) const;
@@ -62,5 +63,6 @@ class Enemy {
     int16_t _shootCooldown;
     int16_t _shootRange;
     int16_t _health;
+    int16_t _maxHealth;
     int16_t _currentCooldown;
 };

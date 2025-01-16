@@ -21,14 +21,17 @@
  * @param bulletDamage The damage of the enemy's bullets
  * @param shootCooldown The cooldown between shots
  * @param shootRange The range at which the enemy can shoot
+ * @param health The health of the enemy
  */
 Enemy::Enemy(EnemyType type, const Point& position, int16_t speed,
              int16_t width, int16_t height, int16_t bulletSpeed,
-             int16_t bulletDamage, int16_t shootCooldown, int16_t shootRange)
+             int16_t bulletDamage, int16_t shootCooldown, int16_t shootRange,
+             int16_t health)
     : _id(IDManager::getNextId()), _type(type), _position(position),
       _speed(speed), _width(width), _height(height), _bulletSpeed(bulletSpeed),
       _bulletDamage(bulletDamage), _shootCooldown(shootCooldown),
-      _shootRange(shootRange), _currentCooldown(0) {}
+      _shootRange(shootRange), _currentCooldown(0), _health(health),
+      _maxHealth(health) {}
 
 /**
  * @brief Get the ID of the enemy
@@ -136,6 +139,15 @@ int16_t Enemy::getHealth() const {
  */
 void Enemy::setHealth(int16_t health) {
     _health = health;
+}
+
+/**
+ * @brief Get the enemy's max health
+ *
+ * @return int16_t The enemy's max health
+ */
+int16_t Enemy::getMaxHealth() const {
+    return _maxHealth;
 }
 
 /**

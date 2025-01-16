@@ -19,6 +19,7 @@ struct EnemyProperties {
     int16_t bulletDamage;
     int16_t shootCooldown;
     int16_t shootRange;
+    int16_t health;
 };
 
 class EnemyManager {

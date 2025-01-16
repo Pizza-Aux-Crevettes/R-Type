@@ -106,8 +106,8 @@ void BulletManager::forPlayers(
                                  player->getPosition().getY(), PLAYER_WIDTH,
                                  PLAYER_HEIGHT)) {
             player->takeDamage(bullet->getDamage());
-            PlayerProtocol::sendPlayerTakeDamage(player->getId(),
-                                                 bullet->getDamage());
+            MapProtocol::sendEntityHealthUpdate(
+                player->getId(), player->getHealth(), player->getMaxHealth());
 
             MapProtocol::sendEntityDeleted(bullet->getId());
             it = _bullets.erase(it);
@@ -135,8 +135,8 @@ void BulletManager::forEnemies(
                                  enemy->getPosition().getY(), enemy->getWidth(),
                                  enemy->getHeight())) {
             enemy->takeDamage(bullet->getDamage());
-            EnemyProtocol::sendEnemyTakeDamage(enemy->getId(),
-                                               bullet->getDamage());
+            MapProtocol::sendEntityHealthUpdate(
+                enemy->getId(), bullet->getDamage(), enemy->getMaxHealth());
 
             if (enemy->getHealth() <= 0 &&
                 enemy->getHealth() != ENEMY_FALLBACK_VALUE) {

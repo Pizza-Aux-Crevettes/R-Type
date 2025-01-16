@@ -84,22 +84,3 @@ void PlayerProtocol::sendPlayerPosition(const sockaddr_in& clientAddr,
         UdpSocket::get().sendToOne(clientAddr, smartBuffer);
     }
 }
-
-/**
- * @brief Send an player take damage event to all clients
- *
- * @param playerId The ID of the player that took damage
- * @param damage The amount of damage taken
- *
- * Protocol: PLAYER_TAKE_DAMAGE
- * Payload: playerId (int32_t), damage (int16_t)
- */
-void PlayerProtocol::sendPlayerTakeDamage(int32_t playerId, int16_t damage) {
-    SmartBuffer smartBuffer;
-    smartBuffer.reset();
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::PLAYER_TAKE_DAMAGE)
-                << static_cast<int32_t>(playerId)
-                << static_cast<int16_t>(damage);
-
-    UdpSocket::get().sendToAll(smartBuffer);
-}

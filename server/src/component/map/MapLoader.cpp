@@ -81,7 +81,7 @@ void MapLoader::parseMapLine(const std::string& line, int32_t y) {
                 properties.type, Point(enemyX, blockY), properties.speed,
                 properties.width, properties.height, properties.bulletSpeed,
                 properties.bulletDamage, properties.shootCooldown,
-                properties.shootRange);
+                properties.shootRange, properties.health);
 
             EnemyManager::get().addEnemy(enemy);
         }

@@ -27,16 +27,16 @@ EnemyManager& EnemyManager::get() {
  */
 EnemyManager::EnemyManager() {
     // EnemyType, speed, width, height, bulletSpeed, bulletDamage,
-    // shootCooldown, shootRange
+    // shootCooldown, shootRange, health
     _enemyMapping = {
-        {"E001", {EnemyType::GRUNT, 3, 50, 50, 10, 5, 800, 500}},
-        {"E002", {EnemyType::SNIPER, 2, 40, 40, 2, 20, 1500, 800}},
-        {"E003", {EnemyType::TANK, 1, 100, 100, 2, 15, 2000, 300}},
-        {"E004", {EnemyType::SWARMER, 5, 30, 30, 4, 3, 400, 200}},
-        {"E005", {EnemyType::BOSS, 1, 200, 200, 7, 50, 3000, 1000}},
-        {"E006", {EnemyType::DRONE, 4, 40, 40, 24, 8, 1000, 600}},
-        {"E007", {EnemyType::MINION, 6, 20, 20, 4, 2, 300, 150}},
-        {"E008", {EnemyType::CANNON, 0, 80, 80, 1, 25, 2000, 1000}}};
+        {"E001", {EnemyType::GRUNT, 3, 50, 50, 10, 5, 800, 500, 100}},
+        {"E002", {EnemyType::SNIPER, 2, 40, 40, 2, 20, 1500, 800, 1000}},
+        {"E003", {EnemyType::TANK, 1, 100, 100, 2, 15, 2000, 300, 1000}},
+        {"E004", {EnemyType::SWARMER, 5, 30, 30, 4, 3, 400, 200, 2000}},
+        {"E005", {EnemyType::BOSS, 1, 200, 200, 7, 50, 3000, 1000, 1000}},
+        {"E006", {EnemyType::DRONE, 4, 40, 40, 24, 8, 1000, 600, 1000}},
+        {"E007", {EnemyType::MINION, 6, 20, 20, 4, 2, 300, 150, 1000}},
+        {"E008", {EnemyType::CANNON, 0, 80, 80, 1, 25, 2000, 1000, 1000}}};
 
     Logger::success("[EnemyManager] Initialized enemy mappings.");
 }

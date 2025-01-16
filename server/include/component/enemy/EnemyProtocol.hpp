@@ -15,5 +15,4 @@ class EnemyProtocol {
   public:
     static void sendEnemiesUpdate(const sockaddr_in& clientAddr,
                                   SmartBuffer& smartBuffer);
-    static void sendEnemyTakeDamage(int32_t enemyId, int16_t damage);
 };
