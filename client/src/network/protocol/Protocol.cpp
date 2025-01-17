@@ -200,7 +200,7 @@ void Protocol::handleDeleteEntity(SmartBuffer& smartBuffer) {
     int32_t entityId;
     
     smartBuffer >> entityId;
-
+	std::lock_guard<std::mutex> guard(EntityManager::get().getMutex());
     auto& _entities = EntityManager::get().getEntityList();
 
 	if (_entities.empty()) {

@@ -177,3 +177,7 @@ sf::Texture EntityManager::manageBackground(sf::RenderWindow& window) {
 
     return newTexture;
 }
+
+std::mutex& EntityManager::getMutex() {
+    return _mutex;
+}

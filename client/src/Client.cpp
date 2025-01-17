@@ -53,8 +53,8 @@ void Client::manageBackground(GameEngine::System system, sf::Clock clock,
 
     sf::Vector2f textureOffset(0.f, 0.f);
     const float scrollSpeed = 100.f;
-    std::map<int, GameEngine::Entity> entityList =
-        EntityManager::get().getEntityList();
+    std::lock_guard<std::mutex> guard(EntityManager::get().getMutex());
+    std::map<int, GameEngine::Entity> entityList = EntityManager::get().getEntityList();
 
     sf::Time elapsed = clock.restart();
     textureOffset.x += scrollSpeed * elapsed.asSeconds();
@@ -101,8 +101,6 @@ void Client::manageClient() {
 
     while (window.isOpen()) {
         manageBackground(system, clock, background);
-        std::map<int, GameEngine::Entity> entitiesList =
-            EntityManager::get().getEntityList();
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
@@ -177,8 +175,11 @@ void Client::manageClient() {
                     return;
                 }
             }
+            std::lock_guard<std::mutex> guard(EntityManager::get().getMutex());
+            std::map<int, GameEngine::Entity> entitiesList = EntityManager::get().getEntityList();
             if (!entitiesList.empty()) {
-                system.render(window, entitiesList);
+                setDisplayEntity(entitiesList);
+                system.render(window, _displayEntities);
             }
             lifeBarMenu.displayLifeBar(window, system);
         }
@@ -218,4 +219,11 @@ void Client::setViewport(double viewport) {
 
 double Client::getViewport() {
     return _viewportX;
+}
+
+void Client::setDisplayEntity(std::map<int, GameEngine::Entity> entities) {
+    _displayEntities.clear();
+    for (const auto& [id, entity] : entities) {
+        _displayEntities.emplace(id, entity);
+    }
 }

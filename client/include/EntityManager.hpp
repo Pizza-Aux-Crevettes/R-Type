@@ -29,6 +29,7 @@ class EntityManager {
     std::map<int, std::map<std::string, std::any>> _items;
     std::map<int, std::map<std::string, std::any>> _updateItems;
     std::vector<int> _playerSpriteColor;
+    std::mutex _mutex;
 
   public:
     static EntityManager& get();
@@ -44,5 +45,6 @@ class EntityManager {
     std::map<int, std::map<std::string, std::any>> getUpdateItems();
     std::vector<int> getPlayerColor();
     void setPlayerColor(int playerId);
+    std::mutex& getMutex();
     sf::Texture manageBackground(sf::RenderWindow& window);
 };
