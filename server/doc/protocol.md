@@ -1,122 +1,149 @@
-# R-Type Communication Protocol
+# R-Type Protocol Documentation
 
-## Introduction
-This document describes the updated communication protocol for the R-Type server. It uses both TCP and UDP. TCP is used for reliable operations (e.g., creating a new player, hotkey inputs), while UDP is used for real-time updates (e.g., positions of players, obstacles, and bullets).
+This document provides a detailed overview of the communication protocol for the R-Type server. It outlines the purpose, payload, and transmission method (TCP/UDP) for each operation code (OpCode). The protocol ensures consistent communication between the server and clients.
 
-## Protocol Overview
+---
+
+## Overview
 
 ### Transport Protocols
-- **TCP**: For reliable commands (e.g., creating a player, hotkey processing).
-- **UDP**: For real-time updates (e.g., player positions, obstacles, bullets).
+- **TCP**: Reliable communication for operations requiring acknowledgment (e.g., player creation, hotkey inputs).
+- **UDP**: Lightweight and fast communication for real-time updates (e.g., player positions, bullets, obstacles).
 
 ### Message Structure
-Each message has the following form:
+All messages follow this general structure:
 
-| Field       | Type     | Size (bytes) | Description                               |
-|-------------|----------|--------------|-------------------------------------------|
-| **OpCode**  | `int16_t`| 2            | Identifies the operation (see below).     |
-| **Payload** | Varies   | Variable     | Data relevant to the specific operation.  |
+| Field       | Type      | Size (bytes) | Description                               |
+|-------------|-----------|--------------|-------------------------------------------|
+| **OpCode**  | `int16_t` | 2            | Identifies the operation (see below).     |
+| **Payload** | Varies    | Variable     | Data relevant to the specific operation.  |
+
+---
 
 ## OpCode Definitions
 
-| OpCode                     | Value | Description                                   |
-|----------------------------|-------|-----------------------------------------------|
-| **DEFAULT**                | 0     | No operation (used for testing or ping).      |
-| **HOTKEY_PRESSED**         | 1     | Process a hotkey (key press) from a player.   |
-| **CREATE_PLAYER**          | 10    | Request to create a new player.               |
-| **CREATE_PLAYER_CALLBACK** | 11    | Callback confirming the newly created player. |
-| **CREATE_PLAYER_BROADCAST**| 12    | Broadcast to others about a new player.       |
-| **UPDATE_PLAYERS**         | 20    | Update players (positions, states, etc.).     |
-| **UPDATE_VIEWPORT**        | 21    | Update current map viewport.                  |
-| **UPDATE_OBSTACLES**       | 22    | Update obstacles data.                        |
-| **UPDATE_BULLETS**         | 23    | Update bullets data.                          |
-| **DELETE_ENTITY**          | 30    | Delete an entity (player/obstacle/bullet).    |
+### 1. **DEFAULT**
+- **Value**: `0`
+- **Description**: Used to save the client on the server.
+- **Payload**: None.
+- **Sent To**: Server or specific client.
+- **Transport**: TCP.
 
-## Detailed Protocol Descriptions
-
-### DEFAULT
-- **Description**: No specific action. Often used for heartbeat or basic connection tests.  
-- **Payload**: None
-
----
-
-### HOTKEY_PRESSED
-- **Description**: Notifies the server of a key press by a specific player.  
-- **Payload**:  
-  - `playerId` (int32_t)  
-  - `hotkeyCode` (int16_t)
-
----
-
-### CREATE_PLAYER
-- **Description**: Requests creation of a new player on the server.  
-- **Payload**:  
-  - `playerName` (string)
-
-### CREATE_PLAYER_CALLBACK
-- **Description**: Server response confirming the creation of a new player.  
-- **Payload**:  
-  - `playerId` (int32_t)
-  - `width` (int16_t)
-  - `height` (int16_t)
-
-### CREATE_PLAYER_BROADCAST
-- **Description**: Broadcasts to all clients that a new player has joined.  
-- **Payload**:  
-  - `playerId` (int32_t)  
-  - `playerName` (string)
-  - `width` (int16_t)
-  - `height` (int16_t)
-
----
-
-### UPDATE_PLAYERS
-- **Description**: Updates the positions (and possibly other data) of multiple players.  
+### 2. **HOTKEY_PRESSED**
+- **Value**: `1`
+- **Description**: Notifies the server of a key press by a specific player.
 - **Payload**:
-  - `playerId` (int32_t)  
-  - `posX` (int32_t)  
-  - `posY` (int32_t)
+  - `playerId` (int32_t): The ID of the player who pressed the key.
+  - `hotkeyCode` (int16_t): The code of the pressed key.
+- **Sent To**: Server.
+- **Transport**: TCP.
 
-### UPDATE_VIEWPORT
-- **Description**: Updates the current map viewport.  
+### 3. **CREATE_PLAYER**
+- **Value**: `10`
+- **Description**: Requests the creation of a new player on the server.
 - **Payload**:
-  - `viewport` (double)
+  - `playerName` (string): The name of the player to create.
+- **Sent To**: Server.
+- **Transport**: TCP.
 
-### UPDATE_OBSTACLES
-- **Description**: Updates the positions or states of obstacles on the map.  
+### 4. **CREATE_PLAYER_CALLBACK**
+- **Value**: `11`
+- **Description**: Confirms the creation of a new player to the requesting client.
 - **Payload**:
-  - `obstacleId` (int32_t)
-  - `posX` (int32_t)
-  - `posY` (int32_t)
-  - `size` (int16_t)
-  - `type` (int16_t)
+  - `playerId` (int32_t): The ID of the newly created player.
+  - `width` (int16_t): The width of the player’s sprite.
+  - `height` (int16_t): The height of the player’s sprite.
+- **Sent To**: Specific client (the one who requested the creation).
+- **Transport**: TCP.
 
-### UPDATE_BULLETS
-- **Description**: Updates the positions or states of bullets on the map.  
+### 5. **CREATE_PLAYER_BROADCAST**
+- **Value**: `12`
+- **Description**: Broadcasts the creation of a new player to all connected clients.
 - **Payload**:
-  - `bulletId` (int32_t)
-  - `posX` (int32_t)
-  - `posY` (int32_t)
-  - `speed` (int16_t)
-  - `type` (int16_t)
+  - `playerId` (int32_t): The ID of the new player.
+  - `playerName` (string): The name of the new player.
+  - `width` (int16_t): The width of the player’s sprite.
+  - `height` (int16_t): The height of the player’s sprite.
+- **Sent To**: All clients.
+- **Transport**: UDP.
 
-### UPDATE_ENTITY_HEALTH
-- **Description**: Broadcasts to all clients that an entity's health changed. 
+### 6. **UPDATE_PLAYERS**
+- **Value**: `20`
+- **Description**: Updates player positions and states.
 - **Payload**:
-  - `enemyId` (int32_t)
-  - `health` (int16_t)
-  - `maxHealth` (int16_t)
+  - `playerId` (int32_t): The ID of the player.
+  - `posX` (int32_t): The player’s X-coordinate.
+  - `posY` (int32_t): The player’s Y-coordinate.
+- **Sent To**: All clients.
+- **Transport**: UDP.
 
---
-
-### DELETE_ENTITY
-- **Description**: Deletes an existing entity (player, obstacle, or bullet).  
+### 7. **UPDATE_VIEWPORT**
+- **Value**: `21`
+- **Description**: Updates the current map viewport.
 - **Payload**:
-  - `entityId` (int32_t)
+  - `viewport` (double): The viewport’s position.
+- **Sent To**: All clients.
+- **Transport**: UDP.
+
+### 8. **UPDATE_OBSTACLES**
+- **Value**: `22`
+- **Description**: Updates obstacle positions or states.
+- **Payload**:
+  - `obstacleId` (int32_t): The ID of the obstacle.
+  - `posX` (int32_t): The obstacle’s X-coordinate.
+  - `posY` (int32_t): The obstacle’s Y-coordinate.
+  - `size` (int16_t): The size of the obstacle.
+  - `type` (int16_t): The type of the obstacle.
+- **Sent To**: All clients.
+- **Transport**: UDP.
+
+### 9. **UPDATE_BULLETS**
+- **Value**: `23`
+- **Description**: Updates bullet positions or states.
+- **Payload**:
+  - `bulletId` (int32_t): The ID of the bullet.
+  - `posX` (int32_t): The bullet’s X-coordinate.
+  - `posY` (int32_t): The bullet’s Y-coordinate.
+  - `speed` (int16_t): The speed of the bullet.
+  - `type` (int16_t): The type of the bullet.
+- **Sent To**: All clients.
+- **Transport**: UDP.
+
+### 10. **UPDATE_ENEMIES**
+- **Value**: `24`
+- **Description**: Updates enemy positions or states.
+- **Payload**:
+  - `enemyId` (int32_t): The ID of the enemy.
+  - `posX` (int32_t): The enemy’s X-coordinate.
+  - `posY` (int32_t): The enemy’s Y-coordinate.
+  - `width` (int16_t): The width of the enemy’s sprite.
+  - `height` (int16_t): The height of the enemy’s sprite.
+  - `type` (int16_t): The type of the enemy.
+- **Sent To**: All clients.
+- **Transport**: UDP.
+
+### 11. **UPDATE_ENTITY_HEALTH**
+- **Value**: `25`
+- **Description**: Broadcasts changes in the health of an entity (player or enemy).
+- **Payload**:
+  - `entityId` (int32_t): The ID of the entity.
+  - `health` (int16_t): The current health of the entity.
+  - `maxHealth` (int16_t): The maximum health of the entity.
+- **Sent To**: All clients.
+- **Transport**: UDP.
+
+### 12. **DELETE_ENTITY**
+- **Value**: `30`
+- **Description**: Deletes an entity from the game (e.g., player, enemy, bullet).
+- **Payload**:
+  - `entityId` (int32_t): The ID of the entity to delete.
+- **Sent To**: All clients.
+- **Transport**: UDP.
 
 ---
 
 ## Notes
-- All OpCodes must be handled consistently by both server and client.
-- The structure and interpretation of the payload must match exactly between sender and receiver.
-- Some messages may be sent via TCP or UDP depending on the reliability required.
+- The server and clients must strictly adhere to the protocol to ensure consistency.
+- Payloads must be interpreted exactly as defined.
+- TCP is used for operations requiring reliable delivery, while UDP is optimized for real-time updates.
+
