@@ -26,6 +26,7 @@
 #include "network/socket/TcpSocket.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
+#include "component/hotkey/HotkeysManager.hpp"
 
 void runNetworkClient(NetworkClient& networkClient) {
     try {
@@ -57,9 +58,6 @@ void Client::manageBackground(GameEngine::System system, sf::Clock clock,
 
     sf::Time elapsed = clock.restart();
     textureOffset.x += scrollSpeed * elapsed.asSeconds();
-    // if (textureOffset.x > background.getSize().x) {
-    //     textureOffset.x -= background.getSize().x;
-    // }
     textureOffset.x = Client::get().getViewport();
     sf::RectangleShape& shape =
         entityList.at(0).getComponent<Shape>().getRect();
@@ -124,6 +122,19 @@ void Client::manageClient() {
                 HotkeysManager::get().checkKey(event);
             Menu::get().setupInput(event);
             optionMenu.setNewKey(event, system);
+
+        }
+
+        if (HotkeysManager::get().getAutoFireState()) {
+            if (clock.getElapsedTime().asSeconds() >= 0.30f) {
+                SmartBuffer smartBuffer;
+                smartBuffer
+                    << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
+                    << static_cast<int32_t>(Protocol::get().getPlayerId())
+                    << static_cast<int16_t>(HotkeysCodes::SPACE);
+                UdpSocket::send(smartBuffer);
+                clock.restart();
+            }
         }
         window.clear();
         if (!Client::get().getIsPlayed()) {
