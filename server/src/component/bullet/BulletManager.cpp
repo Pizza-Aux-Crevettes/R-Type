@@ -143,7 +143,7 @@ void BulletManager::forEnemies(
                                  enemy->getHeight())) {
             enemy->takeDamage(bullet->getDamage());
             MapProtocol::sendEntityHealthUpdate(
-                enemy->getId(), bullet->getDamage(), enemy->getMaxHealth());
+                enemy->getId(), enemy->getHealth(), enemy->getMaxHealth());
 
             if (enemy->getHealth() <= 0 && enemy->getHealth() != DEFAULT_GONE) {
                 enemy->setHealth(DEFAULT_GONE);

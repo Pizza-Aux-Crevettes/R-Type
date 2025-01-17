@@ -104,7 +104,6 @@ All messages follow this general structure:
   - `bulletId` (int32_t): The ID of the bullet.
   - `posX` (int32_t): The bullet’s X-coordinate.
   - `posY` (int32_t): The bullet’s Y-coordinate.
-  - `speed` (int16_t): The speed of the bullet.
   - `type` (int16_t): The type of the bullet.
 - **Sent To**: All clients.
 - **Transport**: UDP.

@@ -8,6 +8,7 @@
 #include "component/map/MapProtocol.hpp"
 #include "component/obstacle/ObstacleManager.hpp"
 #include "protocol/Protocol.hpp"
+#include "util/Logger.hpp"
 #include "socket/UdpSocket.hpp"
 
 /**

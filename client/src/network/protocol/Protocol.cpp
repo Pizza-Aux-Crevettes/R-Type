@@ -180,18 +180,23 @@ void Protocol::handleUpdateEnemies(SmartBuffer& smartBuffer) {
         {"Size", std::pair<float, float>(width, height)},
         {"Position", std::pair<float, float>(x, y)}};
     EntityManager::get().CompareEntities(enemyId, newItems, {x, y});
-
-    Logger::info("[Protocol] Updating enemy: " + std::to_string(enemyId));
 }
 
 void Protocol::handleUpdateBullets(SmartBuffer& smartBuffer) {
     int32_t bulletId, x, y;
+    int16_t type;
+    std::string texture = std::string("assets/sprite/shoot_blue.png");
+    std::vector<int> textureRect = {180, 0, 50, 20};
     
-    smartBuffer >> bulletId >> x >> y;
+    smartBuffer >> bulletId >> x >> y >> type;
 
+    if (type > 0) {
+        texture = std::string("assets/sprite/shoot_yellow.png");
+        textureRect = {35, 0, 50, 20};
+    }
     std::map<std::string, std::any> newItems = {
-        {"Texture", std::string("assets/sprite/shoot_blue.png")},
-        {"TextureRect", std::vector<int>{180, 0, 50, 20}},
+        {"Texture", texture},
+        {"TextureRect", textureRect},
         {"Position", std::pair<float, float>(x, y)}};
     EntityManager::get().CompareEntities(bulletId, newItems, {x, y});
 }
@@ -218,6 +223,6 @@ void Protocol::handleDeleteEntity(SmartBuffer& smartBuffer) {
 void Protocol::handleUpdateEntityHealth(SmartBuffer& smartBuffer) {
     int32_t entityId;
     int16_t health, maxHealth;
-    
+
     smartBuffer >> entityId >> health >> maxHealth;
 }

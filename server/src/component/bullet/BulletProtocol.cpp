@@ -28,7 +28,8 @@ void BulletProtocol::sendBulletsUpdate(const sockaddr_in& clientAddr,
         smartBuffer << static_cast<int16_t>(Protocol::OpCode::UPDATE_BULLETS)
                     << static_cast<int32_t>(bullet->getId())
                     << static_cast<int32_t>(bullet->getPosition().getX())
-                    << static_cast<int32_t>(bullet->getPosition().getY());
+                    << static_cast<int32_t>(bullet->getPosition().getY())
+                    << static_cast<int16_t>(bullet->getType());
 
         UdpSocket::get().sendToOne(clientAddr, smartBuffer);
     }
