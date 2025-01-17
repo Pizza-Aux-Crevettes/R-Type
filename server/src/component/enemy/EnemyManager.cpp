@@ -8,6 +8,7 @@
 #include "component/enemy/EnemyManager.hpp"
 #include "component/bullet/BulletManager.hpp"
 #include "component/map/MapProtocol.hpp"
+#include "component/obstacle/ObstacleManager.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
@@ -141,7 +142,9 @@ void EnemyManager::updateEnemies() {
     prepare();
 
     for (const auto& enemy : _enemies) {
-        enemy->move();
+        if (ObstacleManager::get().getViewport() < ObstacleManager::get().getMaxViewport()) {
+            enemy->move();
+        }
         enemy->updateShootCooldown();
         forPlayers(enemy);
         invalidate(enemy);

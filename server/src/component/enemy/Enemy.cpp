@@ -211,7 +211,7 @@ void Enemy::updateShootCooldown() {
  *
  */
 void Enemy::move() {
-    _position.setX(_position.getX() - _speed);
+    _position.setX(_position.getX() - (_speed + MAP_SPEED));
 }
 
 /**

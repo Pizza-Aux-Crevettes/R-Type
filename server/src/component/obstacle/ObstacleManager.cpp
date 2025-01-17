@@ -126,11 +126,16 @@ ObstacleType ObstacleManager::getObstacleType(const std::string& code) const {
  */
 void ObstacleManager::updateObstacles() {
     _visibleObstacles.clear();
-    _viewport += MAP_SPEED;
+
+    if (_viewport < _maxViewport) {
+        _viewport += MAP_SPEED;
+    }
 
     for (const auto& obstacle : _obstacles) {
-        obstacle->setPosition(Point(obstacle->getPosition().getX() - MAP_SPEED,
+        if (_viewport < _maxViewport) {
+            obstacle->setPosition(Point(obstacle->getPosition().getX() - MAP_SPEED,
                                     obstacle->getPosition().getY()));
+        }
         forPlayers(obstacle);
         invalidate(obstacle);
     }
@@ -261,4 +266,22 @@ int32_t ObstacleManager::getMaxMoveDistance(int32_t x, int32_t y,
  */
 double ObstacleManager::getViewport() const {
     return _viewport;
+}
+
+/**
+ * @brief Get the maximum viewport
+ *
+ * @return double The maximum viewport
+ */
+double ObstacleManager::getMaxViewport() const {
+    return _maxViewport;
+}
+
+/**
+ * @brief Set the maximum viewport
+ *
+ * @param maxViewport The maximum viewport
+ */
+void ObstacleManager::setMaxViewport(double maxViewport) {
+    _maxViewport = maxViewport;
 }

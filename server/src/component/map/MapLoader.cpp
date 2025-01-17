@@ -70,6 +70,10 @@ void MapLoader::parseMapLine(const std::string& line, int32_t y) {
                 ObstacleManager::get().getObstacleType(code),
                 Point(blockX, blockY));
             ObstacleManager::get().addObstacle(obstacle);
+
+            if (ObstacleManager::get().getMaxViewport() == 0) {
+                ObstacleManager::get().setMaxViewport(line.size() / OBSTACLE_OFFSET - MAP_WIDTH);
+            } 
         } else if (EnemyManager::get().isEnemyCodeValid(code)) {
             int32_t enemyX =
                 static_cast<int32_t>(x / OBSTACLE_OFFSET) * OBSTACLE_SIZE;
