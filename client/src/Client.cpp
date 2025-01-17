@@ -20,7 +20,8 @@
 #include "component/hotkey/HotkeysManager.hpp"
 #include "component/sound/SoundManager.hpp"
 #include "menu/Menu.hpp"
-#include "menu/LifeBar.hpp"
+#include "health/LifeBar.hpp"
+#include "menu/LoseMenu.hpp"
 #include "network/protocol/NetworkClient.hpp"
 #include "network/protocol/Protocol.hpp"
 #include "network/socket/TcpSocket.hpp"
@@ -86,6 +87,7 @@ void Client::manageClient() {
     sf::Texture background = EntityManager::get().manageBackground(window);
     OptionMenu optionMenu;
     LifeBar lifeBarMenu;
+    LoseMenu loseMenu;
     SoundManager::get().setMusicSound("menu", "assets/sounds/ambien-song.wav");
     SoundManager::get().setMusicSound("game", "assets/sounds/boss-song.wav");
     SoundManager::get().setEffectSound("bullet", "assets/sounds/shoot-sound.wav");

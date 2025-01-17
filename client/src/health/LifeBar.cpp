@@ -5,7 +5,7 @@
 ** LifeBar
 */
 
-#include "menu/LifeBar.hpp"
+#include "health/LifeBar.hpp"
 #include "components/Color.hpp"
 #include "components/Position.hpp"
 #include "components/Text.hpp"
