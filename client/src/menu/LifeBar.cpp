@@ -6,6 +6,7 @@
 */
 
 #include "menu/LifeBar.hpp"
+#include "Client.hpp"
 #include "components/Color.hpp"
 #include "components/Position.hpp"
 #include "components/Text.hpp"
@@ -35,7 +36,7 @@ GameEngine::Entity LifeBar::createEntityText(
         }
     }
 
-    newEntity.addComponent(Text(text, "assets/font/Inter_Bold.ttf", fontSize));
+    newEntity.addComponent(Text(text, Client::get().getFont(), fontSize));
     newEntity.addComponent(Position(position));
     newEntity.addComponent(Color(color));
     return newEntity;

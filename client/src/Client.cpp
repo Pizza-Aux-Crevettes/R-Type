@@ -221,6 +221,18 @@ double Client::getViewport() {
     return _viewportX;
 }
 
+std::string Client::getFont() {
+    return _font;
+}
+
+void Client::setFont() {
+    if (_font == "assets/font/Inter_Bold.ttf") {
+        _font = "assets/font/open-dyslexic.ttf";
+    } else {
+        _font = "assets/font/Inter_Bold.ttf";
+    }
+}
+
 void Client::setDisplayEntity(std::map<int, GameEngine::Entity> entities) {
     _displayEntities.clear();
     for (const auto& [id, entity] : entities) {

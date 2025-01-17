@@ -9,6 +9,7 @@
 
 #include "EntityManager.hpp"
 #include "util/getResponsiveValue.hpp"
+#include "Client.hpp"
 
 EntityManager::EntityManager() {}
 
@@ -92,7 +93,7 @@ void EntityManager::CreateEntity(int id,
         if (textLink != components.end()) {
             const auto& text = textLink->second;
             try {
-                newEntity.addComponent(Text(std::any_cast<std::string>(text), "assets/font/Inter_Bold.ttf", 10));
+                newEntity.addComponent(Text(std::any_cast<std::string>(text), Client::get().getFont(), 10));
                 newEntity.addComponent(Link(std::any_cast<int>(id - 10000)));
             } catch (const std::bad_any_cast& e) {
                 std::cerr << "Error casting Position component: " << e.what()

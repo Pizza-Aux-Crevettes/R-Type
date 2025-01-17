@@ -6,6 +6,7 @@
 */
 
 #include "menu/WinMenu.hpp"
+#include <Client.hpp>
 #include <components/Button.hpp>
 #include <components/ButtonRect.hpp>
 #include <components/Text.hpp>
@@ -31,7 +32,7 @@ GameEngine::Entity WinMenu::createEntityButton(int id, std::string title, std::s
 
 GameEngine::Entity WinMenu::createEntityText(int id, const std::string text, const std::vector<std::pair<float, float>> position, unsigned int fontSize) {
     auto newEntity = GameEngine::Entity(id);
-    newEntity.addComponent(Text(text, "assets/font/Inter_Bold.ttf", fontSize));
+    newEntity.addComponent(Text(text, Client::get().getFont(), fontSize));
     newEntity.addComponent(Position(position));
     newEntity.addComponent(Color({34, 139, 34, 255}));
     return newEntity;
@@ -140,7 +141,7 @@ void WinMenu::displayWnMenu(sf::RenderWindow& window, GameEngine::System system)
         _entitiesWinMenu.emplace(
             entityId,
             createEntityButton(
-                entityId++, "QUIT GAME", "assets/font/Inter_Bold.ttf", 25,
+                entityId++, "QUIT GAME", Client::get().getFont(), 25,
                 {{responsive.getResponsivePosX(1920, currentWidth, 850),
                     responsive.getResponsivePosY(1080, currentHeight, 620)}},
                 [this, &window]() { isClickedExit(window); }));

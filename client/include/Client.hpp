@@ -30,6 +30,7 @@ class Client {
     std::string _username = "";
     std::string _port;
     std::string _ip;
+    std::string _font = "assets/font/Inter_Bold.ttf";
     sf::Event _event;
     double _viewportX;
 
@@ -50,6 +51,8 @@ class Client {
     double getViewport();
     std::string getUsername();
     std::string getPort();
+    std::string getFont();
+    void setFont();
     std::string getIp();
     sf::Event getEvent();
 };

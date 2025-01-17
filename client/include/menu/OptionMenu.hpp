@@ -23,7 +23,6 @@ class OptionMenu {
     int _resolution = 1;
     bool _adaptabilityText = false;
     float _elementSize = 100;
-    bool _difficulty = false;
     bool _control = false;
     bool _constrast = false;
     bool _waitingForKey = false;
@@ -40,11 +39,6 @@ class OptionMenu {
     GameEngine::Entity
     createEntityOptionButton(int, std::vector<std::pair<float, float>>,
                              std::function<void()>);
-    GameEngine::Entity
-    createEntityButton(int id, std::string title, std::string font,
-                       int fontSize,
-                       std::vector<std::pair<float, float>> position,
-                       std::function<void()> callback);
     GameEngine::Entity
     createEntitySlider(int, const std::pair<int, int>,
                         const std::vector<std::pair<float, float>>,
@@ -69,10 +63,6 @@ class OptionMenu {
     void setAdaptabilityText();
     int getElementSize();
     void setElementSize(int);
-    bool getDifficulty();
-    void setDifficulty();
     bool getControl();
     void setControl();
-    bool getContrast();
-    void setContrast();
 };

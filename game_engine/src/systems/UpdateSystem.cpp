@@ -10,6 +10,8 @@
 #include <components/Sprite.hpp>
 #include <components/Text.hpp>
 #include <iostream>
+#include "../../../client/include/Client.hpp"
+// #include "../../src/Cient.hpp"
 #include "System.hpp"
 
 void GameEngine::System::updateEntityPosition(
@@ -40,6 +42,7 @@ void GameEngine::System::updateText(Entity& entity, const std::string& text) {
         auto& textComp = entity.getComponent<Text>();
         textComp.setString(text);
         textComp.getText().setString(text);
+        textComp.getFont().loadFromFile(Client::get().getFont());
     }
 }
 

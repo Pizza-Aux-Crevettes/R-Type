@@ -37,11 +37,6 @@ class Menu {
     void displayMenu(sf::RenderWindow& window, GameEngine::System system,
                      OptionMenu& optionMenu);
     GameEngine::Entity
-    createEntityButton(int id, std::string title, std::string font,
-                       int fontSize,
-                       std::vector<std::pair<float, float>> position,
-                       std::function<void()> callback);
-    GameEngine::Entity
     createEntitySprite(int id, const std::pair<float, float> size,
                        std::string texture, std::vector<int> textureRect,
                        const std::vector<std::pair<float, float>> position);
@@ -54,6 +49,10 @@ class Menu {
     createEntityInput(int id, std::string font, int fontSize,
                       const std::vector<std::pair<float, float>> position,
                       std::string inputVar);
+    GameEngine::Entity createEntityText(
+                      int id, const std::string text,
+                      const std::vector<std::pair<float, float>> position,
+                      unsigned int fontSize);
 
     void isClickedInput(bool isIpClicked, bool isPortClicked,
                         bool isUsernameClicked);

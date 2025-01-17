@@ -154,8 +154,6 @@ void GameEngine::System::sliderSystem(sf::RenderWindow& window,
             cursorX - sliderComp.getCursorShape().getRadius(),
             cursorShape.getPosition().y);
             sliderComp.setValue(sliderComp.getValue());
-            // system.update(entity.getEntityId(), entities, UpdateType::Text,
-            //     std::to_string(sliderComp.getValue()));
             sliderComp.setIsLoaded();
 
         }
