@@ -25,6 +25,7 @@ class Client {
     std::map<int, std::map<std::string, std::any>> _items;
     std::map<int, std::map<std::string, std::any>> _updateItems;
     std::map<int, std::shared_ptr<GameEngine::Entity>> _entities;
+    std::map<int, GameEngine::Entity> _displayEntities;
     bool _isPlay = false;
     std::string _username = "";
     std::string _port;
@@ -45,6 +46,7 @@ class Client {
     void setPort(std::string port);
     void setIp(std::string Ip);
     void setViewport(double viewport);
+    void setDisplayEntity(std::map<int, GameEngine::Entity> entities);
     double getViewport();
     std::string getUsername();
     std::string getPort();
