@@ -10,24 +10,7 @@
 */
 
 #include "Client.hpp"
-#include <Entity.hpp>
-#include <components/Position.hpp>
-#include <components/Sprite.hpp>
-#include <components/Texture.hpp>
-#include <menu/OptionMenu.hpp>
-#include <thread>
-#include "EntityManager.hpp"
-#include "component/hotkey/HotkeysManager.hpp"
-#include "component/sound/SoundManager.hpp"
-#include "menu/Menu.hpp"
-#include "health/LifeBar.hpp"
-#include "menu/LoseMenu.hpp"
-#include "network/protocol/NetworkClient.hpp"
-#include "network/protocol/Protocol.hpp"
-#include "network/socket/TcpSocket.hpp"
-#include "util/Config.hpp"
-#include "util/Logger.hpp"
-#include "component/hotkey/HotkeysManager.hpp"
+
 
 void runNetworkClient(NetworkClient& networkClient) {
     try {
@@ -66,28 +49,7 @@ void Client::manageBackground(GameEngine::System system, sf::Clock clock,
         sf::IntRect(textureOffset.x, textureOffset.y, 800, 600));
 }
 
-Client& Client::get() {
-    static Client instance;
-    return instance;
-}
-
-void Client::setIsPlayed() {
-    _isPlay = !_isPlay;
-}
-
-bool Client::getIsPlayed() {
-    return _isPlay;
-}
-
-void Client::manageClient() {
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "RTYPE");
-    std::string ipAdress;
-    std::string username;
-    GameEngine::System system;
-    sf::Texture background = EntityManager::get().manageBackground(window);
-    OptionMenu optionMenu;
-    LifeBar lifeBarMenu;
-    LoseMenu loseMenu;
+void Client::manageSound() {
     SoundManager::get().setMusicSound("menu", "assets/sounds/ambien-song.wav");
     SoundManager::get().setMusicSound("game", "assets/sounds/boss-song.wav");
     SoundManager::get().setEffectSound("bullet", "assets/sounds/shoot-sound.wav");
@@ -96,97 +58,120 @@ void Client::manageClient() {
     SoundManager::get().setEffectSound("click", "assets/sounds/click-menu.wav");
     SoundManager::get().setEffectSound("click", "assets/sounds/click-menu.wav");
     SoundManager::get().getMusicSound("menu").getSound().play();
+}
+
+void Client::processEvents(sf::RenderWindow& window, GameEngine::System& system, 
+                           OptionMenu& optionMenu, bool serverInitialized) {
+    sf::Event event;
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            window.close();
+            return;
+        }
+        if (event.type == sf::Event::MouseButtonPressed) {
+            SoundManager::get().getEffectSound("click").getSound().play();
+        }
+        if (serverInitialized) {
+            if (event.type == sf::Event::KeyPressed &&
+                event.key.code == HotkeysManager::get().getKey(HotkeysCodes::SPACE)) {
+                SoundManager::get().getEffectSound("bullet").getSound().play();
+            }
+        }
+        if (event.type == sf::Event::KeyPressed) {
+            HotkeysManager::get().checkKey(event);
+        }
+        Menu::get().setupInput(event);
+        optionMenu.setNewKey(event, system);
+    }
+}
+
+void Client::handleAutoFire(sf::Clock& clock) {
+    if (HotkeysManager::get().getAutoFireState() &&
+        clock.getElapsedTime().asSeconds() >= 0.30f) {
+        SmartBuffer smartBuffer;
+        smartBuffer << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
+                    << static_cast<int32_t>(Protocol::get().getPlayerId())
+                    << static_cast<int16_t>(HotkeysCodes::SPACE);
+        UdpSocket::send(smartBuffer);
+        clock.restart();
+    }
+}
+
+void Client::initializeServer(bool& serverInitialized, std::unique_ptr<NetworkClient>& networkClient, 
+                              std::thread& serverThread, sf::RenderWindow& window) {
+    try {
+        std::string ipAdress = Client::get().getIp().empty() ? "127.0.0.1" : Client::get().getIp();
+        std::string username = Client::get().getUsername().empty() ? "Guest" : Client::get().getUsername();
+
+        Client::get().setIp(ipAdress);
+        Client::get().setUsername(username);
+
+        networkClient = std::make_unique<NetworkClient>(ipAdress, SERVER_PORT);
+        initializeNetwork(*networkClient);
+
+        serverThread = std::thread(runNetworkClient, std::ref(*networkClient));
+        serverThread.detach();
+
+        SmartBuffer smartBuffer;
+        smartBuffer << static_cast<int16_t>(Protocol::OpCode::CREATE_PLAYER);
+        smartBuffer << username;
+        TcpSocket::send(smartBuffer);
+
+        SoundManager::get().getMusicSound("menu").getSound().stop();
+        SoundManager::get().getMusicSound("game").getSound().play();
+        serverInitialized = true;
+    } catch (const std::exception& e) {
+        Logger::error("[Main] Failed to initialize network: " + std::string(e.what()));
+        window.close();
+    }
+}
+
+void Client::updateGameState(sf::RenderWindow& window, GameEngine::System& system, 
+                             LifeBar& lifeBarMenu) {
+    std::lock_guard<std::mutex> guard(EntityManager::get().getMutex());
+    std::map<int, GameEngine::Entity> entitiesList = EntityManager::get().getEntityList();
+    if (!entitiesList.empty()) {
+        setDisplayEntity(entitiesList);
+        system.render(window, _displayEntities);
+    }
+    lifeBarMenu.displayLifeBar(window, system);
+}
+
+void Client::manageClient() {
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "RTYPE");
+    GameEngine::System system;
+    sf::Texture background = EntityManager::get().manageBackground(window);
+    OptionMenu optionMenu;
+    LifeBar lifeBarMenu;
+    LoseMenu loseMenu;
     sf::Clock clock;
     bool serverInitialized = false;
     std::unique_ptr<NetworkClient> networkClient = nullptr;
     std::thread serverThread;
 
+    manageSound();
+
     while (window.isOpen()) {
         manageBackground(system, clock, background);
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-                return;
-            }
-            if (event.type == sf::Event::MouseButtonPressed) {
-                SoundManager::get().getEffectSound("click").getSound().play();
-            }
-            if (serverInitialized) {
-                if (event.type == sf::Event::KeyPressed &&
-                    event.key.code == HotkeysManager::get().getKey(HotkeysCodes::SPACE)) {
-                    SoundManager::get().getEffectSound("bullet").getSound().play();
-                }
-            }
-            if (event.type == sf::Event::KeyPressed)
-                HotkeysManager::get().checkKey(event);
-            Menu::get().setupInput(event);
-            optionMenu.setNewKey(event, system);
+        processEvents(window, system, optionMenu, serverInitialized);
+        handleAutoFire(clock);
 
-        }
-
-        if (HotkeysManager::get().getAutoFireState()) {
-            if (clock.getElapsedTime().asSeconds() >= 0.30f) {
-                SmartBuffer smartBuffer;
-                smartBuffer
-                    << static_cast<int16_t>(Protocol::OpCode::HOTKEY_PRESSED)
-                    << static_cast<int32_t>(Protocol::get().getPlayerId())
-                    << static_cast<int16_t>(HotkeysCodes::SPACE);
-                UdpSocket::send(smartBuffer);
-                clock.restart();
-            }
-        }
         window.clear();
+
         if (!Client::get().getIsPlayed()) {
             Menu::get().displayMenu(window, system, optionMenu);
+        } else if (Client::get().getIsWinGame()) {
+            WinMenu::get().displayWnMenu(window, system);
         } else {
             if (!serverInitialized) {
-                try {
-                    if (Client::get().getIp() == "") {
-                        ipAdress = "127.0.0.1";
-                        Client::get().setIp(ipAdress);
-                    } else {
-                        ipAdress = Client::get().getIp();
-                    }
-                    if (Client::get().getUsername() == "") {
-                        username = "Guest";
-                        Client::get().setUsername(username);
-                    } else {
-                        username = Client::get().getUsername();
-                    }
-                    networkClient =
-                        std::make_unique<NetworkClient>(ipAdress, SERVER_PORT);
-                    initializeNetwork(*networkClient);
-                    serverThread =
-                        std::thread(runNetworkClient, std::ref(*networkClient));
-                    serverThread.detach();
-
-                    SmartBuffer smartBuffer;
-                    smartBuffer << static_cast<int16_t>(
-                        Protocol::OpCode::CREATE_PLAYER);
-                    smartBuffer << username;
-                    TcpSocket::send(smartBuffer);
-
-                    SoundManager::get().getMusicSound("menu").getSound().stop();
-                    SoundManager::get().getMusicSound("game").getSound().play();
-                    serverInitialized = true;
-                } catch (const std::exception& e) {
-                    Logger::error("[Main] Failed to initialize network: " +
-                                  std::string(e.what()));
-                    window.close();
-                    return;
-                }
+                initializeServer(serverInitialized, networkClient, serverThread, window);
             }
-            std::lock_guard<std::mutex> guard(EntityManager::get().getMutex());
-            std::map<int, GameEngine::Entity> entitiesList = EntityManager::get().getEntityList();
-            if (!entitiesList.empty()) {
-                setDisplayEntity(entitiesList);
-                system.render(window, _displayEntities);
-            }
-            lifeBarMenu.displayLifeBar(window, system);
+            updateGameState(window, system, lifeBarMenu);
         }
+
         window.display();
     }
+
     if (serverThread.joinable()) {
         serverThread.join();
     }
@@ -228,4 +213,25 @@ void Client::setDisplayEntity(std::map<int, GameEngine::Entity> entities) {
     for (const auto& [id, entity] : entities) {
         _displayEntities.emplace(id, entity);
     }
+}
+
+Client& Client::get() {
+    static Client instance;
+    return instance;
+}
+
+void Client::setIsPlayed() {
+    _isPlay = !_isPlay;
+}
+
+bool Client::getIsPlayed() {
+    return _isPlay;
+}
+
+void Client::setIsWinGame() {
+    _isWin = true;
+}
+
+bool Client::getIsWinGame() {
+    return _isWin;
 }

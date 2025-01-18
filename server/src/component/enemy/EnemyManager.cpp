@@ -8,6 +8,7 @@
 #include "component/enemy/EnemyManager.hpp"
 #include "component/bullet/BulletManager.hpp"
 #include "component/map/MapProtocol.hpp"
+#include "component/obstacle/ObstacleManager.hpp"
 #include "component/player/PlayerManager.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
@@ -30,22 +31,22 @@ EnemyManager::EnemyManager() {
         {"E001",
          {
              EnemyType::GRUNT, // type
-             3,                // speed
+             1,                // speed
              50,               // width
              50,               // height
-             10,               // bulletSpeed
+             2.5,              // bulletSpeed
              5,                // bulletDamage
-             800,              // shootCooldown
+             1600,             // shootCooldown
              500,              // shootRange
              100               // health
          }},
-        {"E002", {EnemyType::SNIPER, 2, 40, 40, 2, 20, 1500, 800, 1000}},
-        {"E003", {EnemyType::TANK, 1, 100, 100, 2, 15, 2000, 300, 1000}},
-        {"E004", {EnemyType::SWARMER, 5, 30, 30, 4, 3, 400, 200, 2000}},
-        {"E005", {EnemyType::BOSS, 1, 200, 200, 7, 50, 3000, 1000, 1000}},
-        {"E006", {EnemyType::DRONE, 4, 40, 40, 24, 8, 1000, 600, 1000}},
-        {"E007", {EnemyType::MINION, 6, 20, 20, 4, 2, 300, 150, 1000}},
-        {"E008", {EnemyType::CANNON, 0, 80, 80, 1, 25, 2000, 1000, 1000}}};
+        {"E002", {EnemyType::SNIPER, 1, 40, 40, 1, 10, 3000, 800, 200}},
+        {"E003", {EnemyType::TANK, 0.5, 100, 100, 1, 15, 4000, 300, 300}},
+        {"E004", {EnemyType::SWARMER, 2.5, 30, 30, 2, 20, 800, 200, 400}},
+        {"E005", {EnemyType::BOSS, 0, 700, 700, 3.5, 50, 6000, 1000, 1000}},
+        {"E006", {EnemyType::DRONE, 2, 40, 40, 24, 4, 1000, 1200, 1000}},
+        {"E007", {EnemyType::MINION, 3, 20, 20, 4, 1, 300, 300, 1000}},
+        {"E008", {EnemyType::CANNON, 0, 80, 80, 0.5, 25, 4000, 1000, 1000}}};
 
     Logger::success("[EnemyManager] Initialized enemy mappings.");
 }
@@ -141,7 +142,10 @@ void EnemyManager::updateEnemies() {
     prepare();
 
     for (const auto& enemy : _enemies) {
-        enemy->move();
+        if (ObstacleManager::get().getViewport() <
+            ObstacleManager::get().getMaxViewport()) {
+            enemy->move();
+        }
         enemy->updateShootCooldown();
         forPlayers(enemy);
         invalidate(enemy);

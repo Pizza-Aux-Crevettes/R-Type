@@ -25,6 +25,7 @@ class Protocol {
         UPDATE_BULLETS = 23,
         UPDATE_ENEMIES = 24,
         UPDATE_ENTITY_HEALTH = 25,
+        UPDATE_PLAYER_INFOS = 26,
         DELETE_ENTITY = 30,
     };
 
@@ -32,7 +33,8 @@ class Protocol {
     Protocol& operator=(const Protocol&) = delete;
 
     static Protocol& get();
-    static void handleMessage(int clientSocket, SmartBuffer& smartBuffer);
+    static void handleMessage(int clientSocket, SmartBuffer& smartBuffer,
+                              const sockaddr_in& clientAddr);
 
   private:
     Protocol() = default;

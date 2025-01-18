@@ -30,21 +30,10 @@ PlayerManager& PlayerManager::get() {
  */
 std::shared_ptr<Player> PlayerManager::createPlayer(const std::string& name) {
     Point spawnPos = RandomSpawn::generateRandomSpawnPosition();
+
     auto player =
         std::make_shared<Player>(name, Point(spawnPos.getX(), spawnPos.getY()));
     _players.push_back(player);
-
-    Logger::success("[PlayerManager] Player created:\n"
-                    "  - Player ID: " +
-                    std::to_string(player->getId()) +
-                    "\n"
-                    "  - Name: " +
-                    name +
-                    "\n"
-                    "  - Initial Position: X:" +
-                    std::to_string(player->getPosition().getX()) +
-                    ", Y:" + std::to_string(player->getPosition().getY()));
-
     return player;
 }
 
@@ -99,8 +88,8 @@ bool PlayerManager::removePlayer(int32_t playerId) {
  * @param offsetX The X offset
  * @param offsetY The Y offset
  */
-void PlayerManager::movePlayer(int32_t playerId, int32_t offsetX,
-                               int32_t offsetY) {
+void PlayerManager::movePlayer(int32_t playerId, double offsetX,
+                               double offsetY) {
     auto player = findByID(playerId);
     if (!player) {
         Logger::warning("[PlayerManager] Player not found. Player ID: " +

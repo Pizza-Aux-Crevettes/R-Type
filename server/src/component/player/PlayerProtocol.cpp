@@ -84,3 +84,26 @@ void PlayerProtocol::sendPlayerPosition(const sockaddr_in& clientAddr,
         UdpSocket::get().sendToOne(clientAddr, smartBuffer);
     }
 }
+
+/**
+ * @brief Send a player's score update to all clients
+ *
+ * @param player The player to update
+ *
+ * Protocol: UPDATE_PLAYER_INFOS
+ * Payload: playerId (int32_t), kills (int16_t), score (int32_t)
+ */
+void PlayerProtocol::sendPlayerInfosUpdate(
+    const std::shared_ptr<Player> player) {
+    if (player->getClientAddr().has_value()) {
+        SmartBuffer smartBuffer;
+        smartBuffer << static_cast<int16_t>(
+                           Protocol::OpCode::UPDATE_PLAYER_INFOS)
+                    << static_cast<int32_t>(player->getId())
+                    << static_cast<int16_t>(player->getKills())
+                    << static_cast<int32_t>(player->getScore());
+
+        UdpSocket::get().sendToOne(player->getClientAddr().value(),
+                                   smartBuffer);
+    }
+}

@@ -12,10 +12,10 @@
 
 struct EnemyProperties {
     EnemyType type;
-    int16_t speed;
+    float speed;
     int16_t width;
     int16_t height;
-    int16_t bulletSpeed;
+    float bulletSpeed;
     int16_t bulletDamage;
     int16_t shootCooldown;
     int16_t shootRange;

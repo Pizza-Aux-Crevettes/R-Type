@@ -16,10 +16,16 @@
  * @param playerId The player's ID
  * @param name The player's name
  * @param position The player's position
+ * @param health The player's health
+ * @param isAlive The player's alive status
+ * @param kills The player's kills
+ * @param score The player's score
  */
-Player::Player(const std::string& name, const Point& position, int16_t health)
+Player::Player(const std::string& name, const Point& position, int16_t health,
+               bool isAlive, int16_t kills, int32_t score)
     : _id(IDManager::getNextId()), _name(name), _position(position),
-      _health(health), _clientSocket(std::nullopt) {}
+      _clientSocket(std::nullopt), _clientAddr(std::nullopt), _health(health),
+      _isAlive(isAlive), _kills(kills), _score(score) {}
 
 /**
  * @brief Get the player's ID
@@ -76,15 +82,21 @@ void Player::setClientSocket(int clientSocket) {
 }
 
 /**
- * @brief Take damage
+ * @brief Get the client address associated with the player
  *
- * @param damage The amount of damage to take
+ * @return std::optional<sockaddr_in>
  */
-void Player::takeDamage(int16_t damage) {
-    _health -= damage;
-    if (_health <= 0) {
-        Logger::info("[Player] Player " + _name + " died.");
-    }
+std::optional<sockaddr_in> Player::getClientAddr() const {
+    return _clientAddr;
+}
+
+/**
+ * @brief Associate a client address with the player
+ *
+ * @param clientAddr The client address
+ */
+void Player::setClientAddr(const sockaddr_in& clientAddr) {
+    _clientAddr = clientAddr;
 }
 
 /**
@@ -112,4 +124,61 @@ void Player::setHealth(int16_t health) {
  */
 int16_t Player::getMaxHealth() const {
     return DEFAULT_HEALTH;
+}
+
+/**
+ * @brief Get the player's alive status
+ *
+ * @return bool The player's alive status
+ */
+bool Player::isAlive() const {
+    return _isAlive;
+}
+
+/**
+ * @brief Get the player's kills
+ *
+ * @return int16_t The player's kills
+ */
+int16_t Player::getKills() const {
+    return _kills;
+}
+
+/**
+ * @brief Add a kill to the player
+ *
+ */
+void Player::addKill() {
+    _kills++;
+}
+
+/**
+ * @brief Get the player's score
+ *
+ * @return int32_t The player's score
+ */
+int32_t Player::getScore() const {
+    return _score;
+}
+
+/**
+ * @brief Add score to the player
+ *
+ * @param score The score to add
+ */
+void Player::addScore(int32_t score) {
+    _score += score;
+}
+
+/**
+ * @brief Take damage
+ *
+ * @param damage The amount of damage to take
+ */
+void Player::takeDamage(int16_t damage) {
+    _health -= damage;
+    if (_health <= 0 && _isAlive) {
+        _health = 0;
+        _isAlive = false;
+    }
 }
