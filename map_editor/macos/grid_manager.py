@@ -85,7 +85,7 @@ class GridManager:
                 x = col * self.grid_size * self.scale + self.offset_x
                 y = row * self.grid_size * self.scale + self.offset_y
                 new_grid_size = int(self.grid_size * self.scale)
-                img_resized = Image.open(f"images/{data['item'].lower()}.png")
+                img_resized = Image.open(f"../images/{data['item'].lower()}.png")
                 img_resized = img_resized.resize((new_grid_size, new_grid_size), Image.Resampling.LANCZOS)
                 image_resized = ImageTk.PhotoImage(img_resized)
                 self.canvas.itemconfig(data["id"], image=image_resized)
