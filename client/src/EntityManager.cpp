@@ -130,6 +130,10 @@ std::map<int, std::map<std::string, std::any>> EntityManager::getUpdateItems() {
 std::vector<int> EntityManager::getPlayerColor() {
     return _playerSpriteColor;
 }
+    
+void EntityManager::setBossId(int id) {
+    _bossId = id;
+}
 
 void EntityManager::setPlayerColor(int playerId) {
     
@@ -204,4 +208,13 @@ sf::Texture EntityManager::manageBackground(sf::RenderWindow& window) {
 
 std::mutex& EntityManager::getMutex() {
     return _mutex;
+}
+
+void EntityManager::winGame(int id, int health) {
+
+    if (id == _bossId && health == 0) {
+        Client::get().setIsWinGame();
+    } else {
+        return;
+    }
 }

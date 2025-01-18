@@ -103,8 +103,6 @@ void Client::initializeServer(bool& serverInitialized, std::unique_ptr<NetworkCl
         std::string ipAdress = Client::get().getIp().empty() ? "127.0.0.1" : Client::get().getIp();
         std::string username = Client::get().getUsername().empty() ? "Guest" : Client::get().getUsername();
 
-        std::cout << ipAdress << std::endl;
-        std::cout << username << std::endl;
         Client::get().setIp(ipAdress);
         Client::get().setUsername(username);
 
@@ -162,6 +160,8 @@ void Client::manageClient() {
 
         if (!Client::get().getIsPlayed()) {
             Menu::get().displayMenu(window, system, optionMenu);
+        } else if (Client::get().getIsWinGame()) {
+            WinMenu::get().displayWnMenu(window, system);
         } else {
             if (!serverInitialized) {
                 initializeServer(serverInitialized, networkClient, serverThread, window);
@@ -226,4 +226,12 @@ void Client::setIsPlayed() {
 
 bool Client::getIsPlayed() {
     return _isPlay;
+}
+
+void Client::setIsWinGame() {
+    _isWin = true;
+}
+
+bool Client::getIsWinGame() {
+    return _isWin;
 }

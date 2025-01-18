@@ -36,6 +36,7 @@
 #include "network/socket/TcpSocket.hpp"
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
+#include "menu/WinMenu.hpp"
 
 class NetworkClient;
 
@@ -51,6 +52,7 @@ class Client {
     std::string _ip;
     sf::Event _event;
     double _viewportX;
+    bool _isWin;
 
   public:
     Client();
@@ -83,4 +85,6 @@ class Client {
     void setDisplayEntity(std::map<int, GameEngine::Entity> entities);
     sf::Event getEvent();
 
+    void setIsWinGame();
+    bool getIsWinGame();
 };

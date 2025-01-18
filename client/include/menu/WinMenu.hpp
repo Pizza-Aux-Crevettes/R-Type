@@ -18,6 +18,7 @@ class WinMenu {
     public:
         WinMenu();
         ~WinMenu();
+        static WinMenu& get();
 
         GameEngine::Entity createEntityText(int id, const std::string text, const std::vector<std::pair<float, float>> position, unsigned int fontSize);
         GameEngine::Entity createEntityButton(int id, std::string title, std::string font, int fontSize, std::vector<std::pair<float, float>> position, std::function<void()> callback);

@@ -197,6 +197,7 @@ void Protocol::handleUpdateEnemies(SmartBuffer& smartBuffer) {
     } else if (type == 5) {
         filePath = "assets/sprite/boss.gif";
         rect = EntityManager::get().setEnemy(5);
+        EntityManager::get().setBossId(enemyId);
     }
     
     std::vector<int> rectVector = {0, 0, 66, 57};
@@ -258,4 +259,7 @@ void Protocol::handleUpdateEntityHealth(SmartBuffer& smartBuffer) {
     int16_t health, maxHealth;
 
     smartBuffer >> entityId >> health >> maxHealth;
+
+    EntityManager::get().winGame(entityId, health);
+
 }
