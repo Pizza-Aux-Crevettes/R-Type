@@ -76,6 +76,8 @@ class ToolBar:
 
     def save_map(self):
         file_path = filedialog.asksaveasfilename(defaultextension=".map", filetypes=[("MAP files", "*.map")])
+        if (file_path == ""):
+            return
         file_path = file_path if file_path.endswith(".map") else file_path + ".map"
         file_name = file_path.split("/")[-1]
         file_name = file_name.split(".")[0]
