@@ -129,12 +129,13 @@ void ObstacleManager::updateObstacles() {
     if (_viewport < _maxViewport) {
         _viewport += MAP_SPEED;
     }
-    
+
     for (const auto& obstacle : _obstacles) {
         invalidate(obstacle);
         if (_viewport < _maxViewport) {
-            obstacle->setPosition(Point(obstacle->getPosition().getX() - MAP_SPEED,
-                                    obstacle->getPosition().getY()));
+            obstacle->setPosition(
+                Point(obstacle->getPosition().getX() - MAP_SPEED,
+                      obstacle->getPosition().getY()));
         }
         forPlayers(obstacle);
     }
@@ -159,7 +160,7 @@ void ObstacleManager::forPlayers(const std::shared_ptr<Obstacle>& obstacle) {
  * @param obstacle The obstacle to invalidate
  */
 void ObstacleManager::invalidate(const std::shared_ptr<Obstacle>& obstacle) {
-    if (obstacle->getPosition().getX() < RENDER_DISTANCE * OBSTACLE_SIZE && 
+    if (obstacle->getPosition().getX() < RENDER_DISTANCE * OBSTACLE_SIZE &&
         obstacle->getPosition().getX() > -OBSTACLE_SIZE) {
         _visibleObstacles.push_back(obstacle);
     }

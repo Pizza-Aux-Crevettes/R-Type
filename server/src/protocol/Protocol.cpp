@@ -26,7 +26,8 @@ Protocol& Protocol::get() {
  * @param smartBuffer The SmartBuffer containing the message
  * @param clientAddr The client's address
  */
-void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer, const sockaddr_in& clientAddr) {
+void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer,
+                             const sockaddr_in& clientAddr) {
     if (smartBuffer.getSize() < sizeof(int16_t)) {
         Logger::warning(
             "[Protocol] Received invalid message with insufficient size.");

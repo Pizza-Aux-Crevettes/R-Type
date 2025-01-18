@@ -24,10 +24,10 @@
  * @param health The health of the enemy
  * @param isAlive The alive status of the enemy
  */
-Enemy::Enemy(EnemyType type, const Point& position, float speed,
-             int16_t width, int16_t height, float bulletSpeed,
-             int16_t bulletDamage, int16_t shootCooldown, int16_t shootRange,
-             int16_t health, bool isAlive)
+Enemy::Enemy(EnemyType type, const Point& position, float speed, int16_t width,
+             int16_t height, float bulletSpeed, int16_t bulletDamage,
+             int16_t shootCooldown, int16_t shootRange, int16_t health,
+             bool isAlive)
     : _id(IDManager::getNextId()), _type(type), _position(position),
       _speed(speed), _width(width), _height(height), _bulletSpeed(bulletSpeed),
       _bulletDamage(bulletDamage), _shootCooldown(shootCooldown),

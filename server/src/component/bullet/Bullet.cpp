@@ -20,7 +20,8 @@
  * @param player The player that shot the bullet
  */
 Bullet::Bullet(const Point& position, const Point& direction, int16_t speed,
-               BulletType type, int16_t damage, const std::shared_ptr<Player> player)
+               BulletType type, int16_t damage,
+               const std::shared_ptr<Player> player)
     : _id(IDManager::getNextId()), _position(position), _direction(direction),
       _speed(speed), _type(type), _damage(damage), _player(player) {}
 

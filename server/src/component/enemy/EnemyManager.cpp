@@ -34,9 +34,9 @@ EnemyManager::EnemyManager() {
              1,                // speed
              50,               // width
              50,               // height
-             2.5,               // bulletSpeed
+             2.5,              // bulletSpeed
              5,                // bulletDamage
-             1600,              // shootCooldown
+             1600,             // shootCooldown
              500,              // shootRange
              100               // health
          }},
@@ -142,7 +142,8 @@ void EnemyManager::updateEnemies() {
     prepare();
 
     for (const auto& enemy : _enemies) {
-        if (ObstacleManager::get().getViewport() < ObstacleManager::get().getMaxViewport()) {
+        if (ObstacleManager::get().getViewport() <
+            ObstacleManager::get().getMaxViewport()) {
             enemy->move();
         }
         enemy->updateShootCooldown();

@@ -17,8 +17,8 @@
  * @param smartBuffer The smart buffer
  * @param clientAddr The client's address
  */
-void HotkeysProtocol::processHotkey(int clientSocket,
-                                    SmartBuffer& smartBuffer, const sockaddr_in& clientAddr) {
+void HotkeysProtocol::processHotkey(int clientSocket, SmartBuffer& smartBuffer,
+                                    const sockaddr_in& clientAddr) {
     int32_t playerId;
     int16_t hotkey;
     smartBuffer >> playerId >> hotkey;
@@ -27,7 +27,8 @@ void HotkeysProtocol::processHotkey(int clientSocket,
 
     auto player = PlayerManager::get().findByID(playerId);
     if (!player) {
-        Logger::warning("[HotkeysProtocol] Player not found. Player ID: " + std::to_string(playerId));
+        Logger::warning("[HotkeysProtocol] Player not found. Player ID: " +
+                        std::to_string(playerId));
         return;
     }
     player->setClientAddr(clientAddr);

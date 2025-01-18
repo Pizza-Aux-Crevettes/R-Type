@@ -17,7 +17,8 @@ enum class BulletType { PLAYER, ENEMY };
 class Bullet {
   public:
     Bullet(const Point& position, const Point& direction, int16_t speed,
-           BulletType type, int16_t damage, const std::shared_ptr<Player> player = nullptr);
+           BulletType type, int16_t damage,
+           const std::shared_ptr<Player> player = nullptr);
 
     int32_t getId() const;
     const Point& getPosition() const;

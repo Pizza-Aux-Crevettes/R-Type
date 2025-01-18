@@ -155,7 +155,8 @@ void BulletManager::forEnemies(
                 enemiesToDelete.push_back(enemy->getId());
             }
 
-            MapProtocol::sendEntityHealthUpdate(enemy->getId(), enemy->getHealth(), enemy->getMaxHealth());
+            MapProtocol::sendEntityHealthUpdate(
+                enemy->getId(), enemy->getHealth(), enemy->getMaxHealth());
             MapProtocol::sendEntityDeleted(bullet->getId());
             it = _bullets.erase(it);
             isDeleted = true;
@@ -216,6 +217,9 @@ void BulletManager::handlePlayerShoot(int playerId) {
 void BulletManager::handleEnemyShoot(int enemyId, Point direction) {
     auto enemy = EnemyManager::get().findById(enemyId);
     if (!enemy)
+        return;
+
+    if (enemy->getPosition().getX() < 0)
         return;
 
     auto bullet = std::make_shared<Bullet>(

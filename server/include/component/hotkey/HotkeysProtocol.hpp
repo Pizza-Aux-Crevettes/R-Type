@@ -7,10 +7,11 @@
 
 #pragma once
 
-#include <netinet/in.h>
 #include <SmartBuffer.hpp>
+#include <netinet/in.h>
 
 class HotkeysProtocol {
   public:
-    static void processHotkey(int clientSocket, SmartBuffer& smartBuffer, const sockaddr_in& clientAddr);
+    static void processHotkey(int clientSocket, SmartBuffer& smartBuffer,
+                              const sockaddr_in& clientAddr);
 };

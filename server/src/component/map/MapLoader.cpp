@@ -89,6 +89,7 @@ void MapLoader::parseMapLine(const std::string& line, int32_t y) {
     }
 
     if (x > ObstacleManager::get().getMaxViewport()) {
-        ObstacleManager::get().setMaxViewport(((x / OBSTACLE_OFFSET) * OBSTACLE_SIZE) - MAP_WIDTH);
+        ObstacleManager::get().setMaxViewport(
+            ((x / OBSTACLE_OFFSET) * OBSTACLE_SIZE) - MAP_WIDTH);
     }
 }

@@ -8,16 +8,17 @@
 #pragma once
 
 #include <memory>
+#include <netinet/in.h>
 #include <optional>
 #include <string>
-#include <netinet/in.h>
 #include "util/Config.hpp"
 #include "util/Point.hpp"
 
 class Player {
   public:
     Player(const std::string& name, const Point& position,
-           int16_t health = DEFAULT_HEALTH, bool isAlive = true, int16_t kills = 0, int32_t score = 0);
+           int16_t health = DEFAULT_HEALTH, bool isAlive = true,
+           int16_t kills = 0, int32_t score = 0);
 
     int32_t getId() const;
     const std::string& getName() const;

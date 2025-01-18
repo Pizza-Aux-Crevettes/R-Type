@@ -28,7 +28,8 @@ class Enemy {
   public:
     Enemy(EnemyType type, const Point& position, float speed, int16_t width,
           int16_t height, float bulletSpeed, int16_t bulletDamage,
-          int16_t shootCooldown, int16_t shootRange, int16_t health, bool isAlive = true);
+          int16_t shootCooldown, int16_t shootRange, int16_t health,
+          bool isAlive = true);
 
     int32_t getId() const;
     EnemyType getType() const;
