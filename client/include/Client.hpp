@@ -19,6 +19,25 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include <Entity.hpp>
+#include <components/Position.hpp>
+#include <components/Sprite.hpp>
+#include <components/Texture.hpp>
+#include <menu/OptionMenu.hpp>
+#include <thread>
+#include "EntityManager.hpp"
+#include "component/hotkey/HotkeysManager.hpp"
+#include "component/sound/SoundManager.hpp"
+#include "menu/Menu.hpp"
+#include "health/LifeBar.hpp"
+#include "menu/LoseMenu.hpp"
+#include "network/protocol/NetworkClient.hpp"
+#include "network/protocol/Protocol.hpp"
+#include "network/socket/TcpSocket.hpp"
+#include "util/Config.hpp"
+#include "util/Logger.hpp"
+
+class NetworkClient;
 
 class Client {
   private:
@@ -41,18 +60,30 @@ class Client {
     void manageClient();
     void manageBackground(GameEngine::System system, sf::Clock clock,
                           sf::Texture background);
+                          void manageSound();
+    void updateGameState(sf::RenderWindow& window, GameEngine::System& system, LifeBar& lifeBarMenu);
+    void initializeServer(bool& serverInitialized, std::unique_ptr<NetworkClient>& networkClient, std::thread& serverThread, sf::RenderWindow& window);
+    void handleAutoFire(sf::Clock& clock);
+    void processEvents(sf::RenderWindow& window, GameEngine::System& system, OptionMenu& optionMenu, bool serverInitialized);
+
     void setIsPlayed();
     bool getIsPlayed();
+
     void setUsername(std::string username);
-    void setPort(std::string port);
-    void setIp(std::string Ip);
-    void setViewport(double viewport);
-    void setDisplayEntity(std::map<int, GameEngine::Entity> entities);
-    double getViewport();
     std::string getUsername();
+
+    void setPort(std::string port);
     std::string getPort();
+
+    void setIp(std::string Ip);
+    std::string getIp();
+
+    void setViewport(double viewport);
+    double getViewport();
+
     std::string getFont();
     void setFont();
-    std::string getIp();
+
+    void setDisplayEntity(std::map<int, GameEngine::Entity> entities);
     sf::Event getEvent();
 };

@@ -96,7 +96,7 @@ void EntityManager::CreateEntity(int id,
                 newEntity.addComponent(Text(std::any_cast<std::string>(text), Client::get().getFont(), 10));
                 newEntity.addComponent(Link(std::any_cast<int>(id - 10000)));
             } catch (const std::bad_any_cast& e) {
-                std::cerr << "Error casting Position component: " << e.what()
+                std::cerr << "Error casting Text or Link component: " << e.what()
                           << std::endl;
             }
         }
@@ -137,8 +137,6 @@ void EntityManager::setPlayerColor(int playerId) {
 
     int num = playerId % 5;
 
-    std::cout << "PLAYER ID == " << num << std::endl;
-
     switch(num) {
         case 1 :
             _playerSpriteColor = {0, 0, 34, 15};
@@ -159,6 +157,32 @@ void EntityManager::setPlayerColor(int playerId) {
             _playerSpriteColor = {0, 0, 34, 15};
             break;
     }
+}
+
+std::vector<int> EntityManager::setEnemy(int num) {
+
+    std::vector<int> rect;
+
+    switch(num) {
+        case 1:
+            rect = {0, 0, 80, 60};
+            break;
+        case 2:
+            rect = {0, 0, 30, 30};
+            break;
+        case 3:
+            rect = {10, 0, 30, 30};
+            break;
+        case 4:
+            rect = {0, 20, 30, 30};
+            break;
+        case 5:
+            rect = {0, 0, 190, 210};
+            break;
+        default:
+            rect = {0, 0, 0, 0};
+    }
+    return rect;
 }
 
 sf::Texture EntityManager::manageBackground(sf::RenderWindow& window) {

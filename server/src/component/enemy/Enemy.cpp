@@ -22,16 +22,17 @@
  * @param shootCooldown The cooldown between shots
  * @param shootRange The range at which the enemy can shoot
  * @param health The health of the enemy
+ * @param isAlive The alive status of the enemy
  */
-Enemy::Enemy(EnemyType type, const Point& position, int16_t speed,
-             int16_t width, int16_t height, int16_t bulletSpeed,
-             int16_t bulletDamage, int16_t shootCooldown, int16_t shootRange,
-             int16_t health)
+Enemy::Enemy(EnemyType type, const Point& position, float speed, int16_t width,
+             int16_t height, float bulletSpeed, int16_t bulletDamage,
+             int16_t shootCooldown, int16_t shootRange, int16_t health,
+             bool isAlive)
     : _id(IDManager::getNextId()), _type(type), _position(position),
       _speed(speed), _width(width), _height(height), _bulletSpeed(bulletSpeed),
       _bulletDamage(bulletDamage), _shootCooldown(shootCooldown),
       _shootRange(shootRange), _currentCooldown(0), _health(health),
-      _maxHealth(health) {}
+      _maxHealth(health), _isAlive(isAlive) {}
 
 /**
  * @brief Get the ID of the enemy
@@ -63,18 +64,18 @@ const Point& Enemy::getPosition() const {
 /**
  * @brief Get the speed of the enemy
  *
- * @return int16_t The speed of the enemy
+ * @return float The speed of the enemy
  */
-int16_t Enemy::getSpeed() const {
+float Enemy::getSpeed() const {
     return _speed;
 }
 
 /**
  * @brief Get the speed of the enemy's bullets
  *
- * @return int16_t The speed of the enemy's bullets
+ * @return float The speed of the enemy's bullets
  */
-int16_t Enemy::getBulletSpeed() const {
+float Enemy::getBulletSpeed() const {
     return _bulletSpeed;
 }
 
@@ -151,6 +152,15 @@ int16_t Enemy::getMaxHealth() const {
 }
 
 /**
+ * @brief Get the alive status of the enemy
+ *
+ * @return bool The alive status of the enemy
+ */
+bool Enemy::isAlive() const {
+    return _isAlive;
+}
+
+/**
  * @brief Check if the enemy contains a point
  *
  * @param x The x coordinate
@@ -211,7 +221,7 @@ void Enemy::updateShootCooldown() {
  *
  */
 void Enemy::move() {
-    _position.setX(_position.getX() - _speed);
+    _position.setX(_position.getX() - (_speed + MAP_SPEED));
 }
 
 /**
@@ -221,7 +231,8 @@ void Enemy::move() {
  */
 void Enemy::takeDamage(int16_t damage) {
     _health -= damage;
-    if (_health <= 0) {
-        Logger::info("[Enemy] Enemy " + std::to_string(_id) + " died.");
+    if (_health <= 0 && _isAlive) {
+        _health = 0;
+        _isAlive = false;
     }
 }

@@ -69,6 +69,10 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
         handleUpdateEntityHealth(smartBuffer);
         break;
 
+    case UPDATE_PLAYER_INFOS:
+        handleUpdatePlayerInfos(smartBuffer);
+        break;
+
     default:
         Logger::error("[Protocol] Unknown OpCode received: " +
                       std::to_string(opCode));
@@ -170,28 +174,62 @@ void Protocol::handleUpdateBlocks(SmartBuffer& smartBuffer) {
 void Protocol::handleUpdateEnemies(SmartBuffer& smartBuffer) {
     int32_t enemyId, x, y;
     int16_t type, width, height;
+    std::string filePath = "";
+    std::vector<int> rect;
     
     smartBuffer >> enemyId >> x >> y >> width >> height >> type;
+
+    if (type == 1) {
+        filePath = "assets/sprite/mob1.gif";
+        rect = EntityManager::get().setEnemy(1);
+    } else if (type == 2) {
+        filePath = "assets/sprite/mob2.gif";
+        rect = EntityManager::get().setEnemy(2);
+    } else if (type == 3) {
+        filePath = "assets/sprite/mob3.png";
+        rect = EntityManager::get().setEnemy(3);
+    } else if (type == 4) {
+        filePath = "assets/sprite/mob4.gif";
+        rect = EntityManager::get().setEnemy(4);
+    } else if (type == 4) {
+        filePath = "assets/sprite/mob4.gif";
+        rect = EntityManager::get().setEnemy(4);
+    } else if (type == 5) {
+        filePath = "assets/sprite/boss.gif";
+        rect = EntityManager::get().setEnemy(5);
+    }
     
     std::vector<int> rectVector = {0, 0, 66, 57};
     std::map<std::string, std::any> newItems = {
-        {"Texture", std::string("assets/sprite/enemy.png")},
-        {"TextureRect", std::vector<int>{rectVector}},
+        {"Texture", filePath},
+        {"TextureRect", rect},
         {"Size", std::pair<float, float>(width, height)},
         {"Position", std::pair<float, float>(x, y)}};
     EntityManager::get().CompareEntities(enemyId, newItems, {x, y});
+}
 
-    Logger::info("[Protocol] Updating enemy: " + std::to_string(enemyId));
+void Protocol::handleUpdatePlayerInfos(SmartBuffer& smartBuffer) {
+    int32_t playerId, score;
+    int16_t kills;
+    
+    smartBuffer >> playerId >> kills >> score;
 }
 
 void Protocol::handleUpdateBullets(SmartBuffer& smartBuffer) {
     int32_t bulletId, x, y;
+    int16_t type;
+    std::string texture = std::string("assets/sprite/shoot_blue.png");
+    std::vector<int> textureRect = {180, 0, 50, 20};
     
-    smartBuffer >> bulletId >> x >> y;
+    smartBuffer >> bulletId >> x >> y >> type;
 
+    if (type > 0) {
+        texture = std::string("assets/sprite/shoot_yellow.png");
+        textureRect = {35, 0, 50, 20};
+    }
     std::map<std::string, std::any> newItems = {
-        {"Texture", std::string("assets/sprite/shoot_blue.png")},
-        {"TextureRect", std::vector<int>{180, 0, 50, 20}},
+        {"Texture", texture},
+        {"TextureRect", textureRect},
         {"Position", std::pair<float, float>(x, y)}};
     EntityManager::get().CompareEntities(bulletId, newItems, {x, y});
 }
@@ -218,6 +256,6 @@ void Protocol::handleDeleteEntity(SmartBuffer& smartBuffer) {
 void Protocol::handleUpdateEntityHealth(SmartBuffer& smartBuffer) {
     int32_t entityId;
     int16_t health, maxHealth;
-    
+
     smartBuffer >> entityId >> health >> maxHealth;
 }

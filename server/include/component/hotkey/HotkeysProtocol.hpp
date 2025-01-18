@@ -8,8 +8,10 @@
 #pragma once
 
 #include <SmartBuffer.hpp>
+#include <netinet/in.h>
 
 class HotkeysProtocol {
   public:
-    static void processHotkey(int clientSocket, SmartBuffer& smartBuffer);
+    static void processHotkey(int clientSocket, SmartBuffer& smartBuffer,
+                              const sockaddr_in& clientAddr);
 };
