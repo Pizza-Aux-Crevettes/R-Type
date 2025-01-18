@@ -158,6 +158,32 @@ void EntityManager::setPlayerColor(int playerId) {
     }
 }
 
+std::vector<int> EntityManager::setEnemy(int num) {
+
+    std::vector<int> rect;
+
+    switch(num) {
+        case 1:
+            rect = {0, 0, 80, 60};
+            break;
+        case 2:
+            rect = {0, 0, 30, 30};
+            break;
+        case 3:
+            rect = {10, 0, 30, 30};
+            break;
+        case 4:
+            rect = {0, 20, 30, 30};
+            break;
+        case 5:
+            rect = {0, 0, 190, 210};
+            break;
+        default:
+            rect = {0, 0, 0, 0};
+    }
+    return rect;
+}
+
 sf::Texture EntityManager::manageBackground(sf::RenderWindow& window) {
     GetResponsiveValue responsive;
 
