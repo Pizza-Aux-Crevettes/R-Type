@@ -174,8 +174,30 @@ void Protocol::handleUpdateBlocks(SmartBuffer& smartBuffer) {
 void Protocol::handleUpdateEnemies(SmartBuffer& smartBuffer) {
     int32_t enemyId, x, y;
     int16_t type, width, height;
+    std::string filePath = "";
+    std::vector<int> rect;
     
     smartBuffer >> enemyId >> x >> y >> width >> height >> type;
+
+    if (type == 1) {
+        filePath = "assets/sprite/mob1.gif";
+        rect = EntityManager::get().setEnemy(1);
+    } else if (type == 2) {
+        filePath = "assets/sprite/mob2.gif";
+        rect = EntityManager::get().setEnemy(2);
+    } else if (type == 3) {
+        filePath = "assets/sprite/mob3.gif";
+        rect = EntityManager::get().setEnemy(3);
+    } else if (type == 4) {
+        filePath = "assets/sprite/mob4.gif";
+        rect = EntityManager::get().setEnemy(4);
+    } else if (type == 4) {
+        filePath = "assets/sprite/mob4.gif";
+        rect = EntityManager::get().setEnemy(4);
+    } else if (type == 5) {
+        filePath = "assets/sprite/boss.gif";
+        rect = EntityManager::get().setEnemy(5);
+    }
     
     std::vector<int> rectVector = {0, 0, 66, 57};
     std::map<std::string, std::any> newItems = {

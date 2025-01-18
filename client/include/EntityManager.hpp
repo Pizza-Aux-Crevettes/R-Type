@@ -49,4 +49,5 @@ class EntityManager {
     void setPlayerColor(int playerId);
     std::mutex& getMutex();
     sf::Texture manageBackground(sf::RenderWindow& window);
+    std::vector<int> setEnemy(int num);
 };
