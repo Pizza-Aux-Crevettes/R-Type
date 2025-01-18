@@ -191,10 +191,6 @@ void Protocol::handleUpdatePlayerInfos(SmartBuffer& smartBuffer) {
     int16_t kills;
     
     smartBuffer >> playerId >> kills >> score;
-    
-    Logger::info("Player " + std::to_string(playerId) + " has " +
-                 std::to_string(kills) + " kills and " + std::to_string(score) +
-                 " points.");
 }
 
 void Protocol::handleUpdateBullets(SmartBuffer& smartBuffer) {

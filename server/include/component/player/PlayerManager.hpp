@@ -18,7 +18,7 @@ class PlayerManager {
     std::shared_ptr<Player> createPlayer(const std::string& name);
     std::shared_ptr<Player> findByID(int32_t playerId) const;
     bool removePlayer(int32_t playerId);
-    void movePlayer(int32_t playerId, int32_t offsetX, int32_t offsetY);
+    void movePlayer(int32_t playerId, double offsetX, double offsetY);
     const std::vector<std::shared_ptr<Player>>& getPlayers() const;
 
   private:

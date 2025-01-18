@@ -126,13 +126,10 @@ ObstacleType ObstacleManager::getObstacleType(const std::string& code) const {
  */
 void ObstacleManager::updateObstacles() {
     _visibleObstacles.clear();
-
-    Logger::debug("[ObstacleManager] Viewport: " + std::to_string(_viewport) + " MaxViewport: " + std::to_string(_maxViewport));
-
     if (_viewport < _maxViewport) {
         _viewport += MAP_SPEED;
     }
-
+    
     for (const auto& obstacle : _obstacles) {
         invalidate(obstacle);
         if (_viewport < _maxViewport) {

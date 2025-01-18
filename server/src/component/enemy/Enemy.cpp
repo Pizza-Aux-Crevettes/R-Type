@@ -24,8 +24,8 @@
  * @param health The health of the enemy
  * @param isAlive The alive status of the enemy
  */
-Enemy::Enemy(EnemyType type, const Point& position, int16_t speed,
-             int16_t width, int16_t height, int16_t bulletSpeed,
+Enemy::Enemy(EnemyType type, const Point& position, float speed,
+             int16_t width, int16_t height, float bulletSpeed,
              int16_t bulletDamage, int16_t shootCooldown, int16_t shootRange,
              int16_t health, bool isAlive)
     : _id(IDManager::getNextId()), _type(type), _position(position),
@@ -64,18 +64,18 @@ const Point& Enemy::getPosition() const {
 /**
  * @brief Get the speed of the enemy
  *
- * @return int16_t The speed of the enemy
+ * @return float The speed of the enemy
  */
-int16_t Enemy::getSpeed() const {
+float Enemy::getSpeed() const {
     return _speed;
 }
 
 /**
  * @brief Get the speed of the enemy's bullets
  *
- * @return int16_t The speed of the enemy's bullets
+ * @return float The speed of the enemy's bullets
  */
-int16_t Enemy::getBulletSpeed() const {
+float Enemy::getBulletSpeed() const {
     return _bulletSpeed;
 }
 
