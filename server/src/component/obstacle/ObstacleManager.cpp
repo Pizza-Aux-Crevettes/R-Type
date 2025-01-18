@@ -127,17 +127,19 @@ ObstacleType ObstacleManager::getObstacleType(const std::string& code) const {
 void ObstacleManager::updateObstacles() {
     _visibleObstacles.clear();
 
+    Logger::debug("[ObstacleManager] Viewport: " + std::to_string(_viewport) + " MaxViewport: " + std::to_string(_maxViewport));
+
     if (_viewport < _maxViewport) {
         _viewport += MAP_SPEED;
     }
 
     for (const auto& obstacle : _obstacles) {
+        invalidate(obstacle);
         if (_viewport < _maxViewport) {
             obstacle->setPosition(Point(obstacle->getPosition().getX() - MAP_SPEED,
                                     obstacle->getPosition().getY()));
         }
         forPlayers(obstacle);
-        invalidate(obstacle);
     }
 }
 
@@ -160,10 +162,10 @@ void ObstacleManager::forPlayers(const std::shared_ptr<Obstacle>& obstacle) {
  * @param obstacle The obstacle to invalidate
  */
 void ObstacleManager::invalidate(const std::shared_ptr<Obstacle>& obstacle) {
-    if (obstacle->getPosition().getX() < RENDER_DISTANCE * OBSTACLE_SIZE) {
+    if (obstacle->getPosition().getX() < RENDER_DISTANCE * OBSTACLE_SIZE && 
+        obstacle->getPosition().getX() > -OBSTACLE_SIZE) {
         _visibleObstacles.push_back(obstacle);
     }
-
     if (obstacle->getPosition().getX() < -OBSTACLE_SIZE) {
         MapProtocol::sendEntityDeleted(obstacle->getId());
     }

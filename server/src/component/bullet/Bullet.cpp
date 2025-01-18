@@ -64,8 +64,8 @@ const std::shared_ptr<Player> Bullet::getPlayer() const {
  * @brief Move the bullet
  */
 void Bullet::move() {
-    _position.setX(_position.getX() + _direction.getX() * _speed);
-    _position.setY(_position.getY() + _direction.getY() * _speed);
+    _position.setX(_position.getX() + _direction.getX() * (_speed + MAP_SPEED));
+    _position.setY(_position.getY() + _direction.getY() * (_speed + MAP_SPEED));
 }
 
 /**

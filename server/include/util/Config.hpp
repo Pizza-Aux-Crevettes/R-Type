@@ -39,7 +39,7 @@ enum Config {
 
     // Map
     RENDER_DISTANCE = 20,
-    MAP_SPEED = 2,
+    MAP_SPEED = 40,
     MAP_WIDTH = 1280,
     MAP_HEIGHT = 720,
 

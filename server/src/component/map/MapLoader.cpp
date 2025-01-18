@@ -58,8 +58,9 @@ void MapLoader::loadMapFromFile(const std::string& filePath) {
  */
 void MapLoader::parseMapLine(const std::string& line, int32_t y) {
     int32_t blockY = y * OBSTACLE_SIZE;
+    size_t x = 0;
 
-    for (size_t x = 0; x < line.size(); x += OBSTACLE_OFFSET) {
+    for (; x < line.size(); x += OBSTACLE_OFFSET) {
         std::string code = line.substr(x, OBSTACLE_OFFSET);
 
         if (ObstacleManager::get().isObstacleCodeValid(code)) {
@@ -70,10 +71,6 @@ void MapLoader::parseMapLine(const std::string& line, int32_t y) {
                 ObstacleManager::get().getObstacleType(code),
                 Point(blockX, blockY));
             ObstacleManager::get().addObstacle(obstacle);
-
-            if (ObstacleManager::get().getMaxViewport() == 0) {
-                ObstacleManager::get().setMaxViewport(line.size() / OBSTACLE_OFFSET - MAP_WIDTH);
-            } 
         } else if (EnemyManager::get().isEnemyCodeValid(code)) {
             int32_t enemyX =
                 static_cast<int32_t>(x / OBSTACLE_OFFSET) * OBSTACLE_SIZE;
@@ -89,5 +86,9 @@ void MapLoader::parseMapLine(const std::string& line, int32_t y) {
 
             EnemyManager::get().addEnemy(enemy);
         }
+    }
+
+    if (x > ObstacleManager::get().getMaxViewport()) {
+        ObstacleManager::get().setMaxViewport(((x / OBSTACLE_OFFSET) * OBSTACLE_SIZE) - MAP_WIDTH);
     }
 }
