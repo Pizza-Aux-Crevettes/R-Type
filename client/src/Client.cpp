@@ -143,7 +143,6 @@ void Client::manageClient() {
     sf::Texture background = EntityManager::get().manageBackground(window);
     OptionMenu optionMenu;
     LifeBar lifeBarMenu;
-    LoseMenu loseMenu;
     sf::Clock clock;
     bool serverInitialized = false;
     std::unique_ptr<NetworkClient> networkClient = nullptr;

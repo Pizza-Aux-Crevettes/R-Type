@@ -32,7 +32,10 @@ GameEngine::Entity LoseMenu::createEntityText(int id, const std::string text, co
     auto newEntity = GameEngine::Entity(id);
     newEntity.addComponent(Text(text, "assets/font/Inter_Bold.ttf", fontSize));
     newEntity.addComponent(Position(position));
-    newEntity.addComponent(Color({178, 34, 34, 255}));
+    if (text != "QUIT GAME")
+        newEntity.addComponent(Color({178, 34, 34, 255}));
+    else
+        newEntity.addComponent(Color({255, 255, 255, 255}));
     return newEntity;
 }
 
@@ -137,18 +140,15 @@ void LoseMenu::displayLoseMenu(sf::RenderWindow& window, GameEngine::System syst
                                                 -65)}}));
         _entitiesLoseMenu.emplace(entityId, createEntityText(entityId++, "GAME OVER", {{515, 300}}, 40));
         _entitiesLoseMenu.emplace(
-            entityId,
-            createEntityButton(
-                entityId++, "QUIT GAME", "assets/font/Inter_Bold.ttf", 25,
-                {{responsive.getResponsivePosX(1920, currentWidth, 850),
-                    responsive.getResponsivePosY(1080, currentHeight, 620)}},
-                [this, &window]() { isClickedExit(window); }));
+            entityId, createEntityText(entityId++, "QUIT GAME", {{
+                responsive.getResponsivePosX(1920, currentWidth, 860),
+                responsive.getResponsivePosY(1080, currentHeight, 630)}}, 25));
         _entitiesLoseMenu.emplace(
             entityId,
             createEntityRect(
                 entityId++, {165, 50},
                 {{responsive.getResponsivePosX(1920, currentWidth, 845), responsive.getResponsivePosY(1080, currentHeight, 615)}},
-                sf::Color::White, [this]() {}));
+                sf::Color::White, [this, &window]() { isClickedExit(window); }));
         _entitiesInitialized = true;
     }
     system.render(window, _entitiesLoseMenu);
