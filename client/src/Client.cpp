@@ -54,6 +54,8 @@ void Client::manageSound() {
     SoundManager::get().setMusicSound("game", "assets/sounds/boss-song.wav");
     SoundManager::get().setEffectSound("bullet", "assets/sounds/shoot-sound.wav");
     SoundManager::get().setEffectSound("click", "assets/sounds/click-menu.wav");
+    SoundManager::get().setEffectSound("lose", "assets/sounds/game-over.wav");
+    SoundManager::get().setMusicSound("win", "assets/sounds/win.wav");
 
     SoundManager::get().setEffectSound("click", "assets/sounds/click-menu.wav");
     SoundManager::get().setEffectSound("click", "assets/sounds/click-menu.wav");
