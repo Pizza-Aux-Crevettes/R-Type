@@ -135,6 +135,10 @@ void EntityManager::setBossId(int id) {
     _bossId = id;
 }
 
+void EntityManager::setPlayerId(int id) {
+    _playerId = id;
+}
+
 void EntityManager::setPlayerColor(int playerId) {
     
 
@@ -214,6 +218,14 @@ void EntityManager::winGame(int id, int health) {
 
     if (id == _bossId && health == 0) {
         Client::get().setIsWinGame();
+    } else {
+        return;
+    }
+}
+
+void EntityManager::loseGame(int id, int health) {
+    if (id == _playerId && health == 0) {
+        Client::get().setIsLoseGame();
     } else {
         return;
     }

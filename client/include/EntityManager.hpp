@@ -34,6 +34,7 @@ class EntityManager {
     std::vector<int> _playerSpriteColor;
     std::mutex _mutex;
     int _bossId;
+    int _playerId;
 
   public:
     static EntityManager& get();
@@ -56,10 +57,12 @@ class EntityManager {
     void setPlayerColor(int playerId);
 
     void setBossId(int id);
+    void setPlayerId(int id);
     
     std::mutex& getMutex();
     sf::Texture manageBackground(sf::RenderWindow& window);
     std::vector<int> setEnemy(int num);
 
     void winGame(int id, int health);
+    void loseGame(int id, int health);
 };

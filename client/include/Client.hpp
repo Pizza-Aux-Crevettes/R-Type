@@ -53,6 +53,7 @@ class Client {
     sf::Event _event;
     double _viewportX;
     bool _isWin;
+    bool _isLose;
 
   public:
     Client();
@@ -87,4 +88,7 @@ class Client {
 
     void setIsWinGame();
     bool getIsWinGame();
+
+    void setIsLoseGame();
+    bool getIsLoseGame();
 };

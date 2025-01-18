@@ -91,6 +91,7 @@ void Protocol::handleCreatePlayerCallback(SmartBuffer& smartBuffer) {
     std::vector<int> playerRect = EntityManager::get().getPlayerColor();
     Protocol::setPlayerId(playerId);
     LifeBar::get().setPlayerId(playerId);
+    EntityManager::get().setPlayerId(playerId);
 
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/spaceship.png")},
@@ -262,4 +263,5 @@ void Protocol::handleUpdateEntityHealth(SmartBuffer& smartBuffer) {
     smartBuffer >> entityId >> health >> maxHealth;
     LifeBar::get().manageHealth(entityId, health);
     EntityManager::get().winGame(entityId, health);
+    EntityManager::get().loseGame(entityId, health);
 }
