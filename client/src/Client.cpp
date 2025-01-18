@@ -161,7 +161,6 @@ void Client::manageClient() {
         if (!Client::get().getIsPlayed()) {
             Menu::get().displayMenu(window, system, optionMenu);
         } else if (Client::get().getIsWinGame()) {
-            std::cout << "je passe" << std::endl;
             WinMenu::get().displayWnMenu(window, system);
         } else {
             if (!serverInitialized) {
