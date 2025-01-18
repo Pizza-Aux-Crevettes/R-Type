@@ -1,0 +1,84 @@
+# Map Editor
+
+## Description
+
+This is a map generator using the **Tkinter** library to create a graphical user interface (GUI). The application allows users to generate their owns maps with various configurations and options.
+
+## Prerequisites
+
+Before you begin, ensure that you have the following installed:
+
+- **Python 3.x** (recommended version: 3.8 or higher)
+- **Tkinter** (comes pre-installed with Python)
+- **pip** (Python package manager)
+- **Tkmacos** (provides some modified widgets of Tkinter)
+
+### Check Python and Tkinter Installation
+
+To verify if Python and Tkinter are installed, run the following commands in your terminal:
+
+```bash
+python3 --version
+python3 -m tkinter
+```
+## macOS Installation Guide
+
+### Step 1: Install Python (if necessary)
+
+If Python is not installed, or if you want to use a different version, you can install it via Homebrew:
+
+#### Install Homebrew (if not already installed):
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+#### Install Python using Homebrew:
+
+```bash
+brew install python
+```
+
+### Step 2: Install Tkinter (if necessary)
+
+Tkinter usually comes pre-installed with Python on macOS. If it is not installed, you can install it with:
+
+```bash
+brew install python-tk
+```
+
+### Step 3: Install pip (if necessary)
+
+If you encounter the error zsh: command not found: pip, install pip manually:
+
+#### Download the get-pip.py script:
+
+```bash
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+```
+
+#### Install pip using Python:
+
+```bash
+python3 get-pip.py
+```
+
+#### Verify that pip is installed:
+
+```
+pip3 --version
+```
+
+### Step 4: Install Tkmacos (if necessary)
+
+```bash
+pip3 install tkmacosx
+```
+
+### Step 5: Run the Application
+
+```bash
+cd map-editor/macos
+python3 map_editor
+```
+
