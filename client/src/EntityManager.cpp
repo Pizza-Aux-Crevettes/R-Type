@@ -136,8 +136,6 @@ void EntityManager::setPlayerColor(int playerId) {
 
     int num = playerId % 5;
 
-    std::cout << "PLAYER ID == " << num << std::endl;
-
     switch(num) {
         case 1 :
             _playerSpriteColor = {0, 0, 34, 15};

@@ -9,6 +9,7 @@
 #include "component/obstacle/ObstacleManager.hpp"
 #include "protocol/Protocol.hpp"
 #include "socket/UdpSocket.hpp"
+#include "util/Logger.hpp"
 
 /**
  * @brief Send a viewport update to a client

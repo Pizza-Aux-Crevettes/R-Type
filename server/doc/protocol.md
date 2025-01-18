@@ -104,7 +104,6 @@ All messages follow this general structure:
   - `bulletId` (int32_t): The ID of the bullet.
   - `posX` (int32_t): The bullet’s X-coordinate.
   - `posY` (int32_t): The bullet’s Y-coordinate.
-  - `speed` (int16_t): The speed of the bullet.
   - `type` (int16_t): The type of the bullet.
 - **Sent To**: All clients.
 - **Transport**: UDP.
@@ -132,7 +131,17 @@ All messages follow this general structure:
 - **Sent To**: All clients.
 - **Transport**: UDP.
 
-### 12. **DELETE_ENTITY**
+### 12. **UPDATE_PLAYER_INFOS**
+- **Value**: `26`
+- **Description**: Updates player's infos.
+- **Payload**:
+  - `playerId` (int32_t): The ID of the player.
+  - `kills` (int16_t): The kills amount of the player.
+  - `score` (int32_t): The score of the player.
+- **Sent To**: Specific client.
+- **Transport**: UDP.
+
+### 13. **DELETE_ENTITY**
 - **Value**: `30`
 - **Description**: Deletes an entity from the game (e.g., player, enemy, bullet).
 - **Payload**:
