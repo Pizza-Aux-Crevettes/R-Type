@@ -186,7 +186,7 @@ void Protocol::handleUpdateEnemies(SmartBuffer& smartBuffer) {
         filePath = "assets/sprite/mob2.gif";
         rect = EntityManager::get().setEnemy(2);
     } else if (type == 3) {
-        filePath = "assets/sprite/mob3.gif";
+        filePath = "assets/sprite/mob3.png";
         rect = EntityManager::get().setEnemy(3);
     } else if (type == 4) {
         filePath = "assets/sprite/mob4.gif";
@@ -201,8 +201,8 @@ void Protocol::handleUpdateEnemies(SmartBuffer& smartBuffer) {
     
     std::vector<int> rectVector = {0, 0, 66, 57};
     std::map<std::string, std::any> newItems = {
-        {"Texture", std::string("assets/sprite/enemy.png")},
-        {"TextureRect", std::vector<int>{rectVector}},
+        {"Texture", filePath},
+        {"TextureRect", rect},
         {"Size", std::pair<float, float>(width, height)},
         {"Position", std::pair<float, float>(x, y)}};
     EntityManager::get().CompareEntities(enemyId, newItems, {x, y});
