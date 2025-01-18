@@ -11,6 +11,7 @@
 #include "components/Sound.hpp"
 #include "Client.hpp"
 #include "util/Logger.hpp"
+#include "health/LifeBar.hpp"
 
 int32_t Protocol::_playerId = -1;
 
@@ -89,6 +90,7 @@ void Protocol::handleCreatePlayerCallback(SmartBuffer& smartBuffer) {
     EntityManager::get().setPlayerColor(playerId);
     std::vector<int> playerRect = EntityManager::get().getPlayerColor();
     Protocol::setPlayerId(playerId);
+    LifeBar::get().setPlayerId(playerId);
 
     std::map<std::string, std::any> newItems = {
         {"Texture", std::string("assets/sprite/spaceship.png")},
@@ -257,9 +259,7 @@ void Protocol::handleDeleteEntity(SmartBuffer& smartBuffer) {
 void Protocol::handleUpdateEntityHealth(SmartBuffer& smartBuffer) {
     int32_t entityId;
     int16_t health, maxHealth;
-
     smartBuffer >> entityId >> health >> maxHealth;
-
+    LifeBar::get().manageHealth(entityId, health);
     EntityManager::get().winGame(entityId, health);
-
 }
