@@ -82,3 +82,48 @@ cd map-editor/macos
 python3 map_editor
 ```
 
+## Linux Installation Guide
+
+### Step 1: Install Python (if necessary)
+
+On most Linux distributions, Python is pre-installed. To check the installed version:
+
+```bash
+python3 --version
+```
+
+If it's not installed, you can install it using the package manager for your distribution.
+
+```bash
+sudo apt update
+sudo apt install python3
+```
+
+### Step 2: Install Tkinter (if necessary)
+
+Tkinter is usually included with Python. If you need to install it, use the following command :
+
+```bash
+sudo apt install python3-tk
+```
+
+### Step 3: Install pip (if necessary)
+
+To install pip if it’s not already installed:
+
+```bash
+sudo apt install python3-pip
+```
+
+Verify that pip is installed:
+
+```bash
+pip3 --version
+```
+
+### Step 4: Run the Application
+
+```bash
+cd map-editor/linux
+python3 map_editor
+```
