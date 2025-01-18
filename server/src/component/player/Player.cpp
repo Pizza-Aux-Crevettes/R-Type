@@ -22,8 +22,8 @@
  * @param score The player's score
  */
 Player::Player(const std::string& name, const Point& position, int16_t health, bool isAlive, int16_t kills, int32_t score)
-    : _id(IDManager::getNextId()), _name(name), _position(position),
-      _health(health), _clientSocket(std::nullopt), _isAlive(isAlive), _kills(kills), _score(score) {}
+    : _id(IDManager::getNextId()), _name(name), _position(position), _clientSocket(std::nullopt), _clientAddr(std::nullopt),
+      _health(health), _isAlive(isAlive), _kills(kills), _score(score) {}
 
 /**
  * @brief Get the player's ID

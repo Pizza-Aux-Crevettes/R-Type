@@ -140,13 +140,13 @@ void BulletManager::forEnemies(
                                  enemy->getPosition().getY(), enemy->getWidth(),
                                  enemy->getHeight())) {
             enemy->takeDamage(bullet->getDamage());
-            MapProtocol::sendEntityHealthUpdate(
-                enemy->getId(), enemy->getHealth(), enemy->getMaxHealth());
 
-            const auto& player = bullet->getPlayer();
+            auto& player = bullet->getPlayer();
             if (player) {
-                player->addKill();
-                player->addScore(enemy->getBulletDamage());
+                if (!enemy->isAlive()) {
+                    player->addKill();
+                }
+                player->addScore(enemy->getMaxHealth());
                 PlayerProtocol::sendPlayerInfosUpdate(player);
             }
 
@@ -155,6 +155,7 @@ void BulletManager::forEnemies(
                 enemiesToDelete.push_back(enemy->getId());
             }
 
+            MapProtocol::sendEntityHealthUpdate(enemy->getId(), enemy->getHealth(), enemy->getMaxHealth());
             MapProtocol::sendEntityDeleted(bullet->getId());
             it = _bullets.erase(it);
             isDeleted = true;
@@ -219,6 +220,6 @@ void BulletManager::handleEnemyShoot(int enemyId, Point direction) {
 
     auto bullet = std::make_shared<Bullet>(
         enemy->getPosition(), direction, enemy->getBulletSpeed(),
-        BulletType::ENEMY, enemy->getBulletDamage(), enemy);
+        BulletType::ENEMY, enemy->getBulletDamage());
     addBullet(bullet);
 }

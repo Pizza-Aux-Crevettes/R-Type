@@ -93,17 +93,18 @@ void PlayerProtocol::sendPlayerPosition(const sockaddr_in& clientAddr,
  * Protocol: UPDATE_PLAYER_INFOS
  * Payload: playerId (int32_t), kills (int16_t), score (int32_t)
  */
-void PlayerProtocol::sendPlayerInfosUpdate(const std::shared_ptr<Player>& player) {
-    if (!player->getClientAddr().has_value()) {
-        Logger::warning("[PlayerProtocol] Player has no client address.");
-        return;
-    }
-
-    SmartBuffer smartBuffer;
-    smartBuffer << static_cast<int16_t>(Protocol::OpCode::UPDATE_PLAYER_INFOS)
+void PlayerProtocol::sendPlayerInfosUpdate(const std::shared_ptr<Player> player) {
+    if (player->getClientAddr().has_value()) {
+        SmartBuffer smartBuffer;
+        smartBuffer << static_cast<int16_t>(Protocol::OpCode::UPDATE_PLAYER_INFOS)
                 << static_cast<int32_t>(player->getId())
                 << static_cast<int16_t>(player->getKills())
                 << static_cast<int32_t>(player->getScore());
 
-    UdpSocket::get().sendToOne(player->getClientAddr().value(), smartBuffer);
+        UdpSocket::get().sendToOne(player->getClientAddr().value(), smartBuffer);
+
+        Logger::info("Player " + std::to_string(player->getId()) + " has " +
+                     std::to_string(player->getKills()) + " kills and " +
+                     std::to_string(player->getScore()) + " points.");
+    }
 }

@@ -25,9 +25,10 @@ void HotkeysProtocol::processHotkey(int clientSocket,
 
     HotkeysManager::get().handleHotkey(playerId, hotkey);
 
-    if (PlayerManager::get().findByID(playerId) == nullptr) {
+    auto player = PlayerManager::get().findByID(playerId);
+    if (!player) {
         Logger::warning("[HotkeysProtocol] Player not found. Player ID: " + std::to_string(playerId));
         return;
     }
-    PlayerManager::get().findByID(playerId)->setClientAddr(clientAddr);
+    player->setClientAddr(clientAddr);
 }
