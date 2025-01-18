@@ -17,6 +17,11 @@ LoseMenu::LoseMenu(){}
 
 LoseMenu::~LoseMenu(){}
 
+LoseMenu& LoseMenu::get() {
+    static LoseMenu instance;
+    return instance;
+}
+
 GameEngine::Entity LoseMenu::createEntityButton(int id, std::string title, std::string font, int fontSize, std::vector<std::pair<float, float>> position, std::function<void()> callback) {
     auto newEntity = GameEngine::Entity(id);
     auto button = Button(title, font, fontSize);

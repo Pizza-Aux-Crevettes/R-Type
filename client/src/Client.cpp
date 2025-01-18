@@ -161,6 +161,8 @@ void Client::manageClient() {
             Menu::get().displayMenu(window, system, optionMenu);
         } else if (Client::get().getIsWinGame()) {
             WinMenu::get().displayWnMenu(window, system);
+        }  else if (Client::get().getIsLoseGame()) {
+            LoseMenu::get().displayLoseMenu(window, system);
         } else {
             if (!serverInitialized) {
                 initializeServer(serverInitialized, networkClient, serverThread, window);
@@ -233,4 +235,12 @@ void Client::setIsWinGame() {
 
 bool Client::getIsWinGame() {
     return _isWin;
+}
+
+void Client::setIsLoseGame() {
+    _isLose = true;
+}
+
+bool Client::getIsLoseGame() {
+    return _isLose;
 }
