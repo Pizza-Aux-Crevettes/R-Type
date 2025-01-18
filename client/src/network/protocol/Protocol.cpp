@@ -69,6 +69,10 @@ void Protocol::handleMessage(SmartBuffer& smartBuffer) {
         handleUpdateEntityHealth(smartBuffer);
         break;
 
+    case UPDATE_PLAYER_INFOS:
+        handleUpdatePlayerInfos(smartBuffer);
+        break;
+
     default:
         Logger::error("[Protocol] Unknown OpCode received: " +
                       std::to_string(opCode));
@@ -180,6 +184,17 @@ void Protocol::handleUpdateEnemies(SmartBuffer& smartBuffer) {
         {"Size", std::pair<float, float>(width, height)},
         {"Position", std::pair<float, float>(x, y)}};
     EntityManager::get().CompareEntities(enemyId, newItems, {x, y});
+}
+
+void Protocol::handleUpdatePlayerInfos(SmartBuffer& smartBuffer) {
+    int32_t playerId, score;
+    int16_t kills;
+    
+    smartBuffer >> playerId >> kills >> score;
+    
+    Logger::info("Player " + std::to_string(playerId) + " has " +
+                 std::to_string(kills) + " kills and " + std::to_string(score) +
+                 " points.");
 }
 
 void Protocol::handleUpdateBullets(SmartBuffer& smartBuffer) {

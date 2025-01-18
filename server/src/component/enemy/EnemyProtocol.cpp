@@ -25,7 +25,7 @@ void EnemyProtocol::sendEnemiesUpdate(const sockaddr_in& clientAddr,
                                       SmartBuffer& smartBuffer) {
     const auto& visibleEnemies = EnemyManager::get().getVisibleEnemies();
     for (const auto& enemy : visibleEnemies) {
-        if (enemy->getHealth() != DEFAULT_GONE) {
+        if (enemy->isAlive()) {
             smartBuffer.reset();
             smartBuffer << static_cast<int16_t>(
                                Protocol::OpCode::UPDATE_ENEMIES)

@@ -26,7 +26,6 @@ enum Config {
     // Default
     DEFAULT_HEALTH = 100,
     DEFAULT_LIVES = 3,
-    DEFAULT_GONE = -9999,
 
     // Player
     PLAYER_WIDTH = 34,

@@ -22,16 +22,17 @@
  * @param shootCooldown The cooldown between shots
  * @param shootRange The range at which the enemy can shoot
  * @param health The health of the enemy
+ * @param isAlive The alive status of the enemy
  */
 Enemy::Enemy(EnemyType type, const Point& position, int16_t speed,
              int16_t width, int16_t height, int16_t bulletSpeed,
              int16_t bulletDamage, int16_t shootCooldown, int16_t shootRange,
-             int16_t health)
+             int16_t health, bool isAlive)
     : _id(IDManager::getNextId()), _type(type), _position(position),
       _speed(speed), _width(width), _height(height), _bulletSpeed(bulletSpeed),
       _bulletDamage(bulletDamage), _shootCooldown(shootCooldown),
       _shootRange(shootRange), _currentCooldown(0), _health(health),
-      _maxHealth(health) {}
+      _maxHealth(health), _isAlive(isAlive) {}
 
 /**
  * @brief Get the ID of the enemy
@@ -151,6 +152,15 @@ int16_t Enemy::getMaxHealth() const {
 }
 
 /**
+ * @brief Get the alive status of the enemy
+ *
+ * @return bool The alive status of the enemy
+ */
+bool Enemy::isAlive() const {
+    return _isAlive;
+}
+
+/**
  * @brief Check if the enemy contains a point
  *
  * @param x The x coordinate
@@ -221,7 +231,8 @@ void Enemy::move() {
  */
 void Enemy::takeDamage(int16_t damage) {
     _health -= damage;
-    if (_health <= 0) {
-        Logger::info("[Enemy] Enemy " + std::to_string(_id) + " died.");
+    if (_health <= 0 && _isAlive) {
+        _health = 0;
+        _isAlive = false;
     }
 }

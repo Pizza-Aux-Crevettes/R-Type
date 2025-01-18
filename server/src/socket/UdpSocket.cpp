@@ -93,7 +93,7 @@ void UdpSocket::readLoop() {
             smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer),
                                bytesRead);
 
-            Protocol::handleMessage(_udpSocket, smartBuffer);
+            Protocol::handleMessage(_udpSocket, smartBuffer, clientAddr);
         }
     }
 }

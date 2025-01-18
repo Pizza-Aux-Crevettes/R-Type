@@ -101,7 +101,7 @@ void BulletManager::forPlayers(
     std::vector<std::shared_ptr<Bullet>>::iterator& it,
     std::shared_ptr<Bullet>& bullet, bool& isDeleted) {
     for (const auto& player : PlayerManager::get().getPlayers()) {
-        if (player->getHealth() > 0 && bullet->getType() == BulletType::ENEMY &&
+        if (player->isAlive() && bullet->getType() == BulletType::ENEMY &&
             bullet->collidesWith(player->getPosition().getX(),
                                  player->getPosition().getY(), PLAYER_WIDTH,
                                  PLAYER_HEIGHT)) {
@@ -109,9 +109,7 @@ void BulletManager::forPlayers(
             MapProtocol::sendEntityHealthUpdate(
                 player->getId(), player->getHealth(), player->getMaxHealth());
 
-            if (player->getHealth() <= 0 &&
-                player->getHealth() != DEFAULT_GONE) {
-                player->setHealth(DEFAULT_GONE);
+            if (!player->isAlive()) {
                 MapProtocol::sendEntityDeleted(player->getId());
                 PlayerManager::get().removePlayer(player->getId());
             }
@@ -136,8 +134,8 @@ void BulletManager::forEnemies(
     std::vector<std::shared_ptr<Bullet>>::iterator& it,
     std::shared_ptr<Bullet>& bullet, bool& isDeleted,
     std::vector<int32_t>& enemiesToDelete) {
-    for (const auto& enemy : EnemyManager::get().getEnemies()) {
-        if (enemy->getHealth() > 0 && bullet->getType() == BulletType::PLAYER &&
+    for (const auto& enemy : EnemyManager::get().getVisibleEnemies()) {
+        if (enemy->isAlive() && bullet->getType() == BulletType::PLAYER &&
             bullet->collidesWith(enemy->getPosition().getX(),
                                  enemy->getPosition().getY(), enemy->getWidth(),
                                  enemy->getHeight())) {
@@ -145,8 +143,14 @@ void BulletManager::forEnemies(
             MapProtocol::sendEntityHealthUpdate(
                 enemy->getId(), enemy->getHealth(), enemy->getMaxHealth());
 
-            if (enemy->getHealth() <= 0 && enemy->getHealth() != DEFAULT_GONE) {
-                enemy->setHealth(DEFAULT_GONE);
+            const auto& player = bullet->getPlayer();
+            if (player) {
+                player->addKill();
+                player->addScore(enemy->getBulletDamage());
+                PlayerProtocol::sendPlayerInfosUpdate(player);
+            }
+
+            if (!enemy->isAlive()) {
                 MapProtocol::sendEntityDeleted(enemy->getId());
                 enemiesToDelete.push_back(enemy->getId());
             }
@@ -199,7 +203,7 @@ void BulletManager::handlePlayerShoot(int playerId) {
     Point direction(1, 0);
     auto bullet = std::make_shared<Bullet>(
         player->getPosition(), direction, PLAYER_BULLET_SPEED,
-        BulletType::PLAYER, PLAYER_BULLET_DAMAGE);
+        BulletType::PLAYER, PLAYER_BULLET_DAMAGE, player);
     addBullet(bullet);
 }
 
@@ -215,6 +219,6 @@ void BulletManager::handleEnemyShoot(int enemyId, Point direction) {
 
     auto bullet = std::make_shared<Bullet>(
         enemy->getPosition(), direction, enemy->getBulletSpeed(),
-        BulletType::ENEMY, enemy->getBulletDamage());
+        BulletType::ENEMY, enemy->getBulletDamage(), enemy);
     addBullet(bullet);
 }

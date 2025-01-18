@@ -15,11 +15,14 @@
  * @param position Initial position of the bullet
  * @param direction Direction vector (normalized)
  * @param speed Speed of the bullet
+ * @param type Type of the bullet
+ * @param damage Damage of the bullet
+ * @param player The player that shot the bullet
  */
 Bullet::Bullet(const Point& position, const Point& direction, int16_t speed,
-               BulletType type, int16_t damage)
+               BulletType type, int16_t damage, const std::shared_ptr<Player>& player)
     : _id(IDManager::getNextId()), _position(position), _direction(direction),
-      _speed(speed), _type(type), _damage(damage) {}
+      _speed(speed), _type(type), _damage(damage), _player(player) {}
 
 /**
  * @brief Get the ID of the bullet
@@ -46,6 +49,15 @@ const Point& Bullet::getPosition() const {
  */
 int16_t Bullet::getDamage() const {
     return _damage;
+}
+
+/**
+ * @brief Get the player that shot the bullet
+ *
+ * @return const std::shared_ptr<Player>& The player that shot the bullet
+ */
+const std::shared_ptr<Player>& Bullet::getPlayer() const {
+    return _player;
 }
 
 /**

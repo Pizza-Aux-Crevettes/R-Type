@@ -26,7 +26,7 @@ Protocol& Protocol::get() {
  * @param smartBuffer The SmartBuffer containing the message
  * @param clientAddr The client's address
  */
-void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer) {
+void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer, const sockaddr_in& clientAddr) {
     if (smartBuffer.getSize() < sizeof(int16_t)) {
         Logger::warning(
             "[Protocol] Received invalid message with insufficient size.");
@@ -46,7 +46,7 @@ void Protocol::handleMessage(const int clientSocket, SmartBuffer& smartBuffer) {
         break;
 
     case HOTKEY_PRESSED:
-        HotkeysProtocol::processHotkey(clientSocket, smartBuffer);
+        HotkeysProtocol::processHotkey(clientSocket, smartBuffer, clientAddr);
         break;
 
     default:
