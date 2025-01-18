@@ -18,6 +18,11 @@ WinMenu::WinMenu(){}
 
 WinMenu::~WinMenu(){}
 
+WinMenu& WinMenu::get() {
+    static WinMenu instance;
+    return instance;
+}
+
 GameEngine::Entity WinMenu::createEntityButton(int id, std::string title, std::string font, int fontSize, std::vector<std::pair<float, float>> position, std::function<void()> callback) {
     auto newEntity = GameEngine::Entity(id);
     auto button = Button(title, font, fontSize);
