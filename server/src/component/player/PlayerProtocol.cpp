@@ -102,9 +102,5 @@ void PlayerProtocol::sendPlayerInfosUpdate(const std::shared_ptr<Player> player)
                 << static_cast<int32_t>(player->getScore());
 
         UdpSocket::get().sendToOne(player->getClientAddr().value(), smartBuffer);
-
-        Logger::info("Player " + std::to_string(player->getId()) + " has " +
-                     std::to_string(player->getKills()) + " kills and " +
-                     std::to_string(player->getScore()) + " points.");
     }
 }
