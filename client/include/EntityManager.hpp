@@ -7,6 +7,8 @@
 ** EntityManager.hpp
 */
 
+#pragma once
+
 #include <any>
 #include <components/Position.hpp>
 #include <components/Shape.hpp>

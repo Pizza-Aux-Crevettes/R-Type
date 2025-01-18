@@ -95,7 +95,7 @@ void EntityManager::CreateEntity(int id,
                 newEntity.addComponent(Text(std::any_cast<std::string>(text), "assets/font/Inter_Bold.ttf", 10));
                 newEntity.addComponent(Link(std::any_cast<int>(id - 10000)));
             } catch (const std::bad_any_cast& e) {
-                std::cerr << "Error casting Position component: " << e.what()
+                std::cerr << "Error casting Text or Link component: " << e.what()
                           << std::endl;
             }
         }
