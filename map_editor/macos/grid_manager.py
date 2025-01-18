@@ -71,7 +71,10 @@ class GridManager:
                 self.update_images()
 
     def zoom(self, event):
-        self.scale_factor = 1.1 if event.delta > 0 else 0.9
+        if event.delta > 0:
+            self.scale_factor = 1.1
+        else:
+            self.scale_factor = 0.9
         self.scale *= self.scale_factor
         self.canvas.scale("all", event.x, event.y, self.scale_factor, self.scale_factor)
         self.offset_x = (self.offset_x - event.x) * self.scale_factor + event.x

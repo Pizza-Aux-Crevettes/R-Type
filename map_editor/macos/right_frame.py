@@ -29,7 +29,7 @@ class RightFrame:
 
     def display_mobs(self):
         tk.Label(self.mobs_frame, text="Mobs", bg="lightgray", font=("Arial", 10, "bold")).pack(pady=5)
-        items = ["Mob1", "Mob2", "Mob3", "Mob4"]
+        items = ["Mob1", "Mob2", "Mob3", "Mob4", "Boss"]
         for item in items:
             image = self.app.grid_manager.load_image(item)
             if image:
