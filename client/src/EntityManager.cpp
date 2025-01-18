@@ -217,6 +217,8 @@ std::mutex& EntityManager::getMutex() {
 void EntityManager::winGame(int id, int health) {
 
     if (id == _bossId && health == 0) {
+        SoundManager::get().getMusicSound("game").getSound().stop();
+        SoundManager::get().getMusicSound("win").getSound().play();
         Client::get().setIsWinGame();
     } else {
         return;
@@ -225,6 +227,8 @@ void EntityManager::winGame(int id, int health) {
 
 void EntityManager::loseGame(int id, int health) {
     if (id == _playerId && health == 0) {
+        SoundManager::get().getMusicSound("game").getSound().stop();
+        SoundManager::get().getMusicSound("lose").getSound().play();
         Client::get().setIsLoseGame();
     } else {
         return;
