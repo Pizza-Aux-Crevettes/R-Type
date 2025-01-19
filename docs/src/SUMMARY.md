@@ -2,6 +2,7 @@
 
 - [Prerequisites](../../README.md)
 - [User Guide](./UserGuide.md)
+- [Map editor](../../map_editor/README.md)
 - [Contributing](./contributing.md)
 - [Clang format for C++](./clang-format.md)
 - [Accessibility features](./accessibility.md)
