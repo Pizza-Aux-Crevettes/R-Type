@@ -37,6 +37,7 @@
 #include "util/Config.hpp"
 #include "util/Logger.hpp"
 #include "menu/WinMenu.hpp"
+#include "health/BossLifeBar.hpp"
 
 class NetworkClient;
 
@@ -63,7 +64,7 @@ class Client {
     void manageBackground(GameEngine::System system, sf::Clock clock,
                           sf::Texture background);
                           void manageSound();
-    void updateGameState(sf::RenderWindow& window, GameEngine::System& system, LifeBar& lifeBarMenu);
+    void updateGameState(sf::RenderWindow& window, GameEngine::System& system, LifeBar& lifeBarMenu, BossLifeBar& bossLifeBarMenu);
     void initializeServer(bool& serverInitialized, std::unique_ptr<NetworkClient>& networkClient, std::thread& serverThread, sf::RenderWindow& window);
     void handleAutoFire(sf::Clock& clock);
     void processEvents(sf::RenderWindow& window, GameEngine::System& system, bool serverInitialized);

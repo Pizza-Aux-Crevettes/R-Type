@@ -32,6 +32,8 @@ void GameEngine::System::loadText(GameEngine::Entity& entity, auto& textComp) {
         textComp.getText().setCharacterSize(textComp.getCharacterSize());
         setPosition(entity, textComp.getText());
         setColor(entity, textComp.getText());
+        sf::FloatRect bounds = textComp.getText().getLocalBounds();
+        textComp.getText().setOrigin(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2);
         textComp.setIsLoaded(true);
     } else {
         updateText(entity, textComp.getString());

@@ -15,6 +15,7 @@
 #include "components/Position.hpp"
 #include "components/Text.hpp"
 #include "menu/OptionMenu.hpp"
+#include "util/getResponsiveValue.hpp"
 
 LifeBar::LifeBar(){}
 
@@ -45,28 +46,41 @@ GameEngine::Entity LifeBar::createEntityText(
             color = {255, 0, 0, 255};  // Rouge
         }
     }
-
-    newEntity.addComponent(Text(text, OptionMenu::get().getAdaptabilityText(), fontSize));
+    newEntity.addComponent(Text(text, OptionMenu::get().getAdaptabilityText(),
+                         (fontSize * OptionMenu::get().getFontSize() / 100.0f)));
     newEntity.addComponent(Position(position));
     newEntity.addComponent(Color(color));
     return newEntity;
 }
 
 void LifeBar::displayLifeBar(sf::RenderWindow& window,
-                                   GameEngine::System system) {
+                             GameEngine::System system) {
+    GetResponsiveValue responsive;
+    int currentWidth = window.getSize().x;
+    int currentHeight = window.getSize().y;
     static int previousHp = -1;
     int hp = LifeBar::get().getHp();
 
     if (!_entitiesInitialized) {
-        _entitiesLifeBar.emplace(0, createEntityText(0, std::to_string(hp), {{20, 20}}, 30));
-        _entitiesLifeBar.emplace(1, createEntityText(1, "HEALTH", {{80, 20}}, 30));
+        _entitiesLifeBar.emplace(0, createEntityText(0, std::to_string(hp),
+                    {{responsive.getResponsivePosX(800, currentWidth, 60),
+                    responsive.getResponsivePosY(600, currentHeight, 50)}}, 30));
+        _entitiesLifeBar.emplace(1, createEntityText(1, "HEALTH", 
+                    {{responsive.getResponsivePosX(800, currentWidth, 60),
+                    responsive.getResponsivePosY(600, currentHeight, 20)}}, 25));
         _entitiesInitialized = true;
         previousHp = hp;
     }
-    _entitiesLifeBar.erase(0);
-    _entitiesLifeBar.emplace(0, createEntityText(0, std::to_string(hp), {{20, 20}}, 30));
-    system.render(window, _entitiesLifeBar);                        
+    if (hp != previousHp) {
+        _entitiesLifeBar.erase(0);
+        _entitiesLifeBar.emplace(0, createEntityText(0, std::to_string(hp),
+                    {{responsive.getResponsivePosX(800, currentWidth, 60),
+                    responsive.getResponsivePosY(600, currentHeight, 50)}}, 30));
+        previousHp = hp;
+    }
+    system.render(window, _entitiesLifeBar);
 }
+
 
 int LifeBar::getHp() const {
     return this->_hp;

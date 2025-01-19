@@ -25,7 +25,7 @@
  */
 Text::Text(const std::string& text, const std::string& fontFile,
            const unsigned int characterSize)
-    : _initText(text), _fontFile(fontFile), _charSize(characterSize) {}
+    : _initText(text), _fontFile(fontFile), _charSize(characterSize), _initSize(characterSize) {}
 
 /**
  * @brief Destructor for the Text component.
@@ -87,6 +87,17 @@ unsigned int Text::getCharacterSize() const {
  */
 void Text::setCharacterSize(unsigned int characterSize) {
     this->_charSize = characterSize;
+}
+
+/**
+ * @brief Get the initial character size of the Text component.
+ *
+ * This function retrieves the initial character size of the text component.
+ *
+ * @return The initial character size of the text component.
+ */
+unsigned int Text::getInitCharacterSize() const {
+    return this->_initSize;
 }
 
 /**
