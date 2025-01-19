@@ -59,11 +59,11 @@ Menu::createEntityRect(int id, const std::pair<int, int> size,
 }
 
 GameEngine::Entity
-Menu::createEntityInput(int id, std::string font, int fontSize,
+Menu::createEntityInput(int id, int fontSize,
                         const std::vector<std::pair<float, float>> position,
                         std::string inputVar) {
     auto inputEntity = GameEngine::Entity(id);
-    inputEntity.addComponent(Text(inputVar, font, fontSize));
+    inputEntity.addComponent(Text(inputVar, OptionMenu::get().getAdaptabilityText(), fontSize));
     inputEntity.addComponent(Position(position));
     inputEntity.addComponent(Color({255, 255, 255, 255}));
     return inputEntity;
@@ -234,14 +234,14 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
             _entitiesMenu.emplace(
                 entityId,
                 createEntityInput(
-                    entityId++, "assets/font/Inter_Bold.ttf", 30,
+                    entityId++, 30,
                     {{responsive.getResponsivePosX(1920, currentWidth, 500),
                       responsive.getResponsivePosY(1080, currentHeight, 800)}},
                     "Username:"));
             _entitiesMenu.emplace(
                 entityId,
                 createEntityInput(
-                    entityId++, "assets/font/Inter_Bold.ttf", 20,
+                    entityId++, 20,
                     {{responsive.getResponsivePosX(1920, currentWidth, 510),
                       responsive.getResponsivePosY(1080, currentHeight, 875)}},
                     "")); // username input text
@@ -260,14 +260,14 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
             _entitiesMenu.emplace(
                 entityId,
                 createEntityInput(
-                    entityId++, "assets/font/Inter_Bold.ttf", 30,
+                    entityId++, 30,
                     {{responsive.getResponsivePosX(1920, currentWidth, 1150),
                       responsive.getResponsivePosY(1080, currentHeight, 800)}},
                     "Adresse IP:"));
             _entitiesMenu.emplace(
                 entityId,
                 createEntityInput(
-                    entityId++, "assets/font/Inter_Bold.ttf", 20,
+                    entityId++, 20,
                     {{responsive.getResponsivePosX(1920, currentWidth, 1160),
                       responsive.getResponsivePosY(1080, currentHeight, 875)}},
                     "")); // ip input text
@@ -284,8 +284,7 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
     }
 }
 
-void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system,
-                       OptionMenu& optionMenu) {
+void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system) {
     std::map<int, GameEngine::Entity> entities;
 
     switch (_currentMenuState) {
@@ -293,7 +292,7 @@ void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system,
         initMainMenu(window, system);
         break;
     case MenuState::OptionMenu: {
-        optionMenu.displayOptionMenu(window, system);
+        OptionMenu::get().displayOptionMenu(window, system);
         break;
     };
     }

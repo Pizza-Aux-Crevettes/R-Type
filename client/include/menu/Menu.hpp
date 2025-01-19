@@ -34,8 +34,7 @@ class Menu {
     static Menu& get();
 
     void initMainMenu(sf::RenderWindow& window, GameEngine::System system);
-    void displayMenu(sf::RenderWindow& window, GameEngine::System system,
-                     OptionMenu& optionMenu);
+    void displayMenu(sf::RenderWindow& window, GameEngine::System system);
     GameEngine::Entity
     createEntityButton(int id, std::string title, std::string font,
                        int fontSize,
@@ -51,7 +50,7 @@ class Menu {
                      sf::Color color, std::function<void()> callback);
     void setMenuState(MenuState state);
     GameEngine::Entity
-    createEntityInput(int id, std::string font, int fontSize,
+    createEntityInput(int id, int fontSize,
                       const std::vector<std::pair<float, float>> position,
                       std::string inputVar);
 

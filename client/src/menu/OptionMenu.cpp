@@ -25,12 +25,17 @@ OptionMenu::OptionMenu() {}
 
 OptionMenu::~OptionMenu() {}
 
+OptionMenu& OptionMenu::get() {
+    static OptionMenu instance;
+    return instance;
+}
+
 GameEngine::Entity OptionMenu::createEntityText(
     int id, const std::string text,
     const std::vector<std::pair<float, float>> position,
     unsigned int fontSize) {
     auto newEntity = GameEngine::Entity(id);
-    newEntity.addComponent(Text(text, "assets/font/Inter_Bold.ttf", fontSize));
+    newEntity.addComponent(Text(text, _fontFile, fontSize));
     newEntity.addComponent(Position(position));
     newEntity.addComponent(Color({255, 255, 255, 255}));
     return newEntity;
@@ -321,7 +326,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                 entityId++,
                 {{responsive.getResponsivePosX(800, currentWidth, 720),
                   responsive.getResponsivePosY(600, currentHeight, 240)}},
-                [this]() { setAdaptabilityText(); std::cout << "adaptability called" << std::endl;}));
+                [this, &system]() { setAdaptabilityText(system);}));
 
         // Size of elements
         _entitiesMenuOption.emplace(
@@ -352,38 +357,6 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                 {{responsive.getResponsivePosX(800, currentWidth, 580),
                   responsive.getResponsivePosY(600, currentHeight, 310)}},
                 [this](int newValue) { setElementSize(newValue); }));
-
-        // Contrast
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(
-                entityId++, "High contrast",
-                {{responsive.getResponsivePosX(800, currentWidth, 40),
-                  responsive.getResponsivePosY(600, currentHeight, 380)}},
-                20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityOptionButton(
-                entityId++,
-                {{responsive.getResponsivePosX(800, currentWidth, 720),
-                  responsive.getResponsivePosY(600, currentHeight, 380)}},
-                [this]() { setContrast(); }));
-
-        // Difficulty
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(
-                entityId++, "High difficulty",
-                {{responsive.getResponsivePosX(800, currentWidth, 40),
-                  responsive.getResponsivePosY(600, currentHeight, 450)}},
-                20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityOptionButton(
-                entityId++,
-                {{responsive.getResponsivePosX(800, currentWidth, 720),
-                  responsive.getResponsivePosY(600, currentHeight, 450)}},
-                [this]() { setDifficulty(); }));
 
         // Controller
         _entitiesMenuOption.emplace(
@@ -425,24 +398,22 @@ void OptionMenu::setVolumnGame(int new_volumn) {
     SoundManager::get().setEffectVolumn(_volumnGame);
 }
 
-// Resolution
-int OptionMenu::getResolution() {
-    return _resolution;
-}
-
-void OptionMenu::setResolution(int new_resolution) {
-    _resolution = new_resolution;
-    std::cout << "New resolution " << _resolution << std::endl;
-}
-
 // Adaptability text
-bool OptionMenu::getAdaptabilityText() {
-    return _adaptabilityText;
+std::string OptionMenu::getAdaptabilityText() {
+    return _fontFile;
 }
 
-void OptionMenu::setAdaptabilityText() {
-    _adaptabilityText = !_adaptabilityText;
-    std::cout << "New adaptability state " << _adaptabilityText << std::endl;
+void OptionMenu::setAdaptabilityText(GameEngine::System& system ) {
+    if (_fontFile == "assets/font/Inter_Bold.ttf") {
+        _fontFile = "assets/font/open-dyslexic.ttf";
+    } else {
+        _fontFile = "assets/font/Inter_Bold.ttf";
+    };
+    for (auto& [id, entity] : _entitiesMenuOption) {
+        if (entity.hasComponent<Text>()) {
+            system.update(id, _entitiesMenuOption, GameEngine::UpdateType::TextFont, _fontFile);
+        }
+    }
 }
 
 // Element size
@@ -454,16 +425,6 @@ void OptionMenu::setElementSize(int new_size) {
     _elementSize = new_size;
 }
 
-// Difficulty : false = normal && true = difficult
-bool OptionMenu::getDifficulty() {
-    return _difficulty;
-}
-
-void OptionMenu::setDifficulty() {
-    _difficulty = !_difficulty;
-    std::cout << "New difficulty state " << _difficulty << std::endl;
-}
-
 // Control : false = keyboard && true = controller
 bool OptionMenu::getControl() {
     return _control;
@@ -472,14 +433,4 @@ bool OptionMenu::getControl() {
 void OptionMenu::setControl() {
     _control = !_control;
     std::cout << "New control state " << _control << std::endl;
-}
-
-// Contrast : false = disabled && true = enabled
-bool OptionMenu::getContrast() {
-    return _constrast;
-}
-
-void OptionMenu::setContrast() {
-    _constrast = !_constrast;
-    std::cout << "New contrast state " << _constrast << std::endl;
 }

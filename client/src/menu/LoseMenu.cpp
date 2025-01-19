@@ -6,6 +6,7 @@
 */
 
 #include "menu/LoseMenu.hpp"
+#include "menu/OptionMenu.hpp"
 #include <components/Button.hpp>
 #include <components/ButtonRect.hpp>
 #include <components/Text.hpp>
@@ -33,9 +34,9 @@ GameEngine::Entity LoseMenu::createEntityButton(int id, std::string title, std::
 }
 
 
-GameEngine::Entity LoseMenu::createEntityText(int id, const std::string text, const std::vector<std::pair<float, float>> position, unsigned int fontSize) {
+GameEngine::Entity LoseMenu::createEntityText(int id, std::string text, const std::vector<std::pair<float, float>> position, unsigned int fontSize) {
     auto newEntity = GameEngine::Entity(id);
-    newEntity.addComponent(Text(text, "assets/font/Inter_Bold.ttf", fontSize));
+    newEntity.addComponent(Text(text, OptionMenu::get().getAdaptabilityText(),fontSize));
     newEntity.addComponent(Position(position));
     if (text != "QUIT GAME")
         newEntity.addComponent(Color({178, 34, 34, 255}));

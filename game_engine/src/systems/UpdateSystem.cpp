@@ -40,6 +40,19 @@ void GameEngine::System::updateText(Entity& entity, const std::string& text) {
         auto& textComp = entity.getComponent<Text>();
         textComp.setString(text);
         textComp.getText().setString(text);
+        textComp.getFont().loadFromFile(textComp.getFontFile());
+    }
+}
+
+void GameEngine::System::updateTextFont(Entity& entity, const std::string& font) {
+    if (entity.hasComponent<Text>()) {
+        auto& textComp = entity.getComponent<Text>();
+        if (!textComp.getFont().loadFromFile(font)) {
+            std::cerr << "Failed to load font: " << font << std::endl;
+        } else {
+            textComp.getText().setFont(textComp.getFont());
+        }
+        std::cout << "font: " << font << std::endl;
     }
 }
 
@@ -96,6 +109,11 @@ void GameEngine::System::update(const int id, std::map<int, Entity>& entities,
     case UpdateType::TextSize: {
         auto textSize = std::any_cast<unsigned int>(value);
         updateTextSize(id, entities, textSize);
+        break;
+    }
+    case UpdateType::TextFont: {
+        auto textFont = std::any_cast<std::string>(value);
+        updateTextFont(entity, textFont);
         break;
     }
     case UpdateType::Texture: {

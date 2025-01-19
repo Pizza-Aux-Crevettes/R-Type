@@ -20,12 +20,9 @@ class OptionMenu {
     bool _entitiesInitialized = false;
     int _volumnMusic = 100;
     int _volumnGame = 100;
-    int _resolution = 1;
-    bool _adaptabilityText = false;
+    std::string _fontFile = "assets/font/Inter_Bold.ttf";
     float _elementSize = 100;
-    bool _difficulty = false;
     bool _control = false;
-    bool _constrast = false;
     bool _waitingForKey = false;
     HotkeysCodes _hotkeyPressed;
     std::map<HotkeysCodes, int> _hotkeyEntityMap;
@@ -33,9 +30,11 @@ class OptionMenu {
   public:
     OptionMenu();
     ~OptionMenu();
+  
+    static OptionMenu& get();
 
     GameEngine::Entity
-    createEntityText(int, const std::string,
+    createEntityText(int, std::string title,
                      const std::vector<std::pair<float, float>>, unsigned int);
     GameEngine::Entity
     createEntityOptionButton(int, std::vector<std::pair<float, float>>,
@@ -58,21 +57,21 @@ class OptionMenu {
                        std::string texture, std::vector<int> textureRect,
                        const std::vector<std::pair<float, float>> position);
     void displayOptionMenu(sf::RenderWindow&, GameEngine::System);
+
     void setNewKey(const sf::Event& event, GameEngine::System& system);
+
     int getVolumnMusic();
     void setVolumnMusic(int);
+
     int getVolumnGame();
     void setVolumnGame(int);
-    int getResolution();
-    void setResolution(int);
-    bool getAdaptabilityText();
-    void setAdaptabilityText();
+
+    std::string getAdaptabilityText();
+    void setAdaptabilityText(GameEngine::System& system);
+
     int getElementSize();
     void setElementSize(int);
-    bool getDifficulty();
-    void setDifficulty();
+
     bool getControl();
     void setControl();
-    bool getContrast();
-    void setContrast();
 };

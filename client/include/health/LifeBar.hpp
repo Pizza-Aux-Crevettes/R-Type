@@ -19,8 +19,7 @@ class LifeBar {
 
     static LifeBar& get();
     GameEngine::Entity
-    createEntityText(int, const std::string,
-                     const std::vector<std::pair<float, float>>, unsigned int);
+    createEntityText(int, std::string text, const std::vector<std::pair<float, float>>, unsigned int);
 
     void displayLifeBar(sf::RenderWindow&, GameEngine::System);
 
