@@ -4,7 +4,7 @@ Systems are the core of the ECS architecture. They are the place where the logic
 
 ## Functions
 
-- `void render(sf::RenderWindow& window, std::map<int, Entity>& entities)` -> Render all entities that have a component that can be rendered.
+- `void render(sf::RenderWindow& window, std::map<int, Entity>& entities)` -> Renders all entities that have a component capable of being rendered.
 - `void update(int id, std::map<int, Entity>& entities, UpdateType type, const std::any& value, int posId = 0)` -> Update the entity with the given id. The type of update is specified by the `UpdateType` enum. The value is the new value of the component.
 
 ## Example
