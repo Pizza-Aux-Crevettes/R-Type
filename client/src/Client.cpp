@@ -11,6 +11,9 @@
 
 #include "Client.hpp"
 
+Client::Client() {}
+
+Client::~Client() {}
 
 void runNetworkClient(NetworkClient& networkClient) {
     try {
@@ -27,10 +30,6 @@ void initializeNetwork(NetworkClient& networkClient) {
 
     Logger::success("[Main] Network initialized successfully.");
 }
-
-Client::Client() {}
-
-Client::~Client() {}
 
 void Client::manageBackground(GameEngine::System system, sf::Clock clock,
                               sf::Texture background) {
