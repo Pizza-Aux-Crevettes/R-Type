@@ -76,6 +76,10 @@ std::string Text::getFontFile() const {
     return this->_fontFile;
 }
 
+void Text::setFontFile(std::string font) {
+    this->_fontFile = font;
+}
+
 void Text::setIsLoaded(const bool isLoaded) {
     this->_isLoad = isLoaded;
 }

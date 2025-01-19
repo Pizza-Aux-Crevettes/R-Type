@@ -34,13 +34,7 @@ class Menu {
     static Menu& get();
 
     void initMainMenu(sf::RenderWindow& window, GameEngine::System system);
-    void displayMenu(sf::RenderWindow& window, GameEngine::System system,
-                     OptionMenu& optionMenu);
-    GameEngine::Entity
-    createEntityButton(int id, std::string title, std::string font,
-                       int fontSize,
-                       std::vector<std::pair<float, float>> position,
-                       std::function<void()> callback);
+    void displayMenu(sf::RenderWindow& window, GameEngine::System system);
     GameEngine::Entity
     createEntitySprite(int id, const std::pair<float, float> size,
                        std::string texture, std::vector<int> textureRect,
@@ -49,12 +43,17 @@ class Menu {
     createEntityRect(int id, const std::pair<int, int> size,
                      const std::vector<std::pair<float, float>> position,
                      sf::Color color, std::function<void()> callback);
-    void setMenuState(MenuState state);
     GameEngine::Entity
-    createEntityInput(int id, std::string font, int fontSize,
+    createEntityText(
+                      int id, const std::string text,
+                      const std::vector<std::pair<float, float>> position,
+                      unsigned int fontSize);
+    GameEngine::Entity
+    createEntityInput(int id, int fontSize,
                       const std::vector<std::pair<float, float>> position,
                       std::string inputVar);
 
+    void setMenuState(MenuState state);
     void isClickedInput(bool isIpClicked, bool isPortClicked,
                         bool isUsernameClicked);
     void setupInput(const sf::Event& event);

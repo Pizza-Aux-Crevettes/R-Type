@@ -66,7 +66,7 @@ class Client {
     void updateGameState(sf::RenderWindow& window, GameEngine::System& system, LifeBar& lifeBarMenu);
     void initializeServer(bool& serverInitialized, std::unique_ptr<NetworkClient>& networkClient, std::thread& serverThread, sf::RenderWindow& window);
     void handleAutoFire(sf::Clock& clock);
-    void processEvents(sf::RenderWindow& window, GameEngine::System& system, OptionMenu& optionMenu, bool serverInitialized);
+    void processEvents(sf::RenderWindow& window, GameEngine::System& system, bool serverInitialized);
 
     void setIsPlayed();
     bool getIsPlayed();
