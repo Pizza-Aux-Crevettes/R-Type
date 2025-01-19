@@ -16,6 +16,7 @@
 #include "Client.hpp"
 #include "util/Logger.hpp"
 #include "health/LifeBar.hpp"
+#include "health/BossLifeBar.hpp"
 
 int32_t Protocol::_playerId = -1;
 
@@ -205,6 +206,7 @@ void Protocol::handleUpdateEnemies(SmartBuffer& smartBuffer) {
         filePath = "assets/sprite/boss.gif";
         rect = EntityManager::get().setEnemy(5);
         EntityManager::get().setBossId(enemyId);
+        BossLifeBar::get().setBossId(enemyId);
     }
     
     std::vector<int> rectVector = {0, 0, 66, 57};
@@ -266,6 +268,7 @@ void Protocol::handleUpdateEntityHealth(SmartBuffer& smartBuffer) {
     int16_t health, maxHealth;
     smartBuffer >> entityId >> health >> maxHealth;
     LifeBar::get().manageHealth(entityId, health);
+    BossLifeBar::get().manageHealth(entityId, health);
     EntityManager::get().winGame(entityId, health);
     EntityManager::get().loseGame(entityId, health);
 }
