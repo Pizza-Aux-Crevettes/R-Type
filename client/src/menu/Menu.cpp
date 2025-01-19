@@ -2,7 +2,13 @@
 ** EPITECH PROJECT, 2025
 ** R-Type
 ** File description:
-** Menu
+** This file contains the implementation of the Menu class, which handles the
+** creation and management of different menus in the game. It includes functionalities 
+** for creating menu entities such as buttons, sprites, input fields, and interaction logic. 
+** The class allows rendering the main menu, switching between menus, and managing user inputs 
+** for server IP, port, and username. It also handles the transition between the main menu 
+** and the option menu, as well as rendering and updating game elements.
+** Menu.cpp
 */
 
 #include "menu/Menu.hpp"

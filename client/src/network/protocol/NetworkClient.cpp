@@ -2,6 +2,11 @@
 ** EPITECH PROJECT, 2024
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
+** This file implements the NetworkClient class, which is responsible for
+** managing the network connections for the game client. It handles the initialization,
+** connection, and message processing for both TCP and UDP sockets. The class ensures
+** that communication with the server is properly managed by processing incoming
+** messages on separate threads for both protocols.
 ** NetworkClient.cpp
 */
 

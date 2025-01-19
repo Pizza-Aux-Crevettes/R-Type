@@ -2,6 +2,9 @@
 ** EPITECH PROJECT, 2024
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
+** This file contains the implementation of the UdpSocket class for managing UDP socket initialization, sending,
+** and receiving messages. Inherits from Socket and uses Singleton 
+** for storing socket and server information.
 ** UdpSocket.cpp
 */
 

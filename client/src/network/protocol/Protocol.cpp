@@ -2,6 +2,10 @@
 ** EPITECH PROJECT, 2024
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
+** This file implements the Protocol class, which is responsible for handling
+** network messages and interactions in the game. It processes different types of
+** messages identified by opCodes, such as player creation, updates on players, 
+** enemies, bullets, obstacles, and entity health.
 ** Protocol.cpp
 */
 

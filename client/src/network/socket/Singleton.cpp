@@ -2,6 +2,9 @@
 ** EPITECH PROJECT, 2024
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
+** This file contains the implementation of the Singleton class, managing networking resources like TCP/UDP sockets
+** and server address. Ensures only one instance exists and provides
+** thread-safe access to these resources using a mutex.
 ** Singleton.hpp
 */
 

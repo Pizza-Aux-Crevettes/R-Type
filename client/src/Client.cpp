@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
-** This file declares the `Client` class, responsible for managing the
+** This file declares the Client class, responsible for managing the
 ** client's entities and items in the game context. It allows for the
 ** creation, updating, and drawing of items as well as setting their
 ** properties like position, text, and sprites.
@@ -11,6 +11,9 @@
 
 #include "Client.hpp"
 
+Client::Client() {}
+
+Client::~Client() {}
 
 void runNetworkClient(NetworkClient& networkClient) {
     try {
@@ -27,10 +30,6 @@ void initializeNetwork(NetworkClient& networkClient) {
 
     Logger::success("[Main] Network initialized successfully.");
 }
-
-Client::Client() {}
-
-Client::~Client() {}
 
 void Client::manageBackground(GameEngine::System system, sf::Clock clock,
                               sf::Texture background) {

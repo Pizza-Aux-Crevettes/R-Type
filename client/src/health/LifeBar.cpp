@@ -2,7 +2,12 @@
 ** EPITECH PROJECT, 2025
 ** R-Type
 ** File description:
-** LifeBar
+** This file contains the implementation of the LifeBar class, which manages 
+** the player's health display. It creates and updates the health bar, adjusts 
+** the health value based on game events, and renders the health text on the screen. 
+** The health bar changes color based on the remaining health, ranging from green 
+** for high health to red for low health.
+** LifeBar.cpp
 */
 
 #include "health/LifeBar.hpp"
