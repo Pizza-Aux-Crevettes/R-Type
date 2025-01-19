@@ -15,7 +15,7 @@
 
 namespace GameEngine {
 
-enum class UpdateType { Position, Text, TextSize, Texture };
+enum class UpdateType { Position, Text, TextSize, TextFont, Texture };
 
 class System {
   public:
@@ -26,6 +26,7 @@ class System {
                 const std::any& value, int posId = 0);
 
   private:
+    std::string _fontFile;
     template <typename Drawable>
     void setColor(Entity& entity, Drawable& drawable);
     template <typename Drawable>
@@ -38,6 +39,7 @@ class System {
     void updateText(Entity& entity, const std::string& text);
     void updateTextSize(int id, std::map<int, Entity>& entities,
                         unsigned int textSize);
+    void updateTextFont(Entity& entity, const std::string& font);
     void updateTexture(Entity& entity, std::string& texture);
     void loadSprite(Entity& entity, auto& spriteComp, auto& textureComp);
     void spriteSystem(sf::RenderWindow& window, Entity& entity);

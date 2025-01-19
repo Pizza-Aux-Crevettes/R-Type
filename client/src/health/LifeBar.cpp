@@ -9,6 +9,7 @@
 #include "components/Color.hpp"
 #include "components/Position.hpp"
 #include "components/Text.hpp"
+#include "menu/OptionMenu.hpp"
 
 LifeBar::LifeBar(){}
 
@@ -20,7 +21,7 @@ LifeBar& LifeBar::get() {
 }
 
 GameEngine::Entity LifeBar::createEntityText(
-    int id, const std::string text,
+    int id, std::string text,
     const std::vector<std::pair<float, float>> position,
     unsigned int fontSize) {
 
@@ -40,7 +41,7 @@ GameEngine::Entity LifeBar::createEntityText(
         }
     }
 
-    newEntity.addComponent(Text(text, "assets/font/Inter_Bold.ttf", fontSize));
+    newEntity.addComponent(Text(text, OptionMenu::get().getAdaptabilityText(), fontSize));
     newEntity.addComponent(Position(position));
     newEntity.addComponent(Color(color));
     return newEntity;

@@ -62,8 +62,7 @@ void Client::manageSound() {
     SoundManager::get().getMusicSound("menu").getSound().play();
 }
 
-void Client::processEvents(sf::RenderWindow& window, GameEngine::System& system, 
-                           OptionMenu& optionMenu, bool serverInitialized) {
+void Client::processEvents(sf::RenderWindow& window, GameEngine::System& system, bool serverInitialized) {
     sf::Event event;
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
@@ -83,7 +82,7 @@ void Client::processEvents(sf::RenderWindow& window, GameEngine::System& system,
             HotkeysManager::get().checkKey(event);
         }
         Menu::get().setupInput(event);
-        optionMenu.setNewKey(event, system);
+        OptionMenu::get().setNewKey(event, system);
     }
 }
 
@@ -154,13 +153,13 @@ void Client::manageClient() {
 
     while (window.isOpen()) {
         manageBackground(system, clock, background);
-        processEvents(window, system, optionMenu, serverInitialized);
+        processEvents(window, system, serverInitialized);
         handleAutoFire(clock);
 
         window.clear();
 
         if (!Client::get().getIsPlayed()) {
-            Menu::get().displayMenu(window, system, optionMenu);
+            Menu::get().displayMenu(window, system);
         } else if (Client::get().getIsWinGame()) {
             WinMenu::get().displayWnMenu(window, system);
         }  else if (Client::get().getIsLoseGame()) {

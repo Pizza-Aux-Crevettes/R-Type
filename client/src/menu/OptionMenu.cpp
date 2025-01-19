@@ -25,12 +25,17 @@ OptionMenu::OptionMenu() {}
 
 OptionMenu::~OptionMenu() {}
 
+OptionMenu& OptionMenu::get() {
+    static OptionMenu instance;
+    return instance;
+}
+
 GameEngine::Entity OptionMenu::createEntityText(
     int id, const std::string text,
     const std::vector<std::pair<float, float>> position,
     unsigned int fontSize) {
     auto newEntity = GameEngine::Entity(id);
-    newEntity.addComponent(Text(text, "assets/font/Inter_Bold.ttf", fontSize));
+    newEntity.addComponent(Text(text, _fontFile, fontSize));
     newEntity.addComponent(Position(position));
     newEntity.addComponent(Color({255, 255, 255, 255}));
     return newEntity;
@@ -124,7 +129,7 @@ void OptionMenu::setNewKey(const sf::Event& event, GameEngine::System& system) {
 }
 
 void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
-                                   GameEngine::System system) {
+                                   GameEngine::System system, std::map<int, GameEngine::Entity> entities) {
     GetResponsiveValue responsive;
     int currentWidth = window.getSize().x;
     int currentHeight = window.getSize().y;
@@ -140,9 +145,17 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                                                30)}}));
         _entitiesMenuOption.emplace(
             entityId,
-            createEntityButton(entityId++, "Back", "assets/font/Inter_Bold.ttf", 20, {{
+            createEntityRect(
+                entityId++, {55, 22},
+                {{responsive.getResponsivePosX(800, currentWidth, 748),
+                  responsive.getResponsivePosY(600, currentHeight, 27)}},
+                sf::Color::Transparent, [this]() { Menu::get().setMenuState(Menu::MenuState::MainMenu);}));
+
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityText(entityId++, "Back", {{
                 responsive.getResponsivePosX(800, currentWidth, 750),
-                responsive.getResponsivePosY(600, currentHeight, 25)}}, [this]() { Menu::get().setMenuState(Menu::MenuState::MainMenu);}));
+                responsive.getResponsivePosY(600, currentHeight, 25)}}, 20));
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, "OPTIONS", {{
                 responsive.getResponsivePosX(800, currentWidth, 340),
@@ -184,19 +197,19 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
         _entitiesMenuOption.emplace( entityId,
             createEntityText(entityId++, "Key control", {{
                 responsive.getResponsivePosX(800, currentWidth, 40),
-                responsive.getResponsivePosY(600, currentHeight, 170)}}, 20));
+                responsive.getResponsivePosY(600, currentHeight, 200)}}, 20));
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_TOP)), {{
                 responsive.getResponsivePosX(800, currentWidth, 160),
-                responsive.getResponsivePosY(600, currentHeight, 170)}}, 20));
-      
+                responsive.getResponsivePosY(600, currentHeight, 200)}}, 20));
+
         _hotkeyEntityMap[HotkeysCodes::ARROW_TOP] = entityId;
         _entitiesMenuOption.emplace(
             entityId,
             createEntityRect(
                 entityId++, {150, 50},
                 {{responsive.getResponsivePosX(800, currentWidth, 155),
-                  responsive.getResponsivePosY(600, currentHeight, 163)}},
+                  responsive.getResponsivePosY(600, currentHeight, 193)}},
                 sf::Color::White, [this]() {
                     _waitingForKey = true;
                     _hotkeyPressed = HotkeysCodes::ARROW_TOP;
@@ -209,7 +222,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                 HotkeysManager::get().keyToString(
                     HotkeysManager::get().getKey(HotkeysCodes::ARROW_BOTTOM)),
                 {{responsive.getResponsivePosX(800, currentWidth, 260),
-                  responsive.getResponsivePosY(600, currentHeight, 170)}},
+                  responsive.getResponsivePosY(600, currentHeight, 200)}},
                 20));
         _hotkeyEntityMap[HotkeysCodes::ARROW_BOTTOM] = entityId;
         _entitiesMenuOption.emplace(
@@ -217,7 +230,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
             createEntityRect(
                 entityId++, {150, 50},
                 {{responsive.getResponsivePosX(800, currentWidth, 255),
-                  responsive.getResponsivePosY(600, currentHeight, 163)}},
+                  responsive.getResponsivePosY(600, currentHeight, 193)}},
                 sf::Color::White, [this]() {
                     _waitingForKey = true;
                     _hotkeyPressed = HotkeysCodes::ARROW_BOTTOM;
@@ -230,7 +243,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                 HotkeysManager::get().keyToString(
                     HotkeysManager::get().getKey(HotkeysCodes::ARROW_LEFT)),
                 {{responsive.getResponsivePosX(800, currentWidth, 360),
-                  responsive.getResponsivePosY(600, currentHeight, 170)}},
+                  responsive.getResponsivePosY(600, currentHeight, 200)}},
                 20));
         _hotkeyEntityMap[HotkeysCodes::ARROW_LEFT] = entityId;
         _entitiesMenuOption.emplace(
@@ -238,7 +251,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
             createEntityRect(
                 entityId++, {150, 50},
                 {{responsive.getResponsivePosX(800, currentWidth, 355),
-                  responsive.getResponsivePosY(600, currentHeight, 163)}},
+                  responsive.getResponsivePosY(600, currentHeight, 193)}},
                 sf::Color::White, [this]() {
                     _waitingForKey = true;
                     _hotkeyPressed = HotkeysCodes::ARROW_LEFT;
@@ -251,7 +264,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                 HotkeysManager::get().keyToString(
                     HotkeysManager::get().getKey(HotkeysCodes::ARROW_RIGHT)),
                 {{responsive.getResponsivePosX(800, currentWidth, 460),
-                  responsive.getResponsivePosY(600, currentHeight, 170)}},
+                  responsive.getResponsivePosY(600, currentHeight, 200)}},
                 20));
         _hotkeyEntityMap[HotkeysCodes::ARROW_RIGHT] = entityId;
         _entitiesMenuOption.emplace(
@@ -259,7 +272,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
             createEntityRect(
                 entityId++, {150, 50},
                 {{responsive.getResponsivePosX(800, currentWidth, 455),
-                  responsive.getResponsivePosY(600, currentHeight, 163)}},
+                  responsive.getResponsivePosY(600, currentHeight, 193)}},
                 sf::Color::White, [this]() {
                     _waitingForKey = true;
                     _hotkeyPressed = HotkeysCodes::ARROW_RIGHT;
@@ -272,7 +285,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                 HotkeysManager::get().keyToString(
                     HotkeysManager::get().getKey(HotkeysCodes::ENTER)),
                 {{responsive.getResponsivePosX(800, currentWidth, 560),
-                  responsive.getResponsivePosY(600, currentHeight, 170)}},
+                  responsive.getResponsivePosY(600, currentHeight, 200)}},
                 20));
         _hotkeyEntityMap[HotkeysCodes::ENTER] = entityId;
         _entitiesMenuOption.emplace(
@@ -280,7 +293,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
             createEntityRect(
                 entityId++, {150, 50},
                 {{responsive.getResponsivePosX(800, currentWidth, 555),
-                  responsive.getResponsivePosY(600, currentHeight, 163)}},
+                  responsive.getResponsivePosY(600, currentHeight, 193)}},
                 sf::Color::White, [this]() {
                     _waitingForKey = true;
                     _hotkeyPressed = HotkeysCodes::ENTER;
@@ -293,7 +306,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                 HotkeysManager::get().keyToString(
                     HotkeysManager::get().getKey(HotkeysCodes::SPACE)),
                 {{responsive.getResponsivePosX(800, currentWidth, 660),
-                  responsive.getResponsivePosY(600, currentHeight, 170)}},
+                  responsive.getResponsivePosY(600, currentHeight, 200)}},
                 20));
         _hotkeyEntityMap[HotkeysCodes::SPACE] = entityId;
         _entitiesMenuOption.emplace(
@@ -301,7 +314,7 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
             createEntityRect(
                 entityId++, {150, 50},
                 {{responsive.getResponsivePosX(800, currentWidth, 655),
-                  responsive.getResponsivePosY(600, currentHeight, 163)}},
+                  responsive.getResponsivePosY(600, currentHeight, 193)}},
                 sf::Color::White, [this]() {
                     _waitingForKey = true;
                     _hotkeyPressed = HotkeysCodes::SPACE;
@@ -313,15 +326,15 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
             createEntityText(
                 entityId++, "Font for people with reading difficulties",
                 {{responsive.getResponsivePosX(800, currentWidth, 40),
-                  responsive.getResponsivePosY(600, currentHeight, 240)}},
+                  responsive.getResponsivePosY(600, currentHeight, 300)}},
                 20));
         _entitiesMenuOption.emplace(
             entityId,
             createEntityOptionButton(
                 entityId++,
                 {{responsive.getResponsivePosX(800, currentWidth, 720),
-                  responsive.getResponsivePosY(600, currentHeight, 240)}},
-                [this]() { setAdaptabilityText(); std::cout << "adaptability called" << std::endl;}));
+                  responsive.getResponsivePosY(600, currentHeight, 300)}},
+                [this, &system, &entities]() { setAdaptabilityText(system, entities);}));
 
         // Size of elements
         _entitiesMenuOption.emplace(
@@ -329,61 +342,29 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
             createEntityText(
                 entityId++, "Size of elements",
                 {{responsive.getResponsivePosX(800, currentWidth, 40),
-                  responsive.getResponsivePosY(600, currentHeight, 310)}},
+                  responsive.getResponsivePosY(600, currentHeight, 400)}},
                 20));
         _entitiesMenuOption.emplace(
             entityId,
             createEntityText(
                 entityId++, "Enlarge",
                 {{responsive.getResponsivePosX(800, currentWidth, 580),
-                  responsive.getResponsivePosY(600, currentHeight, 280)}},
+                  responsive.getResponsivePosY(600, currentHeight, 370)}},
                 15));
         _entitiesMenuOption.emplace(
             entityId,
             createEntityText(
                 entityId++, std::to_string(getElementSize()),
                 {{responsive.getResponsivePosX(800, currentWidth, 560),
-                  responsive.getResponsivePosY(600, currentHeight, 305)}},
+                  responsive.getResponsivePosY(600, currentHeight, 395)}},
                 15));
         _entitiesMenuOption.emplace(
             entityId,
             createEntitySlider(
                 entityId++, {0, 100},
                 {{responsive.getResponsivePosX(800, currentWidth, 580),
-                  responsive.getResponsivePosY(600, currentHeight, 310)}},
+                  responsive.getResponsivePosY(600, currentHeight, 400)}},
                 [this](int newValue) { setElementSize(newValue); }));
-
-        // Contrast
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(
-                entityId++, "High contrast",
-                {{responsive.getResponsivePosX(800, currentWidth, 40),
-                  responsive.getResponsivePosY(600, currentHeight, 380)}},
-                20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityOptionButton(
-                entityId++,
-                {{responsive.getResponsivePosX(800, currentWidth, 720),
-                  responsive.getResponsivePosY(600, currentHeight, 380)}},
-                [this]() { setContrast(); }));
-
-        // Difficulty
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityText(
-                entityId++, "High difficulty",
-                {{responsive.getResponsivePosX(800, currentWidth, 40),
-                  responsive.getResponsivePosY(600, currentHeight, 450)}},
-                20));
-        _entitiesMenuOption.emplace(
-            entityId,
-            createEntityOptionButton(
-                entityId++,
-                {{responsive.getResponsivePosX(800, currentWidth, 720),
-                  responsive.getResponsivePosY(600, currentHeight, 450)}},
-                [this]() { setDifficulty(); }));
 
         // Controller
         _entitiesMenuOption.emplace(
@@ -391,14 +372,14 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
             createEntityText(
                 entityId++, "Controller  mode",
                 {{responsive.getResponsivePosX(800, currentWidth, 40),
-                  responsive.getResponsivePosY(600, currentHeight, 520)}},
+                  responsive.getResponsivePosY(600, currentHeight, 500)}},
                 20));
         _entitiesMenuOption.emplace(
             entityId,
             createEntityOptionButton(
                 entityId++,
                 {{responsive.getResponsivePosX(800, currentWidth, 720),
-                  responsive.getResponsivePosY(600, currentHeight, 520)}},
+                  responsive.getResponsivePosY(600, currentHeight, 500)}},
                 [this]() { setControl(); }));
         _entitiesInitialized = true;
     }
@@ -425,24 +406,27 @@ void OptionMenu::setVolumnGame(int new_volumn) {
     SoundManager::get().setEffectVolumn(_volumnGame);
 }
 
-// Resolution
-int OptionMenu::getResolution() {
-    return _resolution;
-}
-
-void OptionMenu::setResolution(int new_resolution) {
-    _resolution = new_resolution;
-    std::cout << "New resolution " << _resolution << std::endl;
-}
-
 // Adaptability text
-bool OptionMenu::getAdaptabilityText() {
-    return _adaptabilityText;
+std::string OptionMenu::getAdaptabilityText() {
+    return _fontFile;
 }
 
-void OptionMenu::setAdaptabilityText() {
-    _adaptabilityText = !_adaptabilityText;
-    std::cout << "New adaptability state " << _adaptabilityText << std::endl;
+void OptionMenu::setAdaptabilityText(GameEngine::System& system,std::map<int, GameEngine::Entity> entities) {
+    if (_fontFile == "assets/font/Inter_Bold.ttf") {
+        _fontFile = "assets/font/open-dyslexic.ttf";
+    } else {
+        _fontFile = "assets/font/Inter_Bold.ttf";
+    };
+    for (auto& [id, entity] : _entitiesMenuOption) {
+        if (entity.hasComponent<Text>()) {
+            system.update(id, _entitiesMenuOption, GameEngine::UpdateType::TextFont, _fontFile);
+        }
+    }
+    for (auto& [id, entity] : entities) {
+        if (entity.hasComponent<Text>()) {
+            system.update(id, entities, GameEngine::UpdateType::TextFont, _fontFile);
+        }
+    }
 }
 
 // Element size
@@ -454,16 +438,6 @@ void OptionMenu::setElementSize(int new_size) {
     _elementSize = new_size;
 }
 
-// Difficulty : false = normal && true = difficult
-bool OptionMenu::getDifficulty() {
-    return _difficulty;
-}
-
-void OptionMenu::setDifficulty() {
-    _difficulty = !_difficulty;
-    std::cout << "New difficulty state " << _difficulty << std::endl;
-}
-
 // Control : false = keyboard && true = controller
 bool OptionMenu::getControl() {
     return _control;
@@ -472,14 +446,4 @@ bool OptionMenu::getControl() {
 void OptionMenu::setControl() {
     _control = !_control;
     std::cout << "New control state " << _control << std::endl;
-}
-
-// Contrast : false = disabled && true = enabled
-bool OptionMenu::getContrast() {
-    return _constrast;
-}
-
-void OptionMenu::setContrast() {
-    _constrast = !_constrast;
-    std::cout << "New contrast state " << _constrast << std::endl;
 }

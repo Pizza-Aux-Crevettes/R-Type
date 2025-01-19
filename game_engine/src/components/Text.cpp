@@ -118,6 +118,10 @@ std::string Text::getFontFile() const {
  *
  * @param isLoaded The new loaded state of the component.
  */
+void Text::setFontFile(std::string font) {
+    this->_fontFile = font;
+}
+
 void Text::setIsLoaded(const bool isLoaded) {
     this->_isLoad = isLoaded;
 }
