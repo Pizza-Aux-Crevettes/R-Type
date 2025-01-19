@@ -104,7 +104,7 @@ void Protocol::handleCreatePlayerCallback(SmartBuffer& smartBuffer) {
     };
 
     EntityManager::get().CompareEntities(playerId, newItems, {0.0f, 0.0f});
-    EntityManager::get().CompareEntities(playerId + 10000, playerNameItems, {0.0f, 00.0f});
+    EntityManager::get().CompareEntities(playerId + 10000, playerNameItems, {0.0f, -10.0f});
 }
 
 void Protocol::handleCreatePlayerBroadcast(SmartBuffer& smartBuffer) {

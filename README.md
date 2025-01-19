@@ -26,8 +26,21 @@ Before getting started, make sure you have the following installed on your machi
     git clone --recurse-submodules git@github.com:EpitechPromo2027/B-CCP-500-TLS-5-2-rtype-anastasia.bouby.git
     cd B-CCP-500-TLS-5-2-rtype-anastasia.bouby
     ```
+   
+2. Install UDev library (if necessary)
 
-2. Build the project:
+   On ubuntu:
+
+   ```bash
+   sudo apt-get install libudev-dev
+   ```
+   
+   On fedora:
+   ```bash
+   sudo dnf install libudev-devel
+   ```
+
+3. Build the project:
     ```bash
     cmake -B build .
     cd build/
