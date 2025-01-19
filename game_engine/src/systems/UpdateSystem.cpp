@@ -47,12 +47,8 @@ void GameEngine::System::updateText(Entity& entity, const std::string& text) {
 void GameEngine::System::updateTextFont(Entity& entity, const std::string& font) {
     if (entity.hasComponent<Text>()) {
         auto& textComp = entity.getComponent<Text>();
-        if (!textComp.getFont().loadFromFile(font)) {
-            std::cerr << "Failed to load font: " << font << std::endl;
-        } else {
-            textComp.getText().setFont(textComp.getFont());
-        }
-        std::cout << "font: " << font << std::endl;
+        textComp.getFont().loadFromFile(font);
+        textComp.setFontFile(font);
     }
 }
 

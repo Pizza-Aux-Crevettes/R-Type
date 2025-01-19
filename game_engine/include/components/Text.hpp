@@ -25,6 +25,7 @@ class Text : public Component {
     void setIsLoaded(bool isLoaded);
     void setString(const std::string& text);
     void setCharacterSize(unsigned int characterSize);
+    void setFontFile(std::string font);
     void display() const override;
 
   private:

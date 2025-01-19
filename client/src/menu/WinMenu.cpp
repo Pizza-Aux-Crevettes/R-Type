@@ -67,7 +67,6 @@ GameEngine::Entity WinMenu::createEntityRect(
 }
 
 void WinMenu::isClickedExit(sf::RenderWindow& window) {
-    std::cout << "Button Exit clicked!" << std::endl;
     window.close();
 }
 

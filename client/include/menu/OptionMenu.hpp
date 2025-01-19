@@ -56,7 +56,7 @@ class OptionMenu {
     createEntitySprite(int id, const std::pair<float, float> size,
                        std::string texture, std::vector<int> textureRect,
                        const std::vector<std::pair<float, float>> position);
-    void displayOptionMenu(sf::RenderWindow&, GameEngine::System);
+    void displayOptionMenu(sf::RenderWindow&, GameEngine::System, std::map<int, GameEngine::Entity> entities);
 
     void setNewKey(const sf::Event& event, GameEngine::System& system);
 
@@ -67,7 +67,7 @@ class OptionMenu {
     void setVolumnGame(int);
 
     std::string getAdaptabilityText();
-    void setAdaptabilityText(GameEngine::System& system);
+    void setAdaptabilityText(GameEngine::System& system, std::map<int, GameEngine::Entity> entities);
 
     int getElementSize();
     void setElementSize(int);
