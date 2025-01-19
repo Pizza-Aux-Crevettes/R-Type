@@ -187,11 +187,11 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
             createEntityText(entityId++, "Key control", {{
                 responsive.getResponsivePosX(800, currentWidth, 60),
                 responsive.getResponsivePosY(600, currentHeight, 210)}}, 20));
+
         _entitiesMenuOption.emplace(
             entityId, createEntityText(entityId++, HotkeysManager::get().keyToString(HotkeysManager::get().getKey(HotkeysCodes::ARROW_TOP)), {{
                 responsive.getResponsivePosX(800, currentWidth, 200),
                 responsive.getResponsivePosY(600, currentHeight, 210)}}, 20));
-
         _hotkeyEntityMap[HotkeysCodes::ARROW_TOP] = entityId;
         _entitiesMenuOption.emplace(
             entityId,
@@ -203,6 +203,14 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                     _waitingForKey = true;
                     _hotkeyPressed = HotkeysCodes::ARROW_TOP;
                 }));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityText(
+                entityId++,
+                "Move up",
+                {{responsive.getResponsivePosX(800, currentWidth, 200),
+                  responsive.getResponsivePosY(600, currentHeight, 255)}},
+                15));
 
         _entitiesMenuOption.emplace(
             entityId,
@@ -224,6 +232,14 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                     _waitingForKey = true;
                     _hotkeyPressed = HotkeysCodes::ARROW_BOTTOM;
                 }));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityText(
+                entityId++,
+                "Move down",
+                {{responsive.getResponsivePosX(800, currentWidth, 300),
+                  responsive.getResponsivePosY(600, currentHeight, 255)}},
+                15));
 
         _entitiesMenuOption.emplace(
             entityId,
@@ -245,6 +261,14 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                     _waitingForKey = true;
                     _hotkeyPressed = HotkeysCodes::ARROW_LEFT;
                 }));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityText(
+                entityId++,
+                "Move left",
+                {{responsive.getResponsivePosX(800, currentWidth, 400),
+                  responsive.getResponsivePosY(600, currentHeight, 255)}},
+                15));
 
         _entitiesMenuOption.emplace(
             entityId,
@@ -266,6 +290,14 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                     _waitingForKey = true;
                     _hotkeyPressed = HotkeysCodes::ARROW_RIGHT;
                 }));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityText(
+                entityId++,
+                "Move right",
+                {{responsive.getResponsivePosX(800, currentWidth, 500),
+                  responsive.getResponsivePosY(600, currentHeight, 255)}},
+                15));
 
         _entitiesMenuOption.emplace(
             entityId,
@@ -287,6 +319,14 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                     _waitingForKey = true;
                     _hotkeyPressed = HotkeysCodes::ENTER;
                 }));
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityText(
+                entityId++,
+                "Auto-fire",
+                {{responsive.getResponsivePosX(800, currentWidth, 600),
+                  responsive.getResponsivePosY(600, currentHeight, 255)}},
+                15));
 
         _entitiesMenuOption.emplace(
             entityId,
@@ -308,7 +348,15 @@ void OptionMenu::displayOptionMenu(sf::RenderWindow& window,
                     _waitingForKey = true;
                     _hotkeyPressed = HotkeysCodes::SPACE;
                 }));
-
+        _entitiesMenuOption.emplace(
+            entityId,
+            createEntityText(
+                entityId++,
+                "Shoot",
+                {{responsive.getResponsivePosX(800, currentWidth, 700),
+                  responsive.getResponsivePosY(600, currentHeight, 255)}},
+                15));
+                
         // Adaptability
         _entitiesMenuOption.emplace(
             entityId,
