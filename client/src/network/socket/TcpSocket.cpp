@@ -2,6 +2,9 @@
 ** EPITECH PROJECT, 2024
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
+** This file contains the implementation of the TcpSocket class, managing TCP socket initialization, connection,
+** message sending, and receiving.
+** Inherits from Socket, uses Singleton for storing the socket.
 ** TcpSocket.cpp
 */
 

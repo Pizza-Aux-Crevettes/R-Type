@@ -2,7 +2,11 @@
 ** EPITECH PROJECT, 2025
 ** R-Type
 ** File description:
-** LoseMenu
+** This file contains the implementation of the LoseMenu class, responsible for 
+** managing and rendering the Game Over menu in the game. The class defines 
+** methods for creating menu entities such as buttons, text, sprites, and rectangles 
+** with responsive positioning.
+** LoseMenu.cpp
 */
 
 #include "menu/LoseMenu.hpp"

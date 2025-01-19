@@ -2,6 +2,13 @@
 ** EPITECH PROJECT, 2024
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
+** This file implements the HotkeysManager class, which is responsible for managing
+** the player's hotkeys. It allows the mapping of specific keys to certain game
+** actions.
+** It also sends relevant data through a UDP socket when a hotkey is pressed, 
+** allowing the server to process the player's input. Additionally, the file includes
+** a utility function to convert key codes into readable string representations for
+** display or logging purposes.
 ** HotkeysManager.cpp
 */
 

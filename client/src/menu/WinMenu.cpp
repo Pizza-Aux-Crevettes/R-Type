@@ -1,8 +1,13 @@
 /*
-** EPITECH PROJECT, 2025
-** ù
+** EPITECH PROJECT, 2024
+** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
-** WinMenu
+** This file implements the WinMenu class, which is responsible for creating and
+** managing the win menu interface. The class provides functionalities to create
+** and display various elements, such as buttons, text, sprites, and other
+** components on the win menu screen. It also includes methods to handle user
+** interaction, such as clicking the Quit Game button to exit the game.
+** WinMenu.cpp
 */
 
 #include "menu/WinMenu.hpp"
