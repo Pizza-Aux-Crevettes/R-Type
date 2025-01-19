@@ -73,3 +73,10 @@ render() of the Enemy object. The function has been fixed to handle sizes.
 ```
 
 ---
+
+## Merging the code
+
+To participate in the project, you must create GitHub branches. It is not possible to push directly to the main or dev branches.
+Your new branch must be based on the dev branch.
+Once you want to share your work, you need to create a pull request from your branch to the dev branch. This must be accepted by one of the project creators. Once the pull request is accepted, you can then merge your work.
+During regular project updates, the dev branch is merged into the main branch.
