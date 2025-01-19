@@ -8,7 +8,6 @@ We designed the game with a strong focus on accessibility to ensure an inclusive
 
 ## Interaction Options
 - **Customizable controls**: Players can remap keys according to their preferences.
-- **Controller support**: Full gamepad support enabled through SFML library integration.
 - **“Auto-Fire” mode**: Enables automatic shooting to reduce the need for holding down buttons.
 
 ## Audio Options
@@ -19,8 +18,4 @@ We designed the game with a strong focus on accessibility to ensure an inclusive
 
 ## Progression Options
 - **Frequent checkpoints**: Automatic saving and strategically placed checkpoints prevent the need to replay long sections.
-- **Multiple difficulty levels**: Adjust the speed and complexity of enemies and projectiles to suit player preferences.
-
-## Tutorials and Assistance
-- **Interactive tutorials**: Clear instructions with well-defined goals to help new players understand game mechanics.
-- **Pause function**: Pausing the game displays a reminder of current objectives to keep players oriented.
+- **Multiple difficulty levels**: You can create your own map and adjust the difficulty level yourself.

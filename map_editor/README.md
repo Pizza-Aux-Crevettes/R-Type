@@ -173,3 +173,5 @@ Verify that pip is installed:
   cd map-editor/linux
   python3 map_editor
 ```
+
+Once the map editor is launched, you can place your enemies and obstacles as you wish. Make sure to save your work in our project at this path: /server/maps/, and name your file “map1.map”.
