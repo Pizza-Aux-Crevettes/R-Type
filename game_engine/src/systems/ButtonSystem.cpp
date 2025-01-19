@@ -2,7 +2,13 @@
 ** EPITECH PROJECT, 2024
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
-** ButtonSystem.cpp
+** Implements the `buttonSystem` function, which handles the rendering and
+** interaction of button components within the game engine.
+** Responsibility:
+** - Check if an entity has button and position components
+** - Load button resources if not already loaded
+** - Render the button on the window
+** - Execute the button's callback function when pressed
 */
 
 #include <components/Button.hpp>
@@ -11,6 +17,16 @@
 #include <components/Slider.hpp>
 #include "System.hpp"
 
+/**
+ * @brief Renders the button component of an entity on the window.
+ * 
+ * This function checks if the entity has both button and position components. If so, it loads
+ * the button component and then draws the button on the window. If the button is pressed, it
+ * executes the callback function.
+ * 
+ * @param window The render window where the button will be drawn.
+ * @param entity The entity containing the button and position components.
+ */
 void GameEngine::System::buttonSystem(sf::RenderWindow& window,
                                       GameEngine::Entity& entity) {
     if (entity.hasComponent<Button>() && entity.hasComponent<Position>()) {
@@ -64,6 +80,17 @@ void GameEngine::System::buttonSystem(sf::RenderWindow& window,
     }
 }
 
+/**
+ * @brief Renders the checkbox component of an entity on the window.
+ * 
+ * This function checks if the entity has both checkbox and position components. If so, it loads
+ * the checkbox component and then draws the checkbox on the window. If the checkbox is
+ * checked, it fills the button with white color. If the checkbox is pressed, it executes the
+ * callback function.
+ * 
+ * @param window The render window where the checkbox will be drawn.
+ * @param entity The entity containing the checkbox and position components.
+ */
 void GameEngine::System::optionButtonSystem(sf::RenderWindow& window,
                                             GameEngine::Entity& entity) {
     if (entity.hasComponent<OptionButton>() &&
@@ -116,6 +143,17 @@ void GameEngine::System::optionButtonSystem(sf::RenderWindow& window,
     }
 }
 
+/**
+ * @brief Renders the slider component of an entity on the window.
+ * 
+ * This function checks if the entity has both slider and position components. If so, it loads
+ * the slider component and then draws the slider on the window. If the slider is pressed, it
+ * updates the value of the slider and executes the callback function.
+ * 
+ * @param window The render window where the slider will be drawn.
+ * @param entity The entity containing the slider and position components.
+ * @param entities The map of entities.
+ */
 void GameEngine::System::sliderSystem(sf::RenderWindow& window,
                                       GameEngine::Entity& entity,
                                       std::map<int, Entity>& entities) {
@@ -196,6 +234,16 @@ void GameEngine::System::sliderSystem(sf::RenderWindow& window,
     }
 }
 
+/**
+ * @brief Renders the buttonRect component of an entity on the window.
+ * 
+ * This function checks if the entity has both buttonRect and position components. If so, it loads
+ * the buttonRect component and then draws the buttonRect on the window. If the buttonRect is
+ * pressed, it executes the callback function. The buttonRect is an input where text can be written.
+ * 
+ * @param window The render window where the buttonRect will be drawn.
+ * @param entity The entity containing the buttonRect and position components.
+ */
 void GameEngine::System::buttonRectSystem(sf::RenderWindow& window,
                                           GameEngine::Entity& entity) {
     if (entity.hasComponent<ButtonRect>() && entity.hasComponent<Position>()) {

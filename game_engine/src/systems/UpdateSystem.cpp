@@ -2,7 +2,12 @@
 ** EPITECH PROJECT, 2024
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
-** UpdateSystem.cpp
+** Implements the `updateSystem` function, which handles the updating of
+** various components within the game engine.
+** Responsibility:
+** - Check if entities have updatable components
+** - Update the state of components based on game logic
+** - Ensure synchronization between different systems
 */
 
 #include <components/Position.hpp>
