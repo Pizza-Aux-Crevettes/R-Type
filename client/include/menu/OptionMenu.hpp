@@ -22,7 +22,6 @@ class OptionMenu {
     int _volumnGame = 100;
     std::string _fontFile = "assets/font/Inter_Bold.ttf";
     unsigned int _fontSize = 100;
-    bool _control = false;
     bool _waitingForKey = false;
     HotkeysCodes _hotkeyPressed;
     std::map<HotkeysCodes, int> _hotkeyEntityMap;
@@ -66,7 +65,4 @@ class OptionMenu {
 
     int getFontSize();
     void setFontSize(unsigned int new_size, GameEngine::System& system, std::map<int, GameEngine::Entity> entities);
-
-    bool getControl();
-    void setControl();
 };
