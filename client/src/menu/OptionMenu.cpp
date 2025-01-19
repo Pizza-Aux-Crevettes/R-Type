@@ -98,7 +98,6 @@ void OptionMenu::setNewKey(const sf::Event& event, GameEngine::System& system) {
         sf::Keyboard::Key newKey = event.key.code;
 
         if (HotkeysManager::get().isKeyUsed(newKey)) {
-            std::cout << "Already use" << std::endl;
             return;
         }
 

@@ -34,7 +34,7 @@
 15. [ECS](./ecs/ecs.md)
      - [Components](./ecs/components.md)
      - [Entity](./ecs/entity.md)
-     - [Systems](./ecs/entity.md)
+     - [Systems](./ecs/systems.md)
 
 16. [Network](./server/network.md)
      - [Miscellaneous](./server/misc.md)
