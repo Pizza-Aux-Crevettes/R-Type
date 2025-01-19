@@ -122,6 +122,13 @@ void Text::setFontFile(std::string font) {
     this->_fontFile = font;
 }
 
+/**
+ * @brief Set whether the Text component is loaded.
+ *
+ * This function sets the loaded state of the Text component.
+ *
+ * @param isLoaded The new loaded state of the component.
+ */
 void Text::setIsLoaded(const bool isLoaded) {
     this->_isLoad = isLoaded;
 }
