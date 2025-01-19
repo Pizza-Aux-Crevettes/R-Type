@@ -5,6 +5,8 @@
 This project is a recreation of the R-Type game using our own custom game engine.
 Inspired by the classic **Shoot'em'up** genre, players take control of a spaceship to combat waves of enemies and challenging bosses.
 
+You can check the online documentation to this url : "https://pizza-aux-crevettes.github.io/R-Type/clang-format.html"
+
 ---
 
 ## Table of contents
