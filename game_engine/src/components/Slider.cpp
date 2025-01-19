@@ -214,6 +214,12 @@ void Slider::executeCallback(int arg) {
     }
 }
 
+/**
+ * @brief Display the Slider component information.
+ *
+ * This function displays a message indicating that the Slider component is
+ * being displayed.
+ */
 void Slider::display() const {
     std::cout << "Slider component displayed!" << std::endl;
 }

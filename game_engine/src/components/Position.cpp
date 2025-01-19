@@ -31,6 +31,13 @@ Position::Position(const std::vector<std::pair<float, float>>& positions)
  */
 Position::~Position() {}
 
+/**
+ * @brief Get all positions.
+ *
+ * This function retrieves all the positions stored in the Position component.
+ *
+ * @return A vector of pairs representing the x and y coordinates.
+ */
 std::vector<std::pair<float, float>> Position::getPositions() const {
     return _positions;
 }
@@ -81,10 +88,25 @@ void Position::setPositionY(const int id, const float y) {
     this->_positions[id].second = y;
 }
 
+/**
+ * @brief Add a new position.
+ *
+ * This function adds a new position to the Position component.
+ *
+ * @param x The x-coordinate of the new position.
+ * @param y The y-coordinate of the new position.
+ */
 void Position::addPosition(const float x, const float y) {
     this->_positions.emplace_back(x, y);
 }
 
+/**
+ * @brief Remove a position.
+ *
+ * This function removes a position from the Position component.
+ *
+ * @param id The index of the position to be removed.
+ */
 void Position::removePosition(const int id) {
     this->_positions.erase(this->_positions.begin() + id);
 }

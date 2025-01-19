@@ -2,12 +2,28 @@
 ** EPITECH PROJECT, 2024
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
-** TextSystem.cpp
+** Implements the `textSystem` function, which handles the rendering and
+** interaction of text components within the game engine.
+** Responsibility:
+** - Check if an entity has text and position components
+** - Load text resources if not already loaded
+** - Render the text on the window
+** - Update the text's properties based on game logic
 */
 
 #include <components/Text.hpp>
 #include "System.hpp"
 
+/**
+ * @brief Loads the text component of an entity if it is not already loaded.
+ * 
+ * This function checks if the text component is loaded. If not, it loads the font from file,
+ * sets the font, string, character size, position, and color of the text. Finally, it marks
+ * the text component as loaded. If the text component is already loaded, it updates the text.
+ * 
+ * @param entity The entity containing the text component.
+ * @param textComp The text component to be loaded.
+ */
 void GameEngine::System::loadText(GameEngine::Entity& entity, auto& textComp) {
     if (!textComp.getIsLoaded()) {
         textComp.getFont().loadFromFile(textComp.getFontFile());
@@ -22,6 +38,17 @@ void GameEngine::System::loadText(GameEngine::Entity& entity, auto& textComp) {
     }
 }
 
+/**
+ * @brief Renders the text component of an entity on the window.
+ * 
+ * This function checks if the entity has both text and position components. If so, it loads
+ * the text component and then draws the text on the window. If the position component has
+ * multiple positions, it draws the text at each position. Otherwise, it draws the text at
+ * the single position.
+ * 
+ * @param window The render window where the text will be drawn.
+ * @param entity The entity containing the text and position components.
+ */
 void GameEngine::System::textSystem(sf::RenderWindow& window,
                                     GameEngine::Entity& entity) {
     if (entity.hasComponent<Text>() && entity.hasComponent<Position>()) {

@@ -46,22 +46,55 @@ void Texture::setTexturePath(const std::string& texturePath) {
     this->_texturePath = texturePath;
 }
 
+/**
+ * @brief Get the texture rectangle.
+ *
+ * This function retrieves the texture rectangle.
+ *
+ * @return The texture rectangle.
+ */
 std::vector<int> Texture::getTextureRect() const {
     return this->_textureRect;
 }
 
+/**
+ * @brief Get whether the Texture component is loaded.
+ *
+ * This function checks if the Texture component has been initialized.
+ *
+ * @return True if the Texture is loaded, false otherwise.
+ */
 bool Texture::getIsLoaded() const {
     return this->_isLoad;
 }
 
+/**
+ * @brief Set whether the Texture component is loaded.
+ *
+ * This function sets the loaded state of the Texture component.
+ */
 void Texture::setIsLoaded(const bool isLoaded) {
     this->_isLoad = isLoaded;
 }
 
+/**
+ * @brief Get the texture object.
+ *
+ * This function retrieves the texture object.
+ *
+ * @return The texture object.
+ */
 sf::Texture& Texture::getTexture() {
     return this->_texture;
 }
 
+/**
+ * @brief Set the texture object.
+ *
+ * This function sets the texture object.
+ *
+ * @param texture The new texture object.
+ */
 void Texture::setTexture(const sf::Texture& texture) {
     this->_texture = texture;
 }
