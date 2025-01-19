@@ -17,7 +17,7 @@
 
 class Slider : public Component {
   public:
-    Slider(std::pair<double, double> lenght, std::pair<double, double> size);
+    Slider(float current, std::pair<double, double> lenght, std::pair<double, double> size);
     ~Slider();
 
     std::pair<double, double> getSize() const;
@@ -26,18 +26,21 @@ class Slider : public Component {
     void setBarShape(const sf::RectangleShape&);
     sf::CircleShape& getCursorShape();
     void setCursorShape(const sf::CircleShape&);
-    float getValue() const;
+    int getValue() const;
     void setValue(float);
+
     void setMinValue(float minValue);
     float getMinValue() const;
+
     void setMaxValue(float maxValue);
     float getMaxValue() const;
+
     bool getIsLoaded() const;
     void setIsLoaded();
-    void setSetCallback(std::function<void(float)>);
-    void setGetCallback(std::function<float()>);
-    float triggerSetCallback(float value);
-    float triggerGetCallback();
+
+    void setCallback(std::function<void(float)>);
+    void executeCallback(int arg);
+    
     void display() const;
 
   private:
@@ -48,7 +51,5 @@ class Slider : public Component {
     bool _isLoad = false;
     sf::RectangleShape _barShape;
     sf::CircleShape _cursorShape;
-    std::function<void(float)> _onValueChanged;
-    std::function<float()> getCallback;
-    std::function<void(float)> setCallback;
+    std::function<void(float)> _callback;
 };

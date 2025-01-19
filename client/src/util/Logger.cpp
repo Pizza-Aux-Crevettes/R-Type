@@ -2,6 +2,11 @@
 ** EPITECH PROJECT, 2024
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
+** This file implements the Logger class, which is responsible for handling
+** various log levels such as info, success, warning, error, socket, packet,
+** thread, debug, and trace. It provides functionality to log messages with
+** appropriate color coding and timestamps to facilitate debugging and tracking
+** during runtime.
 ** Logger.cpp
 */
 

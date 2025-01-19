@@ -21,8 +21,8 @@
  * @param soundFile The path to the sound file.
  * @param volume The volume level for the sound (typically between 0 and 100).
  */
-Sound::Sound(std::string soundFile, int volume)
-    : _soundFile(soundFile), _volume(volume) {}
+Sound::Sound(std::string soundFile)
+    : _soundFile(soundFile) {}
 
 /**
  * @brief Destructor for the Sound component.
@@ -30,6 +30,19 @@ Sound::Sound(std::string soundFile, int volume)
  * This destructor cleans up any resources used by the sound component.
  */
 Sound::~Sound() {}
+
+Sound& Sound::get() {
+    static Sound instance;
+    return instance;
+}
+
+sf::Sound& Sound::getSound() {
+    return this->_sound;
+}
+
+sf::SoundBuffer& Sound::getSoundBuffer() {
+    return this->_buffer;
+}
 
 /**
  * @brief Get the sound file path.
@@ -72,8 +85,9 @@ int Sound::getVolume() const {
  *
  * @param volume The new volume level to set (typically between 0 and 100).
  */
-void Sound::setVolume(int volume) {
+void Sound::setVolumeSound(int volume) {
     this->_volume = volume;
+    _sound.setVolume(_volume);
 }
 
 /**

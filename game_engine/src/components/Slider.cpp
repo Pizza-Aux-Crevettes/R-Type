@@ -12,6 +12,7 @@
 */
 
 #include "components/Slider.hpp"
+#include <cmath>
 #include <iostream>
 
 /**
@@ -20,13 +21,13 @@
  * Initializes the Slider component with the specified minimum, maximum values
  * and the initial position and size on the screen.
  *
+ * @param current The current value of the slider.
  * @param minValue The minimum value that the slider can represent.
  * @param maxValue The maximum value that the slider can represent.
  * @param size The size of the slider (width, height).
  */
-Slider::Slider(std::pair<double, double> lenght, std::pair<double, double> size)
-    : _minValue(lenght.first), _maxValue(lenght.second),
-      _currentValue(lenght.second / 2), _size(size) {}
+Slider::Slider(float current, std::pair<double, double> lenght, std::pair<double, double> size)
+    : _minValue(lenght.first), _maxValue(lenght.second), _size(size), _currentValue(current) {}
 
 /**
  * @brief Destructor for the Slider component.
@@ -139,8 +140,8 @@ void Slider::setValue(float value) {
  *
  * @return A float representing the current value of the slider.
  */
-float Slider::getValue() const {
-    return _currentValue;
+int Slider::getValue() const {
+    return static_cast<int>(round(_currentValue));
 }
 
 /**
@@ -192,25 +193,14 @@ float Slider::getMaxValue() const {
 }
 
 /**
- * @brief Set function for callback.
- *
- * This function sets the callback state of the Slider component.
- * @param callback An std::function object representing the function to
- * callback.
- */
-void Slider::setSetCallback(std::function<void(float)> callback) {
-    setCallback = callback;
-}
-
-/**
  * @brief Set function for get callback.
  *
  * This function sets the get callback state of the Slider component.
  * @param callback An std::function object representing the function to
  * callback.
  */
-void Slider::setGetCallback(std::function<float()> callback) {
-    getCallback = callback;
+void Slider::setCallback(std::function<void(float)> callback) {
+    _callback = callback;
 }
 
 /**
@@ -218,25 +208,18 @@ void Slider::setGetCallback(std::function<float()> callback) {
  *
  * This function call the function set in callback of the Slider component.
  */
-float Slider::triggerSetCallback(float newValue) {
-    if (getCallback) {
-        return getCallback();
+void Slider::executeCallback(int arg) {
+    if (_callback) {
+        return _callback(arg);
     }
-    return 0.0f;
 }
 
 /**
- * @brief Execute function get callback.
+ * @brief Display the Slider component information.
  *
- * This function call the function get in callback of the Slider component.
+ * This function displays a message indicating that the Slider component is
+ * being displayed.
  */
-float Slider::triggerGetCallback() {
-    if (getCallback) {
-        return getCallback();
-    }
-    return 0.0f;
-}
-
 void Slider::display() const {
     std::cout << "Slider component displayed!" << std::endl;
 }

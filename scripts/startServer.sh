@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./build/network/Network
+./build/server/Server

@@ -16,11 +16,18 @@ class HotkeysManager {
     HotkeysManager();
     ~HotkeysManager();
 
+    static HotkeysManager& get();
+
     sf::Keyboard::Key getKey(HotkeysCodes hotkey);
     void setKey(HotkeysCodes hotkey, sf::Keyboard::Key newKey);
 
     void checkKey(const sf::Event& event);
+    bool isKeyUsed(sf::Keyboard::Key key);
+    std::string keyToString(sf::Keyboard::Key key);
+    void isAutoFire(HotkeysCodes code);
+    bool getAutoFireState();
 
   private:
     std::unordered_map<HotkeysCodes, sf::Keyboard::Key> _keys;
+    bool _autofire;
 };

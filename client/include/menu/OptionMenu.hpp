@@ -12,49 +12,57 @@
 #include <System.hpp>
 #include <functional>
 #include <memory>
+#include "component/hotkey/HotkeysCodes.hpp"
 
 class OptionMenu {
   private:
     std::map<int, GameEngine::Entity> _entitiesMenuOption;
     bool _entitiesInitialized = false;
-    int _volumnMusic = 0;
-    int _volumnGame = 0;
-    int _resolution = 1;
-    bool _adaptabilityText = false;
-    float _elementSize = 0;
-    bool _difficulty = false;
-    bool _control = false;
-    bool _constrast = false;
+    int _volumnMusic = 100;
+    int _volumnGame = 100;
+    std::string _fontFile = "assets/font/Inter_Bold.ttf";
+    unsigned int _fontSize = 100;
+    bool _waitingForKey = false;
+    HotkeysCodes _hotkeyPressed;
+    std::map<HotkeysCodes, int> _hotkeyEntityMap;
 
   public:
     OptionMenu();
     ~OptionMenu();
+  
+    static OptionMenu& get();
+
     GameEngine::Entity
-    createEntityText(int, const std::string,
+    createEntityText(int, std::string title,
                      const std::vector<std::pair<float, float>>, unsigned int);
     GameEngine::Entity
     createEntityOptionButton(int, std::vector<std::pair<float, float>>,
                              std::function<void()>);
     GameEngine::Entity
-    createEntitySlider(int, const std::pair<int, int>,
-                       const std::vector<std::pair<float, float>>,
-                       std::function<float()>, std::function<void(float)>);
+    createEntitySlider(int id, float current, const std::pair<int, int> values,
+                        const std::vector<std::pair<float, float>> position,
+                        std::function<void(float)> callback);
+    GameEngine::Entity
+    createEntityRect(int id, const std::pair<int, int> size,
+                        const std::vector<std::pair<float, float>> position,
+                        sf::Color color, std::function<void()> callback);
+    GameEngine::Entity
+    createEntitySprite(int id, const std::pair<float, float> size,
+                       std::string texture, std::vector<int> textureRect,
+                       const std::vector<std::pair<float, float>> position);
+    void displayOptionMenu(sf::RenderWindow&, GameEngine::System, std::map<int, GameEngine::Entity> entities);
 
-    void displayOptionMenu(sf::RenderWindow&, GameEngine::System);
+    void setNewKey(const sf::Event& event, GameEngine::System& system);
+
     int getVolumnMusic();
     void setVolumnMusic(int);
+
     int getVolumnGame();
     void setVolumnGame(int);
-    int getResolution();
-    void setResolution(int);
-    bool getAdaptabilityText();
-    void setAdaptabilityText();
-    float getElementSize();
-    void setElementSize(float);
-    bool getDifficulty();
-    void setDifficulty();
-    bool getControl();
-    void setControl();
-    bool getContrast();
-    void setContrast();
+
+    std::string getAdaptabilityText();
+    void setAdaptabilityText(GameEngine::System& system, std::map<int, GameEngine::Entity> entities);
+
+    int getFontSize();
+    void setFontSize(unsigned int new_size, GameEngine::System& system, std::map<int, GameEngine::Entity> entities);
 };

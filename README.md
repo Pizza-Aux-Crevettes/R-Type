@@ -5,6 +5,8 @@
 This project is a recreation of the R-Type game using our own custom game engine.
 Inspired by the classic **Shoot'em'up** genre, players take control of a spaceship to combat waves of enemies and challenging bosses.
 
+You can check the online documentation to this url : "https://pizza-aux-crevettes.github.io/R-Type/clang-format.html"
+
 ---
 
 ## Table of contents
@@ -23,11 +25,24 @@ Before getting started, make sure you have the following installed on your machi
 1. Clone the repository:
 
     ```bash
-    git clone git@github.com:EpitechPromo2027/B-CCP-500-TLS-5-2-rtype-anastasia.bouby.git
+    git clone --recurse-submodules git@github.com:EpitechPromo2027/B-CCP-500-TLS-5-2-rtype-anastasia.bouby.git
     cd B-CCP-500-TLS-5-2-rtype-anastasia.bouby
     ```
+   
+2. Install UDev library (if necessary)
 
-2. Build the project:
+   On ubuntu:
+
+   ```bash
+   sudo apt-get install libudev-dev
+   ```
+   
+   On fedora:
+   ```bash
+   sudo dnf install libudev-devel
+   ```
+
+3. Build the project:
     ```bash
     cmake -B build .
     cd build/
@@ -37,22 +52,20 @@ Before getting started, make sure you have the following installed on your machi
 
 ## Run the game
 
-1. Start the Network Server:
+1. Start the Server:
 
-    Make sure to be in **B-CCP-500-TLS-5-2-rtype-anastasia.bouby/build/**
+    Make sure to be in **B-CCP-500-TLS-5-2-rtype-anastasia.bouby/**
 
     ```bash
-    cd network/
-    ./Network
+    ./build/server/Server
     ```
 
 2. Start the Client:
 
-    Open a new terminal and make sure to be in **B-CCP-500-TLS-5-2-rtype-anastasia.bouby/build/**
+    Open a new terminal and make sure to be in **B-CCP-500-TLS-5-2-rtype-anastasia.bouby/**
 
     ```bash
-    cd client/
-    ./Client
+    ./build/client/Client
     ```
 ---
 
@@ -66,5 +79,5 @@ Before getting started, make sure you have the following installed on your machi
 
 `game_engine/`: Handles server-side game_engine.
 
-`network/`: Handles server-side networking.
+`server/`: Handles server-side networking.
 

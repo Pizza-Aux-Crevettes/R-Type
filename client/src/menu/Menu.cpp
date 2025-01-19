@@ -2,28 +2,29 @@
 ** EPITECH PROJECT, 2025
 ** R-Type
 ** File description:
-** Menu
+** This file contains the implementation of the Menu class, which handles the
+** creation and management of different menus in the game. It includes functionalities 
+** for creating menu entities such as buttons, sprites, input fields, and interaction logic. 
+** The class allows rendering the main menu, switching between menus, and managing user inputs 
+** for server IP, port, and username. It also handles the transition between the main menu 
+** and the option menu, as well as rendering and updating game elements.
+** Menu.cpp
 */
 
 #include "menu/Menu.hpp"
+#include <SmartBuffer.hpp>
 #include "Client.hpp"
+#include "network/protocol/Protocol.hpp"
+#include "network/socket/TcpSocket.hpp"
+#include "util/getResponsiveValue.hpp"
 
 Menu::Menu() {}
 
 Menu::~Menu() {}
 
-GameEngine::Entity
-Menu::createEntityButton(int id, std::string title, std::string font,
-                         int fontSize,
-                         std::vector<std::pair<float, float>> position,
-                         std::function<void()> callback) {
-    auto newEntity = GameEngine::Entity(id);
-    auto button = Button(title, font, fontSize);
-    button.setCallback(callback);
-    newEntity.addComponent(button);
-    newEntity.addComponent(Position(position));
-    newEntity.addComponent(Color({255, 255, 255, 255}));
-    return newEntity;
+Menu& Menu::get() {
+    static Menu instance;
+    return instance;
 }
 
 GameEngine::Entity
@@ -37,67 +38,275 @@ Menu::createEntitySprite(int id, const std::pair<float, float> size,
     return newEntity;
 }
 
-void Menu::isClickedPlay() {
-    std::cout << "Button play clicked!" << std::endl;
-    Client::get().setIsPlayed();
+GameEngine::Entity
+Menu::createEntityRect(int id, const std::pair<int, int> size,
+                       const std::vector<std::pair<float, float>> position,
+                       sf::Color color, std::function<void()> callback) {
+    auto rectEntity = GameEngine::Entity(id);
+    auto buttonRect = ButtonRect(size, color, false);
+    buttonRect.setCallback(callback);
+    rectEntity.addComponent(buttonRect);
+    rectEntity.addComponent(Position(position));
+    return rectEntity;
 }
 
-void Menu::isClickedExit() {
-    std::cout << "Button Exit clicked!" << std::endl;
+GameEngine::Entity Menu::createEntityText(
+    int id, const std::string text,
+    const std::vector<std::pair<float, float>> position,
+    unsigned int fontSize) {
+    auto newEntity = GameEngine::Entity(id);
+    newEntity.addComponent(Text(text, OptionMenu::get().getAdaptabilityText(), fontSize));
+    newEntity.addComponent(Position(position));
+    newEntity.addComponent(Color({255, 255, 255, 255}));
+    return newEntity;
+}
+
+GameEngine::Entity
+Menu::createEntityInput(int id, int fontSize,
+                        const std::vector<std::pair<float, float>> position,
+                        std::string inputVar) {
+    auto inputEntity = GameEngine::Entity(id);
+    inputEntity.addComponent(Text(inputVar, OptionMenu::get().getAdaptabilityText(), fontSize));
+    inputEntity.addComponent(Position(position));
+    inputEntity.addComponent(Color({255, 255, 255, 255}));
+    return inputEntity;
+}
+
+void Menu::isClickedInput(bool isIpClicked, bool isPortClicked,
+                          bool isUsernameClicked) {
+
+    _isIpClicked = isIpClicked;
+    _isPortClicked = isPortClicked;
+    _isUsernameClicked = isUsernameClicked;
+}
+
+void Menu::setupInput(const sf::Event& event) {
+    if (event.type == sf::Event::TextEntered) {
+        if (_isIpClicked) {
+            std::string ip = Client::get().getIp();
+            if (event.text.unicode == '\b') {
+                if (!ip.empty()) {
+                    ip.pop_back();
+                }
+                Client::get().setIp(ip);
+            } else if (event.text.unicode < 128 && ip.size() < 15) {
+                ip += static_cast<char>(event.text.unicode);
+            }
+            Client::get().setIp(ip);
+        } else if (_isPortClicked) {
+            std::string port = Client::get().getPort();
+            if (event.text.unicode == '\b') {
+                if (!port.empty()) {
+                    port.pop_back();
+                }
+                Client::get().setPort(port);
+            } else if (event.text.unicode < 128 && port.size() < 15) {
+                port += static_cast<char>(event.text.unicode);
+            }
+            Client::get().setPort(port);
+        } else if (_isUsernameClicked) {
+            std::string username = Client::get().getUsername();
+            if (event.text.unicode == '\b') {
+                if (!username.empty()) {
+                    username.pop_back();
+                }
+                Client::get().setUsername(username);
+            } else if (event.text.unicode < 128 && username.size() < 15) {
+                username += static_cast<char>(event.text.unicode);
+            }
+            Client::get().setUsername(username);
+        }
+    }
 }
 
 void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
     if (_currentMenuState == MenuState::MainMenu) {
         if (!_entitiesInitialized) {
+            GetResponsiveValue responsive;
+            int currentWidth = window.getSize().x;
+            int currentHeight = window.getSize().y;
+
             int entityId = 0;
 
-            float totalButtonHeight = 3;
-            float verticalSpacing = (1080 - totalButtonHeight) / (3 + 2);
+            float verticalSpacing = (1080 - 3) / (3 + 2);
 
             _entitiesMenu.emplace(
                 entityId,
-                createEntitySprite(entityId++, {8, 8}, "assets/sprite/map.png",
-                                   {0, 0, 200, 200}, {{-1300, -300}}));
-            _entitiesMenu.emplace(
-                entityId, createEntityButton(
-                              entityId++, "PLAY", "assets/font/Inter_Bold.ttf",
-                              50, {{1920 / 2 - 60, (verticalSpacing + 130)}},
-                              [this]() { isClickedPlay(); }));
+                createEntitySprite(
+                    entityId++,
+                    {responsive.getResponsiveSizeX(1920, currentWidth, 5),
+                     responsive.getResponsiveSizeY(1080, currentHeight, 5)},
+                    "assets/sprite/space.png", {0, 0, 400, 400},
+                    {{responsive.getResponsivePosX(1920, currentWidth, -400),
+                      responsive.getResponsivePosY(1080, currentHeight,
+                                                   -170)}}));
             _entitiesMenu.emplace(
                 entityId,
-                createEntityButton(
-                    entityId++, "OPTION", "assets/font/Inter_Bold.ttf", 50,
-                    {{1920 / 2 - 100, verticalSpacing * 2 + 50}},
-                    [this]() { _currentMenuState = MenuState::OptionMenu; }));
+                createEntityRect(
+                    entityId++, {145, 45},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 850),
+                    responsive.getResponsivePosY(1080, currentHeight, 320)}},
+                    sf::Color::Transparent, [this]() {Client::get().setIsPlayed(); }));
+
             _entitiesMenu.emplace(
-                entityId, createEntityButton(
-                              entityId++, "EXIT", "assets/font/Inter_Bold.ttf",
-                              50, {{1920 / 2 - 50, verticalSpacing * 3 - 20}},
-                              [this]() { isClickedExit(); }));
+                entityId,
+                createEntityText(
+                    entityId++, "PLAY",
+                    {{responsive.getResponsivePosX(1920, currentWidth, 960),
+                    responsive.getResponsivePosY(1080, currentHeight, 330)}},
+                    50));
             _entitiesMenu.emplace(
-                entityId, createEntitySprite(entityId++, {6, 6},
-                                             "assets/sprite/spaceship.png",
-                                             {0, 18, 34, 15}, {{30, 100}}));
+                entityId,
+                createEntityRect(
+                    entityId++, {205, 45},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 810),
+                    responsive.getResponsivePosY(1080, currentHeight, 450)}},
+                    sf::Color::Transparent, [this]() {
+                        _currentMenuState = MenuState::OptionMenu;
+                        isClickedInput(false, false, false); }));
+
             _entitiesMenu.emplace(
-                entityId, createEntitySprite(entityId++, {5, 5},
-                                             "assets/sprite/shoot_blue.png",
-                                             {165, 0, 65, 15}, {{350, 100}}));
+                entityId,
+                createEntityText(
+                    entityId++, "OPTION",
+                    {{responsive.getResponsivePosX(1920, currentWidth, 960),
+                    responsive.getResponsivePosY(1080, currentHeight, 465)}},
+                    50));
             _entitiesMenu.emplace(
-                entityId, createEntitySprite(entityId++, {5, 5},
-                                             "assets/sprite/enemy.png",
-                                             {0, 0, 50, 80}, {{280, 820}}));
+                entityId,
+                createEntityRect(
+                    entityId++, {125, 45},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 865),
+                    responsive.getResponsivePosY(1080, currentHeight, 590)}},
+                    sf::Color::Transparent, [this, &window]() { window.close(); }));
+
             _entitiesMenu.emplace(
-                entityId, createEntitySprite(entityId++, {5, 5},
-                                             "assets/sprite/canon.png",
-                                             {165, 0, 33, 30}, {{1600, -50}}));
+                entityId,
+                createEntityText(
+                    entityId++, "EXIT",
+                    {{responsive.getResponsivePosX(1920, currentWidth, 960),
+                    responsive.getResponsivePosY(1080, currentHeight, 600)}},
+                    50));
             _entitiesMenu.emplace(
-                entityId, createEntitySprite(entityId++, {5, 5},
-                                             "assets/sprite/canon.png",
-                                             {33, 33, 33, 30}, {{1600, 970}}));
+                entityId,
+                createEntitySprite(
+                    entityId++,
+                    {responsive.getResponsiveSizeX(1920, currentWidth, 6),
+                     responsive.getResponsiveSizeY(1080, currentHeight, 6)},
+                    "assets/sprite/spaceship.png", {0, 18, 34, 15},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 30),
+                      responsive.getResponsivePosY(1080, currentHeight,
+                                                   100)}}));
             _entitiesMenu.emplace(
-                entityId, createEntitySprite(entityId++, {5, 5},
-                                             "assets/sprite/intact-boss.png",
-                                             {0, 0, 200, 200}, {{1400, 200}}));
+                entityId,
+                createEntitySprite(
+                    entityId++,
+                    {responsive.getResponsiveSizeX(1920, currentWidth, 5),
+                     responsive.getResponsiveSizeY(1080, currentHeight, 5)},
+                    "assets/sprite/shoot_blue.png", {165, 0, 65, 15},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 350),
+                      responsive.getResponsivePosY(1080, currentHeight,
+                                                   100)}}));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntitySprite(
+                    entityId++,
+                    {responsive.getResponsiveSizeX(1920, currentWidth, 5),
+                     responsive.getResponsiveSizeY(1080, currentHeight, 5)},
+                    "assets/sprite/enemy.png", {0, 0, 50, 80},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 180),
+                      responsive.getResponsivePosY(1080, currentHeight,
+                                                   820)}}));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntitySprite(
+                    entityId++,
+                    {responsive.getResponsiveSizeX(1920, currentWidth, 5),
+                     responsive.getResponsiveSizeY(1080, currentHeight, 5)},
+                    "assets/sprite/canon.png", {165, 0, 33, 30},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 1600),
+                      responsive.getResponsivePosY(1080, currentHeight,
+                                                   -50)}}));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntitySprite(
+                    entityId++,
+                    {responsive.getResponsiveSizeX(1920, currentWidth, 5),
+                     responsive.getResponsiveSizeY(1080, currentHeight, 5)},
+                    "assets/sprite/canon.png", {33, 33, 33, 30},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 1600),
+                      responsive.getResponsivePosY(1080, currentHeight,
+                                                   970)}}));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntitySprite(
+                    entityId++,
+                    {responsive.getResponsiveSizeX(1920, currentWidth, 5),
+                     responsive.getResponsiveSizeY(1080, currentHeight, 5)},
+                    "assets/sprite/intact-boss.png", {0, 0, 200, 200},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 1400),
+                      responsive.getResponsivePosY(1080, currentHeight,
+                                                   -65)}}));
+
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityRect(
+                    entityId++,
+                    {responsive.getResponsiveSizeX(1920, currentWidth, 300),
+                     responsive.getResponsiveSizeY(1080, currentHeight, 50)},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 500),
+                      responsive.getResponsivePosY(1080, currentHeight, 870)}},
+                    sf::Color(169, 169, 169), [this]() {
+                        isClickedInput(false, false, true);
+                    }));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityInput(
+                    entityId++, 30,
+                    {{responsive.getResponsivePosX(1920, currentWidth, 640),
+                      responsive.getResponsivePosY(1080, currentHeight, 800)}},
+                    "Username:"));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityInput(
+                    entityId++, 20,
+                    {{responsive.getResponsivePosX(1920, currentWidth, 510),
+                      responsive.getResponsivePosY(1080, currentHeight, 875)}},
+                    ""));
+            _usernameId = entityId;
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityRect(
+                    entityId++,
+                    {responsive.getResponsiveSizeX(1920, currentWidth, 300),
+                     responsive.getResponsiveSizeY(1080, currentHeight, 50)},
+                    {{responsive.getResponsivePosX(1920, currentWidth, 1150),
+                      responsive.getResponsivePosY(1080, currentHeight, 870)}},
+                    sf::Color(169, 169, 169), [this]() {
+                        isClickedInput(true, false, false);
+                    }));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityInput(
+                    entityId++, 30,
+                    {{responsive.getResponsivePosX(1920, currentWidth, 1300),
+                      responsive.getResponsivePosY(1080, currentHeight, 800)}},
+                    "Adresse IP:"));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityInput(
+                    entityId++, 20,
+                    {{responsive.getResponsivePosX(1920, currentWidth, 1160),
+                      responsive.getResponsivePosY(1080, currentHeight, 875)}},
+                    ""));
+            _ipId = entityId;
+            _entitiesInitialized = true;
+        } else {
+            _entitiesMenu.at(_usernameId)
+                .getComponent<Text>()
+                .setString(Client::get().getUsername());
+            _entitiesMenu.at(_ipId).getComponent<Text>().setString(
+                Client::get().getIp());
         }
         system.render(window, _entitiesMenu);
     }
@@ -105,33 +314,18 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
 
 void Menu::displayMenu(sf::RenderWindow& window, GameEngine::System system) {
     std::map<int, GameEngine::Entity> entities;
-    OptionMenu optionMenu;
-    sf::SoundBuffer ambienBuffer;
-    sf::SoundBuffer clickBuffer;
-
-    if (!ambienBuffer.loadFromFile("assets/sounds/ambien-song.wav")) {
-        std::cerr << "Error: unable to load the audio file." << std::endl;
-    }
-
-    if (!clickBuffer.loadFromFile("assets/sounds/click-menu.wav")) {
-        std::cerr << "Error: unable to load the audio file." << std::endl;
-    }
-
-    sf::Sound ambienSound;
-    sf::Sound clickMenuSound;
-
-    ambienSound.setBuffer(ambienBuffer);
-    clickMenuSound.setBuffer(clickBuffer);
-
-    ambienSound.play();
 
     switch (_currentMenuState) {
     case MenuState::MainMenu:
         initMainMenu(window, system);
         break;
     case MenuState::OptionMenu: {
-        optionMenu.displayOptionMenu(window, system);
+        OptionMenu::get().displayOptionMenu(window, system, _entitiesMenu);
         break;
     };
     }
+}
+
+void Menu::setMenuState(MenuState state) {
+    _currentMenuState = state;
 }

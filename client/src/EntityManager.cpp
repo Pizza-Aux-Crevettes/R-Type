@@ -8,6 +8,7 @@
 */
 
 #include "EntityManager.hpp"
+#include "util/getResponsiveValue.hpp"
 
 EntityManager::EntityManager() {}
 
@@ -18,11 +19,11 @@ EntityManager& EntityManager::get() {
     return instance;
 }
 
-void EntityManager::setEntityList(int id, GameEngine::Entity entity) {
-    _entities.emplace(id, std::move(entity));
+void EntityManager::setEntityList(std::map<int, GameEngine::Entity> entities) {
+    _entities = entities;
 }
 
-std::map<int, GameEngine::Entity> EntityManager::getEntityList() {
+std::map<int, GameEngine::Entity>& EntityManager::getEntityList() {
     return _entities;
 }
 
@@ -40,26 +41,67 @@ void EntityManager::CompareEntities(int id,
 
 void EntityManager::CreateEntity(int id,
                                  std::map<std::string, std::any> components) {
-    auto newEntity = GameEngine::Entity(id);
-    for (auto it = components.begin(); it != components.end(); it++) {
-        const auto& key = it->first;
-        const auto& component = it->second;
+    if (components.size() > 0) {
+        auto newEntity = GameEngine::Entity(id);
 
-        auto nextIt = std::next(it);
-        const auto& newComponent = nextIt->second;
-        if (key == "Texture" && nextIt != components.end() && nextIt->first == "TextureRect") {
-            newEntity.addComponent(Sprite());
-            newEntity.addComponent(Texture(std::any_cast<std::string>(component), std::any_cast<std::vector<int>>(newComponent)));
-        } else if (key == "Texture" && nextIt != components.end()) {
-            newEntity.addComponent(Sprite());
-            newEntity.addComponent(Texture(std::any_cast<std::string>(component)));
+        auto textureIt = components.find("Texture");
+        auto textureRectIt = components.find("TextureRect");
+        auto sizeIt = components.find("Size");
+        auto positionIt = components.find("Position");
+        auto textLink = components.find("Link");
+
+        if (textureIt != components.end()) {
+            const auto& texture = textureIt->second;
+
+            if (textureRectIt != components.end()) {
+                const auto& textureRect = textureRectIt->second;
+
+                if (sizeIt != components.end()) {
+                    const auto& size = sizeIt->second;
+
+                    newEntity.addComponent(
+                        Shape(Rectangle,
+                              std::any_cast<std::pair<float, float>>(size)));
+                    newEntity.addComponent(
+                        Texture(std::any_cast<std::string>(texture),
+                                std::any_cast<std::vector<int>>(textureRect)));
+                } else {
+                    newEntity.addComponent(Sprite());
+                    newEntity.addComponent(
+                        Texture(std::any_cast<std::string>(texture),
+                                std::any_cast<std::vector<int>>(textureRect)));
+                }
+            } else {
+                newEntity.addComponent(Sprite());
+                newEntity.addComponent(
+                    Texture(std::any_cast<std::string>(texture)));
+            }
         }
-        if (key == "Position") {
-            newEntity.addComponent(
-                Position({std::any_cast<std::pair<float, float>>(component)}));
+
+        if (positionIt != components.end()) {
+            const auto& position = positionIt->second;
+            try {
+                newEntity.addComponent(Position(
+                    {std::any_cast<std::pair<float, float>>(position)}));
+            } catch (const std::bad_any_cast& e) {
+                std::cerr << "Error casting Position component: " << e.what()
+                          << std::endl;
+            }
         }
+
+        if (textLink != components.end()) {
+            const auto& text = textLink->second;
+            try {
+                newEntity.addComponent(Text(std::any_cast<std::string>(text), OptionMenu::get().getAdaptabilityText(), 10));
+                newEntity.addComponent(Link(std::any_cast<int>(id - 10000)));
+            } catch (const std::bad_any_cast& e) {
+                std::cerr << "Error casting Text or Link component: " << e.what()
+                          << std::endl;
+            }
+        }
+
+        _entities.emplace(id, std::move(newEntity));
     }
-    _entities.emplace(id, std::move(newEntity));
 }
 
 void EntityManager::setItems(
@@ -85,11 +127,80 @@ std::map<int, std::map<std::string, std::any>> EntityManager::getUpdateItems() {
     return _updateItems;
 }
 
-sf::Texture EntityManager::manageBackground() {
+std::vector<int> EntityManager::getPlayerColor() {
+    return _playerSpriteColor;
+}
+    
+void EntityManager::setBossId(int id) {
+    _bossId = id;
+}
+
+void EntityManager::setPlayerId(int id) {
+    _playerId = id;
+}
+
+void EntityManager::setPlayerColor(int playerId) {
+    
+
+    int num = playerId % 5;
+
+    switch(num) {
+        case 1 :
+            _playerSpriteColor = {0, 0, 34, 15};
+            break;
+        case 2 :
+            _playerSpriteColor = {0, 34, 34, 15};
+            break;
+        case 3 :
+            _playerSpriteColor = {0, 51, 34, 15};
+            break;
+        case 4 :
+            _playerSpriteColor = {0, 68, 34, 15};
+            break;
+        case 5 :
+            _playerSpriteColor = {0, 85, 34, 15};
+            break;
+        default:
+            _playerSpriteColor = {0, 0, 34, 15};
+            break;
+    }
+}
+
+std::vector<int> EntityManager::setEnemy(int num) {
+
+    std::vector<int> rect;
+
+    switch(num) {
+        case 1:
+            rect = {0, 0, 80, 60};
+            break;
+        case 2:
+            rect = {0, 0, 30, 30};
+            break;
+        case 3:
+            rect = {10, 0, 30, 30};
+            break;
+        case 4:
+            rect = {0, 20, 30, 30};
+            break;
+        case 5:
+            rect = {0, 0, 190, 210};
+            break;
+        default:
+            rect = {0, 0, 0, 0};
+    }
+    return rect;
+}
+
+sf::Texture EntityManager::manageBackground(sf::RenderWindow& window) {
+    GetResponsiveValue responsive;
 
     int id = 0;
     auto newEntity = GameEngine::Entity(id);
-    newEntity.addComponent(Shape(ShapeType::Rectangle, {800, 600}));
+    newEntity.addComponent(
+        Shape(ShapeType::Rectangle,
+              {responsive.getResponsiveSizeX(800, window.getSize().x, 800),
+               responsive.getResponsiveSizeY(600, window.getSize().y, 600)}));
     newEntity.addComponent(Texture("assets/sprite/space.png"));
     newEntity.addComponent(Position());
     sf::Texture& newTexture = newEntity.getComponent<Texture>().getTexture();
@@ -97,4 +208,29 @@ sf::Texture EntityManager::manageBackground() {
     _entities.emplace(id, std::move(newEntity));
 
     return newTexture;
+}
+
+std::mutex& EntityManager::getMutex() {
+    return _mutex;
+}
+
+void EntityManager::winGame(int id, int health) {
+
+    if (id == _bossId && health == 0) {
+        SoundManager::get().getMusicSound("game").getSound().stop();
+        SoundManager::get().getMusicSound("win").getSound().play();
+        Client::get().setIsWinGame();
+    } else {
+        return;
+    }
+}
+
+void EntityManager::loseGame(int id, int health) {
+    if (id == _playerId && health == 0) {
+        SoundManager::get().getMusicSound("game").getSound().stop();
+        SoundManager::get().getMusicSound("lose").getSound().play();
+        Client::get().setIsLoseGame();
+    } else {
+        return;
+    }
 }
