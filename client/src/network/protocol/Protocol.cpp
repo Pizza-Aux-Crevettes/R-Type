@@ -105,7 +105,7 @@ void Protocol::handleCreatePlayerCallback(SmartBuffer& smartBuffer) {
 
     std::map<std::string, std::any> playerNameItems = {
         {"Link", std::string(Client::get().getUsername())},
-        {"Position", std::pair<float, float>(0.0f, -10.0f)}
+        {"Position", std::pair<float, float>(15.0f, -10.0f)}
     };
 
     EntityManager::get().CompareEntities(playerId, newItems, {0.0f, 0.0f});

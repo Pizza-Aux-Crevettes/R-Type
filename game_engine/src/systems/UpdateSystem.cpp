@@ -33,21 +33,31 @@ void GameEngine::System::updateEntityPosition(
     const int id, std::map<int, Entity>& entities,
     const std::pair<float, float>& pos, const int posId) {
     linkSystem(id, entities, pos, posId);
+    if (!entities.contains(id)) {
+        std::cerr << "Entity " << id << " does not exist." << std::endl;
+        return;
+    }
+
     Entity& entity = entities.at(id);
+
     if (entity.hasComponent<Sprite>()) {
-        updatePos(entity, entity.getComponent<Sprite>().getSprite(), pos,
-                  posId);
+        updatePos(entity, entity.getComponent<Sprite>().getSprite(), pos, posId);
     }
+
     if (entity.hasComponent<Text>()) {
-        updatePos(entity, entity.getComponent<Text>().getText(), pos, posId);
+        auto& textComp = entity.getComponent<Text>();
+        sf::FloatRect bounds = textComp.getText().getLocalBounds();
+        textComp.getText().setOrigin(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2);
+        textComp.getText().setPosition(pos.first, pos.second);
     }
+
+
     if (entity.hasComponent<Shape>()) {
-        if (entity.getComponent<Shape>().getShapeType() == Rectangle) {
-            updatePos(entity, entity.getComponent<Shape>().getRect(), pos,
-                      posId);
-        } else {
-            updatePos(entity, entity.getComponent<Shape>().getCircle(), pos,
-                      posId);
+        auto& shapeComp = entity.getComponent<Shape>();
+        if (shapeComp.getShapeType() == Rectangle) {
+            updatePos(entity, shapeComp.getRect(), pos, posId);
+        } else if (shapeComp.getShapeType() == Circle) {
+            updatePos(entity, shapeComp.getCircle(), pos, posId);
         }
     }
 }
@@ -96,8 +106,16 @@ void GameEngine::System::updateTextSize(const int id,
     Entity& entity = entities.at(id);
     if (entity.hasComponent<Text>()) {
         auto& textComp = entity.getComponent<Text>();
-        textComp.setCharacterSize(textSize);
-        textComp.getText().setCharacterSize(textSize);
+        auto& positionComp = entity.getComponent<Position>();
+        unsigned int newSize = static_cast<unsigned int>(textComp.getInitCharacterSize() * (textSize / 100.0f));
+        textComp.setCharacterSize(newSize);
+        textComp.getText().setCharacterSize(newSize);
+        if (entity.hasComponent<Position>()) {
+            auto& positionComp = entity.getComponent<Position>();
+            auto currentPos = std::make_pair(
+                positionComp.getPositionX(0), positionComp.getPositionY(0));
+            updateEntityPosition(id, entities, currentPos, 0);
+        }
     }
 }
 

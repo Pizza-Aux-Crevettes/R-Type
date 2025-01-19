@@ -10,6 +10,7 @@
 #include "components/Position.hpp"
 #include "components/Text.hpp"
 #include "menu/OptionMenu.hpp"
+#include "util/getResponsiveValue.hpp"
 
 BossLifeBar::BossLifeBar(){}
 
@@ -25,7 +26,7 @@ GameEngine::Entity BossLifeBar::createEntityText(
     int id, std::string text,
     const std::vector<std::pair<float, float>> position,
     unsigned int fontSize) {
-
+    
     auto newEntity = GameEngine::Entity(id);
     int hp = BossLifeBar::get().getHp();
     std::vector<double> color;
@@ -42,7 +43,7 @@ GameEngine::Entity BossLifeBar::createEntityText(
         }
     }
 
-    newEntity.addComponent(Text(text, OptionMenu::get().getAdaptabilityText(), fontSize));
+    newEntity.addComponent(Text(text, OptionMenu::get().getAdaptabilityText(), (fontSize * OptionMenu::get().getFontSize() / 100.0f)));
     newEntity.addComponent(Position(position));
     newEntity.addComponent(Color(color));
     return newEntity;
@@ -50,17 +51,27 @@ GameEngine::Entity BossLifeBar::createEntityText(
 
 void BossLifeBar::displayBossLifeBar(sf::RenderWindow& window,
                                    GameEngine::System system) {
+
+    GetResponsiveValue responsive;
+    int currentWidth = window.getSize().x;
+    int currentHeight = window.getSize().y;
     static int previousHp = -1;
     int hp = BossLifeBar::get().getHp();
 
     if (!_entitiesInitialized) {
-        _entitiesBossLifeBar.emplace(0, createEntityText(0, std::to_string(hp), {{965, 20}}, 30));
-        _entitiesBossLifeBar.emplace(1, createEntityText(1, "BOSS HEALTH", {{1050, 20}}, 30));
+        _entitiesBossLifeBar.emplace(0, createEntityText(0, std::to_string(hp), 
+                    {{responsive.getResponsivePosX(800, currentWidth, 715),
+                    responsive.getResponsivePosY(600, currentHeight, 50)}}, 25));
+        _entitiesBossLifeBar.emplace(1, createEntityText(1, "BOSS HEALTH", 
+                    {{responsive.getResponsivePosX(800, currentWidth, 715),
+                    responsive.getResponsivePosY(600, currentHeight, 20)}}, 25));
         _entitiesInitialized = true;
         previousHp = hp;
     }
     _entitiesBossLifeBar.erase(0);
-    _entitiesBossLifeBar.emplace(0, createEntityText(0, std::to_string(hp), {{965, 20}}, 30));
+    _entitiesBossLifeBar.emplace(0, createEntityText(0, std::to_string(hp), 
+                    {{responsive.getResponsivePosX(800, currentWidth, 715),
+                    responsive.getResponsivePosY(600, currentHeight, 50)}}, 25));
     system.render(window, _entitiesBossLifeBar);                        
 }
 

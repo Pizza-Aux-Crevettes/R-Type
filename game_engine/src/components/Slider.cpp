@@ -21,13 +21,13 @@
  * Initializes the Slider component with the specified minimum, maximum values
  * and the initial position and size on the screen.
  *
+ * @param current The current value of the slider.
  * @param minValue The minimum value that the slider can represent.
  * @param maxValue The maximum value that the slider can represent.
  * @param size The size of the slider (width, height).
  */
-Slider::Slider(std::pair<double, double> lenght, std::pair<double, double> size)
-    : _minValue(lenght.first), _maxValue(lenght.second),
-      _currentValue(lenght.second / 2), _size(size) {}
+Slider::Slider(float current, std::pair<double, double> lenght, std::pair<double, double> size)
+    : _minValue(lenght.first), _maxValue(lenght.second), _size(size), _currentValue(current) {}
 
 /**
  * @brief Destructor for the Slider component.

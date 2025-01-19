@@ -42,7 +42,7 @@ GameEngine::Entity WinMenu::createEntityButton(int id, std::string title, std::s
 
 GameEngine::Entity WinMenu::createEntityText(int id, const std::string text, const std::vector<std::pair<float, float>> position, unsigned int fontSize) {
     auto newEntity = GameEngine::Entity(id);
-    newEntity.addComponent(Text(text, OptionMenu::get().getAdaptabilityText(), fontSize));
+    newEntity.addComponent(Text(text, OptionMenu::get().getAdaptabilityText(), (fontSize * OptionMenu::get().getFontSize() / 100.0f)));
     newEntity.addComponent(Position(position));
     if (text != "QUIT GAME")
         newEntity.addComponent(Color({34, 139, 34, 255}));
@@ -149,17 +149,19 @@ void WinMenu::displayWnMenu(sf::RenderWindow& window, GameEngine::System system)
                 {{responsive.getResponsivePosX(1920, currentWidth, 1400),
                     responsive.getResponsivePosY(1080, currentHeight,
                                                 -65)}}));
-        _entitiesWinMenu.emplace(entityId, createEntityText(entityId++, "YOU WIN", {{550, 300}}, 40));
+        _entitiesWinMenu.emplace(entityId, createEntityText(entityId++, "YOU WIN", {{
+                responsive.getResponsivePosX(1920, currentWidth, 960),
+                responsive.getResponsivePosY(1080, currentHeight, 500)}}, 40));
         _entitiesWinMenu.emplace(
             entityId, createEntityText(entityId++, "QUIT GAME", {{
-                responsive.getResponsivePosX(1920, currentWidth, 860),
+                responsive.getResponsivePosX(1920, currentWidth, 960),
                 responsive.getResponsivePosY(1080, currentHeight, 630)}}, 25));
         _entitiesWinMenu.emplace(
             entityId,
             createEntityRect(
-                entityId++, {165, 50},
-                {{responsive.getResponsivePosX(1920, currentWidth, 845), responsive.getResponsivePosY(1080, currentHeight, 615)}},
-                sf::Color::White, [this, &window]() { isClickedExit(window); }));
+                entityId++, {390, 50},
+                {{responsive.getResponsivePosX(1920, currentWidth, 750), responsive.getResponsivePosY(1080, currentHeight, 590)}},
+                sf::Color::Transparent, [this, &window]() { isClickedExit(window); }));
         _entitiesInitialized = true;
     }
     system.render(window, _entitiesWinMenu);
