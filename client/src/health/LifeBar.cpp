@@ -5,7 +5,7 @@
 ** LifeBar
 */
 
-#include "menu/LifeBar.hpp"
+#include "health/LifeBar.hpp"
 #include "components/Color.hpp"
 #include "components/Position.hpp"
 #include "components/Text.hpp"
@@ -14,13 +14,18 @@ LifeBar::LifeBar(){}
 
 LifeBar::~LifeBar(){}
 
+LifeBar& LifeBar::get() {
+    static LifeBar instance;
+    return instance;
+}
+
 GameEngine::Entity LifeBar::createEntityText(
     int id, const std::string text,
     const std::vector<std::pair<float, float>> position,
     unsigned int fontSize) {
 
     auto newEntity = GameEngine::Entity(id);
-    int hp = getHp();
+    int hp = LifeBar::get().getHp();
     std::vector<double> color;
 
     if (text != "HEALTH") {
@@ -44,18 +49,16 @@ GameEngine::Entity LifeBar::createEntityText(
 void LifeBar::displayLifeBar(sf::RenderWindow& window,
                                    GameEngine::System system) {
     static int previousHp = -1;
-    int hp = getHp();
+    int hp = LifeBar::get().getHp();
 
     if (!_entitiesInitialized) {
         _entitiesLifeBar.emplace(0, createEntityText(0, std::to_string(hp), {{20, 20}}, 30));
         _entitiesLifeBar.emplace(1, createEntityText(1, "HEALTH", {{80, 20}}, 30));
         _entitiesInitialized = true;
         previousHp = hp;
-    } else if ((previousHp > 70 && hp <= 70) || (previousHp > 50 && hp <= 50) || (previousHp > 30 && hp <= 30)) {
-        _entitiesLifeBar.erase(0);
-        _entitiesLifeBar.emplace(0, createEntityText(0, std::to_string(hp), {{20, 20}}, 30));
-        previousHp = hp;
     }
+    _entitiesLifeBar.erase(0);
+    _entitiesLifeBar.emplace(0, createEntityText(0, std::to_string(hp), {{20, 20}}, 30));
     system.render(window, _entitiesLifeBar);                        
 }
 
@@ -64,6 +67,24 @@ int LifeBar::getHp() const {
 }
 
 void LifeBar::setHp(int newHp) {
-    this->_hp = newHp;
+    if (newHp <= 0) {
+        this->_hp = 0;
+    } else {
+        this->_hp = newHp;
+    }
 }
 
+int LifeBar::getPlayerId() {
+    return _playerId;
+}
+
+void LifeBar::setPlayerId(int playerId) {
+    _playerId = playerId;
+}
+
+
+void LifeBar::manageHealth(int entityId, int health) {
+    if (LifeBar::get().getPlayerId() == entityId) {
+        LifeBar::get().setHp(health);
+    }
+}

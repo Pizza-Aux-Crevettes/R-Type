@@ -7,38 +7,26 @@
 
 #pragma once
 
-enum Config {
-    // Socket
-    DEFAULT_BYTES = 1024,
-    PORT = 8080,
-
-    // Server
-    CADENCY = 20,
-    TICK_PER_SECOND = 1000 / CADENCY,
-
-    // Program
-    SUCCESS = 0,
-    ERROR = 84,
-    FAILURE = -1,
-    BAD = 1,
-    END_STR = '\0',
-
-    // Default
-    DEFAULT_HEALTH = 100,
-    DEFAULT_LIVES = 3,
-
-    // Player
-    PLAYER_WIDTH = 34,
-    PLAYER_BULLET_SPEED = 10,
-    PLAYER_HEIGHT = 15,
-    PLAYER_SPEED = 30,
-
-    // Obstacle
-    OBSTACLE_SIZE = 64,
-
-    // Map
-    RENDER_DISTANCE = 20,
-    MAP_SPEED = 2,
-    MAP_WIDTH = 1280,
-    MAP_HEIGHT = 720,
-};
+static constexpr int DEFAULT_BYTES = 1024;
+static constexpr int PORT = 8080;
+static constexpr int CADENCY = 60;
+static constexpr int TICK_PER_SECOND = 1000 / CADENCY;
+static constexpr int SUCCESS = 0;
+static constexpr int ERROR = 84;
+static constexpr int FAILURE = -1;
+static constexpr int BAD = 1;
+static constexpr char END_STR = '\0';
+static constexpr int DEFAULT_HEALTH = 100;
+static constexpr int DEFAULT_LIVES = 3;
+static constexpr int PLAYER_WIDTH = 34;
+static constexpr int PLAYER_BULLET_SPEED = 10;
+static constexpr int PLAYER_BULLET_DAMAGE = 10;
+static constexpr int PLAYER_HEIGHT = 15;
+static constexpr int PLAYER_SPEED = 30;
+static constexpr int OBSTACLE_SIZE = 64;
+static constexpr int RENDER_DISTANCE = 20;
+static constexpr float MAP_SPEED = 1;
+static constexpr int MAP_WIDTH = 1280;
+static constexpr int MAP_HEIGHT = 720;
+static constexpr int BULLET_WIDTH = 50;
+static constexpr int BULLET_HEIGHT = 20;

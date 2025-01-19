@@ -55,8 +55,6 @@ class Menu {
                       const std::vector<std::pair<float, float>> position,
                       std::string inputVar);
 
-    void isClickedPlay();
-    void isClickedExit(sf::RenderWindow& window);
     void isClickedInput(bool isIpClicked, bool isPortClicked,
                         bool isUsernameClicked);
     void setupInput(const sf::Event& event);

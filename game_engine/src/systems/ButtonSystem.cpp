@@ -149,8 +149,15 @@ void GameEngine::System::sliderSystem(sf::RenderWindow& window,
                 sliderComp.getCursorShape().setFillColor(
                     sf::Color(color[0], color[1], color[2], color[3]));
             }
-            sliderComp.setIsLoaded();
+            float cursorX = barShape.getPosition().x + barShape.getSize().x;
+            sliderComp.getCursorShape().setPosition(
+            cursorX - sliderComp.getCursorShape().getRadius(),
+            cursorShape.getPosition().y);
             sliderComp.setValue(sliderComp.getValue());
+            // system.update(entity.getEntityId(), entities, UpdateType::Text,
+            //     std::to_string(sliderComp.getValue()));
+            sliderComp.setIsLoaded();
+
         }
         static std::map<GameEngine::Entity*, bool> wasPressedMap;
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -179,7 +186,7 @@ void GameEngine::System::sliderSystem(sf::RenderWindow& window,
                 sliderComp.getCursorShape().setPosition(
                     cursorX - sliderComp.getCursorShape().getRadius(),
                     sliderComp.getCursorShape().getPosition().y);
-                sliderComp.triggerSetCallback(sliderComp.getValue());
+                    sliderComp.executeCallback(sliderComp.getValue());
                 system.update(entity.getEntityId(), entities, UpdateType::Text,
                               std::to_string(sliderComp.getValue()));
             }

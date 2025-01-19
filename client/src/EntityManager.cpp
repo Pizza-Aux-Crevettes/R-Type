@@ -95,7 +95,7 @@ void EntityManager::CreateEntity(int id,
                 newEntity.addComponent(Text(std::any_cast<std::string>(text), "assets/font/Inter_Bold.ttf", 10));
                 newEntity.addComponent(Link(std::any_cast<int>(id - 10000)));
             } catch (const std::bad_any_cast& e) {
-                std::cerr << "Error casting Position component: " << e.what()
+                std::cerr << "Error casting Text or Link component: " << e.what()
                           << std::endl;
             }
         }
@@ -127,6 +127,71 @@ std::map<int, std::map<std::string, std::any>> EntityManager::getUpdateItems() {
     return _updateItems;
 }
 
+std::vector<int> EntityManager::getPlayerColor() {
+    return _playerSpriteColor;
+}
+    
+void EntityManager::setBossId(int id) {
+    _bossId = id;
+}
+
+void EntityManager::setPlayerId(int id) {
+    _playerId = id;
+}
+
+void EntityManager::setPlayerColor(int playerId) {
+    
+
+    int num = playerId % 5;
+
+    switch(num) {
+        case 1 :
+            _playerSpriteColor = {0, 0, 34, 15};
+            break;
+        case 2 :
+            _playerSpriteColor = {0, 34, 34, 15};
+            break;
+        case 3 :
+            _playerSpriteColor = {0, 51, 34, 15};
+            break;
+        case 4 :
+            _playerSpriteColor = {0, 68, 34, 15};
+            break;
+        case 5 :
+            _playerSpriteColor = {0, 85, 34, 15};
+            break;
+        default:
+            _playerSpriteColor = {0, 0, 34, 15};
+            break;
+    }
+}
+
+std::vector<int> EntityManager::setEnemy(int num) {
+
+    std::vector<int> rect;
+
+    switch(num) {
+        case 1:
+            rect = {0, 0, 80, 60};
+            break;
+        case 2:
+            rect = {0, 0, 30, 30};
+            break;
+        case 3:
+            rect = {10, 0, 30, 30};
+            break;
+        case 4:
+            rect = {0, 20, 30, 30};
+            break;
+        case 5:
+            rect = {0, 0, 190, 210};
+            break;
+        default:
+            rect = {0, 0, 0, 0};
+    }
+    return rect;
+}
+
 sf::Texture EntityManager::manageBackground(sf::RenderWindow& window) {
     GetResponsiveValue responsive;
 
@@ -143,4 +208,29 @@ sf::Texture EntityManager::manageBackground(sf::RenderWindow& window) {
     _entities.emplace(id, std::move(newEntity));
 
     return newTexture;
+}
+
+std::mutex& EntityManager::getMutex() {
+    return _mutex;
+}
+
+void EntityManager::winGame(int id, int health) {
+
+    if (id == _bossId && health == 0) {
+        SoundManager::get().getMusicSound("game").getSound().stop();
+        SoundManager::get().getMusicSound("win").getSound().play();
+        Client::get().setIsWinGame();
+    } else {
+        return;
+    }
+}
+
+void EntityManager::loseGame(int id, int health) {
+    if (id == _playerId && health == 0) {
+        SoundManager::get().getMusicSound("game").getSound().stop();
+        SoundManager::get().getMusicSound("lose").getSound().play();
+        Client::get().setIsLoseGame();
+    } else {
+        return;
+    }
 }

@@ -34,9 +34,8 @@ class Slider : public Component {
     float getMaxValue() const;
     bool getIsLoaded() const;
     void setIsLoaded();
-    void setSetCallback(std::function<void(float)>);
-    void setGetCallback(std::function<float()>);
-    float triggerSetCallback(float value);
+    void setCallback(std::function<void(float)>);
+    void executeCallback(int arg);
     void display() const;
 
   private:
@@ -47,7 +46,5 @@ class Slider : public Component {
     bool _isLoad = false;
     sf::RectangleShape _barShape;
     sf::CircleShape _cursorShape;
-    std::function<void(float)> _onValueChanged;
-    std::function<float()> getCallback;
-    std::function<void(float)> setCallback;
+    std::function<void(float)> _callback;
 };

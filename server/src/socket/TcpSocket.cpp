@@ -113,7 +113,7 @@ void TcpSocket::handleRead(const int clientSocket, SmartBuffer& smartBuffer) {
         smartBuffer.reset();
         smartBuffer.inject(reinterpret_cast<const uint8_t*>(buffer), bytesRead);
 
-        Protocol::handleMessage(clientSocket, smartBuffer);
+        Protocol::handleMessage(clientSocket, smartBuffer, {});
     }
 }
 

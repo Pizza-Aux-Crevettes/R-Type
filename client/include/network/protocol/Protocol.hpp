@@ -23,6 +23,8 @@ class Protocol {
         UPDATE_OBSTACLES = 22,
         UPDATE_BULLETS = 23,
         UPDATE_ENEMIES = 24,
+        UPDATE_ENTITY_HEALTH = 25,
+        UPDATE_PLAYER_INFOS = 26,
         DELETE_ENTITY = 30,
     };
 
@@ -48,5 +50,7 @@ class Protocol {
     static void handleUpdateBlocks(SmartBuffer& smartBuffer);
     static void handleUpdateBullets(SmartBuffer& smartBuffer);
     static void handleUpdateEnemies(SmartBuffer& smartBuffer);
+    static void handleUpdatePlayerInfos(SmartBuffer& smartBuffer);
     static void handleDeleteEntity(SmartBuffer& smartBuffer);
+    static void handleUpdateEntityHealth(SmartBuffer& smartBuffer);
 };

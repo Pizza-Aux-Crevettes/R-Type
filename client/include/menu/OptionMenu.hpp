@@ -18,11 +18,11 @@ class OptionMenu {
   private:
     std::map<int, GameEngine::Entity> _entitiesMenuOption;
     bool _entitiesInitialized = false;
-    int _volumnMusic = 0;
-    int _volumnGame = 0;
+    int _volumnMusic = 100;
+    int _volumnGame = 100;
     int _resolution = 1;
     bool _adaptabilityText = false;
-    float _elementSize = 0;
+    float _elementSize = 100;
     bool _difficulty = false;
     bool _control = false;
     bool _constrast = false;
@@ -48,7 +48,7 @@ class OptionMenu {
     GameEngine::Entity
     createEntitySlider(int, const std::pair<int, int>,
                         const std::vector<std::pair<float, float>>,
-                        std::function<float()>, std::function<void(float)>);
+                        std::function<void(float)>);
     GameEngine::Entity
     createEntityRect(int id, const std::pair<int, int> size,
                         const std::vector<std::pair<float, float>> position,

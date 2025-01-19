@@ -58,8 +58,9 @@ void MapLoader::loadMapFromFile(const std::string& filePath) {
  */
 void MapLoader::parseMapLine(const std::string& line, int32_t y) {
     int32_t blockY = y * OBSTACLE_SIZE;
+    size_t x = 0;
 
-    for (size_t x = 0; x < line.size(); x += OBSTACLE_OFFSET) {
+    for (; x < line.size(); x += OBSTACLE_OFFSET) {
         std::string code = line.substr(x, OBSTACLE_OFFSET);
 
         if (ObstacleManager::get().isObstacleCodeValid(code)) {
@@ -79,12 +80,16 @@ void MapLoader::parseMapLine(const std::string& line, int32_t y) {
 
             auto enemy = std::make_shared<Enemy>(
                 properties.type, Point(enemyX, blockY), properties.speed,
-                properties.bulletSpeed, properties.width, properties.height,
-                properties.shootCooldown, properties.shootRange);
+                properties.width, properties.height, properties.bulletSpeed,
+                properties.bulletDamage, properties.shootCooldown,
+                properties.shootRange, properties.health);
 
-            enemy->setShootCooldown(properties.shootCooldown);
-            enemy->setShootRange(properties.shootRange);
             EnemyManager::get().addEnemy(enemy);
         }
+    }
+
+    if (x > ObstacleManager::get().getMaxViewport()) {
+        ObstacleManager::get().setMaxViewport(
+            ((x / OBSTACLE_OFFSET) * OBSTACLE_SIZE) - MAP_WIDTH);
     }
 }

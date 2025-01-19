@@ -17,6 +17,7 @@ class LifeBar {
         LifeBar();
         ~LifeBar();
 
+    static LifeBar& get();
     GameEngine::Entity
     createEntityText(int, const std::string,
                      const std::vector<std::pair<float, float>>, unsigned int);
@@ -26,8 +27,14 @@ class LifeBar {
     int getHp() const;
     void setHp(int newHp);
 
+    int getPlayerId();
+    void setPlayerId(int playerId);
+
+    void manageHealth(int entityId, int health);
+
     protected:
     private:
+        int _playerId;
         std::map<int, GameEngine::Entity> _entitiesLifeBar;
         int _hp = 100;
         bool _entitiesInitialized = false;
