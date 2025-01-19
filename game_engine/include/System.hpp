@@ -15,7 +15,7 @@
 
 namespace GameEngine {
 
-enum class UpdateType { Position, Text, TextSize, Texture };
+enum class UpdateType { Position, Text, TextSize, Texture, TextureRect};
 
 class System {
   public:
@@ -41,6 +41,7 @@ class System {
     void updateTextSize(int id, std::map<int, Entity>& entities,
                         unsigned int textSize);
     void updateTexture(Entity& entity, std::string& texture);
+    void updateTextureRect(Entity& entity, std::vector<int> rect) {
     void loadSprite(Entity& entity, auto& spriteComp, auto& textureComp);
     void spriteSystem(sf::RenderWindow& window, Entity& entity);
     void linkSystem(int id, std::map<int, Entity>& entities,

@@ -104,6 +104,28 @@ void EntityManager::CreateEntity(int id,
     }
 }
 
+void EntityManager::animateBoss(sf::Clock& clock) {
+    if (EntityManager::get().getBossId() != 0 &&
+        clock.getElapsedTime().asSeconds() >= 0.10f) {
+        if (auto search = _entities.find(bossId); search != _entities.end()) {
+            int bossId = EntityManager::get().getBossId();
+            std::vector<int> bossTextureRect = EntityManager::get().getBossTextureRect();
+            if (bossTextureRect[1] < 1680 || bossTextureRect[0] < 570) {
+                if (bossTextureRect[0] < 570) {
+                    std::vector<int> newBossTextureRect = {bossTextureRect[0] + 190, bossTextureRect[1], bossTextureRect[2], bossTextureRect[3]}
+                } else {
+                    std::vector<int> newBossTextureRect = {0, bossTextureRect[1] + 210, bossTextureRect[2], bossTextureRect[3]}
+                }
+            } else {
+                std::vector<int> newBossTextureRect = {0, 0, bossTextureRect[2], bossTextureRect[3]}
+            }
+            EntityManager::get().setBossTextureRect(newBossTextureRect);
+            system.update(bossId, _entities, GameEngine::UpdateType::TextureRect, newBossTextureRect);
+    } 
+        clock.restart();
+    }
+}
+
 void EntityManager::setItems(
     std::map<int, std::map<std::string, std::any>> items) {
     _items = items;
@@ -133,6 +155,10 @@ std::vector<int> EntityManager::getPlayerColor() {
     
 void EntityManager::setBossId(int id) {
     _bossId = id;
+}
+
+int EntityManager::getBossId() {
+    return _bossId;
 }
 
 void EntityManager::setPlayerId(int id) {
@@ -185,11 +211,20 @@ std::vector<int> EntityManager::setEnemy(int num) {
             break;
         case 5:
             rect = {0, 0, 190, 210};
+            EntityManager::get().setBossTextureRect(rect);
             break;
         default:
             rect = {0, 0, 0, 0};
     }
     return rect;
+}
+
+void EntityManager::setBossTextureRect(std::vector<int> newRect) {
+    _bossTextureRect = newRect;
+}
+
+std::vector<int> EntityManager::getBossTextureRect() {
+    return _bossTextureRect;
 }
 
 sf::Texture EntityManager::manageBackground(sf::RenderWindow& window) {

@@ -156,6 +156,7 @@ void Client::manageClient() {
         manageBackground(system, clock, background);
         processEvents(window, system, optionMenu, serverInitialized);
         handleAutoFire(clock);
+        EntityManager::get().animateBoss(clock);
 
         window.clear();
 

@@ -75,6 +75,24 @@ void GameEngine::System::updateTexture(Entity& entity, std::string& texture) {
     }
 }
 
+void GameEngine::System::updateTextureRect(Entity& entity, std::vector<int> rect) {
+    if (entity.hasComponent<Texture>()) {
+        if (entity.hasComponent<Sprite>()) {
+            auto& spriteComp = entity.getComponent<Sprite>();
+            spriteComp.getSprite().setTextureRect(sf::IntRect(rect[0], rect[1], rect[2], rect[3]));
+        }
+        if (entity.hasComponent<Shape>()) {
+            auto& shapeComp = entity.getComponent<Shape>();
+            if (shapeComp.getShapeType() == Circle) {
+                shapeComp.getCircle().setTextureRect(sf::IntRect(rect[0], rect[1], rect[2], rect[3]));
+            }
+            if (shapeComp.getShapeType() == Rectangle) {
+                shapeComp.getRect().setTextureRect(sf::IntRect(rect[0], rect[1], rect[2], rect[3]));
+            }
+        }
+    }
+}
+
 void GameEngine::System::update(const int id, std::map<int, Entity>& entities,
                                 const UpdateType type, const std::any& value,
                                 const int posId) {
@@ -102,6 +120,10 @@ void GameEngine::System::update(const int id, std::map<int, Entity>& entities,
         auto texture = std::any_cast<std::string>(value);
         updateTexture(entity, texture);
         break;
+    }
+    case UpdateType::TextureRect: {
+        auto textureRect = std::any_cast<std::vector<int>>(value);
+        updateTextureRect(entity, textureRect);
     }
     default:
         break;

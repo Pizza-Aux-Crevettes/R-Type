@@ -33,8 +33,9 @@ class EntityManager {
     std::map<int, std::map<std::string, std::any>> _updateItems;
     std::vector<int> _playerSpriteColor;
     std::mutex _mutex;
-    int _bossId;
+    int _bossId = 0;
     int _playerId;
+    std::vector<int> _bossTextureRect;
 
   public:
     static EntityManager& get();
@@ -57,7 +58,12 @@ class EntityManager {
     void setPlayerColor(int playerId);
 
     void setBossId(int id);
+    int getBossId();
+
     void setPlayerId(int id);
+
+    void setBossTextureRect(std::vector<int> newRect);
+    std::vector<int> getBossTextureRect();
     
     std::mutex& getMutex();
     sf::Texture manageBackground(sf::RenderWindow& window);
@@ -65,4 +71,6 @@ class EntityManager {
 
     void winGame(int id, int health);
     void loseGame(int id, int health);
+
+    void animateBoss(sf::Clock& clock);
 };
