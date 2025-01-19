@@ -49,7 +49,5 @@ class Button : public Component {
     unsigned int _charSize;
     std::pair<double, double> _size;
     std::function<void()> _callback;
-    // enum Shape { Circle, Rectangle };
-    // sf::Color _buttonColor;
     bool _isLoad = false;
 };

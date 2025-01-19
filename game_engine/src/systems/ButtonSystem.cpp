@@ -134,31 +134,29 @@ void GameEngine::System::sliderSystem(sf::RenderWindow& window,
             barShape.setOutlineColor(sf::Color::Transparent);
 
             sf::CircleShape cursorShape;
-            cursorShape.setPosition(positionComp.getPositionX(0),
-                                    positionComp.getPositionY(0) - 7);
             cursorShape.setRadius(9.f);
 
-            sliderComp.setBarShape(barShape);
-            sliderComp.setCursorShape(cursorShape);
             if (entity.hasComponent<Color>() &&
                 entity.getComponent<Color>().getColor().size() == 4) {
                 auto& colorComp = entity.getComponent<Color>();
                 const auto color = colorComp.getColor();
-                sliderComp.getBarShape().setFillColor(
+                barShape.setFillColor(
                     sf::Color(color[0], color[1], color[2], color[3]));
-                sliderComp.getCursorShape().setFillColor(
+                cursorShape.setFillColor(
                     sf::Color(color[0], color[1], color[2], color[3]));
             }
-            float cursorX = barShape.getPosition().x + barShape.getSize().x;
-            sliderComp.getCursorShape().setPosition(
-            cursorX - sliderComp.getCursorShape().getRadius(),
-            cursorShape.getPosition().y);
-            sliderComp.setValue(sliderComp.getValue());
-            // system.update(entity.getEntityId(), entities, UpdateType::Text,
-            //     std::to_string(sliderComp.getValue()));
-            sliderComp.setIsLoaded();
+            float normalizedValue = (sliderComp.getValue() - sliderComp.getMinValue()) /
+                                    (sliderComp.getMaxValue() - sliderComp.getMinValue());
+            float cursorX = barShape.getPosition().x + normalizedValue * barShape.getSize().x;
 
+            cursorShape.setPosition(cursorX - cursorShape.getRadius(),
+                                    barShape.getPosition().y - 7);
+
+            sliderComp.setBarShape(barShape);
+            sliderComp.setCursorShape(cursorShape);
+            sliderComp.setIsLoaded();
         }
+
         static std::map<GameEngine::Entity*, bool> wasPressedMap;
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         sf::FloatRect barBounds = sliderComp.getBarShape().getGlobalBounds();
@@ -172,6 +170,7 @@ void GameEngine::System::sliderSystem(sf::RenderWindow& window,
             } else if (!isPressed) {
                 wasPressedMap[&entity] = false;
             }
+
             if (wasPressedMap[&entity]) {
                 float newValue =
                     (mousePos.x - barBounds.left) / barBounds.width;
@@ -186,11 +185,13 @@ void GameEngine::System::sliderSystem(sf::RenderWindow& window,
                 sliderComp.getCursorShape().setPosition(
                     cursorX - sliderComp.getCursorShape().getRadius(),
                     sliderComp.getCursorShape().getPosition().y);
-                    sliderComp.executeCallback(sliderComp.getValue());
+                sliderComp.executeCallback(sliderComp.getValue());
+
                 system.update(entity.getEntityId(), entities, UpdateType::Text,
                               std::to_string(sliderComp.getValue()));
             }
         }
+
         window.draw(sliderComp.getBarShape());
         window.draw(sliderComp.getCursorShape());
     }

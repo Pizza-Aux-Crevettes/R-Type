@@ -21,7 +21,7 @@ class OptionMenu {
     int _volumnMusic = 100;
     int _volumnGame = 100;
     std::string _fontFile = "assets/font/Inter_Bold.ttf";
-    float _elementSize = 100;
+    unsigned int _fontSize = 100;
     bool _control = false;
     bool _waitingForKey = false;
     HotkeysCodes _hotkeyPressed;
@@ -40,14 +40,9 @@ class OptionMenu {
     createEntityOptionButton(int, std::vector<std::pair<float, float>>,
                              std::function<void()>);
     GameEngine::Entity
-    createEntityButton(int id, std::string title, std::string font,
-                       int fontSize,
-                       std::vector<std::pair<float, float>> position,
-                       std::function<void()> callback);
-    GameEngine::Entity
-    createEntitySlider(int, const std::pair<int, int>,
-                        const std::vector<std::pair<float, float>>,
-                        std::function<void(float)>);
+    createEntitySlider(int id, float current, const std::pair<int, int> values,
+                        const std::vector<std::pair<float, float>> position,
+                        std::function<void(float)> callback);
     GameEngine::Entity
     createEntityRect(int id, const std::pair<int, int> size,
                         const std::vector<std::pair<float, float>> position,
@@ -69,8 +64,8 @@ class OptionMenu {
     std::string getAdaptabilityText();
     void setAdaptabilityText(GameEngine::System& system, std::map<int, GameEngine::Entity> entities);
 
-    int getElementSize();
-    void setElementSize(int);
+    int getFontSize();
+    void setFontSize(unsigned int new_size, GameEngine::System& system, std::map<int, GameEngine::Entity> entities);
 
     bool getControl();
     void setControl();

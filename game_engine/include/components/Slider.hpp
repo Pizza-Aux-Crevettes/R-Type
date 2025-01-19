@@ -17,7 +17,7 @@
 
 class Slider : public Component {
   public:
-    Slider(std::pair<double, double> lenght, std::pair<double, double> size);
+    Slider(float current, std::pair<double, double> lenght, std::pair<double, double> size);
     ~Slider();
 
     std::pair<double, double> getSize() const;
@@ -28,14 +28,19 @@ class Slider : public Component {
     void setCursorShape(const sf::CircleShape&);
     int getValue() const;
     void setValue(float);
+
     void setMinValue(float minValue);
     float getMinValue() const;
+
     void setMaxValue(float maxValue);
     float getMaxValue() const;
+
     bool getIsLoaded() const;
     void setIsLoaded();
+
     void setCallback(std::function<void(float)>);
     void executeCallback(int arg);
+    
     void display() const;
 
   private:
