@@ -1,4 +1,4 @@
-#LoseMenu
+# LoseMenu
 
 The LoseMenu class handles the creation and display of the lose menu in the game, where the player can view the game over screen and exit the game. It provides methods to create various entities such as buttons, text, sprites, and rectangles, and arranges them on the screen in a responsive manner. The class also includes a method to handle user interaction, specifically when the Exit button is clicked, closing the game window. 
 

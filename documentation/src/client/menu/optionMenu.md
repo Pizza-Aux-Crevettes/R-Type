@@ -1,4 +1,4 @@
-#OptionMenu
+# OptionMenu
 
 The OptionMenu class is responsible for managing the options menu in a game. 
 

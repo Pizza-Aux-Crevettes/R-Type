@@ -1,4 +1,4 @@
-#HotkeyManager
+# HotkeyManager
 
 The HotkeysManager class handles hotkey-to-keyboard mappings, key reassignment, and autofire state. It processes input events, triggers actions, and sends hotkey data over the network, using a singleton design.s
 

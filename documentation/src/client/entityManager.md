@@ -1,4 +1,4 @@
-#Entity Manager
+# Entity Manager
 
 The EntityManager class manages the creation, deletion, and updating of entities.
 

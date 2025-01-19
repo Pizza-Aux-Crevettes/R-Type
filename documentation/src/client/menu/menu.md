@@ -1,4 +1,4 @@
-#Menu
+# Menu
 
 The Menu class manages the user interface for the game’s menu system, including buttons, input fields, and sprites. It handles the creation and rendering of menu entities, input handling, and transitions between different menu states.
 

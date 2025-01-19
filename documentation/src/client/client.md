@@ -1,4 +1,4 @@
-#Client
+# Client
 
 The Client class manages the overall operation of the client.
 

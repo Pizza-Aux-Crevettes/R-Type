@@ -1,4 +1,4 @@
-#LifeBar
+# LifeBar
 
 The LifeBar class manages the health bar functionality for a player, including creating health-related UI elements, updating health points, and rendering the life bar on the screen. It uses a singleton pattern to ensure a single instance is accessible globally.
 

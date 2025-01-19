@@ -1,4 +1,4 @@
-#Protocol
+# Protocol
 
 The Protocol class handles the processing of various game-related messages, such as player creation, entity updates, health management, and more.The class includes methods for handling different types of network operations, including updating player positions, enemy data, bullets, and obstacles.
 

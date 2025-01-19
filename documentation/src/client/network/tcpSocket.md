@@ -1,4 +1,4 @@
-#TcpSocket
+# TcpSocket
 
 The TcpSocket class represents a TCP socket that allows connecting to a server, sending, and receiving data. It inherits from the Socket class, with specific methods to initialize the socket (init), establish a connection (connect), send data (send), and receive data (receive). It handles errors by throwing exceptions in case of network operation failures and uses a singleton to store the active TCP socket.
 
