@@ -75,18 +75,46 @@ void Sprite::setSize(const std::pair<float, float>& size) {
     this->_size = size;
 }
 
+/**
+ * @brief Get whether the Sprite component is loaded.
+ *
+ * This function checks if the Sprite component has been initialized.
+ *
+ * @return True if the Sprite is loaded, false otherwise.
+ */
 bool Sprite::getIsLoaded() const {
     return this->_isLoad;
 }
 
+/**
+ * @brief Set whether the Sprite component is loaded.
+ *
+ * This function sets the loaded state of the Sprite component.
+ *
+ * @param isLoaded A boolean indicating whether the sprite is loaded.
+ */
 void Sprite::setIsLoaded(const bool isLoaded) {
     this->_isLoad = isLoaded;
 }
 
+/**
+ * @brief Get the sf::Sprite object of the Sprite component.
+ *
+ * This function retrieves the sf::Sprite object used by the sprite component.
+ *
+ * @return The sf::Sprite object of the sprite.
+ */
 sf::Sprite& Sprite::getSprite() {
     return this->_sprite;
 }
 
+/**
+ * @brief Set the sf::Sprite object of the Sprite component.
+ *
+ * This function sets the sf::Sprite object used by the sprite component.
+ *
+ * @param sprite The new sf::Sprite object to set for the sprite.
+ */
 void Sprite::setSprite(const sf::Sprite& sprite) {
     this->_sprite = sprite;
 }

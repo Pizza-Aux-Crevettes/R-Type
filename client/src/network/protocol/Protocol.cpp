@@ -2,6 +2,10 @@
 ** EPITECH PROJECT, 2024
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
+** This file implements the Protocol class, which is responsible for handling
+** network messages and interactions in the game. It processes different types of
+** messages identified by opCodes, such as player creation, updates on players, 
+** enemies, bullets, obstacles, and entity health.
 ** Protocol.cpp
 */
 
@@ -12,6 +16,7 @@
 #include "Client.hpp"
 #include "util/Logger.hpp"
 #include "health/LifeBar.hpp"
+#include "health/BossLifeBar.hpp"
 
 int32_t Protocol::_playerId = -1;
 
@@ -100,11 +105,11 @@ void Protocol::handleCreatePlayerCallback(SmartBuffer& smartBuffer) {
 
     std::map<std::string, std::any> playerNameItems = {
         {"Link", std::string(Client::get().getUsername())},
-        {"Position", std::pair<float, float>(0.0f, -10.0f)}
+        {"Position", std::pair<float, float>(15.0f, -10.0f)}
     };
 
     EntityManager::get().CompareEntities(playerId, newItems, {0.0f, 0.0f});
-    EntityManager::get().CompareEntities(playerId + 10000, playerNameItems, {0.0f, 00.0f});
+    EntityManager::get().CompareEntities(playerId + 10000, playerNameItems, {0.0f, -10.0f});
 }
 
 void Protocol::handleCreatePlayerBroadcast(SmartBuffer& smartBuffer) {
@@ -201,6 +206,7 @@ void Protocol::handleUpdateEnemies(SmartBuffer& smartBuffer) {
         filePath = "assets/sprite/boss.gif";
         rect = EntityManager::get().setEnemy(5);
         EntityManager::get().setBossId(enemyId);
+        BossLifeBar::get().setBossId(enemyId);
     }
     
     std::vector<int> rectVector = {0, 0, 66, 57};
@@ -262,6 +268,7 @@ void Protocol::handleUpdateEntityHealth(SmartBuffer& smartBuffer) {
     int16_t health, maxHealth;
     smartBuffer >> entityId >> health >> maxHealth;
     LifeBar::get().manageHealth(entityId, health);
+    BossLifeBar::get().manageHealth(entityId, health);
     EntityManager::get().winGame(entityId, health);
     EntityManager::get().loseGame(entityId, health);
 }

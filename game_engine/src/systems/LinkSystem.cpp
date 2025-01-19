@@ -2,7 +2,12 @@
 ** EPITECH PROJECT, 2024
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
-** LinkSystem.cpp
+** Implements the `linkSystem` function, which manages the linking of entities
+** within the game engine.
+** Responsibility:
+** - Check if entities have linkable components
+** - Establish and manage links between entities
+** - Update linked entities based on their relationships
 */
 
 #include <components/Link.hpp>
@@ -10,6 +15,18 @@
 #include <components/Text.hpp>
 #include "System.hpp"
 
+/**
+ * @brief Links the position of two entities.
+ * 
+ * This function links the position of two entities. It checks if the entity has a link component.
+ * If so, it gets the linked entity and calculates the distance between the two entities. It then
+ * updates the position of the entity based on the distance.
+ * 
+ * @param id The id of the entity.
+ * @param entities The map of entities.
+ * @param newLinkedEntityPos The new position of the linked entity.
+ * @param posId The position id.
+ */
 void GameEngine::System::linkSystem(int id,
                                     std::map<int, GameEngine::Entity>& entities,
                                     std::pair<float, float> newLinkedEntityPos,

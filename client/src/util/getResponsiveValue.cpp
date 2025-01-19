@@ -1,7 +1,9 @@
 /*
-** EPITECH PROJECT, 2025
+** EPITECH PROJECT, 2024
 ** R-Type
 ** File description:
+** This file implements the GetResponsiveValue class, which provides methods
+** to adjust the position and size of elements in a responsive layout.
 ** getResponsiveValue.cpp
 */
 

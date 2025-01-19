@@ -21,8 +21,6 @@ class System {
   public:
     System();
     ~System();
-    int onClick(sf::RenderWindow& window, std::map<int, Entity>& entities,
-                sf::Vector2i mousePos, System system);
     void render(sf::RenderWindow& window, std::map<int, Entity>& entities);
     void update(int id, std::map<int, Entity>& entities, UpdateType type,
                 const std::any& value, int posId = 0);

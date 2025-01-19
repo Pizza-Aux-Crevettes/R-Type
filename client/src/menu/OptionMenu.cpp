@@ -2,6 +2,10 @@
 ** EPITECH PROJECT, 2024
 ** B-CPP-500-TLS-5-2-rtype-anastasia.bouby
 ** File description:
+** This file contains the implementation of the OptionMenu class, responsible
+** for managing and displaying the options menu in the game. It includes
+** functionalities like setting key bindings, adjusting volume, controlling 
+** game resolution, enabling or disabling contrast, and controlling game difficulty.
 ** OptionMenu.cpp
 */
 
