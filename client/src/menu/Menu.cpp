@@ -155,6 +155,28 @@ void Menu::initMainMenu(sf::RenderWindow& window, GameEngine::System system) {
                     {{responsive.getResponsivePosX(1920, currentWidth, 960),
                     responsive.getResponsivePosY(1080, currentHeight, 330)}},
                     50));
+
+            _entitiesMenu.emplace(  
+                entityId,
+                createEntityText(
+                    entityId++, "Best username: " + Client::get().getBestUsername(),
+                    {{responsive.getResponsivePosX(1920, currentWidth, 200),
+                        responsive.getResponsivePosY(1080, currentHeight, 330)}},
+                    20));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityText(
+                    entityId++, "Best score: " + std::to_string(Client::get().getBestScores()),
+                    {{responsive.getResponsivePosX(1920, currentWidth, 160),
+                        responsive.getResponsivePosY(1080, currentHeight, 400)}},
+                    20));
+            _entitiesMenu.emplace(
+                entityId,
+                createEntityText(
+                    entityId++, "Best kills: " + std::to_string(Client::get().getBestKills()),
+                    {{responsive.getResponsivePosX(1920, currentWidth, 110),
+                        responsive.getResponsivePosY(1080, currentHeight, 470)}},
+                    20));
             _entitiesMenu.emplace(
                 entityId,
                 createEntityRect(

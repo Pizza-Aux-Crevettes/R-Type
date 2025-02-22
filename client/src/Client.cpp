@@ -30,6 +30,63 @@ void initializeNetwork(NetworkClient& networkClient) {
 
     Logger::success("[Main] Network initialized successfully.");
 }
+void Client::saveScoreToFile(int score, int kills) {
+    std::ofstream file("score.txt", std::ios::app);
+    if (file.is_open()) {
+        file << "----------------------" << std::endl;
+        file << "Username: " << Client::get().getUsername() << std::endl;
+        file << "Score: " << score << std::endl;
+        file << "Kills: " << kills << std::endl;
+        file.close();
+        std::cout << "Score added in score.txt" << std::endl;
+    } else {
+        std::cerr << "Error: Unable to open the file for saving." << std::endl;
+    }
+}
+
+void Client::getBestScore() {
+    std::ifstream file("score.txt");
+    if (!file.is_open()) {
+        std::cerr << "Error: Unable to open the file score.txt." << std::endl;
+        return;
+    }
+
+    std::string line, bestUsername, currentUsername;
+    int bestKills = 0, bestScore = 0;
+    int currentKills = -1, currentScore = -1;
+
+    while (std::getline(file, line)) {
+        if (line.find("Username: ") != std::string::npos) {
+            currentUsername = line.substr(10);
+        } else if (line.find("Kills: ") != std::string::npos) {
+            currentKills = std::stoi(line.substr(7));
+        } else if (line.find("Score: ") != std::string::npos) {
+            currentScore = std::stoi(line.substr(7));
+        }
+
+        if (!currentUsername.empty() && currentKills != -1 && currentScore != -1) {
+            if (currentKills > bestKills || (currentKills == bestKills && currentScore > bestScore)) {
+                bestKills = currentKills;
+                bestScore = currentScore;
+                bestUsername = currentUsername;
+            }
+
+            currentUsername = "";
+            currentKills = -1;
+            currentScore = -1;
+        }
+    }
+
+    file.close();
+
+    if (!bestUsername.empty()) {
+        Client::get().setBestKills(bestKills);
+        Client::get().setBestScore(bestScore);
+        Client::get().setBestUsername(bestUsername);
+    } else {
+        std::cout << "Aucun score enregistré." << std::endl;
+    }
+}
 
 void Client::manageBackground(GameEngine::System system, sf::Clock clock,
                               sf::Texture background) {
@@ -151,6 +208,7 @@ void Client::manageClient() {
     std::thread serverThread;
 
     manageSound();
+    getBestScore();
 
     while (window.isOpen()) {
         manageBackground(system, clock, background);
@@ -174,6 +232,8 @@ void Client::manageClient() {
 
         window.display();
     }
+
+    saveScoreToFile(Client::get().getScore(), Client::get().getKills());
 
     if (serverThread.joinable()) {
         serverThread.join();
@@ -245,4 +305,43 @@ void Client::setIsLoseGame() {
 
 bool Client::getIsLoseGame() {
     return _isLose;
+}
+
+void Client::setScore(int score) {
+    _score = score;
+}
+
+int Client::getScore() {
+    return _score;
+}
+
+void Client::setKills(int kills) {
+    _kills = kills;
+}
+
+int Client::getKills() {
+    return _kills;
+}
+
+void Client::setBestScore(int bestScore) {
+    _bestScore = bestScore;
+}
+
+int Client::getBestScores() {
+    return _bestScore;
+}
+void Client::setBestKills(int bestKills) {
+    _bestKills = bestKills;
+}
+
+int Client::getBestKills() {
+    return _bestKills;
+}
+
+void Client::setBestUsername(std::string bestUsername) {
+    _bestUsername = bestUsername;
+}
+
+std::string Client::getBestUsername() {
+    return _bestUsername;
 }
