@@ -25,6 +25,7 @@
 #include <components/Texture.hpp>
 #include <menu/OptionMenu.hpp>
 #include <thread>
+#include <fstream>
 #include "EntityManager.hpp"
 #include "component/hotkey/HotkeysManager.hpp"
 #include "component/sound/SoundManager.hpp"
@@ -55,6 +56,12 @@ class Client {
     double _viewportX;
     bool _isWin;
     bool _isLose;
+    int _score;
+    int _kills;
+
+    int _bestScore;
+    int _bestKills;
+    std::string _bestUsername;
 
   public:
     Client();
@@ -92,4 +99,22 @@ class Client {
 
     void setIsLoseGame();
     bool getIsLoseGame();
+
+    void setScore(int score);
+    int getScore();
+
+    void setKills(int kills);
+    int getKills();
+
+    void saveScoreToFile(int score, int kills);
+    void getBestScore();
+
+    void setBestScore(int bestScore);
+    int getBestScores();
+
+    void setBestKills(int bestKills);
+    int getBestKills();
+
+    void setBestUsername(std::string bestUsername);
+    std::string getBestUsername();
 };

@@ -223,6 +223,9 @@ void Protocol::handleUpdatePlayerInfos(SmartBuffer& smartBuffer) {
     int16_t kills;
     
     smartBuffer >> playerId >> kills >> score;
+
+    Client::get().setScore(score);
+    Client::get().setKills(kills);
 }
 
 void Protocol::handleUpdateBullets(SmartBuffer& smartBuffer) {
